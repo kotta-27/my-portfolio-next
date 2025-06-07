@@ -39,27 +39,38 @@ export default function About() {
                 <div className={styles.timelineWrapper}>
                     <div className={styles.timelineList}>
                         {careers[lang].map((career, idx) => (
-                            <li key={idx} className={styles.timelineItem}>
-                                <div className={styles.timelineDotContainer}>
-                                    <div className={styles.timelineLine} />
-                                    <div className={styles.timelineDot} />
+                            career['period-bar'] ? (
+                                <div key={idx} className={styles.timelinePeriodBar}>
+                                    <div className={styles.timelineBarContainer}>
+                                        <div className={styles.timelineLine} />
+                                        <div className={styles.timelinePeriodContainer}>
+                                            <div className={styles.timelinePeriodText}>{career['period-bar']}</div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className={styles.timelineContent}>
-                                    <div className={styles.timelinePeriod}>{career.period}</div>
-                                    <div className={styles.timelineTitle}>{career.title}</div>
-                                    {career.image && <Image src={career.image} alt={career.title}
-                                        width={100} height={100} className={styles.timelineImage} />}
-                                </div>
-                            </li>
+                            ) : (
+                                <li key={idx} className={styles.timelineItem}>
+                                    <div className={styles.timelineDotContainer}>
+                                        <div className={styles.timelineLine} />
+                                        <div className={styles.timelineDot} />
+                                    </div>
+                                    <div className={styles.timelineContent}>
+                                        <div className={styles.timelinePeriod}>{career.period}</div>
+                                        <div className={styles.timelineTitle}>{career.title}</div>
+                                        {career.image && <Image src={career.image} alt={career.title}
+                                            width={100} height={100} className={styles.timelineImage} />}
+                                    </div>
+                                </li>
+                            )
                         ))}
                     </div>
                 </div>
             </div>
-            <div style={{ marginTop: '2.5rem' }}>
+            <div className={styles.achievementsSection}>
                 <h3 className={styles.sectionTitle}>{lang === 'ja' ? '実績' : 'Achievements'}</h3>
-                <ul className={styles.list}>
+                <div className={styles.list}>
                     {achievements[lang].map((ach, idx) => (
-                        <li key={idx} className={styles.listItem}>
+                        <div key={idx} className={styles.listItem}>
                             <span style={{ fontStyle: 'italic' }}>{ach.period}：</span> {ach.title}
                             {ach.award && (
                                 <>
@@ -67,9 +78,9 @@ export default function About() {
                                     <span style={{ color: '#facc15', fontWeight: 'bold' }}>{ach.award.description}「{ach.award.title}」{ach.award.congratulations}</span>
                                 </>
                             )}
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             </div>
         </section>
     );

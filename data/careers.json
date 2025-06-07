@@ -1,31 +1,37 @@
 {
     "ja": [
         {
-            "period": "2023/08",
+            "period-bar": "2023"
+        },
+        {
+            "period": "8月",
             "title": "理化学研究所主催「量子コンピュータってなんだろう？」学生スタッフ",
             "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html"
         },
         {
-            "period": "2023/09〜",
+            "period": "9月〜",
             "title": "株式会社QunaSys 量子×情報インターン",
             "image": "/qunasys.png"
         },
         {
-            "period": "2024/02〜",
+            "period-bar": "2024"
+        },
+        {
+            "period": "2月〜",
             "title": "量子コンピューティング公開伴送型生配信授業QC4U2 参加"
         },
         {
-            "period": "2024/06〜",
+            "period": "6月〜",
             "title": "株式会社CRISP エンジニアインターン",
             "image": "/crisp.png"
         },
         {
-            "period": "2024/08",
+            "period": "8月",
             "title": "理化学研究所×日本科学未来館主催「クイズとゲームでせまる！量子コンピュータ」学生スタッフ",
             "link": "https://www.miraikan.jst.go.jp/events/202408033551.html"
         },
         {
-            "period": "2024/08〜",
+            "period": "8月〜",
             "title": "量子ICT人材育成プログラムNQC 参加",
             "interview": {
                 "url": "https://nqc.nict.go.jp/report/250528_02.html",
@@ -33,7 +39,7 @@
             }
         },
         {
-            "period": "2024/09〜",
+            "period": "9月〜",
             "title": "株式会社スタディスト ソフトウェアエンジニアインターン",
             "interview": {
                 "url": "https://path.progate.com/career-stories/studist-intern",
@@ -42,7 +48,7 @@
             "image": "/studist.png"
         },
         {
-            "period": "2024/10〜",
+            "period": "10月〜",
             "title": "株式会社Jij リサーチエンジニアインターン",
             "interview": {
                 "url": "https://www.j-ij.com/ja/recruit/interview-mizuno",
@@ -51,38 +57,47 @@
             "image": "/jij.svg"
         },
         {
-            "period": "2025/03〜",
+            "period-bar": "2025"
+        },
+        {
+            "period": "3月〜",
             "title": "文部科学省 量子研究推進室主催「大阪・関西万博『エンタングル・モーメント ―[量子・海・宇宙]×芸術』プレイベント『ゲームで体験！作って実感！量子の世界』」学生スタッフ",
             "link": "https://www.qst.go.jp/site/entangle-moment/pre-event.html"
         }
     ],
     "en": [
         {
-            "period": "Aug 2023",
+            "period-bar": "2023"
+        },
+        {
+            "period": "Aug",
             "title": "Student staff at RIKEN event 'What is a Quantum Computer?'",
             "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html"
         },
         {
-            "period": "Sep 2023~",
+            "period": "Sep〜",
             "title": "Quantum & Information Intern at QunaSys Inc.",
             "image": "/qunasys.png"
         },
         {
-            "period": "Feb 2024~",
+            "period-bar": "2024"
+        },
+        {
+            "period": "Feb〜",
             "title": "Participated in QC4U2, a live-streamed quantum computing class"
         },
         {
-            "period": "Jun 2024~",
+            "period": "Jun〜",
             "title": "Engineering Intern at CRISP Inc.",
             "image": "/crisp.png"
         },
         {
-            "period": "Aug 2024",
+            "period": "Aug",
             "title": "Student staff at RIKEN & Miraikan event 'Quantum Computers through Quizzes and Games'",
             "link": "https://www.miraikan.jst.go.jp/events/202408033551.html"
         },
         {
-            "period": "Aug 2024~",
+            "period": "Aug〜",
             "title": "Participated in NQC Quantum ICT Human Resource Development Program",
             "interview": {
                 "url": "https://nqc.nict.go.jp/report/250528_02.html",
@@ -90,7 +105,7 @@
             }
         },
         {
-            "period": "Sep 2024~",
+            "period": "Sep〜",
             "title": "Software Engineer Intern at Studist Corporation",
             "interview": {
                 "url": "https://path.progate.com/career-stories/studist-intern",
@@ -99,7 +114,7 @@
             "image": "/studist.png"
         },
         {
-            "period": "Oct 2024~",
+            "period": "Oct〜",
             "title": "Research Engineer Intern at Jij Inc.",
             "interview": {
                 "url": "https://www.j-ij.com/ja/recruit/interview-mizuno",

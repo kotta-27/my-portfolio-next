@@ -46,17 +46,7 @@
     letter-spacing: 0.03em;
 }
 
-.list {
-    list-style: disc inside;
-    color: #e0e0e0;
-    line-height: 1.8;
-    margin-bottom: 2rem;
-}
 
-.listItem {
-    margin-bottom: 0.5rem;
-    font-size: 1.05rem;
-}
 
 .timelineWrapper {
     display: flex;
@@ -82,6 +72,16 @@
     border-radius: 10px;
 }
 
+.timelinePeriodBar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+    height: 40px;
+    border-radius: 10px;
+}
+
 .timelineItem:hover {
     background-color: #4446;
 }
@@ -96,6 +96,15 @@
 .timelineItem:hover .timelineContent {
     transform: scale(1.02);
     transition: transform 0.18s;
+}
+
+.timelineBarContainer {
+    width: 100px;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    position: relative;
 }
 
 .timelineDotContainer {
@@ -117,6 +126,24 @@
     background-color: #facc15;
 }
 
+.timelinePeriodContainer {
+    width: 60%;
+    margin: auto auto;
+    padding: 0.2rem 0.2rem;
+    background: #1c1c1c;
+    z-index: 100;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timelinePeriodText {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #ffffff;
+}
+
 .timelineDot {
     width: 20px;
     height: 20px;
@@ -136,8 +163,6 @@
     flex-direction: row;
     justify-content: start;
     align-items: center;
-    /* background-color: #bababa; */
-    /* padding: 1rem; */
 }
 
 .timelineImage {
@@ -165,11 +190,30 @@
 
 .timelinePeriod {
     width: 100px;
+    height: 20px;
 }
 
 .timelineTitle {
     width: 100%;
 }
+
+.list {
+    list-style: disc inside;
+    color: #e0e0e0;
+    line-height: 1.8;
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.listItem {
+    margin-bottom: 0.5rem;
+    font-size: 1.05rem;
+}
+
+.achievementsSection {
+    margin-top: 2.5rem;
+}
+
 
 @media (max-width: 768px) {
     .timelineWrapper {
@@ -192,6 +236,16 @@
         margin: 0;
     }
 
+    .timelinePeriodBar {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: start;
+        height: 40px;
+        border-radius: 10px;
+    }
+
     .timelineItem {
         width: 100%;
         display: flex;
@@ -204,20 +258,41 @@
         background-color: #4446;
     }
 
-
-
     .timelineItem:hover .timelineContent {
         transform: scale(1.02);
         transition: transform 0.18s;
     }
 
     .timelineDotContainer {
-        width: 10px;
+        width: 20px;
         height: 100%;
         display: flex;
         justify-content: start;
         align-items: start;
         position: relative;
+    }
+
+    .timelineBarContainer {
+        width: 20px;
+        height: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: start;
+        position: relative;
+    }
+
+    .timelinePeriodContainer {
+        margin: auto auto;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .timelinePeriodText {
+        font-size: 0.85rem;
+        font-weight: bold;
+        color: #ffffff;
     }
 
     .timelineDot {
@@ -279,5 +354,22 @@
     .timelineTitle {
         margin-left: 10px;
         width: 100%;
+    }
+
+    .achievementsSection {
+        margin-top: 2.5rem;
+    }
+
+    .list {
+        list-style: disc inside;
+        color: #e0e0e0;
+        padding: 0 1rem 0 0;
+        line-height: 1.8;
+        margin-bottom: 2rem;
+    }
+
+    .listItem {
+        margin-bottom: 0.5rem;
+        font-size: 1.05rem;
     }
 }
