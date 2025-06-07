@@ -1,0 +1,164 @@
+{
+    "ja": [
+        {
+            "id": 1,
+            "title": "Orbit | タスク管理アプリ",
+            "description": "シンプルで使いやすいタスク管理アプリケーション。習慣/日課/TODOに分けて、日々のタスクを効率的に管理できる機能を実装。",
+            "fullDescription": "Vue.js + Ruby on Railsで作成したタスク管理システム。「毎日を、軌道にのせる」をコンセプトに、日々のタスクを効率的に管理できる機能を実装。ドラッグ&ドロップによる直感的な操作、タスクの優先順位付け、進捗管理などの機能を提供。",
+            "image": "/orbit_1.png",
+            "technologies": [
+                "Vue.js",
+                "Ruby on Rails",
+                "PostgreSQL"
+            ],
+            "githubLink": "https://github.com/kotta-27/orbit-todo-app"
+        },
+        {
+            "id": 2,
+            "title": "研究室購入申請管理システム",
+            "description": "研究室内の物品購買管理を効率化するWebアプリケーション。Firebaseと接続して、購買申請の承認/却下を管理。",
+            "fullDescription": "React、Firebaseを用いて作成した研究室内の物品購買管理システム。購買申請の提出から承認/却下、購入手続きまでの一連のフローを管理。Discordとの連携による通知機能、申請内容の更新履歴管理、商品URLやコメント機能など、実用的な機能を実装。",
+            "image": "/purchase_1.png",
+            "technologies": [
+                "React",
+                "Firebase",
+                "Discord API"
+            ],
+            "githubLink": "https://github.com/username/project2"
+        },
+        {
+            "id": 3,
+            "title": "Quantum Pizza",
+            "description": "量子コンピューティングを学ぶための教育用ゲーム。量子ゲートを作用させて、お題に合うピザを作ることで量子情報の基本概念を学べる。",
+            "fullDescription": "Reactで作成した量子コンピューティング学習ゲーム。量子ゲートを作用させて、お題に合うピザを作ることで量子情報の基本概念を学べる。丁寧な解説と多言語対応（日本語/英語/中国語）を実装。理研×未来館イベントで展示、理研サイトQ-Portalに掲載。",
+            "image": "/qpizza_1.png",
+            "technologies": [
+                "React",
+                "Quantum Computing",
+                "i18n"
+            ],
+            "githubLink": "https://github.com/username/project3",
+            "i18n": true
+        },
+        {
+            "id": 4,
+            "title": "なんJenerator",
+            "description": "カスタマイズ可能な2ch風スレッドを自動生成するツール。Amazon Bedrockを用いて、テーマに合うスレッドを生成。",
+            "fullDescription": "React（フロントエンド）とPython（バックエンド）で作成したスレッド生成システム。AWS Bedrock（Claude3 Haiku）を用いて自然なスレッドを生成。スレッド数、キーワード、危険度などのパラメータをカスタマイズ可能。第2回Progate×AWSハッカソン最優秀賞受賞。",
+            "image": "/nanj_1.png",
+            "technologies": [
+                "React",
+                "Python",
+                "AWS Bedrock",
+                "AWS Cognito"
+            ],
+            "githubLink": "https://github.com/username/project3"
+        },
+        {
+            "id": 5,
+            "title": "ImgToLatexコンバータ",
+            "description": "画像からLaTeX数式を自動生成するツール。Google Gemini APIを用いて、数式を認識し、LaTeXコードを生成。",
+            "fullDescription": "ReactとGemini APIを用いて作成した画像認識システム。画像や手書きの数式からLaTeXコードを自動生成。数式の解説表示、コードのコピー機能、スナックバーによる操作確認など、使いやすい機能を実装。複雑な数式（ラマヌジャンの公式など）も正確に認識。",
+            "image": "/tex_1.png",
+            "technologies": [
+                "React",
+                "Gemini",
+                "LaTeX"
+            ],
+            "githubLink": "https://github.com/username/project3"
+        },
+        {
+            "id": 6,
+            "title": "Quantum Super Techshiba-kun",
+            "description": "横スクロールゲームで、量子情報技術をゲームの要素として配置。",
+            "fullDescription": "Remix（フロントエンド）とQulacs（バックエンド）で作成した量子機械学習を活用したタイピングゲーム。ユーザのタイピングデータを用いて量子回路学習を行い、難易度を動的に調整。AWSとVercelでデプロイ。QC4U2 GroupWorkで全体5位を獲得。",
+            "image": "/qmario_1.png",
+            "technologies": [
+                "React",
+                "Vercel"
+            ],
+            "githubLink": "https://github.com/username/project3"
+        }
+    ],
+    "en": [
+        {
+            "id": 1,
+            "title": "Orbit | Task Management App",
+            "description": "A simple and user-friendly task management application with intuitive drag-and-drop functionality.",
+            "fullDescription": "A task management system created with Vue.js + Ruby on Rails. Based on the concept of \"Getting your daily life into orbit,\" it implements efficient task management features. Includes intuitive drag-and-drop operations, task prioritization, and progress tracking.",
+            "image": "/orbit_1.png",
+            "technologies": [
+                "Vue.js",
+                "Ruby on Rails",
+                "PostgreSQL"
+            ],
+            "githubLink": "https://github.com/kotta-27/orbit-todo-app"
+        },
+        {
+            "id": 2,
+            "title": "Laboratory Purchase Request System",
+            "description": "A web application that streamlines laboratory equipment purchase management.",
+            "fullDescription": "A laboratory equipment purchase management system built with React and Firebase. Manages the entire workflow from purchase requests to approval/rejection and procurement procedures. Features include Discord integration for notifications, request update history, and practical functions like product URLs and comments.",
+            "image": "/purchase_1.png",
+            "technologies": [
+                "React",
+                "Firebase",
+                "Discord API"
+            ],
+            "githubLink": "https://github.com/username/project2"
+        },
+        {
+            "id": 3,
+            "title": "Quantum Pizza",
+            "description": "An educational game for learning quantum computing concepts.",
+            "fullDescription": "A quantum computing learning game created with React. Learn basic quantum information concepts by applying quantum gates to create pizzas matching given themes. Features detailed explanations and multilingual support (Japanese/English/Chinese). Exhibited at RIKEN × Miraikan event and featured on RIKEN's Q-Portal site.",
+            "image": "/qpizza_1.png",
+            "technologies": [
+                "React",
+                "Quantum Computing",
+                "i18n"
+            ],
+            "githubLink": "https://github.com/username/project3",
+            "i18n": true
+        },
+        {
+            "id": 4,
+            "title": "Nanjenerator",
+            "description": "A tool for automatically generating customizable 2ch-style threads.",
+            "fullDescription": "A thread generation system built with React (frontend) and Python (backend). Uses AWS Bedrock (Claude3 Haiku) to generate natural threads. Features customizable parameters including thread count, keywords, and risk level. Winner of the 2nd Progate × AWS Hackathon Grand Prize.",
+            "image": "/nanj_1.png",
+            "technologies": [
+                "React",
+                "Python",
+                "AWS Bedrock",
+                "AWS Cognito"
+            ],
+            "githubLink": "https://github.com/username/project3"
+        },
+        {
+            "id": 5,
+            "title": "ImgToLatex Converter",
+            "description": "A tool for automatically generating LaTeX equations from images.",
+            "fullDescription": "An image recognition system built with React and Gemini API. Automatically generates LaTeX code from images and handwritten equations. Features include equation explanations, code copying, and snackbar notifications. Accurately recognizes complex equations including Ramanujan's formulas.",
+            "image": "/tex_1.png",
+            "technologies": [
+                "React",
+                "Gemini API",
+                "LaTeX"
+            ],
+            "githubLink": "https://github.com/username/project3"
+        },
+        {
+            "id": 6,
+            "title": "Quantum Super Techshiba-kun",
+            "description": "A side-scrolling game incorporating quantum information technology as game elements.",
+            "fullDescription": "A typing game utilizing quantum machine learning, built with Remix (frontend) and Qulacs (backend). Dynamically adjusts difficulty using quantum circuit learning based on user typing data. Deployed on AWS and Vercel. Achieved 5th place overall in QC4U2 GroupWork.",
+            "image": "/qmario_1.png",
+            "technologies": [
+                "React",
+                "Vercel"
+            ],
+            "githubLink": "https://github.com/username/project3"
+        }
+    ]
+}

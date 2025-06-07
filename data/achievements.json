@@ -1,0 +1,64 @@
+{
+    "ja": [
+        {
+            "period": "2024/05",
+            "title": "量子コンピューティング公開伴送型生配信授業QC4U2 グループワーク 全体5位 量子タイピングゲーム"
+        },
+        {
+            "period": "2024/05",
+            "title": "量子アニーリングアイディアソン グループワーク 全体2位"
+        },
+        {
+            "period": "2024/06",
+            "title": "Progateハッカソン powered by AWS 最優秀賞"
+        },
+        {
+            "period": "2024/10",
+            "title": "量子アニーリング国際ネットワークINQA2024国際会議 ポスター発表"
+        },
+        {
+            "period": "2024/10",
+            "title": "Quantum Innovation2024 ポスターセッション発表",
+            "award": {
+                "description": "このセッションで",
+                "title": "Poster Presentation Award for Young Researcher",
+                "congratulations": "を受賞しました！ 🎉"
+            }
+        },
+        {
+            "period": "2024/10",
+            "title": "第13回量子ソフトウェア研究発表会 口頭発表"
+        }
+    ],
+    "en": [
+        {
+            "period": "2024/05",
+            "title": "QC4U2 Quantum Computing Live Class Group Work: 5th Place, Quantum Typing Game"
+        },
+        {
+            "period": "2024/05",
+            "title": "Quantum Annealing Ideathon Group Work: 2nd Place Overall"
+        },
+        {
+            "period": "2024/06",
+            "title": "Progate Hackathon powered by AWS: Grand Prize"
+        },
+        {
+            "period": "2024/10",
+            "title": "INQA2024 International Conference Poster Presentation"
+        },
+        {
+            "period": "2024/10",
+            "title": "Quantum Innovation2024 Poster Session Presentation",
+            "award": {
+                "description": "In this session, received the",
+                "title": "Poster Presentation Award for Young Researcher",
+                "congratulations": "! 🎉"
+            }
+        },
+        {
+            "period": "2024/10",
+            "title": "13th Quantum Software Research Presentation: Oral Presentation"
+        }
+    ]
+}

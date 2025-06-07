@@ -1,0 +1,35 @@
+.projects {
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+    padding: 0 1.5rem 0 1.5rem;
+}
+
+.title {
+    text-align: center;
+    color: #fff;
+    font-size: 2.3rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.dark .title {
+    color: white;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

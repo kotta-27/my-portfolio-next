@@ -1,0 +1,73 @@
+.langSwitcher {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.langIconBtn {
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.7rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0003;
+    transition: background 0.2s, color 0.2s;
+}
+
+.langIconBtn:hover,
+.langIconBtn:focus {
+    background: #facc15;
+    color: #222;
+}
+
+.langDropdown {
+    margin-top: 8px;
+    background: #222;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px #0005;
+    padding: 0.5rem 0;
+    min-width: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    animation: fadeIn 0.18s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.langItem {
+    color: #fff;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.18s, color 0.18s;
+}
+
+.langItem:hover,
+.langItem.active {
+    background: #facc15;
+    color: #222;
+}

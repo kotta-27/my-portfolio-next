@@ -1,0 +1,76 @@
+'use client';
+import React from 'react';
+import Image from 'next/image';
+import { useLanguage } from '../context/LanguageContext';
+import about from '../data/about.json';
+import careers from '../data/careers.json';
+import achievements from '../data/achievements.json';
+import styles from './About.module.css';
+
+export default function About() {
+    const { lang } = useLanguage();
+    return (
+        <section className={styles.aboutSection} id="about">
+            <div className={styles.profileBlock}>
+                <div className={styles.profileName}>{about[lang].name}</div>
+                <div className={styles.profileDetail}>
+                    <Image src="/lego-block-yellow.svg" alt="lego block" width={16} height={16} className={styles.legoIcon} />
+                    {about[lang].education}
+                </div>
+                <div className={styles.profileDetail}>
+                    <Image src="/lego-block-red.svg" alt="lego block" width={16} height={16} className={styles.legoIcon} />
+                    {about[lang].lab}
+                </div>
+                <div className={styles.profileDetail}>
+                    <Image src="/lego-block-blue.svg" alt="lego block" width={16} height={16} className={styles.legoIcon} />
+                    {about[lang].birthplace}
+                </div>
+                <div className={styles.profileDetail}>
+                    <Image src="/lego-block-green.svg" alt="lego block" width={16} height={16} className={styles.legoIcon} />
+                    {about[lang].graduationResearch}
+                </div>
+                <div className={styles.profileDetail}>
+                    <Image src="/lego-block-purple.svg" alt="lego block" width={16} height={16} className={styles.legoIcon} />
+                    {about[lang].researchTheme}
+                </div>
+            </div>
+            <div style={{ marginTop: '2rem' }}>
+                <h3 className={styles.sectionTitle}>{lang === 'ja' ? '経歴' : 'Career'}</h3>
+                <div className={styles.timelineWrapper}>
+                    <div className={styles.timelineList}>
+                        {careers[lang].map((career, idx) => (
+                            <li key={idx} className={styles.timelineItem}>
+                                <div className={styles.timelineDotContainer}>
+                                    <div className={styles.timelineLine} />
+                                    <div className={styles.timelineDot} />
+                                </div>
+                                <div className={styles.timelineContent}>
+                                    <div className={styles.timelinePeriod}>{career.period}</div>
+                                    <div className={styles.timelineTitle}>{career.title}</div>
+                                    {career.image && <Image src={career.image} alt={career.title}
+                                        width={100} height={100} className={styles.timelineImage} />}
+                                </div>
+                            </li>
+                        ))}
+                    </div>
+                </div>
+            </div>
+            <div style={{ marginTop: '2.5rem' }}>
+                <h3 className={styles.sectionTitle}>{lang === 'ja' ? '実績' : 'Achievements'}</h3>
+                <ul className={styles.list}>
+                    {achievements[lang].map((ach, idx) => (
+                        <li key={idx} className={styles.listItem}>
+                            <span style={{ fontStyle: 'italic' }}>{ach.period}：</span> {ach.title}
+                            {ach.award && (
+                                <>
+                                    <br />
+                                    <span style={{ color: '#facc15', fontWeight: 'bold' }}>{ach.award.description}「{ach.award.title}」{ach.award.congratulations}</span>
+                                </>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </section>
+    );
+} 

@@ -1,0 +1,20 @@
+{
+    "ja": {
+        "name": "Kota Mizuno / 水野航太",
+        "education": "芝浦工業大学大学院 理工学研究科 電気・電子情報工学専攻 M2",
+        "lab": "量子情報工学研究室（渡部研）",
+        "birthplace": "出身：東京",
+        "graduationResearch": "卒業研究：「虚時間発展法を用いた励起状態探索の最短ベクトル問題への応用」",
+        "researchTheme": "研究テーマ：格子暗号，量子アルゴリズム，数理最適化",
+        "paper": "🎉 論文投稿しました！"
+    },
+    "en": {
+        "name": "Kota Mizuno",
+        "education": "M2, Graduate School of Engineering, Shibaura Institute of Technology",
+        "lab": "Quantum Information Engineering Lab (Watabe Lab)",
+        "birthplace": "From: Tokyo",
+        "graduationResearch": "Thesis: 'Application of imaginary time evolution to the shortest vector problem for excited state search'",
+        "researchTheme": "Research: Lattice cryptography, quantum algorithms, mathematical optimization",
+        "paper": "🎉 Paper submitted!"
+    }
+}

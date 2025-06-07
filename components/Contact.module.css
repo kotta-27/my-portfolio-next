@@ -1,0 +1,68 @@
+.contactSection {
+    padding: 80px 0 40px 0;
+    background: none;
+}
+
+.contactContainer {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    text-align: center;
+}
+
+.contactText {
+    color: #e0e0e0;
+    font-size: 1.15rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+.contactBtn {
+    display: inline-block;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.contactBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.footer {
+    padding: 2rem 0;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footerContainer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footerCopy {
+    color: #e0e0e0;
+    font-size: 0.9rem;
+}
+
+.footerSocials {
+    display: flex;
+    gap: 1rem;
+}
+
+.footerSocialLink {
+    color: #e0e0e0;
+    transition: color 0.2s;
+}
+
+.footerSocialLink:hover {
+    color: #fff;
+}
