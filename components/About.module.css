@@ -60,6 +60,7 @@
 
 .timelineWrapper {
     display: flex;
+    width: 100%;
     height: 100%;
     min-height: 300px;
     flex-direction: row;
@@ -69,17 +70,14 @@
 
 .timelineList {
     width: 100%;
-    list-style: none;
     padding: 0;
     margin: 0;
 }
 
 .timelineItem {
+    width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
     height: 100px;
     border-radius: 10px;
 }
@@ -91,7 +89,7 @@
 .timelineItem:hover .timelineDot {
     width: 28px;
     height: 28px;
-    border: 3px solid #a08106;
+    border: 3px solid #df6c00;
     transition: width 0.18s, height 0.18s;
 }
 
@@ -136,18 +134,25 @@
     height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     /* background-color: #bababa; */
-    padding: 1rem;
+    /* padding: 1rem; */
 }
 
 .timelineImage {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: auto;
+    height: 50px;
+    object-fit: cover;
+    background-color: #fff;
     opacity: 0;
 }
 
 .timelineItem:hover .timelineImage {
-    position: fixed;
+    position: absolute;
     bottom: 10px;
     right: 10px;
     width: auto;
@@ -163,5 +168,116 @@
 }
 
 .timelineTitle {
-    width: calc(100% - 100px);
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .timelineWrapper {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        min-height: 300px;
+        flex-direction: row;
+        position: relative;
+        margin-bottom: 2.5rem;
+    }
+
+    .timelineList {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        justify-content: start;
+        padding: 0;
+        margin: 0;
+    }
+
+    .timelineItem {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        height: 100px;
+        border-radius: 10px;
+    }
+
+    .timelineItem:hover {
+        background-color: #4446;
+    }
+
+
+
+    .timelineItem:hover .timelineContent {
+        transform: scale(1.02);
+        transition: transform 0.18s;
+    }
+
+    .timelineDotContainer {
+        width: 10px;
+        height: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: start;
+        position: relative;
+    }
+
+    .timelineDot {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #facc15;
+        border-radius: 50%;
+        transition: width 0.18s, height 0.18s;
+    }
+
+    .timelineItem:hover .timelineDot {
+        width: 22px;
+        height: 22px;
+        border: 3px solid #df6c00;
+        transition: width 0.18s, height 0.18s;
+    }
+
+    .timelineContent {
+        width: 90%;
+        height: 100%;
+        display: flex;
+        margin-left: 10px;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+    }
+
+    .timelineImage {
+        position: absolute;
+        bottom: 0px;
+        right: 10px;
+        width: auto;
+        height: 50px;
+        object-fit: cover;
+        background-color: #fff;
+        opacity: 0;
+    }
+
+    .timelineItem:hover .timelineImage {
+        position: absolute;
+        bottom: 0px;
+        right: 10px;
+        width: auto;
+        height: 50px;
+        object-fit: cover;
+        background-color: #fff;
+        opacity: 0.6;
+        transition: width 0.18s, height 0.18s, opacity 1s;
+    }
+
+    .timelinePeriod {
+        width: 50px;
+    }
+
+    .timelineTitle {
+        margin-left: 10px;
+        width: 100%;
+    }
 }
