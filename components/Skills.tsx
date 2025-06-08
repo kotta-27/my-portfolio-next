@@ -1,11 +1,12 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-import { FaReact, FaVuejs, FaDocker } from 'react-icons/fa';
+import { FaReact, FaVuejs, FaJava } from 'react-icons/fa';
 import { BiLogoTypescript } from "react-icons/bi";
 import { SiRubyonrails, SiDjango } from "react-icons/si";
 import { FaAws } from "react-icons/fa6";
 import styles from './Skills.module.css';
 import { SiGooglecloud } from "react-icons/si";
+import { IoLogoDocker } from "react-icons/io5";
 
 const skills = [
     // フロントエンド
@@ -15,8 +16,9 @@ const skills = [
     // バックエンド
     { icon: <SiRubyonrails />, name: 'Ruby on Rails', colorCode: '#CC0102', iconColor: '#fff', textColor: '#fff', category: 'backend' },
     { icon: <SiDjango />, name: 'Django', colorCode: '#459285', iconColor: '#fff', textColor: '#fff', category: 'backend' },
+    { icon: <FaJava />, name: 'Java', colorCode: '#007396', iconColor: '#fff', textColor: '#fff', category: 'backend' },
     // その他
-    { icon: <FaDocker />, name: 'Docker', colorCode: '#2496ED', iconColor: '#fff', textColor: '#fff', category: 'other' },
+    { icon: <IoLogoDocker />, name: 'Docker', colorCode: '#2496Ea', iconColor: '#fff', textColor: '#fff', category: 'other' },
     { icon: <FaAws />, name: 'AWS', colorCode: '#F69400', iconColor: '#242E3C', textColor: '#fff', category: 'other' },
     { icon: <SiGooglecloud />, name: 'GCP', colorCode: '#2496ED', iconColor: '#fff', textColor: '#fff', category: 'other' },
 ];
@@ -84,7 +86,7 @@ export default function Skills() {
                                             background: skill.colorCode,
                                             opacity: globalIdx < visibleCount ? 1 : 0,
                                             transform: globalIdx < visibleCount ? 'translateY(0)' : 'translateY(40px)',
-                                            transition: 'all 0.8s cubic-bezier(.68,-0.55,.27,1.55)',
+                                            transition: 'all 1s cubic-bezier(.68,-0.55,.27,1.55)',
                                             zIndex: globalIdx,
                                             marginBottom: isLast ? 0 : (visibleCount === skills.length ? '-34px' : '20px'),
                                         }}
