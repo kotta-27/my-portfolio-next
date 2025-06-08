@@ -143,7 +143,8 @@ export default function Hero() {
                     {displayed}
                     <span className={styles.heroCursor} />
                 </h1>
-                <p className={styles.heroSubtitle}>Web Developer, Student</p>
+                <p className={styles.heroSubtitle}>Web Developer</p>
+                <p className={styles.heroSubtitle}>Quantum Computing</p>
             </div>
             <div className={styles.heroArrow}>
                 <ArrowDownIcon className={`${styles.heroArrowIcon} ${styles.w6} ${styles.h6}`} />
