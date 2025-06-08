@@ -1,20 +1,60 @@
 {
     "ja": {
-        "name": "Kota Mizuno / 水野航太",
-        "education": "芝浦工業大学大学院 理工学研究科 電気・電子情報工学専攻 M2",
-        "lab": "量子情報工学研究室（渡部研）",
-        "birthplace": "出身：東京",
-        "graduationResearch": "卒業研究：「虚時間発展法を用いた励起状態探索の最短ベクトル問題への応用」",
-        "researchTheme": "研究テーマ：格子暗号，量子アルゴリズム，数理最適化",
-        "paper": "🎉 論文投稿しました！"
+        "name": {
+            "value": "Kota Mizuno / 水野航太",
+            "link": "https://github.com/kota-mizuno"
+        },
+        "education": {
+            "value": "芝浦工業大学大学院 理工学研究科 電気・電子情報工学専攻 M2",
+            "link": "https://www.shibaura-it.ac.jp/en/graduate-school/program/eei/"
+        },
+        "lab": {
+            "value": "量子情報工学研究室（渡部研）",
+            "link": "http://watabegroup.quie.ise.shibaura-it.ac.jp/"
+        },
+        "birthplace": {
+            "value": "出身：東京"
+        },
+        "graduationResearch": {
+            "value": "卒業研究：「虚時間発展法を用いた励起状態探索の最短ベクトル問題への応用」",
+            "link": "https://www.shibaura-it.ac.jp/en/graduate-school/program/eei/"
+        },
+        "researchTheme": {
+            "value": "研究テーマ：格子暗号，量子アルゴリズム，数理最適化",
+            "link": "https://www.shibaura-it.ac.jp/en/graduate-school/program/eei/"
+        },
+        "paper": {
+            "value": "🎉 論文投稿しました！",
+            "link": "https://www.shibaura-it.ac.jp/en/graduate-school/program/eei/"
+        }
     },
     "en": {
-        "name": "Kota Mizuno",
-        "education": "M2, Graduate School of Engineering, Shibaura Institute of Technology",
-        "lab": "Quantum Information Engineering Lab (Watabe Lab)",
-        "birthplace": "From: Tokyo",
-        "graduationResearch": "Thesis: 'Application of imaginary time evolution to the shortest vector problem for excited state search'",
-        "researchTheme": "Research: Lattice cryptography, quantum algorithms, mathematical optimization",
-        "paper": "🎉 Paper submitted!"
+        "name": {
+            "value": "Kota Mizuno",
+            "link": "https://github.com/kota-mizuno"
+        },
+        "education": {
+            "value": "M2, Graduate School of Engineering, Shibaura Institute of Technology",
+            "link": "https://www.shibaura-it.ac.jp/en/graduate-school/program/eei/"
+        },
+        "lab": {
+            "value": "Quantum Information Engineering Lab (Watabe Lab)",
+            "link": "http://watabegroup.quie.ise.shibaura-it.ac.jp/"
+        },
+        "birthplace": {
+            "value": "From: Tokyo"
+        },
+        "graduationResearch": {
+            "value": "Thesis: 'Application of imaginary time evolution to the shortest vector problem for excited state search'",
+            "link": "https://www.shibaura-it.ac.jp/en/graduate-school/program/eei/"
+        },
+        "researchTheme": {
+            "value": "Research: Lattice cryptography, quantum algorithms, mathematical optimization",
+            "link": "https://www.shibaura-it.ac.jp/en/graduate-school/program/eei/"
+        },
+        "paper": {
+            "value": "🎉 Paper submitted!",
+            "link": "https://www.shibaura-it.ac.jp/en/graduate-school/program/eei/"
+        }
     }
 }

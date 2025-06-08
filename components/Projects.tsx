@@ -20,7 +20,9 @@ const Projects: FC = () => {
 
     return (
         <section id="projects" className={styles.projects}>
-            <h2 className={styles.title}>My Works</h2>
+            <div className={styles.sectionTitleContainer}>
+                <h2 className={styles.sectionTitle}>My Works</h2>
+            </div>
             <div className={styles.grid}>
                 {projectsData[lang].map((project) => (
                     <ProjectCard key={project.id} project={project} openModal={openModal} />

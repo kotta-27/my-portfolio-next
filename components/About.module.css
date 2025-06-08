@@ -1,18 +1,45 @@
 .aboutSection {
-    max-width: 900px;
     width: 100%;
-    margin: 0 auto;
-    padding: 48px 10px 64px 10px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 18px;
-    box-shadow: 0 8px 32px #0002;
+    margin: 5rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.sectionTitleContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.sectionTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2.5rem;
+    color: #eeeeee;
+    text-align: center;
+}
+
+.aboutContainer {
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .profileBlock {
-    width: 100%;
-    margin-bottom: 2.5rem;
-    padding: 1em 1rem;
+    background-color: #9c9c9c;
+    border-radius: 18px;
+    width: 90%;
+    padding: 1rem 0;
+    margin-bottom: 3rem;
     border-bottom: 1.5px solid #4446;
+    box-shadow: 0 8px 32px rgba(212, 212, 212, 0.133);
 }
 
 .profileName {
@@ -24,29 +51,46 @@
 }
 
 .profileDetail {
-    color: #e0e0e0;
+    color: #0d0d0d;
     font-size: 1.08rem;
     margin-bottom: 1rem;
-    padding: 0 2rem;
+    padding: 0.2rem 2rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+}
+
+.profileDetailLink {
+    color: #005dd6;
+    text-decoration: none;
+}
+
+.profileDetailLink:hover {
+    color: #1024ff;
+    text-decoration: underline;
 }
 
 .legoIcon {
     flex-shrink: 0;
     transform: rotate(45deg);
+    margin-right: 1rem;
 }
 
-.sectionTitle {
+.subSectionTitleContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.subSectionTitle {
+    margin: 0 auto;
     font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 1.2rem;
     color: #facc15;
     letter-spacing: 0.03em;
 }
-
-
 
 .timelineWrapper {
     display: flex;
@@ -197,6 +241,10 @@
     width: 100%;
 }
 
+.achievementsSection {
+    margin-top: 2.5rem;
+}
+
 .list {
     list-style: disc inside;
     color: #e0e0e0;
@@ -210,12 +258,55 @@
     font-size: 1.05rem;
 }
 
-.achievementsSection {
-    margin-top: 2.5rem;
-}
 
 
 @media (max-width: 768px) {
+    .aboutSection {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.03);
+        margin: 0;
+        box-shadow: 0 8px 32px #0002;
+    }
+
+    .sectionTitleContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sectionTitle {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #eeeeee;
+        text-align: center;
+    }
+
+    .profileBlock {
+        width: 100%;
+        padding: 1rem 0;
+        margin-bottom: 2.5rem;
+        border-bottom: 1.5px solid #4446;
+    }
+
+    .profileName {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #facc15;
+        margin-bottom: 0.5rem;
+    }
+
+    .profileDetail {
+        color: #e0e0e0;
+        font-size: 1.08rem;
+        padding: 0.2rem 1rem;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+    }
+
     .timelineWrapper {
         display: flex;
         width: 100%;
@@ -357,14 +448,23 @@
     }
 
     .achievementsSection {
+        width: 100%;
         margin-top: 2.5rem;
+    }
+
+    .subSectionTitleContainer {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
     }
 
     .list {
         list-style: disc inside;
         color: #e0e0e0;
-        padding: 0 1rem 0 0;
         line-height: 1.8;
+        padding: 0;
         margin-bottom: 2rem;
     }
 
