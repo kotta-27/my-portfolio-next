@@ -1,5 +1,5 @@
 'use client';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import Image from 'next/image';
 import { useLanguage } from '../context/LanguageContext';
 import styles from './ProjectCard.module.css';
@@ -23,8 +23,12 @@ interface Project {
     id: number;
     title: string;
     description: string;
-    fullDescription: string;
-    image: string;
+    image_png: string;
+    image_gif: string;
+    data: {
+        image: string;
+        description: string;
+    }[];
     technologies: string[];
     demoLink?: string;
     githubLink?: string;
@@ -75,16 +79,31 @@ const getTechnologyIcon = (tech: string) => {
 
 const ProjectCard: FC<ProjectCardProps> = ({ project, openModal }) => {
     const { lang } = useLanguage();
+    const [isHovered, setIsHovered] = useState(false);
+
+    // GIF画像のパスを生成
+    const getImagePath = (isHovered: boolean) => {
+        if (!isHovered) {
+            return project.image_png;
+        }
+        return project.image_gif;
+    };
 
     return (
-        <div className={styles.projectCard} onClick={() => openModal(project.id)}>
+        <div
+            className={styles.projectCard}
+            onClick={() => openModal(project.id)}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+        >
             <div className={styles.projectCardImageContainer}>
                 <Image
-                    src={project.image}
+                    src={getImagePath(isHovered)}
                     alt={project.title}
                     width={400}
                     height={200}
                     className={styles.projectThumb}
+                    priority={true}
                 />
             </div>
             <div className={styles.projectContent}>

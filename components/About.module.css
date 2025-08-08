@@ -5,7 +5,9 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    min-height: 100vh;
+    perspective: 3000px;
+    overflow-x: hidden;
 }
 
 .sectionTitleContainer {
@@ -30,16 +32,33 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transform-style: preserve-3d;
 }
 
 .profileBlock {
-    background-color: #9c9c9c;
+    background: linear-gradient(135deg,
+            rgba(156, 156, 156, 0.9) 0%,
+            rgba(156, 156, 156, 0.7) 100%);
     border-radius: 18px;
     width: 90%;
     padding: 1rem 0;
     margin-bottom: 3rem;
-    border-bottom: 1.5px solid #4446;
-    box-shadow: 0 8px 32px rgba(212, 212, 212, 0.133);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 8px 32px rgba(212, 212, 212, 0.133),
+        inset 0 0 32px rgba(255, 255, 255, 0.05);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transform-origin: left center;
+    will-change: transform, opacity;
+    backdrop-filter: blur(10px);
+}
+
+.profileBlock:hover {
+    transform: scale(1.02) rotateY(0deg);
+    box-shadow:
+        0 15px 45px rgba(212, 212, 212, 0.2),
+        inset 0 0 32px rgba(255, 255, 255, 0.1);
 }
 
 .profileName {
@@ -57,6 +76,14 @@
     padding: 0.2rem 2rem;
     display: flex;
     align-items: center;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    transition: transform 0.3s ease-out;
+    position: relative;
+}
+
+.profileDetail:hover {
+    transform: translateZ(30px) scale(1.05);
 }
 
 .profileDetailLink {
@@ -71,8 +98,14 @@
 
 .legoIcon {
     flex-shrink: 0;
-    transform: rotate(45deg);
+    transform: rotate(45deg) translateZ(20px);
     margin-right: 1rem;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease-out;
+}
+
+.profileDetail:hover .legoIcon {
+    transform: rotate(45deg) translateZ(40px) scale(1.2);
 }
 
 .subSectionTitleContainer {
