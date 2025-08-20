@@ -1,17 +1,16 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Sphere, Line } from "@react-three/drei"; // Import Line
+import { Sphere } from "@react-three/drei";
+import * as THREE from 'three';
 import { useRef, useState } from "react";
 import styles from "./Background.module.css";
 
-const RotatingSphere = ({ size = 1, initialPosition = [0, 0, 0], rotationSpeed = 0.001, orbitRadius = 0, orbitSpeed = 0, mainSphereColor = "#0000FF", initialSphereColor }) => {
+const RotatingSphere = ({ size = 1, initialPosition = [0, 0, 0] as [number, number, number], rotationSpeed = 0.001, orbitRadius = 0, orbitSpeed = 0, mainSphereColor = "#0000FF", initialSphereColor = "#0000FF" }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const [angle, setAngle] = useState(Math.random() * Math.PI * 2); // Initial random angle for orbit
   const [isFastSpinning, setIsFastSpinning] = useState(false); // New state for fast spin
   const [sphereColor, setSphereColor] = useState(initialSphereColor || mainSphereColor); // State for individual sphere color
-  const [currentPosition, setCurrentPosition] = useState(initialPosition); // State to store current position for the line
-
   useFrame(() => {
     if (meshRef.current) {
       // Self-rotation
@@ -26,9 +25,7 @@ const RotatingSphere = ({ size = 1, initialPosition = [0, 0, 0], rotationSpeed =
         const newZ = initialPosition[2] + Math.sin(angle) * orbitRadius;
         const newY = initialPosition[1];
         meshRef.current.position.set(newX, newY, newZ); // Update mesh position
-        setCurrentPosition([newX, newY, newZ]); // Update state for line
-      } else {
-        setCurrentPosition(meshRef.current.position.toArray()); // For main sphere, update current position
+
       }
     }
   });
@@ -91,7 +88,7 @@ const MultipleSpheres = () => {
 };
 
 const Background = () => {
-  const [isMainSphereActive, setIsMainSphereActive] = useState(false);
+  const [isMainSphereActive] = useState(false);
   const mainSphereColor = isMainSphereActive ? "#FFFF00" : "#0000FF"; // Yellow when active, blue otherwise
 
   return (
