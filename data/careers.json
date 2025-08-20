@@ -6,7 +6,8 @@
         {
             "period": "8月",
             "title": "理化学研究所主催「量子コンピュータってなんだろう？」学生スタッフ",
-            "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html"
+            "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html",
+            "detail": "学生スタッフとして、理化学研究所主催のイベント「量子コンピュータってなんだろう？」に参加。"
         },
         {
             "period": "9月〜",
@@ -63,6 +64,11 @@
             "period": "3月",
             "title": "文部科学省 量子研究推進室主催「大阪・関西万博『エンタングル・モーメント ―[量子・海・宇宙]×芸術』プレイベント『ゲームで体験！作って実感！量子の世界』」学生スタッフ",
             "link": "https://www.qst.go.jp/site/entangle-moment/pre-event.html"
+        },
+        {
+            "period": "8月",
+            "title": "大阪・関西万博 エンタングル・モーメント ―［量子・海・宇宙］× 芸術 ゲーム展示",
+            "image": "/entanglemoment.png"
         }
     ],
     "en": [
@@ -72,7 +78,8 @@
         {
             "period": "Aug",
             "title": "Student staff at RIKEN event 'What is a Quantum Computer?'",
-            "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html"
+            "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html",
+            "detail": "Participated as a student staff at RIKEN event 'What is a Quantum Computer?'"
         },
         {
             "period": "Sep〜",
@@ -129,6 +136,11 @@
             "period": "Mar",
             "title": "Student staff at MEXT Quantum Research Promotion Office event 'Entangle Moment - [Quantum, Sea, Space] x Art' at Osaka-Kansai Expo",
             "link": "https://www.qst.go.jp/site/entangle-moment/pre-event.html"
+        },
+        {
+            "period": "Aug",
+            "title": "Game Exhibition at Osaka-Kansai Expo 'Entangle Moment - [Quantum, Sea, Space] x Art'",
+            "image": "/entanglemoment.png"
         }
     ]
 }

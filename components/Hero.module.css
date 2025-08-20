@@ -6,7 +6,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    background-color: #bfbfbf;
+    background-color: transparent;
 }
 
 .heroTitle {
@@ -19,6 +19,31 @@
     letter-spacing: 0.04em;
     text-shadow: 0 2px 8px #0004;
     text-align: center;
+}
+
+.heroSubtitleGlass {
+    background: linear-gradient(135deg,
+            rgba(156, 156, 156, 0.3) 0%,
+            rgba(156, 156, 156, 0.2) 100%);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+}
+
+.heroSubtitleCard {
+    width: 250px;
+    background: rgba(255, 255, 255, 0.15);
+    /* Lighter translucent background */
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    /* Lighter semi-transparent border */
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
 }
 
 .gearBg {
@@ -99,11 +124,11 @@
     opacity: 0.2;
 }
 
-.w6 {
+.w8 {
     width: 24px;
 }
 
-.h6 {
+.h8 {
     height: 24px;
 }
 

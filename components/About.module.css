@@ -147,6 +147,22 @@
     flex-direction: row;
     height: 100px;
     border-radius: 10px;
+    position: relative;
+    /* Ensure positioning context for pseudo-element */
+}
+
+.timelineItem::after {
+    content: '';
+    position: absolute;
+    left: 50px;
+    /* Align with the existing timelineLine */
+    top: 100%;
+    /* Start from the bottom of the current item */
+    width: 2px;
+    height: 0.5rem;
+    /* Height of the margin-bottom */
+    background-color: #facc15;
+    transform: translateX(-50%);
 }
 
 .timelinePeriodBar {
@@ -157,10 +173,26 @@
     align-items: start;
     height: 40px;
     border-radius: 10px;
+    position: relative;
+    /* Ensure positioning context for pseudo-element */
+}
+
+.timelinePeriodBar::after {
+    content: '';
+    position: absolute;
+    left: 50px;
+    /* Align with the existing timelineLine */
+    top: 100%;
+    /* Start from the bottom of the current item */
+    width: 2px;
+    height: 0.5rem;
+    /* Height of the margin-bottom */
+    background-color: #facc15;
+    transform: translateX(-50%);
 }
 
 .timelineItem:hover {
-    background-color: #4446;
+    background-color: rgba(41, 41, 41, 0.4);
 }
 
 .timelineItem:hover .timelineDot {
@@ -182,6 +214,16 @@
     justify-content: start;
     align-items: start;
     position: relative;
+}
+
+.timelineLine {
+    height: 100%;
+    width: 2px;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    background-color: #facc15;
 }
 
 .timelineDotContainer {
@@ -237,9 +279,18 @@
     width: calc(100% - 120px);
     height: 100%;
     display: flex;
-    flex-direction: row;
+    padding: 0.5rem 0;
+    flex-direction: column;
+    /* Changed to column */
     justify-content: start;
-    align-items: center;
+    align-items: start;
+}
+
+.timelineContentLeft {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: start;
 }
 
 .timelineImage {
@@ -279,10 +330,12 @@
 }
 
 .list {
-    list-style: disc inside;
+    list-style: none;
+    /* Removed disc inside */
     color: #e0e0e0;
     line-height: 1.8;
-    padding: 2rem;
+    padding: 0;
+    /* Adjusted padding */
     margin-bottom: 2rem;
 }
 
@@ -291,7 +344,39 @@
     font-size: 1.05rem;
 }
 
+.achievementCard {
+    background: rgba(255, 255, 255, 0.1);
+    /* Light translucent background */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Subtle border */
+    border-radius: 10px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    /* Spacing between cards */
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
 
+.achievementCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.careerDetail {
+    margin-left: 60px;
+    background: transparent;
+    /* Translucent background */
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    color: #e0e0e0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
 @media (max-width: 768px) {
     .aboutSection {

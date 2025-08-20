@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useLanguage } from '../context/LanguageContext';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
@@ -12,6 +12,7 @@ export default function About() {
     const { lang } = useLanguage();
     const sectionRef = useRef<HTMLElement>(null);
     const profileRef = useRef<HTMLDivElement>(null);
+    const [hoveredCareerId, setHoveredCareerId] = useState<number | null>(0);
 
     const { scrollYProgress } = useScroll({
         target: sectionRef,
@@ -105,42 +106,54 @@ export default function About() {
                                         </div>
                                     </div>
                                 ) : (
-                                    <li key={idx} className={styles.timelineItem}>
-                                        <div className={styles.timelineDotContainer}>
-                                            <div className={styles.timelineLine} />
-                                            <div className={styles.timelineDot} />
-                                        </div>
-                                        <div className={styles.timelineContent}>
-                                            <div className={styles.timelinePeriod}>{career.period}</div>
-                                            <div className={styles.timelineTitle}>{career.title}</div>
-                                            {career.image && <Image src={career.image} alt={career.title}
-                                                width={100} height={100} className={styles.timelineImage} />}
-                                        </div>
-                                    </li>
-                                )
-                            ))}
+                                    <React.Fragment key={idx}>
+                                        <li
+                                            className={styles.timelineItem}
+                                            onMouseEnter={() => setHoveredCareerId(idx)}
+                                            onMouseLeave={() => setHoveredCareerId(null)}
+                                        >
+                                            <div className={styles.timelineDotContainer}>
+                                                <div className={styles.timelineLine} />
+                                                <div className={styles.timelineDot} />
+                                            </div>
+                                            <div className={styles.timelineContent}>
+                                                <div className={styles.timelineContentLeft}>
+                                                    <div className={styles.timelinePeriod}>{career.period}</div>
+                                                    <div className={styles.timelineTitle}>{career.title}</div>
+                                                </div>
+                                                {career.image && <Image src={career.image} alt={career.title}
+                                                    width={100} height={100} className={styles.timelineImage} />}
+                                                {hoveredCareerId === idx && (
+                                                    <div className={styles.careerDetail}>
+                                                        {career.detail || career.title}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </li>
+                                    </React.Fragment>
+                                )))}
                         </div>
                     </div>
                 </div>
-                <div className={styles.achievementsSection}>
-                    <div className={styles.subSectionTitleContainer}>
-                        <h3 className={styles.subSectionTitle}>{lang === 'ja' ? '実績' : 'Achievements'}</h3>
-                    </div>
-                    <div className={styles.list}>
-                        {achievements[lang].map((ach, idx) => (
-                            <div key={idx} className={styles.listItem}>
-                                <span style={{ fontStyle: 'italic' }}>{ach.period}：</span> {ach.title}
-                                {ach.award && (
-                                    <>
-                                        <br />
-                                        <span style={{ color: '#facc15', fontWeight: 'bold' }}>{ach.award.title}</span>
-                                    </>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+            </div>
+            <div className={styles.achievementsSection}>
+                <div className={styles.subSectionTitleContainer}>
+                    <h3 className={styles.subSectionTitle}>{lang === 'ja' ? '実績' : 'Achievements'}</h3>
+                </div>
+                <div className={styles.list}>
+                    {achievements[lang].map((ach, idx) => (
+                        <div key={idx} className={`${styles.listItem} ${styles.achievementCard}`}>
+                            <span style={{ fontStyle: 'italic' }}>{ach.period}：</span> {ach.title}
+                            {ach.award && (
+                                <>
+                                    <br />
+                                    <span style={{ color: '#facc15', fontWeight: 'bold' }}>{ach.award.title}</span>
+                                </>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
-        </section>
+        </section >
     );
-} 
+}
