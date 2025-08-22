@@ -125,7 +125,13 @@ export default function About() {
                                                     width={100} height={100} className={styles.timelineImage} />}
                                                 {hoveredCareerId === idx && (
                                                     <div className={styles.careerDetail}>
-                                                        {career.detail || career.title}
+                                                        {career.details ? (
+                                                            career.details.map((detail, detailIdx) => (
+                                                                <div key={detailIdx}>{detail}</div>
+                                                            ))
+                                                        ) : (
+                                                            career.title
+                                                        )}
                                                     </div>
                                                 )}
                                             </div>

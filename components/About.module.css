@@ -146,24 +146,26 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    height: 100px;
+    min-height: 100px;
     border-radius: 10px;
     position: relative;
     /* Ensure positioning context for pseudo-element */
 }
 
-.timelineItem::after {
+.timelineItem {
+    margin-bottom: 1rem;
+}
+
+.timelineItem::before {
     content: '';
     position: absolute;
     left: 50px;
-    /* Align with the existing timelineLine */
-    top: 100%;
-    /* Start from the bottom of the current item */
+    top: 0;
     width: 2px;
-    height: 0.5rem;
-    /* Height of the margin-bottom */
+    height: calc(100% + 1rem);
     background-color: #facc15;
     transform: translateX(-50%);
+    z-index: 0;
 }
 
 .timelinePeriodBar {
@@ -175,21 +177,19 @@
     height: 40px;
     border-radius: 10px;
     position: relative;
-    /* Ensure positioning context for pseudo-element */
+    margin-bottom: 1rem;
 }
 
-.timelinePeriodBar::after {
+.timelinePeriodBar::before {
     content: '';
     position: absolute;
     left: 50px;
-    /* Align with the existing timelineLine */
-    top: 100%;
-    /* Start from the bottom of the current item */
+    top: 0;
     width: 2px;
-    height: 0.5rem;
-    /* Height of the margin-bottom */
+    height: calc(100% + 1rem);
     background-color: #facc15;
     transform: translateX(-50%);
+    z-index: 0;
 }
 
 .timelineItem:hover {
@@ -377,6 +377,14 @@
     line-height: 1.5;
     backdrop-filter: blur(5px);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.careerDetail>div {
+    margin-bottom: 0.5rem;
+}
+
+.careerDetail>div:last-child {
+    margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
