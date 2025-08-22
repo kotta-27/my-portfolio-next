@@ -27,7 +27,7 @@ export default function Hero() {
         return () => clearInterval(nameTimer);
     }, []);
 
-    const startRoleTyping = (roleIndex) => {
+    const startRoleTyping = (roleIndex: number) => {
         let i = 0;
         const roleTimer = setInterval(() => {
             setDisplayedRoles(prev => {
