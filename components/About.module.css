@@ -41,24 +41,14 @@
             rgba(156, 156, 156, 0.7) 100%);
     border-radius: 18px;
     width: 90%;
+    max-width: 1100px;
     padding: 1rem 0;
     margin-bottom: 3rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow:
         0 8px 32px rgba(212, 212, 212, 0.133),
         inset 0 0 32px rgba(255, 255, 255, 0.05);
-    transform-style: preserve-3d;
-    backface-visibility: hidden;
-    transform-origin: left center;
-    will-change: transform, opacity;
     backdrop-filter: blur(10px);
-}
-
-.profileBlock:hover {
-    transform: scale(1.02) rotateY(0deg);
-    box-shadow:
-        0 15px 45px rgba(212, 212, 212, 0.2),
-        inset 0 0 32px rgba(255, 255, 255, 0.1);
 }
 
 .profileName {
@@ -83,7 +73,7 @@
 }
 
 .profileDetail:hover {
-    transform: translateZ(30px) scale(1.05);
+    transform: translateZ(30px) scale(1.01);
 }
 
 .profileDetailLink {
@@ -108,6 +98,12 @@
     transform: rotate(45deg) translateZ(40px) scale(1.2);
 }
 
+.careerSection {
+    width: 90%;
+    max-width: 1100px;
+    margin-bottom: 3rem;
+}
+
 .subSectionTitleContainer {
     width: 100%;
     display: flex;
@@ -128,7 +124,6 @@
 .timelineWrapper {
     display: flex;
     width: 100%;
-    max-width: 1200px;
     height: 100%;
     min-height: 300px;
     flex-direction: row;
@@ -146,26 +141,8 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    min-height: 100px;
+    height: 100px;
     border-radius: 10px;
-    position: relative;
-    /* Ensure positioning context for pseudo-element */
-}
-
-.timelineItem {
-    margin-bottom: 1rem;
-}
-
-.timelineItem::before {
-    content: '';
-    position: absolute;
-    left: 50px;
-    top: 0;
-    width: 2px;
-    height: calc(100% + 1rem);
-    background-color: #facc15;
-    transform: translateX(-50%);
-    z-index: 0;
 }
 
 .timelinePeriodBar {
@@ -176,24 +153,10 @@
     align-items: start;
     height: 40px;
     border-radius: 10px;
-    position: relative;
-    margin-bottom: 1rem;
-}
-
-.timelinePeriodBar::before {
-    content: '';
-    position: absolute;
-    left: 50px;
-    top: 0;
-    width: 2px;
-    height: calc(100% + 1rem);
-    background-color: #facc15;
-    transform: translateX(-50%);
-    z-index: 0;
 }
 
 .timelineItem:hover {
-    background-color: rgba(41, 41, 41, 0.4);
+    background-color: #4446;
 }
 
 .timelineItem:hover .timelineDot {
@@ -215,16 +178,6 @@
     justify-content: start;
     align-items: start;
     position: relative;
-}
-
-.timelineLine {
-    height: 100%;
-    width: 2px;
-    position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    background-color: #facc15;
 }
 
 .timelineDotContainer {
@@ -280,18 +233,27 @@
     width: calc(100% - 120px);
     height: 100%;
     display: flex;
-    padding: 0.5rem 0;
-    flex-direction: column;
-    /* Changed to column */
+    flex-direction: row;
     justify-content: start;
-    align-items: start;
+    align-items: center;
 }
 
 .timelineContentLeft {
     width: 100%;
     display: flex;
     flex-direction: row;
-    align-items: start;
+    justify-content: center;
+}
+
+.timelinePeriod {
+    display: flex;
+    align-items: center;
+}
+
+.timelineTitle {
+    width: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .timelineImage {
@@ -327,65 +289,36 @@
 }
 
 .achievementsSection {
+    width: 90%;
+    max-width: 1100px;
     margin-top: 2.5rem;
+    background: linear-gradient(135deg,
+            rgba(156, 156, 156, 0.2) 50%,
+            rgba(156, 156, 156, 0.1) 100%);
+    border-radius: 18px;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 8px 32px rgba(212, 212, 212, 0.133),
+        inset 0 0 32px rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
 }
 
 .list {
-    list-style: none;
-    /* Removed disc inside */
-    color: #e0e0e0;
+    list-style: disc inside;
     line-height: 1.8;
-    padding: 0;
-    /* Adjusted padding */
+    padding: 2rem;
     margin-bottom: 2rem;
 }
 
 .listItem {
-    margin-bottom: 0.5rem;
-    font-size: 1.05rem;
-}
-
-.achievementCard {
-    background: rgba(255, 255, 255, 0.1);
-    /* Light translucent background */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    /* Subtle border */
-    border-radius: 10px;
-    padding: 1rem 1.5rem;
-    margin-bottom: 1rem;
-    /* Spacing between cards */
-    backdrop-filter: blur(5px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.achievementCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-}
-
-.careerDetail {
-    margin-left: 60px;
-    background: transparent;
-    /* Translucent background */
-    border-radius: 8px;
-    padding: 1rem;
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
     color: #e0e0e0;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    backdrop-filter: blur(5px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.careerDetail>div {
     margin-bottom: 0.5rem;
+    font-weight: bold;
+    font-size: 1.2rem;
 }
 
-.careerDetail>div:last-child {
-    margin-bottom: 0;
-}
+
 
 @media (max-width: 768px) {
     .aboutSection {

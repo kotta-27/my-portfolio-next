@@ -58,15 +58,35 @@
 .heroSubtitleCard {
     width: 300px;
     background: rgba(255, 255, 255, 0.15);
-    /* Lighter translucent background */
     border: 2px solid rgba(255, 255, 255, 0.3);
-    /* Lighter semi-transparent border */
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(8px);
     padding: 0.5rem 1rem;
     margin-bottom: 1rem;
     transition: all 0.3s ease;
+}
+
+.heroSubtitleCard.flash {
+    animation: flashEffect 0.5s ease-out;
+}
+
+@keyframes flashEffect {
+    0% {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    20% {
+        background: rgba(78, 251, 124, 0.3);
+        border-color: rgba(51, 218, 78, 0.8);
+        box-shadow: 0 0 20px rgba(27, 221, 40, 0.4);
+    }
+
+    100% {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
 }
 
 .gearBg {

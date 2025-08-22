@@ -11,6 +11,7 @@ export default function Hero() {
     };
     const [displayedName, setDisplayedName] = useState("");
     const [displayedRoles, setDisplayedRoles] = useState(["", ""]);
+    const [flashIndex, setFlashIndex] = useState<number | null>(null);
 
     useEffect(() => {
         // Name typing animation
@@ -38,8 +39,12 @@ export default function Hero() {
             i++;
             if (i === texts.roles[roleIndex].length) {
                 clearInterval(roleTimer);
+                // フラッシュ効果を追加
+                setFlashIndex(roleIndex);
+                // フラッシュ効果をリセット
+                setTimeout(() => setFlashIndex(null), 500);
                 if (roleIndex < texts.roles.length - 1) {
-                    setTimeout(() => startRoleTyping(roleIndex + 1), 500);
+                    setTimeout(() => startRoleTyping(roleIndex + 1), 800);
                 }
             }
         }, 100);
@@ -56,7 +61,10 @@ export default function Hero() {
                     )}
                 </h1>
                 {displayedRoles.map((role, index) => (
-                    <div key={index} className={styles.heroSubtitleCard}>
+                    <div
+                        key={index}
+                        className={`${styles.heroSubtitleCard} ${flashIndex === index ? styles.flash : ''}`}
+                    >
                         <p className={styles.heroSubtitle}>
                             {role}
                             {role.length > 0 && role.length < texts.roles[index].length && (
