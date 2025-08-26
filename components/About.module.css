@@ -378,8 +378,7 @@
     }
 
     .profileBlock {
-        width: 100%;
-        padding: 1rem 0;
+        width: 95%;
         margin-bottom: 2.5rem;
         border-bottom: 1.5px solid #4446;
     }
@@ -420,6 +419,26 @@
         margin: 0;
     }
 
+    .timelineBarContainer {
+        width: 100px;
+        height: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: start;
+    }
+
+    .timelineDotContainer {
+        width: 100px;
+        height: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: start;
+    }
+
+    .timelinePeriodContainer {
+        width: 100px;
+    }
+
     .timelinePeriodBar {
         width: 100%;
         display: flex;
@@ -427,8 +446,9 @@
         justify-content: start;
         align-items: start;
         height: 40px;
-        border-radius: 10px;
+        border-radius: 5px;
     }
+
 
     .timelineItem {
         width: 100%;
