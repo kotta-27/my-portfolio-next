@@ -23,10 +23,10 @@ const notoSansJP = Noto_Sans_JP({
 
 export const metadata: Metadata = {
     title: 'Kota Mizuno',
-    description: 'Kota Mizuno\'s portfolio',
+    description: 'Web Developer, Student, and more',
     openGraph: {
         title: 'Kota Mizuno',
-        description: 'Kota Mizuno\'s portfolio',
+        description: 'Web Developer, Student, and more',
         url: 'https://kotamizuno.dev',
         siteName: 'Kota Mizuno',
         locale: 'ja_JP',
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     twitter: {
         card: 'summary_large_image',
         title: 'Kota Mizuno',
-        description: 'Kota Mizuno\'s portfolio',
+        description: 'Web Developer, Student, and more',
     },
 };
 
