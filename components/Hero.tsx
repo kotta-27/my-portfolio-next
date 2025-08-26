@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { ArrowDownIcon } from '@heroicons/react/24/outline';
 import styles from './Hero.module.css';
 import Image from 'next/image';
 
@@ -73,9 +72,6 @@ export default function Hero() {
                         </p>
                     </div>
                 ))}
-            </div>
-            <div className={styles.heroArrow}>
-                <ArrowDownIcon className={`${styles.heroArrowIcon} ${styles.w8} ${styles.h8}`} />
             </div>
         </section>
     );

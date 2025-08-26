@@ -2,8 +2,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Raleway, Noto_Sans_JP } from 'next/font/google';
 import { LanguageProvider } from '../context/LanguageContext';
-import LanguageSwitcher from '../components/LanguageSwitcher';
 import Background from '../components/Background';
+import Header from '../components/Header';
 
 const raleway = Raleway({
     preload: true,
@@ -49,8 +49,10 @@ export default function RootLayout({
             <body>
                 <Background />
                 <LanguageProvider>
-                    <LanguageSwitcher />
-                    {children}
+                    <Header />
+                    <main className="main-bg">
+                        {children}
+                    </main>
                 </LanguageProvider>
             </body>
         </html>
