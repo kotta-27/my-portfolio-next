@@ -1,12 +1,42 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import { Raleway, Noto_Sans_JP } from 'next/font/google';
 import { LanguageProvider } from '../context/LanguageContext';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import Background from '../components/Background';
 
+const raleway = Raleway({
+    preload: true,
+    subsets: ['latin'],
+    display: 'swap',
+    weight: ['400', '500', '700', '900'],
+    variable: '--font-raleway',
+});
+
+const notoSansJP = Noto_Sans_JP({
+    preload: true,
+    subsets: ['latin'],
+    display: 'swap',
+    weight: ['400', '500', '700'],
+    variable: '--font-noto-sans-jp',
+});
+
 export const metadata: Metadata = {
     title: 'Kota Mizuno',
     description: 'Kota Mizuno\'s portfolio',
+    openGraph: {
+        title: 'Kota Mizuno',
+        description: 'Kota Mizuno\'s portfolio',
+        url: 'https://kotamizuno.dev',
+        siteName: 'Kota Mizuno',
+        locale: 'ja_JP',
+        type: 'website',
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Kota Mizuno',
+        description: 'Kota Mizuno\'s portfolio',
+    },
 };
 
 export default function RootLayout({
@@ -15,13 +45,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="ja">
-            <head>
-                <title>Kota Mizuno</title>
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-                <link href="https://fonts.googleapis.com/css2?family=Abel&family=Bitter:ital,wght@0,100..900;1,100..900&family=Edu+NSW+ACT+Hand+Pre:wght@400..700&family=Noto+Sans+JP&family=Noto+Sans+TC:wght@100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Pacifico&family=Press+Start+2P&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
-            </head>
+        <html lang="ja" className={`${raleway.variable} ${notoSansJP.variable}`}>
             <body>
                 <Background />
                 <LanguageProvider>

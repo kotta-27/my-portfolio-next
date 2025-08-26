@@ -11,7 +11,7 @@ body {
     margin: 0;
     padding: 0;
     background: transparent;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: var(--font-raleway), var(--font-noto-sans-jp), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* スムーズスクロール */
