@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
+import styles from './Header.module.css';
+
 export default function Header() {
     const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,7 +16,7 @@ export default function Header() {
         { name: 'Home', href: '/' },
         { name: 'About', href: '/about' },
         { name: 'Works', href: '/works' },
-        { name: 'Blog', href: '/blog' },
+        { name: 'Outputs', href: '/outputs' },
     ];
 
     // ページ遷移時にメニューを閉じる
@@ -23,47 +25,48 @@ export default function Header() {
     }, [pathname]);
 
     return (
-        <header className="header-glass">
-            <nav className="header-nav">
-                <Link href="/" className="header-title">
+        <header className={styles.headerGlass}>
+            <nav className={styles.headerNav}>
+                <Link href="/" className={styles.headerTitle}>
                     Kota Mizuno
                 </Link>
                 <button
-                    className="menu-button"
+                    className={styles.menuButton}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     aria-label="Toggle menu"
                 >
                     {isMenuOpen ? '✕' : '☰'}
                 </button>
-                <div className={`header-menu ${isMenuOpen ? 'open' : ''}`}>
-                    <ul className="nav-links">
+                <div className={`${styles.headerMenu} ${isMenuOpen ? styles.open : ''}`}>
+                    <ul className={styles.navLinks}>
                         {navigation.map((item) => {
                             const isActive = pathname === item.href;
                             return (
-                                <li key={item.href}>
+                                <li key={item.href} className={styles.navItem}>
                                     <Link
                                         href={item.href}
-                                        className={`header-link ${isActive ? 'header-link-active' : ''}`}
+                                        className={`${styles.headerLink} ${isActive ? styles.active : ''}`}
                                         onClick={() => setIsMenuOpen(false)}
                                     >
                                         {item.name}
+                                        {isActive && <span className={styles.activeIndicator} />}
                                     </Link>
                                 </li>
                             );
                         })}
                     </ul>
-                    <div className="lang-switcher">
+                    <div className={styles.langSwitcher}>
                         <button
                             onClick={() => setLang(lang === 'en' ? 'ja' : 'en')}
-                            className={`lang-button ${lang === 'en' ? 'active' : ''}`}
+                            className={`${styles.langButton} ${lang === 'en' ? styles.active : ''}`}
                             aria-label="Switch to English"
                         >
                             EN
                         </button>
-                        <span className="lang-separator">/</span>
+                        <span className={styles.langSeparator}>/</span>
                         <button
                             onClick={() => setLang(lang === 'ja' ? 'en' : 'ja')}
-                            className={`lang-button ${lang === 'ja' ? 'active' : ''}`}
+                            className={`${styles.langButton} ${lang === 'ja' ? styles.active : ''}`}
                             aria-label="Switch to Japanese"
                         >
                             JA

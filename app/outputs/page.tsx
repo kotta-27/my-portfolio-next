@@ -1,12 +1,12 @@
 'use client';
 
-export default function BlogPage() {
+export default function OutputsPage() {
     return (
-        <section className="blog-section">
-            <h1>Blog</h1>
+        <section className="outputs-section">
+            <h1>Outputs</h1>
             <p>Coming soon...</p>
             <style jsx>{`
-                .blog-section {
+                .outputs-section {
                     min-height: 100vh;
                     display: flex;
                     flex-direction: column;

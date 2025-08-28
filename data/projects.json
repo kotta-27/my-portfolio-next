@@ -78,8 +78,7 @@
             ],
             "technologies": [
                 "React",
-                "Quantum Computing",
-                "i18n"
+                "Quantum Computing"
             ],
             "githubLink": "https://github.com/username/project3",
             "i18n": true
@@ -107,8 +106,7 @@
             "technologies": [
                 "React",
                 "Python",
-                "AWS Bedrock",
-                "AWS Cognito"
+                "AWS"
             ],
             "githubLink": "https://github.com/username/project3"
         },
@@ -245,8 +243,7 @@
             ],
             "technologies": [
                 "React",
-                "Quantum Computing",
-                "i18n"
+                "Quantum Computing"
             ],
             "githubLink": "https://github.com/username/project3",
             "i18n": true
@@ -274,8 +271,7 @@
             "technologies": [
                 "React",
                 "Python",
-                "AWS Bedrock",
-                "AWS Cognito"
+                "AWS"
             ],
             "githubLink": "https://github.com/username/project3"
         },

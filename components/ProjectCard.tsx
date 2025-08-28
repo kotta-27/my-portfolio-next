@@ -56,10 +56,6 @@ const getTechnologyIcon = (tech: string) => {
             return <SiDiscord className={styles.techIcon} title="Discord API" />;
         case 'aws':
             return <FaAws className={styles.techIcon} title="AWS" />;
-        case 'aws bedrock':
-            return <FaAws className={styles.techIcon} title="AWS Bedrock" />;
-        case 'aws cognito':
-            return <FaAws className={styles.techIcon} title="AWS Cognito" />;
         case 'gemini':
             return <RiGeminiFill className={styles.techIcon} title="Gemini" />;
         case 'vercel':
