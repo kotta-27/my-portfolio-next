@@ -62,7 +62,7 @@ export default function Hero() {
                 {displayedRoles.map((role, index) => (
                     <div
                         key={index}
-                        className={`${styles.heroSubtitleCard} ${flashIndex === index ? styles.flash : ''}`}
+                        className={`${styles.heroSubtitleCard} ${flashIndex === index ? (index === 0 ? styles.flashBlue : styles.flashGreen) : ''}`}
                     >
                         <p className={styles.heroSubtitle}>
                             {role}
