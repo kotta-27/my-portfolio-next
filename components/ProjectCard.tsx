@@ -2,6 +2,7 @@
 import { FC, useState } from 'react';
 import Image from 'next/image';
 import { useLanguage } from '../context/LanguageContext';
+import ImageLoading from './ImageLoading';
 import styles from './ProjectCard.module.css';
 import {
     SiReact,
@@ -76,6 +77,7 @@ const getTechnologyIcon = (tech: string) => {
 const ProjectCard: FC<ProjectCardProps> = ({ project, openModal }) => {
     const { lang } = useLanguage();
     const [isHovered, setIsHovered] = useState(false);
+    const [isImageLoading, setIsImageLoading] = useState(true);
 
     // GIF画像のパスを生成
     const getImagePath = (isHovered: boolean) => {
@@ -93,6 +95,7 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, openModal }) => {
             onMouseLeave={() => setIsHovered(false)}
         >
             <div className={styles.projectCardImageContainer}>
+                {isImageLoading && <ImageLoading />}
                 <Image
                     src={getImagePath(isHovered)}
                     alt={project.title}
@@ -100,6 +103,8 @@ const ProjectCard: FC<ProjectCardProps> = ({ project, openModal }) => {
                     height={200}
                     className={styles.projectThumb}
                     priority={true}
+                    onLoadingComplete={() => setIsImageLoading(false)}
+                    onLoad={() => setIsImageLoading(false)}
                 />
             </div>
             <div className={styles.projectContent}>
