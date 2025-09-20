@@ -27,9 +27,9 @@ export default function Header() {
     return (
         <header className={styles.headerGlass}>
             <nav className={styles.headerNav}>
-                <Link href="/" className={styles.headerTitle}>
+                {/* <Link href="/" className={styles.headerTitle}>
                     Kota Mizuno
-                </Link>
+                </Link> */}
                 <button
                     className={styles.menuButton}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}

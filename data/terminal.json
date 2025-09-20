@@ -1,0 +1,50 @@
+{
+    "ja": {
+        "commands": [
+            {
+                "cmd": "whoami",
+                "output": "名前: 水野 航太\n年齢: 23"
+            },
+            {
+                "cmd": "major and lab",
+                "output": "専攻: 電気電子情報工学\n研究室: 量子情報工学研究室（渡部研） [<ホームページ>](http://watabegroup.quie.ise.shibaura-it.ac.jp/)"
+            },
+            {
+                "cmd": "degree",
+                "output": "学位: 工学学士"
+            },
+            {
+                "cmd": "from",
+                "output": "出身: 東京"
+            },
+            {
+                "cmd": "show career and achievements",
+                "output": "読み込み中...\n完了！"
+            }
+        ]
+    },
+    "en": {
+        "commands": [
+            {
+                "cmd": "whoami",
+                "output": "Name: Kota Mizuno\nAge: 23"
+            },
+            {
+                "cmd": "major and lab",
+                "output": "Major: Electrical / Electronic Information Science and Engineering\nLab: Quantum Information Engineering Lab (Watabe Lab) [<Home Page>](http://watabegroup.quie.ise.shibaura-it.ac.jp/)"
+            },
+            {
+                "cmd": "degree",
+                "output": "Degree: Bachelor of Engineering"
+            },
+            {
+                "cmd": "from",
+                "output": "From: Tokyo, Japan"
+            },
+            {
+                "cmd": "show career and achievements",
+                "output": "Loading...\nDONE!"
+            }
+        ]
+    }
+}

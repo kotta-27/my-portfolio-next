@@ -1,30 +1,17 @@
 'use client';
+import ThreeScene from '../../components/ThreeScene';
+import styles from './page.module.css';
 
-export default function OutputsPage() {
+export default function Outputs() {
     return (
-        <section className="outputs-section">
-            <h1>Outputs</h1>
-            <p>Coming soon...</p>
-            <style jsx>{`
-                .outputs-section {
-                    min-height: 100vh;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: center;
-                    padding: 2rem;
-                    text-align: center;
-                }
-                h1 {
-                    font-size: 2.5rem;
-                    margin-bottom: 1rem;
-                    color: #ffffff;
-                }
-                p {
-                    font-size: 1.2rem;
-                    color: #e0e0e0;
-                }
-            `}</style>
-        </section>
+        <div className={styles.container}>
+            <div className={styles.threeContainer}>
+                <ThreeScene />
+            </div>
+            <div className={styles.content}>
+                <h1 className={styles.title}>Outputs</h1>
+                {/* ここに他のコンテンツを追加 */}
+            </div>
+        </div>
     );
 }
