@@ -12,22 +12,7 @@ export default function Hero() {
     const [displayedRoles, setDisplayedRoles] = useState(["", ""]);
     const [flashIndex, setFlashIndex] = useState<number | null>(null);
 
-    useEffect(() => {
-        // Name typing animation
-        let i = 0;
-        const nameTimer = setInterval(() => {
-            setDisplayedName(texts.name.slice(0, i + 1));
-            i++;
-            if (i === texts.name.length) {
-                clearInterval(nameTimer);
-                // Start role typing after name is complete
-                startRoleTyping(0);
-            }
-        }, 120);
-        return () => clearInterval(nameTimer);
-    }, []);
-
-    const startRoleTyping = (roleIndex: number) => {
+    const startRoleTyping = React.useCallback((roleIndex: number) => {
         let i = 0;
         const roleTimer = setInterval(() => {
             setDisplayedRoles(prev => {
@@ -47,7 +32,22 @@ export default function Hero() {
                 }
             }
         }, 100);
-    };
+    }, [texts.roles]);
+
+    useEffect(() => {
+        // Name typing animation
+        let i = 0;
+        const nameTimer = setInterval(() => {
+            setDisplayedName(texts.name.slice(0, i + 1));
+            i++;
+            if (i === texts.name.length) {
+                clearInterval(nameTimer);
+                // Start role typing after name is complete
+                startRoleTyping(0);
+            }
+        }, 120);
+        return () => clearInterval(nameTimer);
+    }, [texts.name, startRoleTyping]);
 
     return (
         <section id="home" className={styles.heroSection}>

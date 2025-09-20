@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useRef } from 'react';
-import { useSpring, animated } from '@react-spring/web';
 import gsap from 'gsap';
 import styles from './MorphingAnimation.module.css';
 

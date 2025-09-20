@@ -74,7 +74,7 @@ const ProjectModal: FC<ProjectModalProps> = ({ project, closeModal }) => {
         return () => {
             window.removeEventListener('keydown', handleEscKey);
         };
-    }, [closeModal]);
+    }, [closeModal, nextImage, prevImage]);
 
     return (
         <div className={styles.modalOverlay} onClick={closeModal}>

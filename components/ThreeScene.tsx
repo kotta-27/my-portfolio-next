@@ -1,7 +1,6 @@
 'use client';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
-import RotatingCube from './RotatingCube';
 import styles from './ThreeScene.module.css';
 
 export default function ThreeScene() {
@@ -13,7 +12,6 @@ export default function ThreeScene() {
             >
                 <ambientLight intensity={0.5} />
                 <pointLight position={[10, 10, 10]} intensity={0.5} />
-                <RotatingCube />
                 <OrbitControls
                     enableZoom={false}
                     enablePan={false}
