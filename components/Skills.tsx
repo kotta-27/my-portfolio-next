@@ -1,110 +1,42 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
-import { FaReact, FaVuejs, FaJava } from 'react-icons/fa';
-import { BiLogoTypescript } from "react-icons/bi";
-import { SiRubyonrails, SiDjango } from "react-icons/si";
-import { FaAws } from "react-icons/fa6";
+
+import React from 'react';
+import { useLanguage } from '../context/LanguageContext';
+import skills from '../data/skills.json';
 import styles from './Skills.module.css';
-import { SiGooglecloud } from "react-icons/si";
-import { IoLogoDocker } from "react-icons/io5";
-
-const skills = [
-    // フロントエンド
-    { icon: <FaVuejs />, name: 'Vue.js', colorCode: '#3EB27F', iconColor: '#fff', textColor: '#000', category: 'frontend' },
-    { icon: <BiLogoTypescript />, name: 'TypeScript', colorCode: '#3b82f6', iconColor: '#fff', textColor: '#fff', category: 'frontend' },
-    { icon: <FaReact />, name: 'React', colorCode: '#22d3ee', iconColor: '#000', textColor: '#000', category: 'frontend' },
-    // バックエンド
-    { icon: <SiRubyonrails />, name: 'Ruby on Rails', colorCode: '#CC0102', iconColor: '#fff', textColor: '#fff', category: 'backend' },
-    { icon: <SiDjango />, name: 'Django', colorCode: '#459285', iconColor: '#fff', textColor: '#fff', category: 'backend' },
-    { icon: <FaJava />, name: 'Java', colorCode: '#007396', iconColor: '#fff', textColor: '#fff', category: 'backend' },
-    // その他
-    { icon: <IoLogoDocker />, name: 'Docker', colorCode: '#2496Ea', iconColor: '#fff', textColor: '#fff', category: 'other' },
-    { icon: <FaAws />, name: 'AWS', colorCode: '#F69400', iconColor: '#242E3C', textColor: '#fff', category: 'other' },
-    { icon: <SiGooglecloud />, name: 'GCP', colorCode: '#2496ED', iconColor: '#fff', textColor: '#fff', category: 'other' },
-];
-
-function useMediaQuery(query: string) {
-    const [matches, setMatches] = useState(false);
-    useEffect(() => {
-        const media = window.matchMedia(query);
-        if (media.matches !== matches) {
-            setMatches(media.matches);
-        }
-        const listener = () => setMatches(media.matches);
-        media.addEventListener('change', listener);
-        return () => media.removeEventListener('change', listener);
-    }, [matches, query]);
-    return matches;
-}
 
 export default function Skills() {
-    const [visibleCount, setVisibleCount] = useState(0);
-    const [startAnim, setStartAnim] = useState(false);
-    const skillsRef = useRef<HTMLDivElement>(null);
-    const isMobile = useMediaQuery('(max-width: 768px)');
-
-    // Intersection Observerで表示時にアニメ開始
-    useEffect(() => {
-        const observer = new window.IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) setStartAnim(true);
-            },
-            { threshold: 0.6 }
-        );
-        if (skillsRef.current) observer.observe(skillsRef.current);
-        return () => observer.disconnect();
-    }, []);
-
-    // アニメーション制御（下から上に）
-    useEffect(() => {
-        if (startAnim && visibleCount < skills.length) {
-            const timer = setTimeout(() => setVisibleCount(visibleCount + 1), 180);
-            return () => clearTimeout(timer);
-        }
-    }, [startAnim, visibleCount]);
-
-    // 3列分割（下から上にするためreverse）
-    const col1 = skills.filter(skill => skill.category === 'frontend').reverse();
-    const col2 = skills.filter(skill => skill.category === 'backend').reverse();
-    const col3 = skills.filter(skill => skill.category === 'other').reverse();
+    const { lang } = useLanguage();
+    const skillData = skills[lang as keyof typeof skills];
 
     return (
-        <section id="skills" className={styles.skillsSection} ref={skillsRef}>
+        <section className={styles.skillsSection}>
+            <h2 className={styles.sectionTitle}>Skills</h2>
             <div className={styles.skillsContainer}>
-                <h2 className={styles.sectionTitle}>Skills</h2>
-                <div className={styles.skillsList3col}>
-                    {[col1, col2, col3].map((col, colIdx) => (
-                        <div className={styles.skillsCol} key={colIdx}>
-                            {col.map((skill, idx) => {
-                                const isLast = idx === col.length - 1;
-                                const globalIdx = skills.length - 1 - (colIdx + idx * 3);
-                                return (
-                                    <div
-                                        key={skill.name}
-                                        className={`${styles.legoBlock} ${styles.skillBlockAnim}`}
-                                        style={{
-                                            background: skill.colorCode,
-                                            opacity: globalIdx < visibleCount ? 1 : 0,
-                                            transform: globalIdx < visibleCount ? 'translateY(0)' : 'translateY(40px)',
-                                            transition: 'all 1s cubic-bezier(.68,-0.55,.27,1.55)',
-                                            zIndex: globalIdx,
-                                            marginBottom: isLast ? 0 : (visibleCount === skills.length ? '-34px' : '20px'),
-                                        }}
-                                    >
-                                        <div className={styles.legoPotchRow}>
-                                            {[...Array(isMobile ? 2 : 4)].map((_, i) => (
-                                                <span key={i} className={styles.legoPotch} style={{ background: skill.colorCode }}></span>
-                                            ))}
-                                        </div>
-                                        <div className={styles.skillIcon} style={{ color: skill.iconColor }}>{skill.icon}</div>
-                                        <span className={styles.skillName} style={{ color: skill.textColor }}>{skill.name}</span>
+                {skillData.categories.map((category, categoryIndex) => (
+                    <div key={categoryIndex} className={styles.categoryContainer}>
+                        <h3 className={styles.categoryTitle}>{category.name}</h3>
+                        <div className={styles.skillsList}>
+                            {category.skills.map((skill, skillIndex) => (
+                                <div key={skillIndex} className={styles.skillCard}>
+                                    <div className={styles.skillHeader}>
+                                        <h4 className={styles.skillName}>{skill.name}</h4>
+                                        <span className={styles.skillYears}>{skill.years} {lang === 'ja' ? '年' : 'years'}</span>
                                     </div>
-                                );
-                            })}
+                                    <div className={styles.skillBarContainer}>
+                                        <div
+                                            className={styles.skillBar}
+                                            style={{ width: `${skill.level}%` }}
+                                        />
+                                        <span className={styles.skillLevel}>{skill.level}%</span>
+                                    </div>
+                                    <p className={styles.skillDescription}>{skill.description}</p>
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
+                    </div>
+                ))}
             </div>
         </section>
     );
-} 
+}

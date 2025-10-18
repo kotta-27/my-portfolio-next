@@ -1,0 +1,170 @@
+{
+    "ja": {
+        "categories": [
+            {
+                "name": "フロントエンド",
+                "skills": [
+                    {
+                        "name": "React/Next.js",
+                        "level": 90,
+                        "description": "メインで使用しているフレームワーク。パフォーマンス最適化やアクセシビリティにも注力。",
+                        "years": 3
+                    },
+                    {
+                        "name": "TypeScript",
+                        "level": 85,
+                        "description": "型安全性を重視した開発を実践。ジェネリクスやユーティリティ型も活用。",
+                        "years": 3
+                    },
+                    {
+                        "name": "CSS/SCSS",
+                        "level": 80,
+                        "description": "モダンなレイアウト手法やアニメーションの実装が得意。",
+                        "years": 3
+                    }
+                ]
+            },
+            {
+                "name": "量子コンピューティング",
+                "skills": [
+                    {
+                        "name": "Qiskit",
+                        "level": 85,
+                        "description": "量子回路の設計から実機での実行まで幅広く経験。",
+                        "years": 2
+                    },
+                    {
+                        "name": "量子アルゴリズム",
+                        "level": 80,
+                        "description": "VQE、QAOAなどの実装経験あり。新規アルゴリズムの研究開発も。",
+                        "years": 2
+                    }
+                ]
+            },
+            {
+                "name": "バックエンド",
+                "skills": [
+                    {
+                        "name": "Python",
+                        "level": 85,
+                        "description": "FastAPI, Djangoでのバックエンド開発、データ分析、機械学習まで。",
+                        "years": 4
+                    },
+                    {
+                        "name": "Node.js",
+                        "level": 75,
+                        "description": "Express, NestJSでのAPI開発。WebSocketも実装経験あり。",
+                        "years": 2
+                    }
+                ]
+            },
+            {
+                "name": "インフラ/その他",
+                "skills": [
+                    {
+                        "name": "AWS",
+                        "level": 70,
+                        "description": "EC2, S3, Lambda, ECSなどの実務経験。",
+                        "years": 2
+                    },
+                    {
+                        "name": "Docker",
+                        "level": 75,
+                        "description": "開発環境からプロダクション環境まで、コンテナ化の実践。",
+                        "years": 2
+                    },
+                    {
+                        "name": "Git",
+                        "level": 85,
+                        "description": "チーム開発でのバージョン管理、CI/CDパイプラインの構築。",
+                        "years": 4
+                    }
+                ]
+            }
+        ]
+    },
+    "en": {
+        "categories": [
+            {
+                "name": "Frontend",
+                "skills": [
+                    {
+                        "name": "React/Next.js",
+                        "level": 90,
+                        "description": "Main framework. Focus on performance optimization and accessibility.",
+                        "years": 3
+                    },
+                    {
+                        "name": "TypeScript",
+                        "level": 85,
+                        "description": "Type-safe development with generics and utility types.",
+                        "years": 3
+                    },
+                    {
+                        "name": "CSS/SCSS",
+                        "level": 80,
+                        "description": "Proficient in modern layouts and animations.",
+                        "years": 3
+                    }
+                ]
+            },
+            {
+                "name": "Quantum Computing",
+                "skills": [
+                    {
+                        "name": "Qiskit",
+                        "level": 85,
+                        "description": "Experience from circuit design to real device execution.",
+                        "years": 2
+                    },
+                    {
+                        "name": "Quantum Algorithms",
+                        "level": 80,
+                        "description": "Implemented VQE, QAOA. Research on new algorithms.",
+                        "years": 2
+                    }
+                ]
+            },
+            {
+                "name": "Backend",
+                "skills": [
+                    {
+                        "name": "Python",
+                        "level": 85,
+                        "description": "Backend with FastAPI, Django, data analysis, and ML.",
+                        "years": 4
+                    },
+                    {
+                        "name": "Node.js",
+                        "level": 75,
+                        "description": "API development with Express, NestJS. WebSocket implementation.",
+                        "years": 2
+                    }
+                ]
+            },
+            {
+                "name": "Infrastructure/Others",
+                "skills": [
+                    {
+                        "name": "AWS",
+                        "level": 70,
+                        "description": "Professional experience with EC2, S3, Lambda, ECS.",
+                        "years": 2
+                    },
+                    {
+                        "name": "Docker",
+                        "level": 75,
+                        "description": "Containerization from development to production.",
+                        "years": 2
+                    },
+                    {
+                        "name": "Git",
+                        "level": 85,
+                        "description": "Version control in team development, CI/CD pipeline setup.",
+                        "years": 4
+                    }
+                ]
+            }
+        ]
+    }
+}
