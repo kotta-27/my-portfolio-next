@@ -1,7 +1,7 @@
 {
     "ja": [
         {
-            "period-bar": "2023"
+            "period-bar": "’23"
         },
         {
             "period": "8月",
@@ -18,7 +18,7 @@
             "image": "/qunasys.png"
         },
         {
-            "period-bar": "2024"
+            "period-bar": "’24"
         },
         {
             "period": "2月〜",
@@ -61,7 +61,7 @@
             "image": "/jij.svg"
         },
         {
-            "period-bar": "2025"
+            "period-bar": "’25"
         },
         {
             "period": "3月",
@@ -76,7 +76,7 @@
     ],
     "en": [
         {
-            "period-bar": "2023"
+            "period-bar": "’23"
         },
         {
             "period": "Aug",
@@ -93,7 +93,7 @@
             "image": "/qunasys.png"
         },
         {
-            "period-bar": "2024"
+            "period-bar": "’24"
         },
         {
             "period": "Feb〜",
@@ -136,7 +136,7 @@
             "image": "/jij.svg"
         },
         {
-            "period-bar": "2025"
+            "period-bar": "’25"
         },
         {
             "period": "Mar",
