@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Sphere } from "@react-three/drei";
+import { Sphere, Edges } from "@react-three/drei";
 import * as THREE from 'three';
 import { useRef, useState, useMemo } from "react";
 import styles from "./Background.module.css";
@@ -64,25 +64,51 @@ function LegoBrick({
 
   return (
     <group ref={groupRef} position={position} rotation={rotation} scale={scale}>
-      {/* Main body */}
+      {/* Main body with edge lines */}
       <mesh castShadow>
         <boxGeometry args={[bodyW, bodyH, bodyD]} />
         <meshStandardMaterial color={color} roughness={0.3} metalness={0.05} />
+        <Edges threshold={1} color="#ffffff" />
       </mesh>
 
-      {/* Studs */}
+      {/* Studs with white outlines */}
       {studs.map(([sx, sz], i) => (
-        <mesh key={i} position={[sx, bodyH / 2 + STUD_HEIGHT / 2, sz]} castShadow>
-          <cylinderGeometry args={[STUD_RADIUS, STUD_RADIUS, STUD_HEIGHT, 24]} />
-          <meshStandardMaterial color={color} roughness={0.25} metalness={0.05} />
-        </mesh>
+        <group key={i} position={[sx, bodyH / 2, sz]}>
+          {/* Stud body */}
+          <mesh position={[0, STUD_HEIGHT / 2, 0]} castShadow>
+            <cylinderGeometry args={[STUD_RADIUS, STUD_RADIUS, STUD_HEIGHT, 24]} />
+            <meshStandardMaterial color={color} roughness={0.25} metalness={0.05} />
+          </mesh>
+          {/* White ring on top */}
+          <mesh position={[0, STUD_HEIGHT + 0.001, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[STUD_RADIUS - 0.008, STUD_RADIUS + 0.008, 24]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.5} />
+          </mesh>
+          {/* White ring at base */}
+          <mesh position={[0, 0.001, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[STUD_RADIUS - 0.005, STUD_RADIUS + 0.01, 24]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.2} />
+          </mesh>
+        </group>
       ))}
 
-      {/* Top highlight edge (subtle) */}
-      <mesh position={[0, bodyH / 2 + 0.001, 0]}>
-        <boxGeometry args={[bodyW, 0.002, bodyD]} />
-        <meshStandardMaterial color={color} roughness={0.2} metalness={0.1} transparent opacity={0.5} />
-      </mesh>
+      {/* Bottom holes */}
+      {studs.map(([sx, sz], i) => (
+        <group key={`hole-${i}`} position={[sx, -bodyH / 2, sz]}>
+          <mesh position={[0, 0.03, 0]}>
+            <cylinderGeometry args={[STUD_RADIUS + 0.01, STUD_RADIUS + 0.01, 0.06, 24]} />
+            <meshStandardMaterial color="#000000" roughness={0.8} transparent opacity={0.5} />
+          </mesh>
+          <mesh position={[0, -0.002, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[STUD_RADIUS - 0.005, STUD_RADIUS + 0.015, 24]} />
+            <meshBasicMaterial color="#000000" transparent opacity={0.35} />
+          </mesh>
+          <mesh position={[0, -0.003, 0]} rotation={[Math.PI / 2, 0, 0]}>
+            <ringGeometry args={[STUD_RADIUS + 0.01, STUD_RADIUS + 0.025, 24]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.2} />
+          </mesh>
+        </group>
+      ))}
     </group>
   );
 }
