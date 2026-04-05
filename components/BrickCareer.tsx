@@ -8,7 +8,7 @@ import React, {
   useMemo,
 } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Html, Edges } from "@react-three/drei";
+import { Edges, Text } from "@react-three/drei";
 import * as THREE from "three";
 import Image from "next/image";
 import { useLanguage } from "../context/LanguageContext";
@@ -88,8 +88,10 @@ const BRICK_D = 3.4;
 const STUD_RADIUS = 0.35;
 const STUD_HEIGHT = 0.18;
 
-const CAM_FAR = 8;
-const CAM_NEAR = 7.5;
+const CAM_FAR_DESKTOP = 8;
+const CAM_FAR_MOBILE = 11;
+const CAM_NEAR_DESKTOP = 7.5;
+const CAM_NEAR_MOBILE = 10;
 
 /* ==========================================
    Face Content Panels
@@ -266,70 +268,50 @@ const FACE_CONTENT: Record<FaceKey, React.FC<{ lang: string }>> = {
    Single Face (label or expanded content)
    ========================================== */
 
-interface FaceProps {
-  faceKey: FaceKey;
-  activeFace: FaceKey;
-  lang: string;
-  zoomed: boolean;
-  zoomedFace: FaceKey | null;
-  onLabelClick: (face: FaceKey) => void;
-  position: [number, number, number];
-  rotation: [number, number, number];
-}
-
 function BrickFace({
   faceKey,
   activeFace,
   lang,
-  zoomed,
-  zoomedFace,
+  hidden,
   onLabelClick,
   position,
   rotation,
-}: FaceProps) {
-  const isThisFace = zoomedFace === faceKey;
+}: { faceKey: FaceKey; activeFace: FaceKey; lang: string; hidden: boolean; onLabelClick: (f: FaceKey) => void; position: [number, number, number]; rotation: [number, number, number] }) {
   const isFront = activeFace === faceKey;
-  const showContent = zoomed && isThisFace;
   const color = FACE_COLORS[faceKey];
-  const label = FACE_LABELS[lang]?.[faceKey] ?? FACE_LABELS.en[faceKey];
-  const Content = FACE_CONTENT[faceKey];
+  // ラベルは英語のみ（3Dテキストで日本語フォント不要に）
+  const label = FACE_LABELS.en[faceKey];
 
-  // 左右面(work/achievements)はブリック面が狭いので distanceFactor を小さくして同じ見た目サイズに
-  const isSideFace = faceKey === "work" || faceKey === "achievements";
-  const dfZoomed = isSideFace ? 2.2 : 3.2;
-  const dfLabel = 5.5;
+  if (hidden) return null;
 
   return (
-    <Html
-      position={position}
-      rotation={rotation}
-      transform
-      distanceFactor={showContent ? dfZoomed : dfLabel}
-      style={{ pointerEvents: "auto" }}
-    >
-      {showContent ? (
-        <div
-          className={styles.faceExpanded}
-          style={{ "--face-color": color } as React.CSSProperties}
-        >
-          <div className={styles.faceHeader}>
-            <span className={styles.faceHeaderTitle}>{label}</span>
-          </div>
-          <Content lang={lang} />
-        </div>
-      ) : (
-        <div
-          className={styles.faceLabel}
-          style={{ borderColor: color, color: "#fff", opacity: isFront ? 1 : 0.3 }}
-          onClick={(e) => {
-            e.stopPropagation();
-            onLabelClick(faceKey);
-          }}
-        >
-          {label}
-        </div>
-      )}
-    </Html>
+    <group position={position} rotation={rotation}>
+      {/* Clickable area */}
+      <mesh onClick={(e) => { e.stopPropagation(); onLabelClick(faceKey); }}>
+        <planeGeometry args={[1.8, 0.6]} />
+        <meshBasicMaterial transparent opacity={0} />
+      </mesh>
+      {/* Background */}
+      <mesh position={[0, 0, -0.001]}>
+        <planeGeometry args={[1.8, 0.6]} />
+        <meshBasicMaterial color="#000000" transparent opacity={isFront ? 0.65 : 0.2} />
+      </mesh>
+      {/* Border */}
+      <mesh position={[0, 0, -0.002]}>
+        <planeGeometry args={[1.9, 0.7]} />
+        <meshBasicMaterial color={color} transparent opacity={isFront ? 0.8 : 0.2} />
+      </mesh>
+      {/* Text */}
+      <Text
+        fontSize={0.22}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+        fillOpacity={isFront ? 1 : 0.3}
+      >
+        {label}
+      </Text>
+    </group>
   );
 }
 
@@ -341,6 +323,8 @@ interface SceneProps {
   activeFace: FaceKey;
   zoomed: boolean;
   zoomedFace: FaceKey | null;
+  camFar: number;
+  camNear: number;
   onFaceClick: (face: FaceKey) => void;
   onBgClick: () => void;
   onSnapFace: (face: FaceKey) => void;
@@ -351,6 +335,8 @@ function BrickScene({
   activeFace,
   zoomed,
   zoomedFace,
+  camFar,
+  camNear,
   onFaceClick,
   onBgClick,
   onSnapFace,
@@ -358,7 +344,7 @@ function BrickScene({
 }: SceneProps) {
   const groupRef = useRef<THREE.Group>(null!);
   const targetRotY = useRef(FACE_ROTATIONS[activeFace]);
-  const targetCamZ = useRef(CAM_FAR);
+  const targetCamZ = useRef(camFar);
   const isDragging = useRef(false);
   const dragStart = useRef({ x: 0, y: 0 });
   const dragMoved = useRef(false);
@@ -370,7 +356,7 @@ function BrickScene({
     targetRotY.current = FACE_ROTATIONS[activeFace];
   }, [activeFace]);
   useEffect(() => {
-    targetCamZ.current = zoomed ? CAM_NEAR : CAM_FAR;
+    targetCamZ.current = zoomed ? camNear : camFar;
   }, [zoomed]);
 
   useFrame(() => {
@@ -389,10 +375,14 @@ function BrickScene({
     }
   });
 
+  // dragLocked: once we determine direction, lock to horizontal (rotate) or give up (scroll)
+  const dragLocked = useRef<"none" | "horizontal" | "vertical">("none");
+
   const onPointerDown = useCallback(
     (e: THREE.Event) => {
       isDragging.current = true;
       dragMoved.current = false;
+      dragLocked.current = "none";
       const ev = e as unknown as PointerEvent;
       dragStart.current = { x: ev.clientX, y: ev.clientY };
       if (groupRef.current)
@@ -410,23 +400,31 @@ function BrickScene({
     const ev = e as unknown as PointerEvent;
     const dx = ev.clientX - dragStart.current.x;
     const dy = ev.clientY - dragStart.current.y;
-    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragMoved.current = true;
+
+    // Determine drag direction once past threshold
+    if (dragLocked.current === "none" && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
+      dragLocked.current = Math.abs(dx) > Math.abs(dy) ? "horizontal" : "vertical";
+    }
+
+    // If vertical dominant, give up — let the browser scroll
+    if (dragLocked.current === "vertical") return;
+
+    if (Math.abs(dx) > 3) dragMoved.current = true;
     groupRef.current.rotation.y = rotOnDrag.current.y + dx * 0.008;
     groupRef.current.rotation.x = THREE.MathUtils.clamp(
-      rotOnDrag.current.x + dy * 0.004,
-      -0.4,
-      0.4,
+      rotOnDrag.current.x + dy * 0.003,
+      -0.3,
+      0.3,
     );
   }, []);
 
   const onPointerUp = useCallback(() => {
     if (!isDragging.current) return;
     isDragging.current = false;
+    dragLocked.current = "none";
     gl.domElement.style.cursor = "grab";
-    if (groupRef.current && !dragMoved.current) {
-      // tap on brick body but not on label → do nothing special
-    }
-    // Always snap
+
+    // Snap to nearest face
     if (groupRef.current) {
       const y = groupRef.current.rotation.y;
       let ny = ((y % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
@@ -582,8 +580,7 @@ function BrickScene({
             faceKey={key}
             activeFace={activeFace}
             lang={lang}
-            zoomed={zoomed}
-            zoomedFace={zoomedFace}
+            hidden={zoomed}
             onLabelClick={onFaceClick}
             position={pos}
             rotation={rot}
@@ -603,6 +600,17 @@ export default function BrickCareer() {
   const [activeFace, setActiveFace] = useState<FaceKey>("profile");
   const [zoomed, setZoomed] = useState(false);
   const [zoomedFace, setZoomedFace] = useState<FaceKey | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const camFar = isMobile ? CAM_FAR_MOBILE : CAM_FAR_DESKTOP;
+  const camNear = isMobile ? CAM_NEAR_MOBILE : CAM_NEAR_DESKTOP;
 
   const handleFaceClick = useCallback((face: FaceKey) => {
     setActiveFace(face);
@@ -637,40 +645,65 @@ export default function BrickCareer() {
         ))}
       </div>
 
-      {/* 3D Canvas */}
-      <div className={styles.canvasWrap}>
-        <Canvas
-          camera={{ position: [0, 0.5, CAM_FAR], fov: 45 }}
-          shadows
-          style={{ cursor: "grab" }}
-        >
-          <ambientLight intensity={0.5} />
-          <directionalLight
-            position={[5, 8, 6]}
-            intensity={0.8}
-            castShadow
-            shadow-mapSize-width={1024}
-            shadow-mapSize-height={1024}
-            shadow-camera-near={0.5}
-            shadow-camera-far={30}
-            shadow-camera-left={-6}
-            shadow-camera-right={6}
-            shadow-camera-top={6}
-            shadow-camera-bottom={-6}
-            shadow-bias={-0.002}
-          />
-          <pointLight position={[-4, 3, 4]} intensity={0.25} color="#60a5fa" />
-          <pointLight position={[3, -2, 3]} intensity={0.15} color="#f59e0b" />
-          <BrickScene
-            activeFace={activeFace}
-            zoomed={zoomed}
-            zoomedFace={zoomedFace}
-            onFaceClick={handleFaceClick}
-            onBgClick={handleBgClick}
-            onSnapFace={handleSnapFace}
-            lang={lang}
-          />
-        </Canvas>
+      {/* 3D Canvas + React overlay */}
+      <div className={styles.stage}>
+        <div className={styles.canvasWrap}>
+          <Canvas
+            camera={{ position: [0, 0.5, camFar], fov: 45 }}
+            shadows
+            style={{ cursor: "grab", touchAction: "pan-y" }}
+          >
+            <ambientLight intensity={0.5} />
+            <directionalLight
+              position={[5, 8, 6]}
+              intensity={0.8}
+              castShadow
+              shadow-mapSize-width={1024}
+              shadow-mapSize-height={1024}
+              shadow-camera-near={0.5}
+              shadow-camera-far={30}
+              shadow-camera-left={-6}
+              shadow-camera-right={6}
+              shadow-camera-top={6}
+              shadow-camera-bottom={-6}
+              shadow-bias={-0.002}
+            />
+            <pointLight position={[-4, 3, 4]} intensity={0.25} color="#60a5fa" />
+            <pointLight position={[3, -2, 3]} intensity={0.15} color="#f59e0b" />
+            <BrickScene
+              activeFace={activeFace}
+              zoomed={zoomed}
+              zoomedFace={zoomedFace}
+              camFar={camFar}
+              camNear={camNear}
+              onFaceClick={handleFaceClick}
+              onBgClick={handleBgClick}
+              onSnapFace={handleSnapFace}
+              lang={lang}
+            />
+          </Canvas>
+        </div>
+
+        {/* React overlay panel (outside Three.js) */}
+        {zoomed && zoomedFace && (
+          <div
+            className={styles.overlay}
+            onClick={(e) => { if (e.target === e.currentTarget) handleBgClick(); }}
+          >
+            <div
+              className={styles.panel}
+              style={{ "--panel-color": FACE_COLORS[zoomedFace] } as React.CSSProperties}
+            >
+              <div className={styles.panelHeader}>
+                <h3 className={styles.panelTitle}>
+                  {FACE_LABELS[lang]?.[zoomedFace] ?? FACE_LABELS.en[zoomedFace]}
+                </h3>
+                <button className={styles.panelClose} onClick={handleBgClick}>✕</button>
+              </div>
+              {React.createElement(FACE_CONTENT[zoomedFace], { lang })}
+            </div>
+          </div>
+        )}
       </div>
 
       <p className={styles.hint}>

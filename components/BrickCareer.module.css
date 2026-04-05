@@ -50,6 +50,8 @@
     width: 100%;
     height: 90vh;
     min-height: 700px;
+    overflow: hidden;
+    position: relative;
 }
 
 .hint {
@@ -59,57 +61,99 @@
     margin: 0;
 }
 
-/* ==========================================
-   Face: Label (default, zoomed out)
-   ========================================== */
-
-.faceLabel {
-    padding: 8px 20px;
-    background: rgba(0, 0, 0, 0.65);
-    border-radius: 8px;
-    border: 1.5px solid;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    backdrop-filter: blur(8px);
-    cursor: pointer;
-    user-select: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.faceLabel:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
-}
 
 /* ==========================================
-   Face: Expanded content (zoomed in)
+   React Overlay (outside Three.js)
    ========================================== */
 
-.faceExpanded {
-    width: 480px;
-    background: rgba(0, 0, 0, 0.88);
-    border: 1.5px solid var(--face-color);
-    border-radius: 12px;
-    padding: 1.2rem 1.5rem;
+.stage {
+    width: 100%;
+    position: relative;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.3);
+    animation: overlayFadeIn 0.3s ease;
+}
+
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.panel {
+    width: min(520px, 90vw);
+    max-height: 80%;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1.5px solid var(--panel-color);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
     backdrop-filter: blur(20px);
     color: #ffffff;
-    font-family: var(--font-noto-sans-jp), -apple-system, sans-serif;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 0 30px color-mix(in srgb, var(--face-color) 20%, transparent);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5),
+                0 0 30px color-mix(in srgb, var(--panel-color) 15%, transparent);
+    animation: panelSlideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
-.faceHeader {
+.panel::-webkit-scrollbar {
+    width: 5px;
+}
+
+.panel::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+@keyframes panelSlideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.panelHeader {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.6rem;
-    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    flex-shrink: 0;
+}
+
+.panelTitle {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--panel-color);
+    letter-spacing: 0.03em;
+}
+
+.panelClose {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.5);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.panelClose:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .faceHeaderTitle {
@@ -310,13 +354,8 @@
 
 @media (max-width: 768px) {
     .canvasWrap {
-        height: 80vh;
-        min-height: 550px;
-    }
-
-    .faceExpanded {
-        width: 340px;
-        padding: 1rem 1.2rem;
+        height: 50vh;
+        min-height: 350px;
     }
 
     .navBtn {
