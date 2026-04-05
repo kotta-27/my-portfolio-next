@@ -19,9 +19,9 @@ const Projects: FC = () => {
     };
 
     return (
-        <section id="projects" className={styles.projects}>
+        <section id="works" className={styles.projects}>
             <div className={styles.sectionTitleContainer}>
-                <h2 className={styles.sectionTitle}>My Works</h2>
+                <h2 className={styles.sectionTitle}>Works</h2>
             </div>
             <div className={styles.grid}>
                 {projectsData[lang].map((project) => (

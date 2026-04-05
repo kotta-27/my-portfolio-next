@@ -1,34 +1,57 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLanguage } from '../context/LanguageContext';
-
 import styles from './Header.module.css';
 
+const navigation = [
+    { name: 'Home', href: '#home' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'Works', href: '#works' },
+    { name: 'Contact', href: '#contact' },
+];
+
 export default function Header() {
-    const pathname = usePathname();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [activeSection, setActiveSection] = useState('#home');
     const { lang, setLang } = useLanguage();
 
-    const navigation = [
-        { name: 'Home', href: '/' },
-        { name: 'Skill & Works', href: '/works' },
-        { name: 'Outputs', href: '/outputs' },
-    ];
-
-    // ページ遷移時にメニューを閉じる
+    // スクロールでアクティブセクション検知
     useEffect(() => {
+        const sectionIds = navigation.map(n => n.href.replace('#', ''));
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                for (const entry of entries) {
+                    if (entry.isIntersecting) {
+                        setActiveSection(`#${entry.target.id}`);
+                    }
+                }
+            },
+            { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
+        );
+
+        for (const id of sectionIds) {
+            const el = document.getElementById(id);
+            if (el) observer.observe(el);
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
+    const handleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        e.preventDefault();
+        const id = href.replace('#', '');
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth' });
+        }
         setIsMenuOpen(false);
-    }, [pathname]);
+    }, []);
 
     return (
         <header className={styles.headerGlass}>
             <nav className={styles.headerNav}>
-                {/* <Link href="/" className={styles.headerTitle}>
-                    Kota Mizuno
-                </Link> */}
                 <button
                     className={styles.menuButton}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -39,17 +62,17 @@ export default function Header() {
                 <div className={`${styles.headerMenu} ${isMenuOpen ? styles.open : ''}`}>
                     <ul className={styles.navLinks}>
                         {navigation.map((item) => {
-                            const isActive = pathname === item.href;
+                            const isActive = activeSection === item.href;
                             return (
                                 <li key={item.href} className={styles.navItem}>
-                                    <Link
+                                    <a
                                         href={item.href}
                                         className={`${styles.headerLink} ${isActive ? styles.active : ''}`}
-                                        onClick={() => setIsMenuOpen(false)}
+                                        onClick={(e) => handleClick(e, item.href)}
                                     >
                                         {item.name}
                                         {isActive && <span className={styles.activeIndicator} />}
-                                    </Link>
+                                    </a>
                                 </li>
                             );
                         })}

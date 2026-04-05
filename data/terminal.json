@@ -3,7 +3,7 @@
         "commands": [
             {
                 "cmd": "whoami",
-                "output": "名前: 水野 航太\n年齢: 23"
+                "output": "名前: 水野 航太\n年齢: 24"
             },
             {
                 "cmd": "major and lab",
@@ -11,7 +11,7 @@
             },
             {
                 "cmd": "degree",
-                "output": "学位: 工学学士"
+                "output": "学位: 修士（工学）"
             },
             {
                 "cmd": "from",
@@ -23,7 +23,7 @@
         "commands": [
             {
                 "cmd": "whoami",
-                "output": "Name: Kota Mizuno\nAge: 23"
+                "output": "Name: Kota Mizuno\nAge: 24"
             },
             {
                 "cmd": "major and lab",
@@ -31,7 +31,7 @@
             },
             {
                 "cmd": "degree",
-                "output": "Degree: Bachelor of Engineering"
+                "output": "Degree: Master of Engineering"
             },
             {
                 "cmd": "from",

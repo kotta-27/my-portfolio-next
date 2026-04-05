@@ -3,72 +3,143 @@
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Sphere } from "@react-three/drei";
 import * as THREE from 'three';
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import styles from "./Background.module.css";
+
+/* ==========================================
+   LEGO Brick Component
+   ========================================== */
+
+const BRICK_UNIT = 0.4; // base unit size
+const STUD_RADIUS = 0.12;
+const STUD_HEIGHT = 0.08;
+
+interface LegoBrickProps {
+  cols?: number;
+  rows?: number;
+  color?: string;
+  position?: [number, number, number];
+  rotation?: [number, number, number];
+  scale?: number;
+  floatSpeed?: number;
+  rotateSpeed?: number;
+}
+
+function LegoBrick({
+  cols = 3,
+  rows = 2,
+  color = "#4ade80",
+  position = [0, 0, 0],
+  rotation = [0, 0, 0],
+  scale = 1,
+  floatSpeed = 1,
+  rotateSpeed = 0.3,
+}: LegoBrickProps) {
+  const groupRef = useRef<THREE.Group>(null!);
+  const initialY = position[1];
+  const timeOffset = useMemo(() => Math.random() * Math.PI * 2, []);
+
+  useFrame(({ clock }) => {
+    if (groupRef.current) {
+      const t = clock.getElapsedTime() * floatSpeed + timeOffset;
+      groupRef.current.position.y = initialY + Math.sin(t) * 0.3;
+      groupRef.current.rotation.y += rotateSpeed * 0.005;
+      groupRef.current.rotation.x = rotation[0] + Math.sin(t * 0.5) * 0.05;
+    }
+  });
+
+  const bodyW = cols * BRICK_UNIT;
+  const bodyD = rows * BRICK_UNIT;
+  const bodyH = BRICK_UNIT * 0.6;
+
+  // Generate stud positions
+  const studs: [number, number][] = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const sx = -bodyW / 2 + BRICK_UNIT / 2 + c * BRICK_UNIT;
+      const sz = -bodyD / 2 + BRICK_UNIT / 2 + r * BRICK_UNIT;
+      studs.push([sx, sz]);
+    }
+  }
+
+  return (
+    <group ref={groupRef} position={position} rotation={rotation} scale={scale}>
+      {/* Main body */}
+      <mesh castShadow>
+        <boxGeometry args={[bodyW, bodyH, bodyD]} />
+        <meshStandardMaterial color={color} roughness={0.3} metalness={0.05} />
+      </mesh>
+
+      {/* Studs */}
+      {studs.map(([sx, sz], i) => (
+        <mesh key={i} position={[sx, bodyH / 2 + STUD_HEIGHT / 2, sz]} castShadow>
+          <cylinderGeometry args={[STUD_RADIUS, STUD_RADIUS, STUD_HEIGHT, 24]} />
+          <meshStandardMaterial color={color} roughness={0.25} metalness={0.05} />
+        </mesh>
+      ))}
+
+      {/* Top highlight edge (subtle) */}
+      <mesh position={[0, bodyH / 2 + 0.001, 0]}>
+        <boxGeometry args={[bodyW, 0.002, bodyD]} />
+        <meshStandardMaterial color={color} roughness={0.2} metalness={0.1} transparent opacity={0.5} />
+      </mesh>
+    </group>
+  );
+}
+
+/* ==========================================
+   Original Sphere Components
+   ========================================== */
 
 const RotatingSphere = ({ size = 1, initialPosition = [0, 0, 0] as [number, number, number], rotationSpeed = 0.001, orbitRadius = 0, orbitSpeed = 0, mainSphereColor = "#0000FF", initialSphereColor = "#0000FF" }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
-  const [angle, setAngle] = useState(Math.random() * Math.PI * 2); // Initial random angle for orbit
-  const [isFastSpinning, setIsFastSpinning] = useState(false); // New state for fast spin
-  const [sphereColor, setSphereColor] = useState(initialSphereColor || mainSphereColor); // State for individual sphere color
+  const [angle, setAngle] = useState(Math.random() * Math.PI * 2);
+  const [isFastSpinning, setIsFastSpinning] = useState(false);
+  const [sphereColor, setSphereColor] = useState(initialSphereColor || mainSphereColor);
   useFrame(() => {
     if (meshRef.current) {
-      // Self-rotation
-      const currentRotationSpeed = isFastSpinning ? 0.05 : rotationSpeed; // Faster spin when active
+      const currentRotationSpeed = isFastSpinning ? 0.05 : rotationSpeed;
       meshRef.current.rotation.x += currentRotationSpeed;
       meshRef.current.rotation.y += currentRotationSpeed;
 
-      // Orbit around the center
       if (orbitRadius > 0 && orbitSpeed > 0) {
         setAngle(prevAngle => prevAngle + orbitSpeed);
         const newX = initialPosition[0] + Math.cos(angle) * orbitRadius;
         const newZ = initialPosition[2] + Math.sin(angle) * orbitRadius;
         const newY = initialPosition[1];
-        meshRef.current.position.set(newX, newY, newZ); // Update mesh position
-
+        meshRef.current.position.set(newX, newY, newZ);
       }
     }
   });
 
   return (
-    <>
-      <Sphere
-        ref={meshRef}
-        args={[size, 32, 32]}
-        position={initialPosition}
-        onClick={() => {
-          setIsFastSpinning(!isFastSpinning);
-          setSphereColor(isFastSpinning ? (initialSphereColor || mainSphereColor) : "#FF0000"); // Toggle color to red when fast spinning
-        }}
-      >
-        <meshStandardMaterial color={sphereColor} wireframe={true} transparent={true} opacity={0.5} />
-      </Sphere>
-      {/* Draw a line from the sphere to the center */}
-      {/* <Line
-        points={[currentPosition, [0, 0, 0]]}
-        color={sphereColor}
-        lineWidth={1}
-        transparent={true}
-        opacity={0.3}
-      /> */}
-    </>
+    <Sphere
+      ref={meshRef}
+      args={[size, 32, 32]}
+      position={initialPosition}
+      onClick={() => {
+        setIsFastSpinning(!isFastSpinning);
+        setSphereColor(isFastSpinning ? (initialSphereColor || mainSphereColor) : "#FF0000");
+      }}
+    >
+      <meshStandardMaterial color={sphereColor} wireframe={true} transparent={true} opacity={0.5} />
+    </Sphere>
   );
 };
 
 const MultipleSpheres = () => {
   const spheres = [];
   for (let i = 0; i < 5; i++) {
-    const size = Math.random() * 0.5 + 0.2; // Random size between 0.2 and 0.7
-    const x = (Math.random() - 0.5) * 6; // Random x position between -3 and 3
-    const y = (Math.random() - 0.5) * 6; // Random y position between -3 and 3
-    const z = (Math.random() - 0.5) * 8; // Random z position between -4 and 4
-    const rotationSpeed = Math.random() * 0.002 + 0.0005; // Random self-rotation speed
-    const orbitRadius = Math.random() * 3 + 2; // Random orbit radius between 2 and 5
-    const orbitSpeed = Math.random() * 0.005 + 0.001; // Random orbit speed
+    const size = Math.random() * 0.5 + 0.2;
+    const x = (Math.random() - 0.5) * 6;
+    const y = (Math.random() - 0.5) * 6;
+    const z = (Math.random() - 0.5) * 8;
+    const rotationSpeed = Math.random() * 0.002 + 0.0005;
+    const orbitRadius = Math.random() * 3 + 2;
+    const orbitSpeed = Math.random() * 0.005 + 0.001;
 
-    // Generate a random shade of blue
-    const r = Math.floor(Math.random() * 50); // 0-49
-    const g = Math.floor(Math.random() * 50); // 0-49
+    const r = Math.floor(Math.random() * 50);
+    const g = Math.floor(Math.random() * 50);
     const b = 255;
     const randomBlueColor = `rgb(${r}, ${g}, ${b})`;
 
@@ -80,24 +151,49 @@ const MultipleSpheres = () => {
         rotationSpeed={rotationSpeed}
         orbitRadius={orbitRadius}
         orbitSpeed={orbitSpeed}
-        initialSphereColor={randomBlueColor} // Pass the random blue color
+        initialSphereColor={randomBlueColor}
       />
     );
   }
   return <>{spheres}</>;
 };
 
+/* ==========================================
+   Floating LEGO Bricks
+   ========================================== */
+
+const brickConfigs: LegoBrickProps[] = [
+  { cols: 3, rows: 2, color: "#4ade80", position: [3.5, 2, -2], rotation: [0.3, 0.5, 0.1], scale: 1.2, floatSpeed: 0.8, rotateSpeed: 0.25 },
+  { cols: 2, rows: 2, color: "#60a5fa", position: [-3.5, -1.5, -1], rotation: [-0.2, 1.2, 0.15], scale: 1.0, floatSpeed: 1.1, rotateSpeed: -0.3 },
+  { cols: 4, rows: 2, color: "#f472b6", position: [-2, 3, -3], rotation: [0.15, -0.8, -0.1], scale: 0.8, floatSpeed: 0.6, rotateSpeed: 0.2 },
+  { cols: 2, rows: 1, color: "#facc15", position: [2.5, -2.5, -1.5], rotation: [-0.1, 2.0, 0.2], scale: 1.1, floatSpeed: 1.3, rotateSpeed: -0.35 },
+  { cols: 3, rows: 2, color: "#a78bfa", position: [-4, 0.5, -2.5], rotation: [0.4, -0.3, 0.05], scale: 0.7, floatSpeed: 0.9, rotateSpeed: 0.15 },
+  { cols: 2, rows: 2, color: "#fb923c", position: [4.5, -0.5, -3], rotation: [0.2, 1.5, -0.15], scale: 0.9, floatSpeed: 1.0, rotateSpeed: -0.2 },
+];
+
+/* ==========================================
+   Background Component
+   ========================================== */
+
 const Background = () => {
   const [isMainSphereActive] = useState(false);
-  const mainSphereColor = isMainSphereActive ? "#FFFF00" : "#0000FF"; // Yellow when active, blue otherwise
+  const mainSphereColor = isMainSphereActive ? "#FFFF00" : "#0000FF";
 
   return (
     <div className={styles.canvas}>
-      <Canvas>
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
-        <RotatingSphere size={2.7} rotationSpeed={isMainSphereActive ? 0.005 : 0.001} mainSphereColor={mainSphereColor} /> {/* Main sphere */}
+      <Canvas camera={{ position: [0, 0, 8], fov: 50 }}>
+        <ambientLight intensity={0.6} />
+        <pointLight position={[10, 10, 10]} intensity={0.8} />
+        <pointLight position={[-5, -5, 5]} intensity={0.3} color="#60a5fa" />
+
+        {/* Original spheres */}
+        <RotatingSphere size={2.7} rotationSpeed={isMainSphereActive ? 0.005 : 0.001} mainSphereColor={mainSphereColor} />
         <MultipleSpheres />
+
+        {/* Floating LEGO bricks */}
+        {brickConfigs.map((cfg, i) => (
+          <LegoBrick key={i} {...cfg} />
+        ))}
       </Canvas>
     </div>
   );

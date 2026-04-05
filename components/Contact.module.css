@@ -1,121 +1,106 @@
 .contactSection {
     width: 100%;
-    padding: 80px 0 40px 0;
-    background: none;
+    padding: 6rem 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.sectionTitleContainer {
-    width: 100%;
+.contactContainer {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
     display: flex;
-    flex-direction: row;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
 .sectionTitle {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #eeeeee;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
     text-align: center;
+    margin-bottom: 2rem;
 }
 
-.contactContainer {
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.sectionTitle::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+    margin: 1rem auto 0;
+    border-radius: 2px;
 }
 
 .contactText {
-    color: #e0e0e0;
-    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
     line-height: 1.8;
     margin-bottom: 2rem;
 }
 
 .contactBtn {
     display: inline-block;
-    padding: 1rem 2rem;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-    color: white;
-    border-radius: 8px;
+    padding: 0.9rem 2.5rem;
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 40px;
     font-weight: 600;
+    font-size: 1rem;
     text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
+    letter-spacing: 0.03em;
+    transition: all 0.3s ease;
 }
 
 .contactBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.6);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.15);
+}
+
+.socialLinks {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+
+.socialLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.socialLink:hover {
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 768px) {
     .contactSection {
-        width: 100%;
-        padding: 80px 0 40px 0;
-        background: none;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .sectionTitleContainer {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+        padding: 4rem 1.5rem;
     }
 
     .sectionTitle {
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        color: #eeeeee;
-        text-align: center;
-    }
-
-    .contactContainer {
-        width: 90%;
-        margin: 0 auto;
-        padding: 0 0;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        font-size: 2.2rem;
     }
 
     .contactText {
-        color: #e0e0e0;
-        font-size: 1.15rem;
-        line-height: 1.8;
-        margin-bottom: 2rem;
-    }
-
-    .contactBtn {
-        display: inline-block;
-        padding: 1rem 2rem;
-        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        color: white;
-        border-radius: 8px;
-        font-weight: 600;
-        text-decoration: none;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .contactBtn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        font-size: 1rem;
     }
 }

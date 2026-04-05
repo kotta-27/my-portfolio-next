@@ -1,152 +1,196 @@
 {
-    "ja": [
-        {
-            "period-bar": "’23"
-        },
-        {
-            "period": "8月",
-            "title": "理化学研究所主催「量子コンピュータってなんだろう？」学生スタッフ",
-            "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html",
-            "details": [
-                "- 学生スタッフとして、理化学研究所主催のイベント「量子コンピュータってなんだろう？」に参加。",
-                "- 学生スタッフとして、理化学研究所主催のイベント「量子コンピュータってなんだろう？」に参加。"
-            ]
-        },
-        {
-            "period": "9月〜",
-            "title": "株式会社QunaSys 量子×情報インターン",
-            "image": "/qunasys.png"
-        },
-        {
-            "period-bar": "’24"
-        },
-        {
-            "period": "2月〜",
-            "title": "量子コンピューティング公開伴送型生配信授業QC4U2 参加"
-        },
-        {
-            "period": "6月〜",
-            "title": "株式会社CRISP エンジニアインターン",
-            "image": "/crisp.png"
-        },
-        {
-            "period": "8月",
-            "title": "理化学研究所×日本科学未来館主催「クイズとゲームでせまる！量子コンピュータ」学生スタッフ",
-            "link": "https://www.miraikan.jst.go.jp/events/202408033551.html"
-        },
-        {
-            "period": "8月〜",
-            "title": "量子ICT人材育成プログラムNQC 参加",
-            "interview": {
-                "url": "https://nqc.nict.go.jp/report/250528_02.html",
-                "text": "インタビュー記事はこちら"
+    "ja": {
+        "workLabel": "職歴",
+        "experienceLabel": "経歴",
+        "work": [
+            {
+                "company": "株式会社スタディスト",
+                "image": "/studist.png",
+                "positions": [
+                    {
+                        "title": "ソフトウェアエンジニア",
+                        "type": "正社員",
+                        "period": "2026年4月〜現在"
+                    },
+                    {
+                        "title": "ソフトウェアエンジニアインターン",
+                        "type": "インターン",
+                        "period": "2024年9月〜2026年3月",
+                        "interview": {
+                            "url": "https://path.progate.com/career-stories/studist-intern",
+                            "text": "インタビュー記事はこちら"
+                        }
+                    }
+                ]
+            },
+            {
+                "company": "株式会社Jij",
+                "image": "/jij.svg",
+                "positions": [
+                    {
+                        "title": "リサーチエンジニアインターン",
+                        "type": "インターン",
+                        "period": "2024年10月〜2025年3月",
+                        "interview": {
+                            "url": "https://www.j-ij.com/ja/recruit/interview-mizuno",
+                            "text": "インタビュー記事はこちら"
+                        }
+                    }
+                ]
+            },
+            {
+                "company": "株式会社CRISP",
+                "image": "/crisp.png",
+                "positions": [
+                    {
+                        "title": "エンジニアインターン",
+                        "type": "インターン",
+                        "period": "2024年6月〜2024年8月"
+                    }
+                ]
+            },
+            {
+                "company": "株式会社QunaSys",
+                "image": "/qunasys.png",
+                "positions": [
+                    {
+                        "title": "量子×情報インターン",
+                        "type": "インターン",
+                        "period": "2023年9月〜2024年3月"
+                    }
+                ]
             }
-        },
-        {
-            "period": "9月〜",
-            "title": "株式会社スタディスト ソフトウェアエンジニアインターン",
-            "interview": {
-                "url": "https://path.progate.com/career-stories/studist-intern",
-                "text": "インタビュー記事はこちら"
+        ],
+        "experience": [
+            {
+                "title": "大阪・関西万博 エンタングル・モーメント ―［量子・海・宇宙］× 芸術 ゲーム展示",
+                "period": "2025年8月",
+                "image": "/entanglemoment.png"
             },
-            "image": "/studist.png"
-        },
-        {
-            "period": "10月〜",
-            "title": "株式会社Jij リサーチエンジニアインターン",
-            "interview": {
-                "url": "https://www.j-ij.com/ja/recruit/interview-mizuno",
-                "text": "インタビュー記事はこちら"
+            {
+                "title": "大阪・関西万博 プレイベント『ゲームで体験！作って実感！量子の世界』ゲーム展示",
+                "period": "2025年3月",
+                "link": "https://www.qst.go.jp/site/entangle-moment/pre-event.html"
             },
-            "image": "/jij.svg"
-        },
-        {
-            "period-bar": "’25"
-        },
-        {
-            "period": "3月",
-            "title": "大阪・関西万博 プレイベント『ゲームで体験！作って実感！量子の世界』ゲーム展示",
-            "link": "https://www.qst.go.jp/site/entangle-moment/pre-event.html"
-        },
-        {
-            "period": "8月",
-            "title": "大阪・関西万博 エンタングル・モーメント ―［量子・海・宇宙］× 芸術 ゲーム展示",
-            "image": "/entanglemoment.png"
-        }
-    ],
-    "en": [
-        {
-            "period-bar": "’23"
-        },
-        {
-            "period": "Aug",
-            "title": "Student staff at RIKEN event 'What is a Quantum Computer?'",
-            "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html",
-            "details": [
-                "- 学生スタッフとして、理化学研究所主催のイベント「量子コンピュータってなんだろう？」に参加。",
-                "- 学生スタッフとして、理化学研究所主催のイベント「量子コンピュータってなんだろう？」に参加。"
-            ]
-        },
-        {
-            "period": "Sep〜",
-            "title": "Quantum & Information Intern at QunaSys Inc.",
-            "image": "/qunasys.png"
-        },
-        {
-            "period-bar": "’24"
-        },
-        {
-            "period": "Feb〜",
-            "title": "Participated in QC4U2, a live-streamed quantum computing class"
-        },
-        {
-            "period": "Jun〜",
-            "title": "Engineering Intern at CRISP Inc.",
-            "image": "/crisp.png"
-        },
-        {
-            "period": "Aug",
-            "title": "Student staff at RIKEN & Miraikan event 'Quantum Computers through Quizzes and Games'",
-            "link": "https://www.miraikan.jst.go.jp/events/202408033551.html"
-        },
-        {
-            "period": "Aug〜",
-            "title": "Participated in NQC Quantum ICT Human Resource Development Program",
-            "interview": {
-                "url": "https://nqc.nict.go.jp/report/250528_02.html",
-                "text": "Read the interview here"
+            {
+                "title": "量子ICT人材育成プログラムNQC 参加",
+                "period": "2024年8月〜",
+                "interview": {
+                    "url": "https://nqc.nict.go.jp/report/250528_02.html",
+                    "text": "インタビュー記事はこちら"
+                }
+            },
+            {
+                "title": "理化学研究所×日本科学未来館主催「クイズとゲームでせまる！量子コンピュータ」学生スタッフ",
+                "period": "2024年8月",
+                "link": "https://www.miraikan.jst.go.jp/events/202408033551.html"
+            },
+            {
+                "title": "量子コンピューティング公開伴走型生配信授業QC4U2 参加",
+                "period": "2024年2月〜"
+            },
+            {
+                "title": "理化学研究所主催「量子コンピュータってなんだろう？」学生スタッフ",
+                "period": "2023年8月",
+                "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html"
             }
-        },
-        {
-            "period": "Sep〜",
-            "title": "Software Engineer Intern at Studist Corporation",
-            "interview": {
-                "url": "https://path.progate.com/career-stories/studist-intern",
-                "text": "Read the interview here"
+        ]
+    },
+    "en": {
+        "workLabel": "Work Experience",
+        "experienceLabel": "Experience",
+        "work": [
+            {
+                "company": "Studist Corporation",
+                "image": "/studist.png",
+                "positions": [
+                    {
+                        "title": "Software Engineer",
+                        "type": "Full-time",
+                        "period": "Apr 2026 ~ Present"
+                    },
+                    {
+                        "title": "Software Engineer Intern",
+                        "type": "Intern",
+                        "period": "Sep 2024 ~ Mar 2026",
+                        "interview": {
+                            "url": "https://path.progate.com/career-stories/studist-intern",
+                            "text": "Read the interview here"
+                        }
+                    }
+                ]
             },
-            "image": "/studist.png"
-        },
-        {
-            "period": "Oct〜",
-            "title": "Research Engineer Intern at Jij Inc.",
-            "interview": {
-                "url": "https://www.j-ij.com/ja/recruit/interview-mizuno",
-                "text": "Read the interview here"
+            {
+                "company": "Jij Inc.",
+                "image": "/jij.svg",
+                "positions": [
+                    {
+                        "title": "Research Engineer Intern",
+                        "type": "Intern",
+                        "period": "Oct 2024 ~ Mar 2025",
+                        "interview": {
+                            "url": "https://www.j-ij.com/ja/recruit/interview-mizuno",
+                            "text": "Read the interview here"
+                        }
+                    }
+                ]
             },
-            "image": "/jij.svg"
-        },
-        {
-            "period-bar": "’25"
-        },
-        {
-            "period": "Mar",
-            "title": "Game Exhibition at Pre-Event of Osaka-Kansai Expo 'Entangle Moment - [Quantum, Sea, Space] x Art'",
-            "link": "https: //www.qst.go.jp/site/entangle-moment/pre-event.html"
-        },
-        {
-            "period": "Aug",
-            "title": "Game Exhibition at Osaka-Kansai Expo 'Entangle Moment - [Quantum, Sea, Space] x Art'",
-            "image": "/entanglemoment.png"
-        }
-    ]
+            {
+                "company": "CRISP Inc.",
+                "image": "/crisp.png",
+                "positions": [
+                    {
+                        "title": "Engineering Intern",
+                        "type": "Intern",
+                        "period": "Jun 2024 ~ Aug 2024"
+                    }
+                ]
+            },
+            {
+                "company": "QunaSys Inc.",
+                "image": "/qunasys.png",
+                "positions": [
+                    {
+                        "title": "Quantum & Information Intern",
+                        "type": "Intern",
+                        "period": "Sep 2023 ~ Mar 2024"
+                    }
+                ]
+            }
+        ],
+        "experience": [
+            {
+                "title": "Game Exhibition at Osaka-Kansai Expo 'Entangle Moment - [Quantum, Sea, Space] x Art'",
+                "period": "Aug 2025",
+                "image": "/entanglemoment.png"
+            },
+            {
+                "title": "Game Exhibition at Pre-Event of Osaka-Kansai Expo",
+                "period": "Mar 2025",
+                "link": "https://www.qst.go.jp/site/entangle-moment/pre-event.html"
+            },
+            {
+                "title": "Participated in NQC Quantum ICT Human Resource Development Program",
+                "period": "Aug 2024 ~",
+                "interview": {
+                    "url": "https://nqc.nict.go.jp/report/250528_02.html",
+                    "text": "Read the interview here"
+                }
+            },
+            {
+                "title": "Student staff at RIKEN & Miraikan event 'Quantum Computers through Quizzes and Games'",
+                "period": "Aug 2024",
+                "link": "https://www.miraikan.jst.go.jp/events/202408033551.html"
+            },
+            {
+                "title": "Participated in QC4U2, a live-streamed quantum computing class",
+                "period": "Feb 2024 ~"
+            },
+            {
+                "title": "Student staff at RIKEN event 'What is a Quantum Computer?'",
+                "period": "Aug 2023",
+                "link": "https://www.riken.jp/pr/events/events/20230811_1/index.html"
+            }
+        ]
+    }
 }

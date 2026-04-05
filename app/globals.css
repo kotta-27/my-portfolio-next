@@ -20,6 +20,11 @@ html {
     scroll-behavior: smooth;
 }
 
+/* アンカースクロール時にヘッダーに隠れないように */
+section[id] {
+    scroll-margin-top: 80px;
+}
+
 /* カスタムスクロールバー */
 ::-webkit-scrollbar {
     width: 8px;

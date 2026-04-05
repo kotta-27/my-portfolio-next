@@ -1,0 +1,435 @@
+.careerWrapper {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+/* Section */
+.sectionBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sectionLabel {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.04em;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* ========================================
+   LEGO Brick Base
+   ======================================== */
+.brick {
+    --brick-color: rgba(50, 50, 70, 0.85);
+    --brick-highlight: rgba(255, 255, 255, 0.08);
+    --brick-shadow: rgba(0, 0, 0, 0.5);
+    --stud-color: rgba(255, 255, 255, 0.07);
+    --stud-highlight: rgba(255, 255, 255, 0.15);
+
+    position: relative;
+    background: var(--brick-color);
+    border-radius: 10px;
+    padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+    margin-top: 18px; /* space for studs */
+    backdrop-filter: blur(16px);
+    border: none;
+
+    /* 3D brick look */
+    box-shadow:
+        inset 0 1px 0 var(--brick-highlight),
+        inset 0 -2px 0 var(--brick-shadow),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.brick:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 1px 0 var(--brick-highlight),
+        inset 0 -2px 0 var(--brick-shadow),
+        0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+/* Studs row on top of brick */
+.studsRow {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.stud {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--stud-color);
+    box-shadow:
+        inset 0 -2px 3px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px var(--stud-highlight),
+        0 1px 2px rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+/* === Color Variants === */
+.brickProfile {
+    --brick-color: rgba(59, 130, 246, 0.2);
+    --brick-highlight: rgba(96, 165, 250, 0.15);
+    --brick-shadow: rgba(30, 64, 175, 0.4);
+    --stud-color: rgba(59, 130, 246, 0.25);
+    --stud-highlight: rgba(96, 165, 250, 0.3);
+}
+
+.brickWork {
+    --brick-color: rgba(16, 185, 129, 0.15);
+    --brick-highlight: rgba(52, 211, 153, 0.12);
+    --brick-shadow: rgba(6, 95, 70, 0.4);
+    --stud-color: rgba(16, 185, 129, 0.2);
+    --stud-highlight: rgba(52, 211, 153, 0.25);
+}
+
+.brickExperience {
+    --brick-color: rgba(168, 85, 247, 0.15);
+    --brick-highlight: rgba(192, 132, 252, 0.12);
+    --brick-shadow: rgba(88, 28, 135, 0.4);
+    --stud-color: rgba(168, 85, 247, 0.2);
+    --stud-highlight: rgba(192, 132, 252, 0.25);
+}
+
+.brickAchievement {
+    --brick-color: rgba(245, 158, 11, 0.15);
+    --brick-highlight: rgba(251, 191, 36, 0.12);
+    --brick-shadow: rgba(146, 64, 14, 0.4);
+    --stud-color: rgba(245, 158, 11, 0.2);
+    --stud-highlight: rgba(251, 191, 36, 0.25);
+}
+
+/* === Profile Card === */
+.profileCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.profileRow {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.profileItem {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    line-height: 1.5;
+}
+
+.profileLabel {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.5);
+    min-width: 70px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.profileValue {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+.profileLink {
+    color: #7cb8f7;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.profileLink:hover {
+    color: #a5d0ff;
+    text-decoration: underline;
+}
+
+/* === 職歴: Company Block === */
+.workList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.companyHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.companyIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.companyImg {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+}
+
+.companyInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.companyName {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+/* === Positions inside a company === */
+.positionList {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0.5rem;
+}
+
+.positionItem {
+    display: flex;
+    gap: 1rem;
+    min-height: 70px;
+}
+
+.positionDotArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 16px;
+    flex-shrink: 0;
+    padding-top: 6px;
+}
+
+.positionDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 6px rgba(52, 211, 153, 0.5);
+    flex-shrink: 0;
+}
+
+.positionLine {
+    width: 2px;
+    flex: 1;
+    background: rgba(52, 211, 153, 0.3);
+    margin-top: 4px;
+}
+
+.positionContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-bottom: 1.2rem;
+}
+
+.positionTitleRow {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.positionTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.typeBadge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.badgeFulltime {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93bbfd;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.badgeIntern {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.positionPeriod {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.interviewLink {
+    font-size: 0.8rem;
+    color: #7cb8f7;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    margin-top: 0.15rem;
+}
+
+.interviewLink:hover {
+    color: #a5d0ff;
+    text-decoration: underline;
+}
+
+/* === 経歴 / 実績: Timeline list (inside brick) === */
+.timelineList {
+    display: flex;
+    flex-direction: column;
+}
+
+.experienceItem,
+.achievementItem {
+    display: flex;
+    gap: 1rem;
+    min-height: 56px;
+}
+
+.expDotArea,
+.achDotArea {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 16px;
+    flex-shrink: 0;
+    padding-top: 6px;
+    padding-left: 0.5rem;
+}
+
+.expDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(192, 132, 252, 0.5);
+    border: 1.5px solid rgba(192, 132, 252, 0.7);
+    flex-shrink: 0;
+}
+
+.achDot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(251, 191, 36, 0.4);
+    border: 1.5px solid rgba(251, 191, 36, 0.6);
+    flex-shrink: 0;
+}
+
+.achDotAward {
+    background: rgba(250, 204, 21, 0.7);
+    border-color: rgba(250, 204, 21, 0.9);
+    box-shadow: 0 0 6px rgba(250, 204, 21, 0.4);
+}
+
+.expLine {
+    width: 1px;
+    flex: 1;
+    background: rgba(255, 255, 255, 0.12);
+    margin-top: 4px;
+}
+
+.expContent,
+.achContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding-bottom: 1rem;
+}
+
+.expTitle,
+.achTitle {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+}
+
+.expTitleLink {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.expTitleLink:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.expPeriod {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.achAward {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #facc15;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .brick {
+        padding: 1.2rem;
+        margin-top: 16px;
+    }
+
+    .studsRow {
+        gap: 8px;
+        left: 12px;
+        right: 12px;
+        top: -9px;
+    }
+
+    .stud {
+        width: 16px;
+        height: 16px;
+    }
+
+    .profileItem {
+        flex-direction: column;
+        gap: 0.15rem;
+    }
+
+    .profileLabel {
+        min-width: unset;
+    }
+
+    .companyName {
+        font-size: 1.05rem;
+    }
+
+    .positionTitle {
+        font-size: 0.9rem;
+    }
+
+    .expTitle,
+    .achTitle {
+        font-size: 0.88rem;
+    }
+}

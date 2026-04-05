@@ -3,13 +3,11 @@ import React, { useEffect, useState } from 'react';
 import styles from './Hero.module.css';
 import Image from 'next/image';
 import { FaArrowDown } from 'react-icons/fa';
-import { useLanguage } from '../context/LanguageContext';
-import careers from '../data/careers.json';
-import achievements from '../data/achievements.json';
-import terminal from '../data/terminal.json';
+import dynamic from 'next/dynamic';
+
+const BrickCareer = dynamic(() => import('./BrickCareer'), { ssr: false });
 
 export default function Hero() {
-    const { lang } = useLanguage();
     const profile = {
         name: "Kota Mizuno",
         roles: ["Software Engineer", "Quantum Computing"],
@@ -20,14 +18,12 @@ export default function Hero() {
     const [flashIndex, setFlashIndex] = useState<number | null>(null);
 
     useEffect(() => {
-        // Name typing animation
         let i = 0;
         const nameTimer = setInterval(() => {
             setDisplayedName(profile.name.slice(0, i + 1));
             i++;
             if (i === profile.name.length) {
                 clearInterval(nameTimer);
-                // Start role typing after name is complete
                 startRoleTyping(0);
             }
         }, 120);
@@ -45,9 +41,7 @@ export default function Hero() {
             i++;
             if (i === profile.roles[roleIndex].length) {
                 clearInterval(roleTimer);
-                // フラッシュ効果を追加
                 setFlashIndex(roleIndex);
-                // フラッシュ効果をリセット
                 setTimeout(() => setFlashIndex(null), 500);
                 if (roleIndex < profile.roles.length - 1) {
                     setTimeout(() => startRoleTyping(roleIndex + 1), 800);
@@ -88,86 +82,8 @@ export default function Hero() {
                     </div>
                 </div>
 
-
                 <div className={styles.aboutContainer}>
-                    <div className={styles.aboutContent}>
-                        {terminal[lang].commands.map((command, index) => (
-                            <div key={index} className={styles.commandOutput}>
-                                {command.output.split('\n').map((line, i) => {
-                                    const linkMatch = line.match(/\[(.*?)\]\((.*?)\)/);
-                                    if (linkMatch) {
-                                        const [fullMatch, text, url] = linkMatch;
-                                        const parts = line.split(fullMatch);
-                                        return (
-                                            <div key={i}>
-                                                {parts[0]}
-                                                <a href={url} target="_blank" rel="noopener noreferrer">{text}</a>
-                                                {parts[1]}
-                                            </div>
-                                        );
-                                    }
-                                    return <div key={i}>{line}</div>;
-                                })}
-                            </div>
-                        ))}
-                    </div>
-                    <div className={`${styles.careerSection} ${styles.fadeIn}`}>
-                        <div className={styles.subSectionTitleContainer}>
-                            <h3 className={styles.subSectionTitle}>{lang === 'ja' ? '経歴' : 'Career'}</h3>
-                        </div>
-                        <div className={styles.timelineWrapper}>
-                            <div className={styles.timelineList}>
-                                {careers[lang].map((career, idx) => (
-                                    career['period-bar'] ? (
-                                        <div key={idx} className={styles.timelinePeriodBar}>
-                                            <div className={styles.timelineBarContainer}>
-                                                <div className={styles.timelineLine} />
-                                                <div className={styles.timelinePeriodContainer}>
-                                                    <div className={styles.timelinePeriodText}>{career['period-bar']}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <React.Fragment key={idx}>
-                                            <li
-                                                className={styles.timelineItem}
-                                            >
-                                                <div className={styles.timelineDotContainer}>
-                                                    <div className={styles.timelineLine} />
-                                                    <div className={styles.timelineDot} />
-                                                </div>
-                                                <div className={styles.timelineContent}>
-                                                    <div className={styles.timelineContentLeft}>
-                                                        <div className={styles.timelinePeriod}>{career.period}</div>
-                                                        <div className={styles.timelineTitle}>{career.title}</div>
-                                                    </div>
-                                                    {career.image && <Image src={career.image} alt={career.title}
-                                                        width={100} height={100} className={styles.timelineImage} />}
-                                                </div>
-                                            </li>
-                                        </React.Fragment>
-                                    )))}
-                            </div>
-                        </div>
-                    </div>
-                    <div className={`${styles.achievementsSection} ${styles.fadeIn}`}>
-                        <div className={styles.subSectionTitleContainer}>
-                            <h3 className={styles.subSectionTitle}>{lang === 'ja' ? '実績' : 'Achievements'}</h3>
-                        </div>
-                        <div className={styles.list}>
-                            {achievements[lang].map((ach, idx) => (
-                                <div key={idx} className={`${styles.listItem} ${styles.achievementCard}`}>
-                                    <span style={{ fontStyle: 'italic' }}>{ach.period}：</span> {ach.title}
-                                    {ach.award && (
-                                        <>
-                                            <br />
-                                            <span style={{ color: '#facc15', fontWeight: 'bold' }}>{ach.award.title}</span>
-                                        </>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    <BrickCareer />
                 </div>
             </div>
         </section>
