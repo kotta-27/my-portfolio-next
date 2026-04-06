@@ -375,14 +375,10 @@ function BrickScene({
     }
   });
 
-  // dragLocked: once we determine direction, lock to horizontal (rotate) or give up (scroll)
-  const dragLocked = useRef<"none" | "horizontal" | "vertical">("none");
-
   const onPointerDown = useCallback(
     (e: THREE.Event) => {
       isDragging.current = true;
       dragMoved.current = false;
-      dragLocked.current = "none";
       const ev = e as unknown as PointerEvent;
       dragStart.current = { x: ev.clientX, y: ev.clientY };
       if (groupRef.current)
@@ -401,27 +397,14 @@ function BrickScene({
     const dx = ev.clientX - dragStart.current.x;
     const dy = ev.clientY - dragStart.current.y;
 
-    // Determine drag direction once past threshold
-    if (dragLocked.current === "none" && (Math.abs(dx) > 8 || Math.abs(dy) > 8)) {
-      dragLocked.current = Math.abs(dx) > Math.abs(dy) ? "horizontal" : "vertical";
-    }
-
-    // If vertical dominant, give up — let the browser scroll
-    if (dragLocked.current === "vertical") return;
-
-    if (Math.abs(dx) > 3) dragMoved.current = true;
+    if (Math.abs(dx) > 3 || Math.abs(dy) > 3) dragMoved.current = true;
     groupRef.current.rotation.y = rotOnDrag.current.y + dx * 0.008;
-    groupRef.current.rotation.x = THREE.MathUtils.clamp(
-      rotOnDrag.current.x + dy * 0.003,
-      -0.3,
-      0.3,
-    );
+    groupRef.current.rotation.x = rotOnDrag.current.x + dy * 0.008;
   }, []);
 
   const onPointerUp = useCallback(() => {
     if (!isDragging.current) return;
     isDragging.current = false;
-    dragLocked.current = "none";
     gl.domElement.style.cursor = "grab";
 
     // Snap to nearest face
@@ -651,7 +634,7 @@ export default function BrickCareer() {
           <Canvas
             camera={{ position: [0, 0.5, camFar], fov: 45 }}
             shadows
-            style={{ cursor: "grab", touchAction: "pan-y" }}
+            style={{ cursor: "grab", touchAction: "none" }}
           >
             <ambientLight intensity={0.5} />
             <directionalLight
