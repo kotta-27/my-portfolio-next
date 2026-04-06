@@ -506,17 +506,17 @@ function BrickScene({
           <group key={`hole-${i}`} position={[sx, -BRICK_H / 2, sz]}>
             {/* Dark hole cylinder (recessed into brick) */}
             <mesh position={[0, 0.05, 0]}>
-              <cylinderGeometry args={[STUD_RADIUS + 0.02, STUD_RADIUS + 0.02, 0.1, 32]} />
+              <cylinderGeometry args={[STUD_RADIUS + 0.02, STUD_RADIUS + 0.02, 0.1, 16]} />
               <meshStandardMaterial color="#000000" roughness={0.8} metalness={0} transparent opacity={0.6} />
             </mesh>
             {/* Inner ring edge (facing down) */}
             <mesh position={[0, -0.002, 0]} rotation={[Math.PI / 2, 0, 0]}>
-              <ringGeometry args={[STUD_RADIUS - 0.01, STUD_RADIUS + 0.03, 32]} />
+              <ringGeometry args={[STUD_RADIUS - 0.01, STUD_RADIUS + 0.03, 16]} />
               <meshBasicMaterial color="#000000" transparent opacity={0.4} />
             </mesh>
             {/* White rim outline (facing down) */}
             <mesh position={[0, -0.003, 0]} rotation={[Math.PI / 2, 0, 0]}>
-              <ringGeometry args={[STUD_RADIUS + 0.02, STUD_RADIUS + 0.04, 32]} />
+              <ringGeometry args={[STUD_RADIUS + 0.02, STUD_RADIUS + 0.04, 16]} />
               <meshBasicMaterial color="#ffffff" transparent opacity={0.25} />
             </mesh>
           </group>
@@ -528,7 +528,7 @@ function BrickScene({
             {/* Stud body */}
             <mesh position={[0, STUD_HEIGHT / 2, 0]} castShadow receiveShadow>
               <cylinderGeometry
-                args={[STUD_RADIUS, STUD_RADIUS, STUD_HEIGHT, 32]}
+                args={[STUD_RADIUS, STUD_RADIUS, STUD_HEIGHT, 16]}
               />
               <meshStandardMaterial
                 color={brickColor}
@@ -542,14 +542,14 @@ function BrickScene({
               rotation={[-Math.PI / 2, 0, 0]}
             >
               <ringGeometry
-                args={[STUD_RADIUS - 0.012, STUD_RADIUS + 0.012, 32]}
+                args={[STUD_RADIUS - 0.012, STUD_RADIUS + 0.012, 16]}
               />
               <meshBasicMaterial color="#ffffff" transparent opacity={0.55} />
             </mesh>
             {/* White edge ring on bottom (where stud meets brick) */}
             <mesh position={[0, 0.002, 0]} rotation={[-Math.PI / 2, 0, 0]}>
               <ringGeometry
-                args={[STUD_RADIUS - 0.008, STUD_RADIUS + 0.015, 32]}
+                args={[STUD_RADIUS - 0.008, STUD_RADIUS + 0.015, 16]}
               />
               <meshBasicMaterial color="#ffffff" transparent opacity={0.2} />
             </mesh>
@@ -641,8 +641,8 @@ export default function BrickCareer() {
               position={[5, 8, 6]}
               intensity={0.8}
               castShadow
-              shadow-mapSize-width={1024}
-              shadow-mapSize-height={1024}
+              shadow-mapSize-width={512}
+              shadow-mapSize-height={512}
               shadow-camera-near={0.5}
               shadow-camera-far={30}
               shadow-camera-left={-6}
