@@ -271,12 +271,11 @@ const FACE_CONTENT: Record<FaceKey, React.FC<{ lang: string }>> = {
 function BrickFace({
   faceKey,
   activeFace,
-  lang,
   hidden,
   onLabelClick,
   position,
   rotation,
-}: { faceKey: FaceKey; activeFace: FaceKey; lang: string; hidden: boolean; onLabelClick: (f: FaceKey) => void; position: [number, number, number]; rotation: [number, number, number] }) {
+}: { faceKey: FaceKey; activeFace: FaceKey; lang?: string; hidden: boolean; onLabelClick: (f: FaceKey) => void; position: [number, number, number]; rotation: [number, number, number] }) {
   const isFront = activeFace === faceKey;
   const color = FACE_COLORS[faceKey];
   // ラベルは英語のみ（3Dテキストで日本語フォント不要に）
@@ -334,7 +333,6 @@ interface SceneProps {
 function BrickScene({
   activeFace,
   zoomed,
-  zoomedFace,
   camFar,
   camNear,
   onFaceClick,
