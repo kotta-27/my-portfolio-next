@@ -12,7 +12,7 @@
 
 .heroProfile {
     width: 100%;
-    max-width: 1200px;
+    max-width: 800px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -29,83 +29,44 @@
 }
 
 .heroProfileImg {
-    width: 180px;
-    height: 180px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid rgba(255, 255, 255, 0.2);
+    border: 3px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    margin-bottom: 2rem;
-    transition: transform 0.3s ease;
-}
-
-.heroProfileImg:hover {
-    transform: scale(1.05);
+    margin-bottom: 1.5rem;
 }
 
 .heroTitle {
     font-family: "Raleway", sans-serif;
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 700;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     letter-spacing: 0.04em;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .roleContainer {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
     margin-bottom: 1.5rem;
-}
-
-.arrowContainer {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-
-.arrowIcon {
-    margin-top: 4.5rem;
-    width: 40px;
-    height: 40px;
-    color: rgba(0, 0, 0, 0.7);
-    animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-20px);
-    }
-    60% {
-        transform: translateY(-10px);
-    }
 }
 
 .heroSubtitleCard {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 240px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 12px;
+    min-width: 220px;
+    padding: 0.6rem 1.4rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
     backdrop-filter: blur(8px);
-    padding: 0.8rem 1.5rem;
     transition: all 0.3s ease;
-}
-
-.heroSubtitleCard:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
 }
 
 .heroSubtitleCard.flashBlue {
@@ -117,93 +78,256 @@
 }
 
 @keyframes flashEffectBlue {
-    0% {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
-    20% {
-        background: rgba(21, 135, 250, 0.3);
-        border-color: rgba(21, 135, 250, 0.8);
-        box-shadow: 0 0 20px rgba(21, 135, 250, 0.4);
-    }
-    100% {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
+    20% { background: rgba(21, 135, 250, 0.3); border-color: rgba(21, 135, 250, 0.8); }
+    100% { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); }
 }
 
 @keyframes flashEffectGreen {
-    0% {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
-    20% {
-        background: rgba(78, 251, 124, 0.3);
-        border-color: rgba(51, 218, 78, 0.8);
-        box-shadow: 0 0 20px rgba(27, 221, 40, 0.4);
-    }
-    100% {
-        background: rgba(255, 255, 255, 0.15);
-        border-color: rgba(255, 255, 255, 0.3);
-    }
+    20% { background: rgba(78, 251, 124, 0.3); border-color: rgba(51, 218, 78, 0.8); }
+    100% { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.2); }
 }
 
 .heroSubtitle {
     color: #ffffff;
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.1rem;
+    font-weight: 500;
     letter-spacing: 0.04em;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .cursor {
     display: inline-block;
-    width: 3px;
-    height: 1.1em;
+    width: 2px;
+    height: 1em;
     background-color: #ffffff;
     margin-left: 2px;
     animation: blink 0.7s infinite;
     vertical-align: middle;
-    box-shadow: 0 0 10px currentColor;
 }
 
 @keyframes blink {
-    0%, 100% {
-        opacity: 1;
-        transform: scaleY(1);
-    }
-    50% {
-        opacity: 0;
-        transform: scaleY(0.8);
-    }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
 }
 
-/* About Container */
-.aboutContainer {
-    width: 90%;
+.arrowContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.arrowIcon {
+    width: 32px;
+    height: 32px;
+    color: rgba(255, 255, 255, 0.5);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+}
+
+/* About Card */
+.aboutCard {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 4rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.aboutCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(255, 255, 255, 0.2);
+}
+
+.tabNav {
+    display: flex;
+    border-bottom: 1px solid #bdbdbd;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tabNav::-webkit-scrollbar {
+    display: none;
+}
+
+.tabBtn {
+    flex: 1;
+    min-width: 100px;
+    padding: 0.9rem 1rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
+.tabBtn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.tabBtnActive {
+    color: #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+.tabContent {
+    min-height: 200px;
+}
+
+.tabPane {
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Profile info */
+.infoRow {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.infoLabel {
+    color: rgba(255, 255, 255, 0.4);
+    min-width: 80px;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    padding-top: 0.05rem;
+}
+
+.infoVal {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+}
+
+.infoLink {
+    color: #60a5fa;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.infoLink:hover {
+    text-decoration: underline;
+}
+
+/* Work */
+.workEntry {
+    margin-bottom: 1rem;
+}
+
+.workHeader {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 4rem;
+    gap: 0.6rem;
+    margin-bottom: 0.6rem;
+}
+
+.companyName {
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.positionRow {
+    display: flex;
+    gap: 0.75rem;
+    padding-left: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.positionDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+}
+
+.dotGold {
+    background: #f59e0b;
+}
+
+.positionTitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.88rem;
+}
+
+.badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+.badgeFull {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badgeIntern {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c4b5fd;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.period {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.78rem;
+    margin-top: 0.2rem;
+}
+
+/* Experience & Achievements */
+.expRow {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.expTitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.awardBadge {
+    display: inline-block;
+    margin-top: 0.25rem;
+    padding: 0.15rem 0.5rem;
+    background: rgba(245, 158, 11, 0.15);
+    color: #fcd34d;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 4px;
+    font-size: 0.72rem;
 }
 
 @media (max-width: 768px) {
-    .heroProfile {
-        width: 100%;
-        padding: 0 1rem;
-    }
-
     .heroTitle {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
 
-    .roleContainer {
-        flex-direction: column;
-        gap: 0.5rem;
+    .aboutCard {
+        border-radius: 12px;
     }
 
-    .aboutContainer {
-        width: 98%;
+    .tabBtn {
+        min-width: 80px;
+        font-size: 0.8rem;
+        padding: 0.75rem 0.75rem;
     }
 }

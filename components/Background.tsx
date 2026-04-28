@@ -147,8 +147,8 @@ const RotatingSphere = ({
   rotationSpeed = 0.001,
   orbitRadius = 0,
   orbitSpeed = 0,
-  mainSphereColor = "#0000FF",
-  initialSphereColor = "#0000FF",
+  mainSphereColor = "#ffffff",
+  initialSphereColor = "#ffffff",
 }) => {
   const meshRef = useRef<THREE.Mesh>(null!);
   const angleRef = useRef(Math.random() * Math.PI * 2);
@@ -189,7 +189,7 @@ const RotatingSphere = ({
         color={sphereColor}
         wireframe={true}
         transparent={true}
-        opacity={0.5}
+        opacity={0.52}
       />
     </Sphere>
   );
@@ -206,8 +206,8 @@ const MultipleSpheres = () => {
     const orbitRadius = Math.random() * 3 + 2;
     const orbitSpeed = Math.random() * 0.005 + 0.001;
 
-    const r = Math.floor(Math.random() * 50);
-    const g = Math.floor(Math.random() * 50);
+    const r = 200;
+    const g = 200;
     const b = 255;
     const randomBlueColor = `rgb(${r}, ${g}, ${b})`;
 
