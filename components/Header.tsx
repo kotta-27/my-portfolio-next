@@ -6,6 +6,7 @@ import styles from './Header.module.css';
 
 const navigation = [
     { name: 'Home', href: '#home' },
+    { name: 'About', href: '#about' },
     { name: 'Skills', href: '#skills' },
     { name: 'Works', href: '#works' },
     { name: 'Contact', href: '#contact' },
@@ -20,23 +21,22 @@ export default function Header() {
     useEffect(() => {
         const sectionIds = navigation.map(n => n.href.replace('#', ''));
 
-        const observer = new IntersectionObserver(
-            (entries) => {
-                for (const entry of entries) {
-                    if (entry.isIntersecting) {
-                        setActiveSection(`#${entry.target.id}`);
-                    }
+        const handleScroll = () => {
+            const scrollY = window.scrollY + window.innerHeight * 0.3;
+            let current = sectionIds[0];
+            for (const id of sectionIds) {
+                const el = document.getElementById(id);
+                if (el && el.offsetTop <= scrollY) {
+                    current = id;
                 }
-            },
-            { rootMargin: '-40% 0px -50% 0px', threshold: 0 }
-        );
+            }
+            setActiveSection(`#${current}`);
+        };
 
-        for (const id of sectionIds) {
-            const el = document.getElementById(id);
-            if (el) observer.observe(el);
-        }
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
 
-        return () => observer.disconnect();
+        return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const handleClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>, href: string) => {

@@ -1,0 +1,209 @@
+.aboutSection {
+    width: 100%;
+    padding: 5rem 2rem;
+}
+
+.sectionHeader {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.sectionTitle {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: "Raleway", sans-serif;
+    color: #ffffff;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.sectionTitle::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #61dafb, #a855f7);
+    margin: 0.75rem auto 0;
+    border-radius: 2px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.block {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 1.75rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.block:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(255, 255, 255, 0.2);
+}
+
+.blockTitle {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 1.25rem;
+}
+
+.profileGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.infoRow {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.infoLabel {
+    color: rgba(255, 255, 255, 0.4);
+    min-width: 80px;
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    padding-top: 0.05rem;
+}
+
+.infoVal {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+}
+
+.infoLink {
+    color: #60a5fa;
+    text-decoration: none;
+    font-size: 0.85rem;
+}
+
+.infoLink:hover {
+    text-decoration: underline;
+}
+
+.workEntry {
+    margin-bottom: 0.5rem;
+}
+
+.workHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.companyName {
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.positionRow {
+    display: flex;
+    gap: 0.75rem;
+    padding-left: 0.5rem;
+    margin-bottom: 0.4rem;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    margin-top: 0.45rem;
+    flex-shrink: 0;
+}
+
+.dotGold {
+    background: #f59e0b;
+}
+
+.positionTitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.88rem;
+}
+
+.badge {
+    display: inline-block;
+    margin-left: 0.5rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+.badgeFull {
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.badgeIntern {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c4b5fd;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+}
+
+.period {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.78rem;
+    margin-top: 0.2rem;
+}
+
+.expRow {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.expTitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.88rem;
+    line-height: 1.5;
+}
+
+.awardBadge {
+    display: inline-block;
+    margin-top: 0.25rem;
+    padding: 0.15rem 0.5rem;
+    background: rgba(245, 158, 11, 0.15);
+    color: #fcd34d;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 4px;
+    font-size: 0.72rem;
+}
+
+@media (max-width: 768px) {
+    .aboutSection {
+        padding: 3rem 1rem;
+    }
+
+    .sectionTitle {
+        font-size: 2rem;
+    }
+
+    .block {
+        padding: 1.25rem;
+    }
+}

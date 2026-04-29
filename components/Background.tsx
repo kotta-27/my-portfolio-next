@@ -197,7 +197,8 @@ const RotatingSphere = ({
 
 const MultipleSpheres = () => {
   const spheres = [];
-  for (let i = 0; i < 5; i++) {
+  const sphereNum = 3;
+  for (let i = 0; i < sphereNum; i++) {
     const size = Math.random() * 0.5 + 0.2;
     const x = (Math.random() - 0.5) * 6;
     const y = (Math.random() - 0.5) * 6;
