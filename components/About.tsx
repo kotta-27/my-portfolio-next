@@ -8,8 +8,7 @@ export function About({ lang }: { lang: Lang }) {
   return (
     <div id="about" className="animate-fade-in-up [animation-delay:100ms]">
       <SectionLabel>{t.sections.about}</SectionLabel>
-      <div className="flex flex-col gap-2">
-        <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-2 gap-2">
           <div className="bg-white rounded-[10px] p-[26px]">
             <p className="text-[9px] tracking-[.1em] uppercase text-[#999] mb-[14px]">
               {t.currently}
@@ -41,10 +40,6 @@ export function About({ lang }: { lang: Lang }) {
             </p>
             <Tag>{lang === 'ja' ? '渡部研究室' : 'Watabe Group'}</Tag>
           </div>
-        </div>
-        <div className="bg-white rounded-[10px] p-[26px]">
-          <p className="text-[14.5px] leading-[1.85] text-[#555] max-w-[700px]">{t.bio}</p>
-        </div>
       </div>
     </div>
   )
