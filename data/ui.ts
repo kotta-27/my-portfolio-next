@@ -13,6 +13,17 @@ type UiStrings = {
   internships: string
   qiitaLabel: string
   footer: string
+  projectMeta: {
+    reflection: string
+    contributions: string
+    techStack: string
+    period: string
+    role: string
+    members: string
+    event: string
+    back: string
+    backToProjects: string
+  }
 }
 
 export const ui: Record<Lang, UiStrings> = {
@@ -29,6 +40,17 @@ export const ui: Record<Lang, UiStrings> = {
     internships: 'Internships',
     qiitaLabel: 'Qiita Articles',
     footer: '© 2026 Kota Mizuno — Built brick by brick.',
+    projectMeta: {
+      reflection: 'Reflection',
+      contributions: 'Contributions',
+      techStack: 'Tech Stack',
+      period: 'Period',
+      role: 'Role',
+      members: 'Team',
+      event: 'Event',
+      back: 'Back',
+      backToProjects: 'Back to Projects',
+    },
   },
   ja: {
     sections: {
@@ -43,5 +65,16 @@ export const ui: Record<Lang, UiStrings> = {
     internships: 'インターン経験',
     qiitaLabel: 'Qiita 記事',
     footer: '© 2026 水野航太 — Built brick by brick.',
+    projectMeta: {
+      reflection: '感想',
+      contributions: '貢献',
+      techStack: '使用技術',
+      period: '開発期間',
+      role: '担当',
+      members: 'メンバー',
+      event: '発表',
+      back: '戻る',
+      backToProjects: '戻る',
+    },
   },
 }
