@@ -7,16 +7,22 @@ export type LinkCardData = {
   thumbnail?: string | null
 }
 
-export function LinkCard({ card, lang: _lang }: { card: LinkCardData; lang?: Lang }) {
+type Props = {
+  card: LinkCardData
+  lang?: Lang
+  mobileThumbnail?: boolean
+}
+
+export function LinkCard({ card, lang: _lang, mobileThumbnail = true }: Props) {
   return (
     <a
       href={card.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex items-center border border-[#ddd] rounded-[7px] overflow-hidden no-underline hover:border-[#ddd] hover:bg-[#fafafa] transition-colors duration-150 group"
+      className="w-full flex items-center border border-[#ddd] rounded-[7px] overflow-hidden no-underline hover:border-[#ddd] hover:bg-[#fafafa] transition-colors duration-150 group"
     >
       {card.thumbnail && (
-        <div className="w-[72px] sm:w-[80px] h-[52px] shrink-0 bg-[#f4f4f4] overflow-hidden">
+        <div className={`${mobileThumbnail ? 'block' : 'hidden sm:block'} w-[80px] h-[52px] shrink-0 bg-[#f4f4f4] overflow-hidden`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={card.thumbnail} alt="" className="w-full h-full object-cover" />
         </div>
