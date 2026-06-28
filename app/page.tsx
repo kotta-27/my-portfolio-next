@@ -21,7 +21,7 @@ export default async function Page({
   return (
     <div className="min-h-screen bg-[#edeae3] font-sans text-[#1a1a1a]">
       <Nav lang={lang} />
-      <main className="max-w-[1100px] mx-auto px-4 sm:px-7 pt-5 pb-20 flex flex-col gap-[10px]">
+      <main className="max-w-[1100px] mx-auto px-4 sm:px-7 pt-5 pb-20 flex flex-col gap-[30px]">
         <Hero lang={lang} />
         <About lang={lang} />
         <Career lang={lang} />

@@ -12,8 +12,8 @@ export function Skills({ lang }: { lang: Lang }) {
       <div className="bg-white rounded-[10px] p-[26px] flex flex-col gap-[22px]">
         {skillsData.map((group) => (
           <div key={group.en}>
-            <p className="text-[9px] tracking-[.1em] uppercase text-[#999] mb-[11px]">
-              {group[lang]}
+            <p className="text-[12px] tracking-[.1em] uppercase text-[#111] mb-[11px]">
+              - {group[lang]}
             </p>
             <div className="flex flex-wrap gap-[7px]">
               {group.skills.map((s) => (
