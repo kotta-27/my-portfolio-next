@@ -37,8 +37,8 @@ export const about: Record<Lang, AboutStrings> = {
     university: '芝浦工業大学大学院',
     degree: '修士（工学）, 2026年',
     research: '量子アルゴリズム · 格子暗号',
-    labGroup: '渡部研究室',
-    labGroupPrefix: '',
-    labGroupSuffix: 'に所属していました。',
+    labGroup: '量子情報工学研究室（渡部研）',
+    labGroupPrefix: '所属：',
+    labGroupSuffix: '',
   },
 }

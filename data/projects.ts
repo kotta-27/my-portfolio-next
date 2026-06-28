@@ -7,6 +7,7 @@ export type ProjectLink = {
 
 export type ProjectItem = {
   name: string
+  slug: string
   image: string
   tags: string[]
   links: ProjectLink[]
@@ -16,6 +17,7 @@ export type ProjectItem = {
 export const projectsData: ProjectItem[] = [
   {
     name: 'Orbit',
+    slug: 'orbit',
     en: 'Task management app with habit, routine, and TODO tracking.',
     ja: '習慣・ルーティン・TODOをまとめて管理するタスク管理アプリ。',
     detail: {
@@ -30,6 +32,7 @@ export const projectsData: ProjectItem[] = [
   },
   {
     name: 'Lab Purchase System',
+    slug: 'lab-purchase-system',
     en: 'Purchase request management for research labs with approval workflows.',
     ja: '承認フロー付き、研究室向け購入申請管理システム。',
     detail: {
@@ -42,6 +45,7 @@ export const projectsData: ProjectItem[] = [
   },
   {
     name: 'Quantum Pizza',
+    slug: 'quantum-pizza',
     en: 'Educational quantum gate game — learn quantum information by making pizza.',
     ja: 'ピザを作りながら量子情報を学ぶ、量子ゲートの教育ゲーム。',
     detail: {
@@ -54,6 +58,7 @@ export const projectsData: ProjectItem[] = [
   },
   {
     name: 'ImgToLatex',
+    slug: 'img-to-latex',
     en: 'AI tool that converts math formula images to LaTeX code using Gemini.',
     ja: 'Gemini APIで数式画像をLaTeXコードに変換するAIツール。',
     detail: {
@@ -66,6 +71,7 @@ export const projectsData: ProjectItem[] = [
   },
   {
     name: 'なんJenerator',
+    slug: 'nanjenerator',
     en: 'AI-powered 2ch-style thread generator using Amazon Bedrock.',
     ja: 'Amazon Bedrockを使ったAI搭載の2ch風スレ生成ツール。',
     detail: {
@@ -78,6 +84,7 @@ export const projectsData: ProjectItem[] = [
   },
   {
     name: 'Quantum Super Techshiba-kun',
+    slug: 'quantum-super-techshiba-kun',
     en: 'Side-scrolling game featuring quantum information technology as in-game elements.',
     ja: '量子情報技術をゲーム要素に組み込んだ横スクロールゲーム。',
     detail: {
