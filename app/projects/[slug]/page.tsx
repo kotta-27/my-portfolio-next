@@ -37,14 +37,13 @@ export default async function ProjectPage({
         </FadeIn>
 
         <FadeIn delay={60}>
-          <div className="bg-white rounded-2xl overflow-hidden">
-            <div className="relative h-[240px] sm:h-[420px] bg-[#f4f4f4]">
-              <Image
+          <div className="py-8 bg-white rounded-2xl overflow-hidden">
+            <div className="h-[240px] sm:h-[420px] bg-white flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={project.image}
                 alt={project.name}
-                fill
-                className="object-cover"
-                priority
+                className="max-h-full max-w-full object-contain border border-[#e8e8e8] rounded-[4px]"
               />
             </div>
 
@@ -64,7 +63,7 @@ export default async function ProjectPage({
               </FadeIn>
 
               <FadeIn delay={260}>
-                <p className="text-[14px] sm:text-[15px] leading-[1.9] text-[#555] mb-8 max-w-[680px]">
+                <p className="text-[14px] sm:text-[15px] leading-[1.9] text-[#555] mb-8">
                   {project.detail[lang]}
                 </p>
               </FadeIn>
