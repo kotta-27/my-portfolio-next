@@ -88,7 +88,7 @@ export const careerData: CareerItem[] = [
   },
   {
     en: {
-      company: 'CRISP Inc.',
+      company: 'CRISP, INC.',
       role: 'Engineer Intern',
       description: 'RAG system design and use-case exploration; Flutter mobile app implementation.',
     },
