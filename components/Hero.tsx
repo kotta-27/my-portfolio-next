@@ -2,10 +2,11 @@ import Image from 'next/image'
 import { FaGithub, FaXTwitter } from 'react-icons/fa6'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
-import { techStrip } from '@/data/projects'
+import { hero } from '@/data/hero'
 
 export function Hero({ lang }: { lang: Lang }) {
   const t = ui[lang]
+  const h = hero[lang]
   return (
     <section id="hero" className="animate-fade-in">
       <div className="bg-[#1a1a1a] rounded-xl p-6 sm:p-12">
@@ -16,7 +17,7 @@ export function Hero({ lang }: { lang: Lang }) {
           </div>
           <div>
             <span className="text-[10.5px] tracking-[.1em] text-[#777] block mb-5 animate-fade-in-up [animation-delay:100ms]">
-              {t.roleTag}
+              {h.roleTag}
             </span>
             <div className="mb-6 pr-[112px] sm:pr-0 animate-fade-in-up [animation-delay:180ms]">
               <div className="text-[48px] sm:text-[70px] font-bold leading-[0.9] tracking-[-0.04em] text-white">
@@ -27,17 +28,17 @@ export function Hero({ lang }: { lang: Lang }) {
               </div>
             </div>
             <p className="font-light text-[14.5px] leading-[1.75] text-[#aaa] mb-8 max-w-[380px] animate-fade-in-up [animation-delay:260ms]">
-              {t.tagline}
+              {h.tagline}
               <br />
-              {t.currentlyAt}
+              {h.currentlyAt}
             </p>
             <div className="mb-6 animate-fade-in-up [animation-delay:300ms] font-mono text-[12px] text-[#555]">
               <span className="text-[#aaa]">interests</span>
               <span className="text-[#4f4]">{' {'}</span>
-              {['検索技術', 'UI/UX', 'デザイン'].map((item, i) => (
+              {h.interests.map((item, i) => (
                 <span key={item}>
                   <span className="text-[#4f4]">"{item}"</span>
-                  {i < 2 && <span className="text-[#4f4]">, </span>}
+                  {i < h.interests.length - 1 && <span className="text-[#4f4]">, </span>}
                 </span>
               ))}
               <span className="text-[#4f4]">{'}'}</span>
@@ -46,10 +47,10 @@ export function Hero({ lang }: { lang: Lang }) {
             <div className="mb-8 animate-fade-in-up [animation-delay:300ms] font-mono text-[12px] text-[#555]">
               <span className="text-[#aaa]">hobbies</span>
               <span className="text-[#4af]">{' {'}</span>
-              {['LEGO', '謎解き', 'カフェ'].map((item, i) => (
+              {h.hobbies.map((item, i) => (
                 <span key={item}>
                   <span className="text-[#4af]">"{item}"</span>
-                  {i < 2 && <span className="text-[#4af]">, </span>}
+                  {i < h.hobbies.length - 1 && <span className="text-[#4af]">, </span>}
                 </span>
               ))}
               <span className="text-[#4af]">{'}'}</span>
@@ -60,7 +61,7 @@ export function Hero({ lang }: { lang: Lang }) {
                 href="#projects"
                 className="text-[10.5px] font-medium tracking-[.05em] text-white no-underline bg-white/10 border border-white/[.15] rounded-md px-5 py-[11px] hover:bg-white/20 transition-colors duration-150"
               >
-                {t.viewWork}
+                {h.viewWork}
               </a>
               <a
                 href="https://x.com/Melmol_27"
