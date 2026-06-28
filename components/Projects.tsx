@@ -27,7 +27,14 @@ export function Projects({ lang }: { lang: Lang }) {
                 className="max-h-full max-w-full object-contain border border-[#e8e8e8] rounded-[4px]"
               />
             </div>
-            <p className="text-[14px] font-semibold text-[#1a1a1a] mb-[7px]">{project.name}</p>
+            <div className="flex items-center justify-between mb-[7px]">
+              <p className="text-[14px] font-semibold text-[#1a1a1a]">{project.name}</p>
+              {project.badge && (
+                <span className="text-[10px] font-semibold tracking-[.08em] uppercase bg-gradient-to-r from-amber-400 to-yellow-300 text-amber-900 rounded-full px-[11px] py-[5px] shadow-sm shrink-0">
+                  {project.badge}
+                </span>
+              )}
+            </div>
             <p className="text-[12.5px] font-light leading-[1.65] text-[#555] mb-auto">
               {project[lang]}
             </p>
