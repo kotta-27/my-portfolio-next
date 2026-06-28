@@ -16,6 +16,21 @@ export type ProjectItem = {
 
 export const projectsData: ProjectItem[] = [
   {
+    name: 'Quantum Circuit Simulator',
+    slug: 'quantum-circuit-simulator',
+    en: 'Browser-based quantum circuit simulator built with Nuxt.js.',
+    ja: 'Nuxt.js で構築したブラウザ上で動く量子回路シミュレータ。',
+    detail: {
+      en: 'A browser-based quantum circuit simulator that lets users place and connect quantum gates visually to explore quantum computation. Built with Nuxt.js, it simulates qubit state evolution in real time, making quantum circuit design accessible without any local setup.',
+      ja: '量子ゲートを視覚的に配置・接続し、量子計算を体験できるブラウザ上の量子回路シミュレータ。Nuxt.js で構築し、クビットの状態変化をリアルタイムにシミュレーション。ローカル環境不要で量子回路設計を手軽に試せる。',
+    },
+    tags: ['Nuxt.js', 'Quantum Computing'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/nuxt-qc-app' },
+    ],
+    image: '/qc_nuxt_1.png',
+  },
+  {
     name: 'Orbit',
     slug: 'orbit',
     en: 'Task management app with habit, routine, and TODO tracking.',
