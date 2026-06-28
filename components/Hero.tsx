@@ -56,6 +56,14 @@ export function Hero({ lang }: { lang: Lang }) {
                 <FaGithub className="text-[15px]" />
                 kotta-27
               </a>
+              <a
+                href="https://youtrust.jp/users/356b120bc6d76c20101a4096b1896d95"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] text-[#777] no-underline border border-[#3a3a3a] rounded-md px-5 py-[11px] hover:text-[#bbb] hover:border-[#555] transition-colors duration-150"
+              >
+                YouTrust
+              </a>
 
             </div>
           </div>
