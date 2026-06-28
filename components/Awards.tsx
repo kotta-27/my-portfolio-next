@@ -16,15 +16,15 @@ export function Awards({ lang }: { lang: Lang }) {
       <SectionLabel>{t.sections.awards}</SectionLabel>
       <div className="bg-white rounded-[10px] overflow-hidden">
         {activitiesData.map((item) => (
-          <div
-            key={item.en}
-            className="px-7 py-[18px] border-b border-[#f4f4f4] flex justify-between items-start gap-4"
-          >
-            <div className="flex items-start gap-3 min-w-0">
-              <span className="mt-[3px] shrink-0 w-[72px] text-center text-[9px] tracking-[.08em] uppercase text-[#999] bg-[#f4f4f4] rounded px-[7px] py-[3px] whitespace-nowrap">
+          <div key={item.en} className="relative pl-5 pr-[5px] py-[18px] border-b border-[#f4f4f4]">
+            <span className="absolute top-[18px] right-[15px] text-[11px] font-light text-[#999] text-right w-[64px] sm:w-auto sm:whitespace-nowrap">
+              {item.date}
+            </span>
+            <div className="flex items-start gap-3 pr-[70px]">
+              <span className="mt-[3px] shrink-0 w-[72px] text-center text-[9px] tracking-[.08em] uppercase text-[#222] bg-[#f4f4f4] rounded px-[7px] py-[3px] whitespace-nowrap">
                 {categoryLabel[item.category][lang]}
               </span>
-              <div className="min-w-0 w-full">
+              <div className="flex-1 min-w-0">
                 {item.link ? (
                   <a
                     href={item.link}
@@ -45,24 +45,21 @@ export function Awards({ lang }: { lang: Lang }) {
                 )}
                 {item.interview && (
                   <div className="mt-[8px]">
-                    <LinkCard card={toCard(item.interview, 'Interview', lang)} />
+                    <LinkCard card={toCard(item.interview, 'Interview', lang)} mobileThumbnail={false} />
                   </div>
                 )}
                 {item.pressRelease && (
                   <div className="mt-[8px]">
-                    <LinkCard card={toCard(item.pressRelease, 'Press Release', lang)} />
+                    <LinkCard card={toCard(item.pressRelease, 'Press Release', lang)} mobileThumbnail={false} />
                   </div>
                 )}
                 {item.page && (
                   <div className="mt-[8px]">
-                    <LinkCard card={toCard(item.page, 'Page', lang)} />
+                    <LinkCard card={toCard(item.page, 'Page', lang)} mobileThumbnail={false} />
                   </div>
                 )}
               </div>
             </div>
-            <span className="text-[11px] font-light text-[#999] shrink-0 pt-[3px] whitespace-nowrap">
-              {item.date}
-            </span>
           </div>
         ))}
 
