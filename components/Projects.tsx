@@ -17,7 +17,7 @@ export function Projects({ lang }: { lang: Lang }) {
           <Link
             key={project.name}
             href={`/projects/${project.slug}?lang=${lang}`}
-            className="bg-white rounded-[10px] p-[22px] flex flex-col group no-underline border border-transparent hover:border-[#ddd] hover:shadow-md transition-all duration-200"
+            className="bg-white rounded-[10px] px-[22px] py-[12px] flex flex-col group no-underline border border-transparent hover:border-[#ddd] hover:shadow-md transition-all duration-200"
           >
             <div className="h-[148px] sm:h-[228px] rounded-[7px] mb-4 shrink-0 bg-white flex items-center justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
