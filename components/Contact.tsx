@@ -9,10 +9,8 @@ export function Contact({ lang }: { lang: Lang }) {
   const c = contact[lang]
   return (
     <div id="contact" className="animate-fade-in-up [animation-delay:100ms]">
+      <SectionLabel>{t.sections.contact}</SectionLabel>
       <div className="bg-[#1a1a1a] rounded-xl p-6 sm:p-12">
-        <p className="text-[10px] tracking-[.1em] text-[#555] mb-4">
-          {t.sections.contact}
-        </p>
         <p className="text-[26px] sm:text-[34px] font-bold tracking-[-0.025em] text-white mb-[14px]">
           {c.title}
         </p>
