@@ -5,10 +5,16 @@ export type ProjectLink = {
   url: string
 }
 
+export type TechCategory = {
+  category: string
+  items: string[]
+}
+
 export type ProjectMeta = {
   reflection?: Record<Lang, string>
   contributions?: Record<Lang, string[]>
-  period?: string
+  techStack?: TechCategory[]
+  period?: Record<Lang, string>
   role?: Record<Lang, string[]>
   members?: Record<Lang, string>
   event?: string
@@ -22,6 +28,7 @@ export type ProjectItem = {
   links: ProjectLink[]
   detail: Record<Lang, string>
   meta?: ProjectMeta
+  badge?: string
 } & Record<Lang, string>
 
 export const projectsData: ProjectItem[] = [
@@ -57,20 +64,24 @@ export const projectsData: ProjectItem[] = [
           'ゲート操作のレンダリング',
         ],
       },
-      period: '2025-Jan（5日）',
+      techStack: [
+        { category: 'Frontend', items: ['Nuxt.js', 'TypeScript', 'Tailwind CSS'] },
+        { category: 'Infra', items: ['Vercel'] },
+      ],
+      period: { en: '2025-Jan (5 days)', ja: '2025年1月（5日）' },
       role: { en: ['All'], ja: ['すべて'] },
       members: { en: '1 person', ja: '1人' },
       event: undefined,
     },
   },
   {
-    name: 'Orbit',
-    slug: 'orbit',
+    name: 'Orbital',
+    slug: 'orbital',
     en: 'Task management app with habit, routine, and TODO tracking.',
     ja: '習慣・ルーティン・TODOをまとめて管理するタスク管理アプリ。',
     detail: {
-      en: 'A personal productivity app built to unify habit tracking, daily routines, and one-off TODOs in a single interface. Designed around a calendar-first view, it lets users visualize consistency over time. Built with Vue.js and Ruby on Rails, backed by PostgreSQL.',
-      ja: '習慣・ルーティン・TODOを一元管理するパーソナル生産性アプリ。カレンダービューを中心に据え、継続性を可視化できる設計。Vue.js + Ruby on Rails + PostgreSQL で構築。',
+      en: 'A personal productivity app built to unify habits, routines, and TODOs in a single interface — built around the concept of "getting every day on track." Built with Vue.js and Ruby on Rails, backed by PostgreSQL.',
+      ja: '習慣・ルーティン・TODOを一元管理するパーソナル生産性アプリ。ToDoから日課、習慣に繋げ、「毎日を、軌道に乗せる」をコンセプトに作成。Vue.js + Ruby on Rails + PostgreSQL で構築。',
     },
     tags: ['Vue.js', 'Rails', 'PostgreSQL'],
     links: [
@@ -79,16 +90,53 @@ export const projectsData: ProjectItem[] = [
     image: '/orbit_1.png',
     meta: {
       reflection: {
-        en: 'Designing a unified interface for three different task types — habits, routines, and TODOs — was the core challenge. Balancing flexibility with simplicity in the UX took several iterations.',
-        ja: '習慣・ルーティン・TODOという3種類の異なるタスクを一つのUIで扱う設計が難しかったです。柔軟性とシンプルさのバランスを取るためにUIを何度も見直しました。',
+        en: 'Designing a unified interface for three different task types — habits, routines, and TODOs — was the core challenge. Balancing flexibility with simplicity in the UX took several iterations. I also intentionally used a production-grade tech stack to practice real-world patterns, including simple CRUD implementation and Rails MVC design.',
+        ja: '習慣・ルーティン・TODOという3種類の異なるタスクを一つのUIで扱う設計が難しかったです。柔軟性とシンプルさのバランスを取るためにUIを何度も見直しました。業務で使うスタックでの開発を経験として行い、シンプルなCRUD実装や、RailsのMVC設計を学ぶことができました。',
       },
       contributions: {
-        en: ['Full-stack implementation', 'Database schema design', 'Calendar UI design'],
-        ja: ['フルスタック実装', 'データベーススキーマ設計', 'カレンダーUIのデザイン'],
+        en: ['Full-stack implementation', 'Database schema design', 'UI design'],
+        ja: ['フルスタック実装', 'データベーススキーマ設計', 'UIデザイン'],
       },
-      period: '2023-XX（XX日）',
+      techStack: [
+        { category: 'Frontend', items: ['Vue.js', 'TypeScript'] },
+        { category: 'Backend', items: ['Ruby on Rails', 'Pinia'] },
+        { category: 'DB', items: ['PostgreSQL'] },
+        { category: 'Infra', items: ['Heroku'] },
+      ],
+      period: {
+        en: '2025-May（2 Weeks）',
+        ja: '2025-May（2週間）',
+      },
       role: { en: ['All'], ja: ['すべて'] },
       members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'なんJenerator',
+    slug: 'nanjenerator',
+    badge: 'ハッカソン最優秀賞',
+    en: 'AI-powered 2ch-style thread generator using Amazon Bedrock.',
+    ja: 'Amazon Bedrockを使ったAI搭載の2ch風スレ生成ツール。',
+    detail: {
+      en: 'Enter any topic and get a fully generated 2ch-style thread complete with OP post and replies, all powered by Amazon Bedrock (Claude). Built at a hackathon, it became unexpectedly popular among friends.',
+      ja: 'テーマを入力すると、Amazon Bedrock（Claude）が2ch風のスレッドをOP・レス込みで丸ごと生成。ハッカソンで制作し、身内に予想外に好評だったツール。',
+    },
+    tags: ['React', 'Python', 'AWS Bedrock'],
+    links: [],
+    image: '/nanj_1.png',
+    meta: {
+      reflection: {
+        en: 'The hardest part was tuning the prompt to consistently capture the tone and rhythm of 2ch-style posts. Seeing it go viral among friends was a great validation of the concept.',
+        ja: '2ch特有の文体やテンポをAIに再現させるプロンプト調整が一番難しかったです。身内でバズったときは、コンセプトが通じたと実感しました。',
+      },
+      contributions: {
+        en: ['Prompt engineering', 'Frontend implementation', 'AWS Bedrock integration'],
+        ja: ['プロンプトエンジニアリング', 'フロントエンド実装', 'AWS Bedrock連携'],
+      },
+      period: { en: '2024-XX (1 day)', ja: '2024-XX（1日）' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+      event: 'Hackathon',
     },
   },
   {
@@ -107,14 +155,14 @@ export const projectsData: ProjectItem[] = [
     image: '/purchase_1.png',
     meta: {
       reflection: {
-        en: 'Building a real tool for actual lab members meant requirements kept evolving. Integrating Discord notifications made the approval flow much more practical for day-to-day use.',
-        ja: '実際に研究室メンバーが使うツールだったため、要件が開発中に変化し続けました。Discord通知の連携を追加したことで、承認フローが実用的になりました。',
+        en: 'Building a real tool for actual lab members meant requirements kept evolving. Integrating Discord notifications made the approval flow much more practical for day-to-day use. I also implemented Google authentication and a role-based permission system, allowing designated approvers to handle workflow approvals.',
+        ja: '実際に研究室メンバーが使うツールだったため、要件が開発中に変化し続けました。Discord通知の連携を追加したことで、承認フローが実用的になりました。Google認証によるログインを採用し、対象のロールに対して承認者権限を付与し、フローの承認などを行えるようにしました。',
       },
       contributions: {
         en: ['Full-stack implementation', 'Approval workflow design', 'Discord notification integration'],
         ja: ['フルスタック実装', '承認フロー設計', 'Discord通知連携'],
       },
-      period: '2024-XX（XX日）',
+      period: { en: '2024-XX（XX日）', ja: '2024-XX（XX日）' },
       role: { en: ['All'], ja: ['すべて'] },
       members: { en: '1 person', ja: '1人' },
     },
@@ -142,7 +190,7 @@ export const projectsData: ProjectItem[] = [
         en: ['Game mechanics design', 'Quantum gate logic implementation', 'UI/UX design'],
         ja: ['ゲームメカニクス設計', '量子ゲートロジックの実装', 'UI/UXデザイン'],
       },
-      period: '2024-XX（XX日）',
+      period: { en: '2024-XX (XX days)', ja: '2024-XX（XX日）' },
       role: { en: ['All'], ja: ['すべて'] },
       members: { en: '1 person', ja: '1人' },
     },
@@ -170,36 +218,9 @@ export const projectsData: ProjectItem[] = [
         en: ['UI design and implementation', 'Gemini API integration', 'LaTeX output formatting'],
         ja: ['UIデザインと実装', 'Gemini API連携', 'LaTeX出力のフォーマット調整'],
       },
-      period: '2024-XX（XX日）',
+      period: { en: '2024-XX (XX days)', ja: '2024-XX（XX日）' },
       role: { en: ['All'], ja: ['すべて'] },
       members: { en: '1 person', ja: '1人' },
-    },
-  },
-  {
-    name: 'なんJenerator',
-    slug: 'nanjenerator',
-    en: 'AI-powered 2ch-style thread generator using Amazon Bedrock.',
-    ja: 'Amazon Bedrockを使ったAI搭載の2ch風スレ生成ツール。',
-    detail: {
-      en: 'Enter any topic and get a fully generated 2ch-style thread complete with OP post and replies, all powered by Amazon Bedrock (Claude). Built at a hackathon, it became unexpectedly popular among friends.',
-      ja: 'テーマを入力すると、Amazon Bedrock（Claude）が2ch風のスレッドをOP・レス込みで丸ごと生成。ハッカソンで制作し、身内に予想外に好評だったツール。',
-    },
-    tags: ['React', 'Python', 'AWS Bedrock'],
-    links: [],
-    image: '/nanj_1.png',
-    meta: {
-      reflection: {
-        en: 'The hardest part was tuning the prompt to consistently capture the tone and rhythm of 2ch-style posts. Seeing it go viral among friends was a great validation of the concept.',
-        ja: '2ch特有の文体やテンポをAIに再現させるプロンプト調整が一番難しかったです。身内でバズったときは、コンセプトが通じたと実感しました。',
-      },
-      contributions: {
-        en: ['Prompt engineering', 'Frontend implementation', 'AWS Bedrock integration'],
-        ja: ['プロンプトエンジニアリング', 'フロントエンド実装', 'AWS Bedrock連携'],
-      },
-      period: '2024-XX（1日）',
-      role: { en: ['All'], ja: ['すべて'] },
-      members: { en: '1 person', ja: '1人' },
-      event: 'Hackathon',
     },
   },
   {
@@ -225,7 +246,7 @@ export const projectsData: ProjectItem[] = [
         en: ['Game design and mechanics', 'Quantum logic implementation', 'Frontend implementation'],
         ja: ['ゲーム設計とメカニクス', '量子ロジックの実装', 'フロントエンド実装'],
       },
-      period: '2024-XX（XX日）',
+      period: { en: '2024-XX (XX days)', ja: '2024-XX（XX日）' },
       role: { en: ['All'], ja: ['すべて'] },
       members: { en: '1 person', ja: '1人' },
     },
