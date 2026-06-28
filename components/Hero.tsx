@@ -94,7 +94,7 @@ export function Hero({ lang }: { lang: Lang }) {
 
           </div>
 
-          <div className="hidden sm:block absolute top-[25px] right-[20px] w-[202px] h-[242px] rounded-[10px] overflow-hidden animate-fade-in [animation-delay:200ms]">
+          <div className="hidden sm:block absolute top-[45px] right-[60px] w-[252px] h-[292px] rounded-[10px] overflow-hidden animate-fade-in [animation-delay:200ms]">
             <Image src="/mepic2.png" alt="Kota Mizuno" fill className="object-cover" priority />
           </div>
         </div>
