@@ -31,14 +31,14 @@ export default async function Page({
         <ScrollReveal><Awards lang={lang} /></ScrollReveal>
         <ScrollReveal><Contact lang={lang} /></ScrollReveal>
         <ScrollReveal>
-          <div className="flex justify-between items-center px-[2px]">
-            <p className="text-[11px] font-light text-[#999]">{t.footer}</p>
+          <div className="flex flex-col items-center gap-4 py-4">
             <a
               href="?"
-              className="text-[11px] font-light text-[#999] no-underline hover:text-[#555] transition-colors duration-150"
+              className="text-[12px] font-medium tracking-[.06em] uppercase text-[#999] no-underline hover:text-[#1a1a1a] transition-colors duration-150"
             >
-              ↑ Top
+              ↑ Back to Top
             </a>
+            <p className="text-[11px] font-light text-[#999]">{t.footer}</p>
           </div>
         </ScrollReveal>
       </main>

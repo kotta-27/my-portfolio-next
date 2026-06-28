@@ -89,6 +89,17 @@ export default async function ProjectPage({
             </div>
           </div>
         </FadeIn>
+
+        <FadeIn delay={400}>
+          <div className="mt-8">
+            <Link
+              href={`/?lang=${lang}#projects`}
+              className="inline-flex items-center gap-[6px] text-[12px] text-[#999] no-underline hover:text-[#1a1a1a] transition-colors duration-150"
+            >
+              ← {lang === 'ja' ? '戻る' : 'Back to Projects'}
+            </Link>
+          </div>
+        </FadeIn>
       </div>
     </div>
   )
