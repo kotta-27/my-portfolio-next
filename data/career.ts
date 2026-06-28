@@ -27,13 +27,13 @@ export const careerData: CareerItem[] = [
       company: 'Studist Corporation',
       role: 'Software Engineer',
       description:
-        'Teachme Biz product development and R&D. Feature implementation and cross-functional engineering.',
+        'Teachme Biz product development and R&D. ',
     },
     ja: {
       company: '株式会社スタディスト',
       role: 'ソフトウェアエンジニア',
       description:
-        '自社プロダクト「Teachme Biz」の機能開発およびR&D領域。機能実装とクロスファンクショナルなエンジニアリング。',
+        '自社プロダクト「Teachme Biz」の機能開発およびR&D領域。',
     },
     period: 'Apr 2026 —',
     isIntern: false,
@@ -43,19 +43,19 @@ export const careerData: CareerItem[] = [
       {
         url: 'https://path.progate.com/career-stories/studist-intern',
         label: 'ハッカソンから始まった長期インターン。その出会いが変えた就活観とは？',
-        source: 'Progate Path',
+        source: 'Interview',
         thumbnail: '/thumb_progate.png',
       },
       {
         url: 'https://studist.tech/longterm-intern-mizuno-2779a93df71c',
         label: 'CREチームで学んだ"ユーザファーストな開発"',
-        source: 'Studist Tech Blog',
+        source: 'Tech Blog',
         thumbnail: '/thumb_studist_tech.webp',
       },
       {
         url: 'https://speakerdeck.com/kotap/xin-zu-dakarakosoiroirotiao-zhan-suruzonojuan',
         label: '新卒だからこそいろいろ挑戦するぞの巻',
-        source: 'SpeakerDeck',
+        source: 'Talk',
         thumbnail: null,
       },
     ],
@@ -81,7 +81,7 @@ export const careerData: CareerItem[] = [
       {
         url: 'https://www.j-ij.com/ja/recruit/interview-mizuno',
         label: 'サマーインターンシップ インタビュー',
-        source: 'Jij Inc.',
+        source: 'Interview',
         thumbnail: '/thumb_jij_interview.webp',
       },
     ],
@@ -99,7 +99,7 @@ export const careerData: CareerItem[] = [
     },
     period: 'Jun 2024 – Mar 2026',
     isIntern: true,
-    tags: ['Python', 'Flutter'],
+    tags: ['Python', 'Flutter', 'GCP'],
     logo: '/crisp.png',
     links: [],
   },

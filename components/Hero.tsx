@@ -63,19 +63,6 @@ export function Hero({ lang }: { lang: Lang }) {
             <Image src="/mepic2.png" alt="Kota Mizuno" fill className="object-cover" priority />
           </div>
         </div>
-
-        <div className="mt-8 sm:mt-10 pt-6 border-t border-[#252525] flex items-center flex-wrap gap-y-2 animate-fade-in-up [animation-delay:420ms]">
-          {techStrip.map((tech, i) => (
-            <span
-              key={tech}
-              className={`text-[9.5px] tracking-[.07em] uppercase text-[#666] ${
-                i < techStrip.length - 1 ? 'pr-5 mr-5 border-r border-[#333]' : ''
-              }`}
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
       </div>
     </section>
   )
