@@ -10,7 +10,7 @@ export function Projects({ lang }: { lang: Lang }) {
   return (
     <div id="projects" className="animate-fade-in-up [animation-delay:100ms]">
       <SectionLabel>{t.sections.projects}</SectionLabel>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
         {projectsData.map((project) => (
           <div
             key={project.name}

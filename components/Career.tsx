@@ -31,7 +31,7 @@ export async function Career({ lang }: { lang: Lang }) {
         {mainItems.map((item) => (
           <CareerCard key={item.en.company} item={item} lang={lang} />
         ))}
-        <CareerInternToggle lang={lang} count={internItems.length}>
+        <CareerInternToggle label={t.internships} count={internItems.length}>
           {internItems.map((item) => (
             <CareerCard key={item.en.company} item={item} lang={lang} />
           ))}

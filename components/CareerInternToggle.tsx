@@ -1,15 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import type { Lang } from '@/types'
 
 export function CareerInternToggle({
   children,
-  lang,
+  label,
   count,
 }: {
   children: React.ReactNode
-  lang: Lang
+  label: string
   count: number
 }) {
   const [open, setOpen] = useState(false)
@@ -21,7 +20,7 @@ export function CareerInternToggle({
         className="w-full flex items-center justify-between px-5 py-[13px] bg-white/50 rounded-[10px] text-[12px] text-[#777] hover:text-[#444] hover:bg-white/80 transition-all duration-150 border border-transparent hover:border-[#e8e8e8]"
       >
         <span>
-          {lang === 'ja' ? 'インターン経験' : 'Internships'}
+          {label}
           <span className="ml-[6px] text-[10.5px] text-[#999]">({count})</span>
         </span>
         <span

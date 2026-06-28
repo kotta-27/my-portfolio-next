@@ -8,17 +8,21 @@ export function Hero({ lang }: { lang: Lang }) {
   const t = ui[lang]
   return (
     <section id="hero" className="animate-fade-in">
-      <div className="bg-[#1a1a1a] rounded-xl p-12">
-        <div className="grid grid-cols-[1fr_172px] gap-11 items-start">
+      <div className="bg-[#1a1a1a] rounded-xl p-6 sm:p-12">
+        <div className="relative sm:grid sm:grid-cols-[1fr_172px] sm:gap-11 sm:items-start">
+          {/* 写真: モバイルは右上に絶対配置、デスクトップはグリッド2列目 */}
+          <div className="absolute top-[25px] right-0 w-[96px] h-[118px] rounded-[8px] overflow-hidden sm:hidden animate-fade-in [animation-delay:200ms]">
+            <Image src="/mepic2.png" alt="Kota Mizuno" fill className="object-cover" priority />
+          </div>
           <div>
             <span className="text-[10.5px] tracking-[.1em] uppercase text-[#777] block mb-5 animate-fade-in-up [animation-delay:100ms]">
               {t.roleTag}
             </span>
-            <div className="mb-6 animate-fade-in-up [animation-delay:180ms]">
-              <div className="text-[70px] font-bold leading-[0.9] tracking-[-0.04em] text-white">
+            <div className="mb-6 pr-[112px] sm:pr-0 animate-fade-in-up [animation-delay:180ms]">
+              <div className="text-[48px] sm:text-[70px] font-bold leading-[0.9] tracking-[-0.04em] text-white">
                 Kota
               </div>
-              <div className="text-[70px] font-light leading-[0.9] tracking-[-0.04em] text-[#666]">
+              <div className="text-[48px] sm:text-[70px] font-light leading-[0.9] tracking-[-0.04em] text-[#666]">
                 Mizuno
               </div>
             </div>
@@ -55,18 +59,12 @@ export function Hero({ lang }: { lang: Lang }) {
             </div>
           </div>
 
-          <div className="relative w-[172px] h-[212px] rounded-[10px] overflow-hidden shrink-0 animate-fade-in [animation-delay:200ms]">
-            <Image
-              src="/mepic2.png"
-              alt="Kota Mizuno"
-              fill
-              className="object-cover"
-              priority
-            />
+          <div className="hidden sm:block relative w-[172px] h-[212px] rounded-[10px] overflow-hidden shrink-0 animate-fade-in [animation-delay:200ms]">
+            <Image src="/mepic2.png" alt="Kota Mizuno" fill className="object-cover" priority />
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-[#252525] flex items-center flex-wrap animate-fade-in-up [animation-delay:420ms]">
+        <div className="mt-8 sm:mt-10 pt-6 border-t border-[#252525] flex items-center flex-wrap gap-y-2 animate-fade-in-up [animation-delay:420ms]">
           {techStrip.map((tech, i) => (
             <span
               key={tech}

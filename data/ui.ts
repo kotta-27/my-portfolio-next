@@ -15,11 +15,15 @@ type UiStrings = {
   }
   nav: string[]
   currently: string
-  education: string
+  currentCompany: string
   currentRole: string
   currentPeriod: string
+  education: string
+  university: string
   degree: string
   research: string
+  labGroup: string
+  internships: string
   contactTitle: string
   contactBody: string
   qiitaLabel: string
@@ -42,11 +46,15 @@ export const ui: Record<Lang, UiStrings> = {
     },
     nav: ['About', 'Career', 'Skills', 'Projects'],
     currently: 'Currently',
-    education: 'Education',
+    currentCompany: 'Studist Corporation',
     currentRole: 'Software Engineer',
     currentPeriod: 'Teachme Biz · Apr 2026 —',
+    education: 'Education',
+    university: 'Shibaura Institute of Technology',
     degree: 'M.Eng., 2026',
     research: 'Quantum Algorithms · Lattice Cryptography',
+    labGroup: 'Watabe Group',
+    internships: 'Internships',
     contactTitle: "Let's talk.",
     contactBody:
       'Open to new projects, research collaborations, and interesting conversations about quantum computing and web engineering.',
@@ -68,11 +76,15 @@ export const ui: Record<Lang, UiStrings> = {
     },
     nav: ['About', 'Career', 'Skills', 'Projects'],
     currently: '現職',
-    education: '学歴',
+    currentCompany: '株式会社スタディスト',
     currentRole: 'ソフトウェアエンジニア',
     currentPeriod: 'Teachme Biz · 2026年4月〜',
+    education: '学歴',
+    university: '芝浦工業大学大学院',
     degree: '修士（工学）, 2026年',
     research: '量子アルゴリズム · 格子暗号',
+    labGroup: '渡部研究室',
+    internships: 'インターン経験',
     contactTitle: 'お気軽にご連絡を。',
     contactBody:
       '新しいプロジェクト・研究コラボレーション・量子コンピューティングやWebエンジニアリングに関する面白い会話を歓迎します。',

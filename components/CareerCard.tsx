@@ -5,8 +5,8 @@ import { Tag } from '@/components/Tag'
 
 export function CareerCard({ item, lang }: { item: ResolvedCareerItem; lang: Lang }) {
   return (
-    <div className="bg-white rounded-[10px] px-7 py-[22px]">
-      <div className="flex justify-between items-baseline mb-[6px]">
+    <div className="bg-white rounded-[10px] px-5 sm:px-7 py-[22px]">
+      <div className="flex flex-wrap justify-between items-baseline gap-y-[2px] mb-[6px]">
         <div className="flex items-center gap-[10px]">
           {item.logo && (
             <div className="relative w-[20px] h-[20px] shrink-0">
@@ -37,7 +37,7 @@ export function CareerCard({ item, lang }: { item: ResolvedCareerItem; lang: Lan
               rel="noopener noreferrer"
               className="flex items-center gap-[10px] border border-[#f0f0f0] rounded-[7px] overflow-hidden no-underline hover:border-[#ddd] hover:bg-[#fafafa] transition-colors duration-150 group"
             >
-              <div className="w-[80px] h-[52px] shrink-0 bg-[#f4f4f4] overflow-hidden">
+              <div className="w-[72px] sm:w-[80px] h-[52px] shrink-0 bg-[#f4f4f4] overflow-hidden">
                 {link.image && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={link.image} alt="" className="w-full h-full object-cover" />
