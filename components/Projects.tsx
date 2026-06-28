@@ -1,12 +1,18 @@
+'use client'
+
+import { useState } from 'react'
 import Image from 'next/image'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
-import { projectsData } from '@/data/projects'
+import { projectsData, type ProjectItem } from '@/data/projects'
 import { SectionLabel } from '@/components/SectionLabel'
 import { Tag } from '@/components/Tag'
+import { ProjectDialog } from '@/components/ProjectDialog'
 
 export function Projects({ lang }: { lang: Lang }) {
   const t = ui[lang]
+  const [selected, setSelected] = useState<ProjectItem | null>(null)
+
   return (
     <div id="projects" className="animate-fade-in-up [animation-delay:100ms]">
       <SectionLabel>{t.sections.projects}</SectionLabel>
@@ -21,7 +27,7 @@ export function Projects({ lang }: { lang: Lang }) {
                 src={project.image}
                 alt={project.name}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                className="object-cover"
               />
             </div>
             <p className="text-[14px] font-semibold text-[#1a1a1a] mb-[7px]">{project.name}</p>
@@ -34,16 +40,24 @@ export function Projects({ lang }: { lang: Lang }) {
                   <Tag key={tag}>{tag}</Tag>
                 ))}
               </div>
-              <a
-                href={project.href}
-                className="text-[12px] font-medium text-[#999] no-underline hover:text-[#1a1a1a] transition-colors duration-150"
+              <button
+                onClick={() => setSelected(project)}
+                className="text-[11px] font-medium tracking-[.05em] uppercase text-[#999] hover:text-[#1a1a1a] transition-colors duration-150"
               >
-                ↗
-              </a>
+                Detail →
+              </button>
             </div>
           </div>
         ))}
       </div>
+
+      {selected && (
+        <ProjectDialog
+          project={selected}
+          lang={lang}
+          onClose={() => setSelected(null)}
+        />
+      )}
     </div>
   )
 }
