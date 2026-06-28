@@ -19,12 +19,12 @@ export function Projects({ lang }: { lang: Lang }) {
             href={`/projects/${project.slug}?lang=${lang}`}
             className="bg-white rounded-[10px] p-[22px] flex flex-col group no-underline border border-transparent hover:border-[#ddd] hover:shadow-md transition-all duration-200"
           >
-            <div className="relative h-[148px] sm:h-[228px] rounded-[7px] mb-4 overflow-hidden shrink-0 bg-[#f8f8f8]">
-              <Image
+            <div className="h-[148px] sm:h-[228px] rounded-[7px] mb-4 shrink-0 bg-white flex items-center justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={project.image}
                 alt={project.name}
-                fill
-                className="object-cover"
+                className="max-h-full max-w-full object-contain border border-[#e8e8e8] rounded-[4px]"
               />
             </div>
             <p className="text-[14px] font-semibold text-[#1a1a1a] mb-[7px]">{project.name}</p>
