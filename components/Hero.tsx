@@ -9,8 +9,8 @@ export function Hero({ lang }: { lang: Lang }) {
   return (
     <section id="hero" className="animate-fade-in">
       <div className="bg-[#1a1a1a] rounded-xl p-6 sm:p-12">
-        <div className="relative sm:grid sm:grid-cols-[1fr_172px] sm:gap-11 sm:items-start">
-          {/* 写真: モバイルは右上に絶対配置、デスクトップはグリッド2列目 */}
+        <div className="relative">
+          {/* 写真: モバイルは右上、デスクトップは右下に絶対配置 */}
           <div className="absolute top-[25px] right-0 w-[96px] h-[118px] rounded-[8px] overflow-hidden sm:hidden animate-fade-in [animation-delay:200ms]">
             <Image src="/mepic2.png" alt="Kota Mizuno" fill className="object-cover" priority />
           </div>
@@ -59,7 +59,7 @@ export function Hero({ lang }: { lang: Lang }) {
             </div>
           </div>
 
-          <div className="hidden sm:block relative w-[172px] h-[212px] rounded-[10px] overflow-hidden shrink-0 animate-fade-in [animation-delay:200ms]">
+          <div className="hidden sm:block absolute top-[25px] right-[20px] w-[202px] h-[242px] rounded-[10px] overflow-hidden animate-fade-in [animation-delay:200ms]">
             <Image src="/mepic2.png" alt="Kota Mizuno" fill className="object-cover" priority />
           </div>
         </div>

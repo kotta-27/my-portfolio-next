@@ -1,0 +1,38 @@
+import type { Lang } from '@/types'
+
+type AboutStrings = {
+  currently: string
+  currentCompany: string
+  currentRole: string
+  currentPeriod: string
+  education: string
+  university: string
+  degree: string
+  research: string
+  labGroup: string
+}
+
+export const about: Record<Lang, AboutStrings> = {
+  en: {
+    currently: 'Currently',
+    currentCompany: 'Studist Corporation',
+    currentRole: 'Software Engineer',
+    currentPeriod: 'Teachme Biz · Apr 2026 —',
+    education: 'Education',
+    university: 'Shibaura Institute of Technology',
+    degree: 'M.Eng., 2026',
+    research: 'Quantum Algorithms · Lattice Cryptography',
+    labGroup: 'Watabe Group',
+  },
+  ja: {
+    currently: '現職',
+    currentCompany: '株式会社スタディスト',
+    currentRole: 'ソフトウェアエンジニア',
+    currentPeriod: 'Teachme Biz · 2026年4月〜',
+    education: '学歴',
+    university: '芝浦工業大学大学院',
+    degree: '修士（工学）, 2026年',
+    research: '量子アルゴリズム · 格子暗号',
+    labGroup: '渡部研究室',
+  },
+}
