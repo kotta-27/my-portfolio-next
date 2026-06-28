@@ -15,7 +15,7 @@ export function Hero({ lang }: { lang: Lang }) {
             <Image src="/mepic2.png" alt="Kota Mizuno" fill className="object-cover" priority />
           </div>
           <div>
-            <span className="text-[10.5px] tracking-[.1em] uppercase text-[#777] block mb-5 animate-fade-in-up [animation-delay:100ms]">
+            <span className="text-[10.5px] tracking-[.1em] text-[#777] block mb-5 animate-fade-in-up [animation-delay:100ms]">
               {t.roleTag}
             </span>
             <div className="mb-6 pr-[112px] sm:pr-0 animate-fade-in-up [animation-delay:180ms]">
@@ -34,28 +34,29 @@ export function Hero({ lang }: { lang: Lang }) {
             <div className="flex gap-[9px] flex-wrap animate-fade-in-up [animation-delay:340ms]">
               <a
                 href="#projects"
-                className="text-[10.5px] font-medium tracking-[.05em] uppercase text-white no-underline bg-white/10 border border-white/[.15] rounded-md px-5 py-[11px] hover:bg-white/20 transition-colors duration-150"
+                className="text-[10.5px] font-medium tracking-[.05em] text-white no-underline bg-white/10 border border-white/[.15] rounded-md px-5 py-[11px] hover:bg-white/20 transition-colors duration-150"
               >
                 {t.viewWork}
-              </a>
-              <a
-                href="https://github.com/kotta-27"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] uppercase text-[#777] no-underline border border-[#3a3a3a] rounded-md px-5 py-[11px] hover:text-[#bbb] hover:border-[#555] transition-colors duration-150"
-              >
-                <FaGithub className="text-[15px]" />
-                GitHub
               </a>
               <a
                 href="https://x.com/Melmol_27"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] uppercase text-[#777] no-underline border border-[#3a3a3a] rounded-md px-5 py-[11px] hover:text-[#bbb] hover:border-[#555] transition-colors duration-150"
+                className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] text-[#777] no-underline border border-[#3a3a3a] rounded-md px-5 py-[11px] hover:text-[#bbb] hover:border-[#555] transition-colors duration-150"
               >
                 <FaXTwitter className="text-[14px]" />
                 @Melmol_27
               </a>
+              <a
+                href="https://github.com/kotta-27"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] text-[#777] no-underline border border-[#3a3a3a] rounded-md px-5 py-[11px] hover:text-[#bbb] hover:border-[#555] transition-colors duration-150"
+              >
+                <FaGithub className="text-[15px]" />
+                kotta-27
+              </a>
+
             </div>
           </div>
 

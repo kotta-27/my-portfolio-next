@@ -2,7 +2,6 @@ import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { about } from '@/data/about'
 import { SectionLabel } from '@/components/SectionLabel'
-import { Tag } from '@/components/Tag'
 
 export function About({ lang }: { lang: Lang }) {
   const t = ui[lang]
@@ -21,10 +20,6 @@ export function About({ lang }: { lang: Lang }) {
             <br />
             {a.currentPeriod}
           </p>
-          <div className="flex gap-[6px] flex-wrap">
-            <Tag>Ruby on Rails</Tag>
-            <Tag>Vue.js</Tag>
-          </div>
         </div>
         <div className="bg-white rounded-[10px] p-[26px]">
           <p className="text-[9px] tracking-[.1em] uppercase text-[#999] mb-[14px]">
@@ -36,7 +31,18 @@ export function About({ lang }: { lang: Lang }) {
             <br />
             {a.research}
           </p>
-          <Tag>{a.labGroup}</Tag>
+          <p className="text-[12.5px] leading-[1.65] text-[#555]">
+            {a.labGroupPrefix}{' '}
+            <a
+              href="http://watabegroup.quie.ise.shibaura-it.ac.jp/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#1a1a1a] underline underline-offset-2 hover:text-[#555] transition-colors duration-150"
+            >
+              {a.labGroup}
+            </a>
+            {a.labGroupSuffix}
+          </p>
         </div>
       </div>
     </div>

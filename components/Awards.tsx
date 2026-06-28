@@ -1,7 +1,13 @@
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
-import { awardsData, qiitaArticles } from '@/data/awards'
+import { activitiesData, categoryLabel, qiitaArticles, type SubLinkCard } from '@/data/awards'
 import { SectionLabel } from '@/components/SectionLabel'
+import { LinkCard } from '@/components/LinkCard'
+import { PiMedalFill } from 'react-icons/pi'
+
+function toCard(card: SubLinkCard, source: string, lang: Lang) {
+  return { url: card.url, label: card[lang], source, thumbnail: card.thumbnail }
+}
 
 export function Awards({ lang }: { lang: Lang }) {
   const t = ui[lang]
@@ -9,20 +15,57 @@ export function Awards({ lang }: { lang: Lang }) {
     <div id="awards" className="animate-fade-in-up [animation-delay:100ms]">
       <SectionLabel>{t.sections.awards}</SectionLabel>
       <div className="bg-white rounded-[10px] overflow-hidden">
-        {awardsData.map((item) => (
+        {activitiesData.map((item) => (
           <div
-            key={item.name}
-            className="px-7 py-5 border-b border-[#f4f4f4] flex justify-between items-start"
+            key={item.en}
+            className="px-7 py-[18px] border-b border-[#f4f4f4] flex justify-between items-start gap-4"
           >
-            <div>
-              <p className="text-[13.5px] font-semibold text-[#1a1a1a] mb-[5px]">{item.name}</p>
-              <p className="text-[12px] text-[#666]">{item.award[lang]}</p>
+            <div className="flex items-start gap-3 min-w-0">
+              <span className="mt-[3px] shrink-0 w-[72px] text-center text-[9px] tracking-[.08em] uppercase text-[#999] bg-[#f4f4f4] rounded px-[7px] py-[3px] whitespace-nowrap">
+                {categoryLabel[item.category][lang]}
+              </span>
+              <div className="min-w-0 w-full">
+                {item.link ? (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[13px] font-medium text-[#1a1a1a] underline underline-offset-2 decoration-[#ccc] hover:decoration-[#1a1a1a] transition-colors duration-150 leading-[1.5] block"
+                  >
+                    {item[lang]}
+                  </a>
+                ) : (
+                  <p className="text-[13px] font-medium text-[#1a1a1a] leading-[1.5]">{item[lang]}</p>
+                )}
+                {item.award && (
+                  <p className="flex items-center gap-[5px] text-[11.5px] text-[#b07800] mt-[4px]">
+                    <PiMedalFill className="text-[13px] shrink-0" />
+                    {item.award[lang]}
+                  </p>
+                )}
+                {item.interview && (
+                  <div className="mt-[8px]">
+                    <LinkCard card={toCard(item.interview, 'Interview', lang)} />
+                  </div>
+                )}
+                {item.pressRelease && (
+                  <div className="mt-[8px]">
+                    <LinkCard card={toCard(item.pressRelease, 'Press Release', lang)} />
+                  </div>
+                )}
+                {item.page && (
+                  <div className="mt-[8px]">
+                    <LinkCard card={toCard(item.page, 'Page', lang)} />
+                  </div>
+                )}
+              </div>
             </div>
-            <span className="text-[11px] font-light text-[#999] shrink-0 pt-[2px]">
+            <span className="text-[11px] font-light text-[#999] shrink-0 pt-[3px] whitespace-nowrap">
               {item.date}
             </span>
           </div>
         ))}
+
         <div className="px-7 py-5">
           <p className="text-[9px] tracking-[.1em] uppercase text-[#999] mb-[13px]">
             {t.qiitaLabel}
@@ -32,6 +75,8 @@ export function Awards({ lang }: { lang: Lang }) {
               <a
                 key={article.href}
                 href={article.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[12.5px] leading-[1.5] text-[#444] no-underline hover:text-[#1a1a1a] transition-colors duration-150"
               >
                 {article[lang]} →

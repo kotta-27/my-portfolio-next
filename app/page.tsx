@@ -8,6 +8,7 @@ import { Skills } from '@/components/Skills'
 import { Projects } from '@/components/Projects'
 import { Awards } from '@/components/Awards'
 import { Contact } from '@/components/Contact'
+import { ScrollReveal } from '@/components/ScrollReveal'
 
 export default async function Page({
   searchParams,
@@ -23,21 +24,23 @@ export default async function Page({
       <Nav lang={lang} />
       <main className="max-w-[1100px] mx-auto px-4 sm:px-7 pt-5 pb-20 flex flex-col gap-[30px]">
         <Hero lang={lang} />
-        <About lang={lang} />
-        <Career lang={lang} />
-        <Skills lang={lang} />
-        <Projects lang={lang} />
-        <Awards lang={lang} />
-        <Contact lang={lang} />
-        <div className="flex justify-between items-center px-[2px]">
-          <p className="text-[11px] font-light text-[#999]">{t.footer}</p>
-          <a
-            href="?"
-            className="text-[11px] font-light text-[#999] no-underline hover:text-[#555] transition-colors duration-150"
-          >
-            ↑ Top
-          </a>
-        </div>
+        <ScrollReveal><About lang={lang} /></ScrollReveal>
+        <ScrollReveal><Career lang={lang} /></ScrollReveal>
+        <ScrollReveal><Skills lang={lang} /></ScrollReveal>
+        <ScrollReveal><Projects lang={lang} /></ScrollReveal>
+        <ScrollReveal><Awards lang={lang} /></ScrollReveal>
+        <ScrollReveal><Contact lang={lang} /></ScrollReveal>
+        <ScrollReveal>
+          <div className="flex justify-between items-center px-[2px]">
+            <p className="text-[11px] font-light text-[#999]">{t.footer}</p>
+            <a
+              href="?"
+              className="text-[11px] font-light text-[#999] no-underline hover:text-[#555] transition-colors duration-150"
+            >
+              ↑ Top
+            </a>
+          </div>
+        </ScrollReveal>
       </main>
     </div>
   )

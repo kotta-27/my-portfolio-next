@@ -10,6 +10,8 @@ type AboutStrings = {
   degree: string
   research: string
   labGroup: string
+  labGroupPrefix: string
+  labGroupSuffix: string
 }
 
 export const about: Record<Lang, AboutStrings> = {
@@ -23,6 +25,8 @@ export const about: Record<Lang, AboutStrings> = {
     degree: 'M.Eng., 2026',
     research: 'Quantum Algorithms · Lattice Cryptography',
     labGroup: 'Watabe Group',
+    labGroupPrefix: 'Former member of',
+    labGroupSuffix: '.',
   },
   ja: {
     currently: '現職',
@@ -34,5 +38,7 @@ export const about: Record<Lang, AboutStrings> = {
     degree: '修士（工学）, 2026年',
     research: '量子アルゴリズム · 格子暗号',
     labGroup: '渡部研究室',
+    labGroupPrefix: '',
+    labGroupSuffix: 'に所属していました。',
   },
 }

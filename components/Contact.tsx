@@ -8,7 +8,7 @@ export function Contact({ lang }: { lang: Lang }) {
   return (
     <div id="contact" className="animate-fade-in-up [animation-delay:100ms]">
       <div className="bg-[#1a1a1a] rounded-xl p-6 sm:p-12">
-        <p className="text-[10px] tracking-[.1em] uppercase text-[#555] mb-4">
+        <p className="text-[10px] tracking-[.1em] text-[#555] mb-4">
           {t.sections.contact}
         </p>
         <p className="text-[26px] sm:text-[34px] font-bold tracking-[-0.025em] text-white mb-[14px]">
@@ -20,15 +20,15 @@ export function Contact({ lang }: { lang: Lang }) {
         <div className="flex gap-[10px] flex-wrap">
           <a
             href="mailto:mizukou27@gmail.com"
-            className="text-[10.5px] font-medium tracking-[.05em] uppercase text-white no-underline bg-white/10 border border-white/[.15] rounded-md px-5 py-3 hover:bg-white/20 transition-colors duration-150"
+            className="text-[10.5px] font-medium tracking-[.05em] text-white no-underline bg-white/10 border border-white/[.15] rounded-md px-5 py-3 hover:bg-white/20 transition-colors duration-150"
           >
-            mizukou27@gmail.com
+            Mizukou27@gmail.com
           </a>
           <a
             href="https://x.com/Melmol_27"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] uppercase text-[#555] no-underline border border-[#2e2e2e] rounded-md px-5 py-3 hover:text-[#888] transition-colors duration-150"
+            className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] text-[#555] no-underline border border-[#2e2e2e] rounded-md px-5 py-3 hover:text-[#888] transition-colors duration-150"
           >
             <FaXTwitter className="text-[14px]" />
             @Melmol_27
@@ -37,10 +37,10 @@ export function Contact({ lang }: { lang: Lang }) {
             href="https://github.com/kotta-27"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] uppercase text-[#555] no-underline border border-[#2e2e2e] rounded-md px-5 py-3 hover:text-[#888] transition-colors duration-150"
+            className="flex items-center gap-[7px] text-[10.5px] font-medium tracking-[.05em] text-[#555] no-underline border border-[#2e2e2e] rounded-md px-5 py-3 hover:text-[#888] transition-colors duration-150"
           >
             <FaGithub className="text-[15px]" />
-            GitHub
+            kotta-27
           </a>
         </div>
       </div>
