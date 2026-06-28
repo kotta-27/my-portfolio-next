@@ -37,7 +37,7 @@ export function LangToggle({ lang }: { lang: Lang }) {
           <span className="w-[22px] h-[22px] border-2 border-[#1a1a1a]/20 border-t-[#1a1a1a] rounded-full animate-spin" />
         </div>
       )}
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative z-[200]">
       <button
         onClick={() => setOpen((v) => !v)}
         disabled={isPending}
