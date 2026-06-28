@@ -31,6 +31,30 @@ export function Hero({ lang }: { lang: Lang }) {
               <br />
               {t.currentlyAt}
             </p>
+            <div className="mb-6 animate-fade-in-up [animation-delay:300ms] font-mono text-[12px] text-[#555]">
+              <span className="text-[#aaa]">interests</span>
+              <span className="text-[#4f4]">{' {'}</span>
+              {['検索技術', 'UI/UX', 'デザイン'].map((item, i) => (
+                <span key={item}>
+                  <span className="text-[#4f4]">"{item}"</span>
+                  {i < 2 && <span className="text-[#4f4]">, </span>}
+                </span>
+              ))}
+              <span className="text-[#4f4]">{'}'}</span>
+            </div>
+
+            <div className="mb-8 animate-fade-in-up [animation-delay:300ms] font-mono text-[12px] text-[#555]">
+              <span className="text-[#aaa]">hobbies</span>
+              <span className="text-[#4af]">{' {'}</span>
+              {['LEGO', '謎解き', 'カフェ'].map((item, i) => (
+                <span key={item}>
+                  <span className="text-[#4af]">"{item}"</span>
+                  {i < 2 && <span className="text-[#4af]">, </span>}
+                </span>
+              ))}
+              <span className="text-[#4af]">{'}'}</span>
+            </div>
+
             <div className="flex gap-[9px] flex-wrap animate-fade-in-up [animation-delay:340ms]">
               <a
                 href="#projects"
@@ -66,6 +90,7 @@ export function Hero({ lang }: { lang: Lang }) {
               </a>
 
             </div>
+
           </div>
 
           <div className="hidden sm:block absolute top-[25px] right-[20px] w-[202px] h-[242px] rounded-[10px] overflow-hidden animate-fade-in [animation-delay:200ms]">
