@@ -20,8 +20,8 @@ export const hero: Record<Lang, HeroStrings> = {
   },
   ja: {
     roleTag: 'ソフトウェアエンジニア',
-    tagline: 'Web Engineering.',
-    currentlyAt: 'Currently Working at Studist Corporation',
+    tagline: '26卒のwebエンジニア。',
+    currentlyAt: '',
     viewWork: '実績を見る',
     interests: ['検索技術', 'UI/UX', 'デザイン'],
     hobbies: ['LEGO', '謎解き', 'カフェ'],
