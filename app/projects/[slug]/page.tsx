@@ -6,6 +6,7 @@ import { projectsData } from '@/data/projects'
 import { ui } from '@/data/ui'
 import { Tag } from '@/components/Tag'
 import { LangToggle } from '@/components/LangToggle'
+import { ProjectImageCarousel } from '@/components/ProjectImageCarousel'
 import { FadeIn } from './ProjectPageClient'
 
 export function generateStaticParams() {
@@ -44,14 +45,10 @@ export default async function ProjectPage({
 
         <div className="bg-white rounded-2xl overflow-hidden pt-6">
           <FadeIn delay={60}>
-            <div className="h-[240px] sm:h-[420px] bg-white flex items-center justify-center">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={project.image}
-                alt={project.name}
-                className="max-h-full max-w-full object-contain border border-[#e8e8e8] rounded-[4px]"
-              />
-            </div>
+            <ProjectImageCarousel
+              images={project.images && project.images.length > 0 ? project.images : [project.image]}
+              alt={project.name}
+            />
           </FadeIn>
 
           <div className="p-7 sm:p-10">

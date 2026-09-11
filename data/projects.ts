@@ -24,6 +24,7 @@ export type ProjectItem = {
   name: string
   slug: string
   image: string
+  images?: string[]
   tags: string[]
   links: ProjectLink[]
   detail: Record<Lang, string>
@@ -88,6 +89,7 @@ export const projectsData: ProjectItem[] = [
       { label: 'GitHub', url: 'https://github.com/kotta-27/orbit-todo-app' },
     ],
     image: '/orbit_1.png',
+    images: ['/orbit_1.png', '/orbit_2.png', '/orbit_3.png'],
     meta: {
       reflection: {
         en: 'Designing a unified interface for three different task types — habits, routines, and TODOs — was the core challenge. Balancing flexibility with simplicity in the UX took several iterations. I also intentionally used a production-grade tech stack to practice real-world patterns, including simple CRUD implementation and Rails MVC design.',
