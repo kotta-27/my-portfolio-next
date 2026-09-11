@@ -5,6 +5,7 @@ import { fetchOgImage } from '@/lib/fetchOgImage'
 import { SectionLabel } from '@/components/SectionLabel'
 import { CareerCard } from '@/components/CareerCard'
 import { CareerInternToggle } from '@/components/CareerInternToggle'
+import { PandaPeek } from '@/components/PandaPeek'
 
 export async function Career({ lang }: { lang: Lang }) {
   const t = ui[lang]
@@ -27,7 +28,8 @@ export async function Career({ lang }: { lang: Lang }) {
   return (
     <div id="career" className="animate-fade-in-up [animation-delay:100ms]">
       <SectionLabel>{t.sections.career}</SectionLabel>
-      <div className="flex flex-col gap-2">
+      <div className="relative flex flex-col gap-2">
+        <PandaPeek />
         {mainItems.map((item) => (
           <CareerCard key={item.en.company} item={item} lang={lang} />
         ))}
