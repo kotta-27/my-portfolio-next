@@ -24,6 +24,8 @@ type UiStrings = {
     back: string
     backToProjects: string
   }
+  showMoreProjects: string
+  showLessProjects: string
 }
 
 export const ui: Record<Lang, UiStrings> = {
@@ -51,6 +53,8 @@ export const ui: Record<Lang, UiStrings> = {
       back: 'Back',
       backToProjects: 'Back to Projects',
     },
+    showMoreProjects: 'Show more projects',
+    showLessProjects: 'Show less',
   },
   ja: {
     sections: {
@@ -76,5 +80,7 @@ export const ui: Record<Lang, UiStrings> = {
       back: '戻る',
       backToProjects: '戻る',
     },
+    showMoreProjects: 'もっと見る',
+    showLessProjects: '閉じる',
   },
 }
