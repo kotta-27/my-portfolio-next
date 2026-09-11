@@ -34,6 +34,71 @@ export type ProjectItem = {
 
 export const projectsData: ProjectItem[] = [
   {
+    name: 'Tabipla',
+    slug: 'tabipla',
+    en: 'Group trip planning app with date polling, itinerary, and expense splitting.',
+    ja: '日程調整・旅程・割り勘までまとめられる、グループ旅行計画アプリ。',
+    detail: {
+      en: 'A web app for planning group trips end to end. Members vote on candidate dates in a Doodle-style poll, build a shared day-by-day itinerary, keep trip notes, and split expenses — all inside one trip, joinable via invite link or code. Built with Next.js, NextAuth, and Drizzle ORM on Neon Postgres.',
+      ja: 'グループ旅行の計画をまとめて管理するWebアプリ。候補日をDoodle形式で投票する日程調整、日別の旅程プラン、メモ、費用の割り勘までを1つのトリップ内で完結。招待リンクやコードでメンバーを招待できる。Next.js + NextAuth + Drizzle ORM(Neon Postgres)で構築。',
+    },
+    tags: ['Next.js', 'PostgreSQL', 'NextAuth'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/tabipla-app' },
+    ],
+    image: '/tabipla_1.png',
+    images: ['/tabipla_1.png', '/tabipla_2.png'],
+    meta: {
+      reflection: {
+        en: 'Modeling a single trip as several connected sub-features — poll, itinerary, expenses, memos — while keeping membership and permissions consistent across all of them took careful schema design with Drizzle. Building the day-by-day itinerary editor with drag-and-drop reordering (dnd-kit) was also a good exercise in complex interactive UI.',
+        ja: '日程調整・旅程・費用・メモという複数の機能を1つのトリップとして繋ぎつつ、メンバーシップや権限を全体で一貫させるスキーマ設計にDrizzleで苦労しました。dnd-kitを使った日別旅程のドラッグ&ドロップ並び替えエディタの実装も、複雑なインタラクティブUIの良い練習になりました。',
+      },
+      contributions: {
+        en: ['Full-stack implementation', 'Schema & auth design', 'Itinerary drag-and-drop editor'],
+        ja: ['フルスタック実装', 'スキーマ・認証設計', '旅程ドラッグ&ドロップエディタの実装'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['Next.js', 'TypeScript', 'Tailwind CSS', 'dnd-kit'] },
+        { category: 'Backend', items: ['NextAuth', 'Drizzle ORM'] },
+        { category: 'DB', items: ['Neon (PostgreSQL)'] },
+      ],
+      period: { en: '2026 – ongoing', ja: '2026年〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'Fude',
+    slug: 'fude',
+    en: 'AI-powered note-taking desktop app with Notion-like blocks, built with Next.js and Electron.',
+    ja: 'Notion風ブロックとAIアシストを備えた、Next.js + Electron製のノートデスクトップアプリ。',
+    detail: {
+      en: 'A desktop note-taking app that packages a Next.js app inside Electron. Notes are composed of blocks — tables, links, properties — and any selected text can be sent to an AI panel powered by Gemini, which streams answers about the note content back inline. Includes full-text search, an emoji picker, and app settings, all shipped as a native macOS app via electron-builder.',
+      ja: 'Next.jsアプリをElectronに内包したデスクトップ型ノートアプリ。テーブル・リンク・プロパティなどのブロックでノートを構成し、選択したテキストをAIパネルに送るとGemini APIが内容についてストリーミングで回答する。全文検索・絵文字ピッカー・設定画面を備え、electron-builderでmacOSネイティブアプリとして配布。',
+    },
+    tags: ['Next.js', 'Electron', 'Gemini API'],
+    links: [],
+    image: '/fude_mock_1.png',
+    meta: {
+      reflection: {
+        en: 'Packaging a Next.js standalone build inside Electron was the trickiest part — the standalone output omits `public/` and static assets by default, so a custom build script copies them back in before electron-builder runs. Streaming AI responses into a note UI without blocking typing also took a few iterations to get feeling responsive.',
+        ja: 'Next.jsのstandaloneビルドをElectronに詰め込む部分が一番苦労しました。standalone出力はデフォルトで`public/`や静的アセットを含まないため、electron-builder実行前にそれらをコピーし直す独自スクリプトを用意しました。ノートUIを止めずにAIの回答をストリーミング表示する部分も、快適に感じるまで何度か調整しました。',
+      },
+      contributions: {
+        en: ['Full-stack implementation', 'Electron packaging & build pipeline', 'AI panel & streaming UX'],
+        ja: ['フルスタック実装', 'Electronパッケージング・ビルドパイプライン構築', 'AIパネル・ストリーミングUXの実装'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['Next.js', 'TypeScript', 'Tailwind CSS'] },
+        { category: 'Desktop', items: ['Electron', 'electron-builder'] },
+        { category: 'AI', items: ['Google Gemini API'] },
+      ],
+      period: { en: '2026-Jul – ongoing', ja: '2026年7月〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
     name: 'Quantum Circuit Simulator',
     slug: 'quantum-circuit-simulator',
     en: 'Browser-based quantum circuit simulator built with Nuxt.js.',
