@@ -1,12 +1,12 @@
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
-import Link from 'next/link'
 import type { Lang } from '@/types'
 import { projectsData } from '@/data/projects'
 import { ui } from '@/data/ui'
 import { Tag } from '@/components/Tag'
 import { LangToggle } from '@/components/LangToggle'
 import { ProjectImageCarousel } from '@/components/ProjectImageCarousel'
+import { BackLink } from '@/components/BackLink'
 import { FadeIn } from './ProjectPageClient'
 
 export function generateStaticParams() {
@@ -33,12 +33,7 @@ export default async function ProjectPage({
       <div className="max-w-[1100px] mx-auto px-4 sm:px-7 pt-6 pb-20">
         <FadeIn delay={0} className="relative z-[200]">
           <div className="flex items-center justify-between mb-8">
-            <Link
-              href={`/?lang=${lang}#projects`}
-              className="inline-flex items-center gap-[6px] text-[12px] text-[#999] no-underline hover:text-[#1a1a1a] transition-colors duration-150 z-100"
-            >
-              ← {t.back}
-            </Link>
+            <BackLink href={`/?lang=${lang}#projects`} label={t.back} />
             <LangToggle lang={lang} />
           </div>
         </FadeIn>
@@ -190,12 +185,7 @@ export default async function ProjectPage({
 
         <FadeIn delay={400}>
           <div className="mt-8">
-            <Link
-              href={`/?lang=${lang}#projects`}
-              className="inline-flex items-center gap-[6px] text-[12px] text-[#999] no-underline hover:text-[#1a1a1a] transition-colors duration-150"
-            >
-              ← {t.backToProjects}
-            </Link>
+            <BackLink href={`/?lang=${lang}#projects`} label={t.backToProjects} />
           </div>
         </FadeIn>
       </div>
