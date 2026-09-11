@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
 export function CareerInternToggle({
   children,
@@ -23,14 +24,28 @@ export function CareerInternToggle({
           {label}
           <span className="ml-[6px] text-[10.5px] text-[#999]">({count})</span>
         </span>
-        <span
-          className="text-[10px] transition-transform duration-200"
-          style={{ display: 'inline-block', transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+        <motion.span
+          className="text-[10px]"
+          style={{ display: 'inline-block' }}
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
         >
           ▼
-        </span>
+        </motion.span>
       </button>
-      {open && <div className="flex flex-col gap-2 mt-2">{children}</div>}
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            className="overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: 'easeInOut' }}
+          >
+            <div className="flex flex-col gap-2 mt-2">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

@@ -1,4 +1,7 @@
+'use client'
+
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 import type { Lang } from '@/types'
 import type { ResolvedCareerItem } from '@/data/career'
 import { Tag } from '@/components/Tag'
@@ -6,7 +9,13 @@ import { LinkCard } from '@/components/LinkCard'
 
 export function CareerCard({ item, lang }: { item: ResolvedCareerItem; lang: Lang }) {
   return (
-    <div className="bg-white rounded-[10px] px-5 sm:px-7 py-[22px]">
+    <motion.div
+      className="bg-white rounded-[10px] px-5 sm:px-7 py-[22px]"
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.45, ease: 'easeOut' }}
+    >
       <div className="flex flex-wrap justify-between items-baseline gap-y-[2px] mb-[6px]">
         <div className="flex items-center gap-[10px]">
           {item.logo && (
@@ -38,6 +47,6 @@ export function CareerCard({ item, lang }: { item: ResolvedCareerItem; lang: Lan
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }

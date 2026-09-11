@@ -1,11 +1,27 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { LangToggle } from '@/components/LangToggle'
 
 export function Nav({ lang }: { lang: Lang }) {
   const t = ui[lang]
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
-    <nav className="sticky top-0 z-50 bg-[#edeae3] border-b border-black/[.07] px-5 sm:px-10 flex justify-between items-center h-[58px]">
+    <nav
+      className={`sticky top-0 z-50 bg-[#edeae3]/90 backdrop-blur-sm border-b px-5 sm:px-10 flex justify-between items-center transition-all duration-300 ${
+        scrolled ? 'h-[50px] border-black/[.1] shadow-sm' : 'h-[58px] border-black/[.07]'
+      }`}
+    >
       <a
         href="?"
         className="text-[14px] font-semibold tracking-[-0.01em] text-[#1a1a1a] no-underline"

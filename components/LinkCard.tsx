@@ -1,3 +1,6 @@
+'use client'
+
+import { motion } from 'framer-motion'
 import type { Lang } from '@/types'
 
 export type LinkCardData = {
@@ -15,10 +18,12 @@ type Props = {
 
 export function LinkCard({ card, lang: _lang, mobileThumbnail = true }: Props) {
   return (
-    <a
+    <motion.a
       href={card.url}
       target="_blank"
       rel="noopener noreferrer"
+      whileHover={{ scale: 1.015 }}
+      whileTap={{ scale: 0.985 }}
       className="w-full flex items-center border border-[#ddd] rounded-[7px] overflow-hidden no-underline hover:border-[#ddd] hover:bg-[#fafafa] transition-colors duration-150 group"
     >
       {card.thumbnail && (
@@ -36,6 +41,6 @@ export function LinkCard({ card, lang: _lang, mobileThumbnail = true }: Props) {
       <span className="ml-auto pr-[14px] text-[#999] text-[13px] shrink-0 group-hover:text-[#555] transition-colors duration-150">
         ↗
       </span>
-    </a>
+    </motion.a>
   )
 }

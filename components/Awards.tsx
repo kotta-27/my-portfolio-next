@@ -1,3 +1,6 @@
+'use client'
+
+import { motion } from 'framer-motion'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { activitiesData, categoryLabel, qiitaArticles, type SubLinkCard } from '@/data/awards'
@@ -12,11 +15,18 @@ function toCard(card: SubLinkCard, source: string, lang: Lang) {
 export function Awards({ lang }: { lang: Lang }) {
   const t = ui[lang]
   return (
-    <div id="awards" className="animate-fade-in-up [animation-delay:100ms]">
+    <div id="awards">
       <SectionLabel>{t.sections.awards}</SectionLabel>
       <div className="bg-white rounded-[10px] overflow-hidden">
-        {activitiesData.map((item) => (
-          <div key={item.en} className="relative pl-5 pr-[5px] py-[18px] border-b border-[#f4f4f4]">
+        {activitiesData.map((item, i) => (
+          <motion.div
+            key={item.en}
+            className="relative pl-5 pr-[5px] py-[18px] border-b border-[#f4f4f4]"
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.4, ease: 'easeOut', delay: Math.min(i, 6) * 0.04 }}
+          >
             <span className="absolute top-[18px] right-[15px] text-[11px] font-light text-[#999] text-right w-[64px] sm:w-auto sm:whitespace-nowrap">
               {item.date}
             </span>
@@ -60,7 +70,7 @@ export function Awards({ lang }: { lang: Lang }) {
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
 
         <div className="px-7 py-5">
