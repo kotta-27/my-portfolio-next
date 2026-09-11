@@ -16,8 +16,9 @@ export type ActivityItem = {
   page?: SubLinkCard
 }
 
-export type QiitaArticle = {
+export type ArticleLink = {
   href: string
+  source: 'Qiita' | 'Zenn'
 } & { [K in Lang]: string }
 
 export const categoryLabel: Record<ActivityCategory, { en: string; ja: string }> = {
@@ -99,20 +100,23 @@ export const activitiesData: ActivityItem[] = [
   },
 ]
 
-export const qiitaArticles: QiitaArticle[] = [
+export const articles: ArticleLink[] = [
   {
-    en: '[QuTiP] Imaginary-time evolution of quantum states in Python',
-    ja: '[QuTiP] pythonで量子状態の虚時間発展をシミュレートする',
-    href: 'https://qiita.com/Mel_14/items/91465234a64d9a6eec99',
+    en: '[Qiskit] How to use QuantumCircuit.draw() for circuit visualization',
+    ja: '【Qiskit】量子回路描画QuantumCircuit.draw()の使い方',
+    href: 'https://zenn.dev/kotap/articles/acfc7bdcf478e5',
+    source: 'Zenn',
   },
   {
-    en: '[Qiskit] QuantumCircuit.draw() usage guide',
-    ja: '[Qiskit] QuantumCircuit.draw() の使い方ガイド',
-    href: 'https://qiita.com/Mel_14/items/fe9d66c4ef41bc39f224',
+    en: '[Dify] Fix for "Weaviate 1.19 is not supported" after an update',
+    ja: '【Dify】アプデで「Weaviate 1.19 is not supported」が出た時の対処法',
+    href: 'https://zenn.dev/kotap/articles/ea3b5995b8ba44',
+    source: 'Zenn',
   },
   {
-    en: 'QURI-Parts installation troubleshooting',
-    ja: 'QURI-Parts インストールトラブルシューティング',
-    href: 'https://qiita.com/Mel_14/items/02bc1b4e44961bdb2947',
+    en: '[LaTeX] Using the latexdiff command in Overleaf',
+    ja: '【LaTex】Overleafでlatexdiffコマンドを使う',
+    href: 'https://zenn.dev/kotap/articles/5ea5c8b69ecbef',
+    source: 'Zenn',
   },
 ]

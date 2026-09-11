@@ -11,7 +11,7 @@ type UiStrings = {
   }
   nav: string[]
   internships: string
-  qiitaLabel: string
+  articlesLabel: string
   footer: string
   projectMeta: {
     reflection: string
@@ -38,7 +38,7 @@ export const ui: Record<Lang, UiStrings> = {
     },
     nav: ['About', 'Career', 'Skills', 'Projects'],
     internships: 'Internships',
-    qiitaLabel: 'Qiita Articles',
+    articlesLabel: 'Articles',
     footer: '© 2026 Kota Mizuno — Built brick by brick.',
     projectMeta: {
       reflection: 'Reflection',
@@ -63,7 +63,7 @@ export const ui: Record<Lang, UiStrings> = {
     },
     nav: ['About', 'Career', 'Skills', 'Projects'],
     internships: 'インターン経験',
-    qiitaLabel: 'Qiita 記事',
+    articlesLabel: '技術記事',
     footer: '© 2026 水野航太 — Built brick by brick.',
     projectMeta: {
       reflection: '感想',

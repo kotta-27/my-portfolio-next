@@ -1,93 +1,39 @@
-'use client'
-
-import { motion } from 'framer-motion'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
-import { activitiesData, categoryLabel, qiitaArticles, type SubLinkCard } from '@/data/awards'
+import { activitiesData, articles } from '@/data/awards'
+import { fetchOgImage } from '@/lib/fetchOgImage'
 import { SectionLabel } from '@/components/SectionLabel'
 import { LinkCard } from '@/components/LinkCard'
-import { PiMedalFill } from 'react-icons/pi'
+import { AwardRow } from '@/components/AwardRow'
 
-function toCard(card: SubLinkCard, source: string, lang: Lang) {
-  return { url: card.url, label: card[lang], source, thumbnail: card.thumbnail }
-}
-
-export function Awards({ lang }: { lang: Lang }) {
+export async function Awards({ lang }: { lang: Lang }) {
   const t = ui[lang]
+
+  const articlesWithOg = await Promise.all(
+    articles.map(async (article) => ({
+      ...article,
+      thumbnail: await fetchOgImage(article.href),
+    }))
+  )
+
   return (
     <div id="awards">
       <SectionLabel>{t.sections.awards}</SectionLabel>
       <div className="bg-white rounded-[10px] overflow-hidden">
         {activitiesData.map((item, i) => (
-          <motion.div
-            key={item.en}
-            className="relative pl-5 pr-[5px] py-[18px] border-b border-[#f4f4f4]"
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.4, ease: 'easeOut', delay: Math.min(i, 6) * 0.04 }}
-          >
-            <span className="absolute top-[18px] right-[15px] text-[11px] font-light text-[#999] text-right w-[64px] sm:w-auto sm:whitespace-nowrap">
-              {item.date}
-            </span>
-            <div className="flex items-start gap-3 pr-[70px]">
-              <span className="mt-[3px] shrink-0 w-[72px] text-center text-[9px] tracking-[.08em] uppercase text-[#222] bg-[#f4f4f4] rounded px-[7px] py-[3px] whitespace-nowrap">
-                {categoryLabel[item.category][lang]}
-              </span>
-              <div className="flex-1 min-w-0">
-                {item.link ? (
-                  <a
-                    href={item.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[13px] font-medium text-[#1a1a1a] underline underline-offset-2 decoration-[#ccc] hover:decoration-[#1a1a1a] transition-colors duration-150 leading-[1.5] block"
-                  >
-                    {item[lang]}
-                  </a>
-                ) : (
-                  <p className="text-[13px] font-medium text-[#1a1a1a] leading-[1.5]">{item[lang]}</p>
-                )}
-                {item.award && (
-                  <p className="flex items-center gap-[5px] text-[11.5px] text-[#b07800] mt-[4px]">
-                    <PiMedalFill className="text-[13px] shrink-0" />
-                    {item.award[lang]}
-                  </p>
-                )}
-                {item.interview && (
-                  <div className="mt-[8px]">
-                    <LinkCard card={toCard(item.interview, 'Interview', lang)} mobileThumbnail={false} />
-                  </div>
-                )}
-                {item.pressRelease && (
-                  <div className="mt-[8px]">
-                    <LinkCard card={toCard(item.pressRelease, 'Press Release', lang)} mobileThumbnail={false} />
-                  </div>
-                )}
-                {item.page && (
-                  <div className="mt-[8px]">
-                    <LinkCard card={toCard(item.page, 'Page', lang)} mobileThumbnail={false} />
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
+          <AwardRow key={item.en} item={item} lang={lang} index={i} />
         ))}
 
         <div className="px-7 py-5">
           <p className="text-[9px] tracking-[.1em] uppercase text-[#999] mb-[13px]">
-            {t.qiitaLabel}
+            {t.articlesLabel}
           </p>
-          <div className="flex flex-col gap-2">
-            {qiitaArticles.map((article) => (
-              <a
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            {articlesWithOg.map((article) => (
+              <LinkCard
                 key={article.href}
-                href={article.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[12.5px] leading-[1.5] text-[#444] no-underline hover:text-[#1a1a1a] transition-colors duration-150"
-              >
-                {article[lang]} →
-              </a>
+                card={{ url: article.href, label: article[lang], source: article.source, thumbnail: article.thumbnail }}
+              />
             ))}
           </div>
         </div>
