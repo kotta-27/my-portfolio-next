@@ -21,6 +21,8 @@ const notoJp = Noto_Sans_JP({
 })
 
 export const metadata: Metadata = {
+  // OGP 画像などの相対 URL をこのドメイン基準の絶対 URL にする
+  metadataBase: new URL('https://kotap.dev'),
   title: 'Kota Mizuno — Portfolio',
   description:
     'Software Engineer specializing in Quantum Computing and Web Engineering. Currently at Studist Inc.',
@@ -29,6 +31,7 @@ export const metadata: Metadata = {
     description:
       'Software Engineer specializing in Quantum Computing and Web Engineering.',
     siteName: 'Kota Mizuno',
+    url: 'https://kotap.dev',
     locale: 'en_US',
     type: 'website',
   },
