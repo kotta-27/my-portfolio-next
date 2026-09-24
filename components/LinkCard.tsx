@@ -24,21 +24,21 @@ export function LinkCard({ card, lang: _lang, mobileThumbnail = true }: Props) {
       rel="noopener noreferrer"
       whileHover={{ scale: 1.015 }}
       whileTap={{ scale: 0.985 }}
-      className="w-full flex items-center border border-[#ddd] rounded-[7px] overflow-hidden no-underline hover:border-[#ddd] hover:bg-[#fafafa] transition-colors duration-150 group"
+      className="w-full flex items-center rounded-[10px] bg-soft overflow-hidden no-underline hover:bg-ground transition-colors duration-150 group"
     >
       {card.thumbnail && (
-        <div className={`${mobileThumbnail ? 'block' : 'hidden sm:block'} w-[80px] h-[52px] shrink-0 bg-[#f4f4f4] overflow-hidden`}>
+        <div className={`${mobileThumbnail ? 'block' : 'hidden sm:block'} w-[80px] h-[52px] shrink-0 bg-ground overflow-hidden`}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={card.thumbnail} alt="" className="w-full h-full object-cover" />
         </div>
       )}
       <div className="flex flex-col gap-[2px] px-[12px] py-[8px] min-w-0">
-        <span className="text-[9.5px] tracking-[.07em] uppercase text-[#888]">{card.source}</span>
-        <span className="text-[12px] leading-[1.4] text-[#333] group-hover:text-[#1a1a1a] transition-colors duration-150 line-clamp-2">
+        <span className="text-[9.5px] font-bold tracking-[.07em] uppercase text-mute">{card.source}</span>
+        <span className="text-[12px] font-semibold leading-[1.4] text-ink group-hover:text-teal transition-colors duration-150 line-clamp-2">
           {card.label}
         </span>
       </div>
-      <span className="ml-auto pr-[14px] text-[#999] text-[13px] shrink-0 group-hover:text-[#555] transition-colors duration-150">
+      <span className="ml-auto pr-[14px] text-mute text-[13px] shrink-0 group-hover:text-ink transition-colors duration-150">
         ↗
       </span>
     </motion.a>

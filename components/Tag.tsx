@@ -1,6 +1,6 @@
 export function Tag({ children }: { children: string }) {
   return (
-    <span className="text-[10px] text-[#666] bg-[#f5f5f5] rounded-full px-[9px] py-[3px]">
+    <span className="rounded-full bg-soft px-[9px] py-[3px] text-[10px] font-semibold text-mute">
       {children}
     </span>
   )

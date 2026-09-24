@@ -1,12 +1,15 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import type { Lang } from '@/types'
+import { motion } from 'framer-motion'
+import type { Lang, View } from '@/types'
 import { ui } from '@/data/ui'
 import { LangToggle } from '@/components/LangToggle'
+import { useView } from '@/components/ViewContext'
 
 export function Nav({ lang }: { lang: Lang }) {
   const t = ui[lang]
+  const { view, setView } = useView()
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -16,34 +19,61 @@ export function Nav({ lang }: { lang: Lang }) {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  function choose(next: View) {
+    setView(next)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  function goContact() {
+    setView('all')
+    requestAnimationFrame(() => {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    })
+  }
+
   return (
     <nav
-      className={`sticky top-0 z-50 bg-[#edeae3]/90 backdrop-blur-sm border-b px-5 sm:px-10 flex justify-between items-center transition-all duration-300 ${
-        scrolled ? 'h-[50px] border-black/[.1] shadow-sm' : 'h-[58px] border-black/[.07]'
+      className={`sticky top-0 z-50 flex items-center justify-between gap-3 bg-ground/85 px-4 backdrop-blur-md transition-all duration-300 sm:px-6 ${
+        scrolled ? 'h-[52px] shadow-[0_1px_0_rgba(13,27,42,0.08)]' : 'h-[60px]'
       }`}
     >
-      <a
-        href="?"
-        className="text-[14px] font-semibold tracking-[-0.01em] text-[#1a1a1a] no-underline"
-      >
-        Kota Mizuno
+      <a href="?" className="flex items-center gap-[8px] text-[14px] font-extrabold tracking-[-0.01em] text-ink no-underline">
+        <span className="h-[10px] w-[10px] rounded-[3px] bg-teal" />
+        <span className="hidden sm:inline">Kota Mizuno</span>
       </a>
-      <div className="flex gap-[16px] sm:gap-[26px] items-center">
-        {t.nav.map((label) => (
-          <a
-            key={label}
-            href={`#${label.toLowerCase()}`}
-            className="hidden sm:block text-[12px] text-[#555] no-underline hover:text-[#1a1a1a] transition-colors duration-150"
-          >
-            {label}
-          </a>
-        ))}
-        <a
-          href="#contact"
-          className="text-[11.5px] font-medium tracking-[.02em] text-white no-underline bg-[#1a1a1a] rounded-[5px] px-4 py-2 hover:bg-[#333] transition-colors duration-150"
+      <div className="flex min-w-0 items-center gap-[10px]">
+        <div className="flex items-center gap-[2px] overflow-x-auto rounded-full bg-tile p-[3px] text-[11px] font-bold sm:text-[11.5px]">
+          {t.nav.map((item) => {
+            const active = view === item.view
+            return (
+              <button
+                key={item.view}
+                type="button"
+                onClick={() => choose(item.view)}
+                aria-pressed={active}
+                className={`relative shrink-0 rounded-full px-[10px] py-[5px] transition-colors duration-150 sm:px-3 ${
+                  active ? 'text-white' : 'text-mute hover:text-ink'
+                }`}
+              >
+                {active && (
+                  <motion.span
+                    layoutId="nav-pill"
+                    className="absolute inset-0 rounded-full bg-ink"
+                    transition={{ type: 'spring', stiffness: 420, damping: 36 }}
+                  />
+                )}
+                <span className="relative z-10">{item.label}</span>
+              </button>
+            )
+          })}
+        </div>
+        <button
+          type="button"
+          onClick={goContact}
+          className="hidden rounded-full bg-ink px-4 py-[7px] text-[11.5px] font-bold text-white transition-colors duration-150 hover:bg-teal sm:inline-flex"
         >
           Contact
-        </a>
+        </button>
         <LangToggle lang={lang} />
       </div>
     </nav>
