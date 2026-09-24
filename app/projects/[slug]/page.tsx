@@ -1,13 +1,16 @@
 import { notFound } from 'next/navigation'
-import Image from 'next/image'
+import { PiArrowUpRight, PiCheckCircleFill, PiMedalFill, PiQuotes } from 'react-icons/pi'
 import type { Lang } from '@/types'
 import { projectsData } from '@/data/projects'
 import { ui } from '@/data/ui'
+import { Reveal } from '@/components/Reveal'
+import { Tile } from '@/components/Tile'
+import { TileLabel } from '@/components/TileLabel'
 import { Tag } from '@/components/Tag'
 import { LangToggle } from '@/components/LangToggle'
 import { ProjectImageCarousel } from '@/components/ProjectImageCarousel'
 import { BackLink } from '@/components/BackLink'
-import { FadeIn } from './ProjectPageClient'
+import { ProjectNeighborTile } from '@/components/tiles/ProjectNeighborTile'
 
 export function generateStaticParams() {
   return projectsData.map((p) => ({ slug: p.slug }))
@@ -24,170 +27,154 @@ export default async function ProjectPage({
   const { lang: rawLang } = await searchParams
   const lang: Lang = rawLang === 'ja' ? 'ja' : 'en'
 
-  const project = projectsData.find((p) => p.slug === slug)
-  if (!project) notFound()
+  const index = projectsData.findIndex((p) => p.slug === slug)
+  if (index === -1) notFound()
+  const project = projectsData[index]
+  const prev = projectsData[(index - 1 + projectsData.length) % projectsData.length]
+  const next = projectsData[(index + 1) % projectsData.length]
   const t = ui[lang].projectMeta
+  const meta = project.meta
+
+  const facts: { label: string; value: string }[] = [
+    meta?.period && { label: t.period, value: meta.period[lang] },
+    meta?.role && { label: t.role, value: meta.role[lang].join(', ') },
+    meta?.members && { label: t.members, value: meta.members[lang] },
+    meta?.event && { label: t.event, value: meta.event },
+  ].filter((f): f is { label: string; value: string } => Boolean(f))
 
   return (
-    <div className="min-h-screen bg-[#edeae3] font-sans text-[#1a1a1a]">
-      <div className="max-w-[1100px] mx-auto px-4 sm:px-7 pt-6 pb-20">
-        <FadeIn delay={0} className="relative z-[200]">
-          <div className="flex items-center justify-between mb-8">
-            <BackLink href={`/?lang=${lang}#projects`} label={t.back} />
-            <LangToggle lang={lang} />
-          </div>
-        </FadeIn>
+    <div className="min-h-screen bg-ground font-sans text-ink">
+      <div className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
+        <div className="relative z-[200] mb-3 flex items-center justify-between">
+          <BackLink href={`/?lang=${lang}`} label={t.back} />
+          <LangToggle lang={lang} />
+        </div>
 
-        <div className="bg-white rounded-2xl overflow-hidden pt-6">
-          <FadeIn delay={60}>
+        <Reveal span={4}>
+          <Tile pad={false}>
             <ProjectImageCarousel
               images={project.images && project.images.length > 0 ? project.images : [project.image]}
               alt={project.name}
             />
-          </FadeIn>
 
-          <div className="p-7 sm:p-10">
-            <FadeIn delay={120}>
-              <div className="flex items-center justify-between gap-4 mb-3">
-                <h1 className="text-[24px] sm:text-[32px] font-bold text-[#1a1a1a]">
-                  {project.name}
-                </h1>
+            <div className="flex flex-col gap-10 p-6 sm:p-10">
+              {/* Header */}
+              <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <TileLabel>{ui[lang].sections.projects}</TileLabel>
+                    {project.badge && (
+                      <span className="inline-flex items-center gap-[3px] rounded-full bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-white">
+                        <PiMedalFill className="text-[11px]" />
+                        {project.badge}
+                      </span>
+                    )}
+                  </div>
+                  <h1 className="mt-2 text-[32px] font-extrabold leading-[1] tracking-[-0.035em] sm:text-[44px]">
+                    {project.name}
+                  </h1>
+                  <p className="mt-3 max-w-[60ch] text-[13.5px] leading-[1.6] text-mute">{project[lang]}</p>
+                  <div className="mt-3 flex flex-wrap gap-[5px]">
+                    {project.tags.map((tag) => (
+                      <Tag key={tag}>{tag}</Tag>
+                    ))}
+                  </div>
+                </div>
                 {project.links.length > 0 && (
-                  <div className="hidden sm:flex flex-wrap gap-2 shrink-0">
+                  <div className="flex flex-wrap gap-2 sm:shrink-0 sm:justify-end">
                     {project.links.map((link) => (
                       <a
                         key={link.url}
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-[6px] text-[12px] font-medium tracking-[.04em] uppercase no-underline bg-[#1a1a1a] text-white rounded-lg px-5 py-[10px] hover:bg-[#333] transition-colors duration-150"
+                        className="inline-flex items-center gap-[5px] rounded-full bg-ink px-4 py-[9px] text-[11.5px] font-bold text-white no-underline transition-colors duration-150 hover:bg-teal"
                       >
-                        {link.label} ↗
+                        {link.label}
+                        <PiArrowUpRight className="text-[13px]" />
                       </a>
                     ))}
                   </div>
                 )}
-              </div>
-            </FadeIn>
+              </header>
 
-            <FadeIn delay={240}>
-              <p className="text-[14px] sm:text-[15px] leading-[1.9] text-[#555] mb-8">
-                {project.detail[lang]}
-              </p>
-            </FadeIn>
+              <p className="max-w-[72ch] text-[14px] leading-[1.9] text-ink/80 sm:text-[15px]">{project.detail[lang]}</p>
 
-            {project.links.length > 0 && (
-              <FadeIn delay={280}>
-                <div className="flex sm:hidden flex-wrap gap-3 mb-10">
-                  {project.links.map((link) => (
-                    <a
-                      key={link.url}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-[6px] text-[12px] font-medium tracking-[.04em] uppercase no-underline bg-[#1a1a1a] text-white rounded-lg px-5 py-[10px] hover:bg-[#333] transition-colors duration-150"
-                    >
-                      {link.label} ↗
-                    </a>
-                  ))}
-                </div>
-              </FadeIn>
-            )}
-
-            {project.meta && (
-              <FadeIn delay={320}>
-                <div className="border-t border-[#f0f0f0] pt-8 flex flex-col gap-8">
-
-                  {project.meta.reflection && (
-                    <div>
-                      <p className="text-[15px] font-semibold tracking-[.1em] uppercase text-[#aaa] mb-3">
-                        {t.reflection}
-                      </p>
-                      <p className="text-[13.5px] leading-[1.9] text-[#555]">
-                        {project.meta.reflection[lang]}
-                      </p>
+              {facts.length > 0 && (
+                <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {facts.map((fact) => (
+                    <div key={fact.label} className="rounded-[14px] bg-soft px-4 py-3">
+                      <dt className="text-[10.5px] font-bold uppercase tracking-[.08em] text-mute">{fact.label}</dt>
+                      <dd className="mt-1 text-[14px] font-extrabold leading-snug tracking-[-0.01em]">{fact.value}</dd>
                     </div>
-                  )}
+                  ))}
+                </dl>
+              )}
 
-                  {project.meta.contributions && (
-                    <div>
-                      <p className="text-[15px] font-semibold tracking-[.1em] uppercase text-[#aaa] mb-3">
-                        {t.contributions}
-                      </p>
-                      <ul className="ml-4 flex flex-col gap-[8px]">
-                        {project.meta.contributions[lang].map((item) => (
-                          <li key={item} className="flex items-center gap-3 text-[13px] text-[#555]">
-                            <span className="w-[4px] h-[4px] rounded-full bg-[#ccc] shrink-0" />
-                            <span>{item}</span>
+              {(meta?.techStack || meta?.contributions) && (
+                <div className="grid grid-cols-1 gap-10 border-t border-soft pt-8 sm:grid-cols-2">
+                  {meta?.techStack && (
+                    <section>
+                      <TileLabel>{t.techStack}</TileLabel>
+                      <ul className="mt-2 flex flex-col divide-y divide-soft">
+                        {meta.techStack.map((cat) => (
+                          <li key={cat.category} className="grid grid-cols-[84px_1fr] items-start gap-3 py-[9px] first:pt-0 last:pb-0">
+                            <span className="pt-[3px] text-[11px] font-bold uppercase tracking-[.06em] text-mute">{cat.category}</span>
+                            <div className="flex flex-wrap gap-[5px]">
+                              {cat.items.map((item) => (
+                                <span key={item} className="rounded-full bg-soft px-[10px] py-[4px] text-[11.5px] font-bold">
+                                  {item}
+                                </span>
+                              ))}
+                            </div>
                           </li>
                         ))}
                       </ul>
-                    </div>
+                    </section>
                   )}
-
-                  {project.meta.techStack && (
-                    <div>
-                      <p className="text-[15px] font-semibold tracking-[.1em] uppercase text-[#aaa] mb-3">
-                        {t.techStack}
-                      </p>
-                      <div className="flex flex-col gap-[10px]">
-                        {project.meta.techStack.map((cat) => (
-                          <div key={cat.category} className="flex items-start gap-4">
-                            <span className="text-[13px] text-[#888] w-[72px] shrink-0 pt-[2px]">{cat.category}</span>
-                            <div className="w-px bg-[#e8e8e8] self-stretch shrink-0" />
-                            <span className="text-[13px] text-[#444]">{cat.items.join(', ')}</span>
-                          </div>
+                  {meta?.contributions && (
+                    <section>
+                      <TileLabel>{t.contributions}</TileLabel>
+                      <ul className="mt-2 flex flex-col gap-[9px]">
+                        {meta.contributions[lang].map((item) => (
+                          <li key={item} className="flex items-start gap-[8px] text-[13px] font-semibold leading-[1.5]">
+                            <PiCheckCircleFill className="mt-[2px] shrink-0 text-[16px] text-teal" />
+                            {item}
+                          </li>
                         ))}
-                      </div>
-                    </div>
+                      </ul>
+                    </section>
                   )}
-
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-                    {project.meta.period && (
-                      <div>
-                        <p className="text-[15px] font-semibold tracking-[.1em] uppercase text-[#aaa] mb-1">
-                          {t.period}
-                        </p>
-                        <p className="text-[13px] text-[#333]">{project.meta.period[lang]}</p>
-                      </div>
-                    )}
-                    {project.meta.role && (
-                      <div>
-                        <p className="text-[15px] font-semibold tracking-[.1em] uppercase text-[#aaa] mb-1">
-                          {t.role}
-                        </p>
-                        <p className="text-[13px] text-[#333]">{project.meta.role[lang].join(', ')}</p>
-                      </div>
-                    )}
-                    {project.meta.members && (
-                      <div>
-                        <p className="text-[15px] font-semibold tracking-[.1em] uppercase text-[#aaa] mb-1">
-                          {t.members}
-                        </p>
-                        <p className="text-[13px] text-[#333]">{project.meta.members[lang]}</p>
-                      </div>
-                    )}
-                    {project.meta.event && (
-                      <div>
-                        <p className="text-[15px] font-semibold tracking-[.1em] uppercase text-[#aaa] mb-1">
-                          {t.event}
-                        </p>
-                        <p className="text-[13px] text-[#333]">{project.meta.event}</p>
-                      </div>
-                    )}
-                  </div>
-
                 </div>
-              </FadeIn>
-            )}
-          </div>
+              )}
+
+              {meta?.reflection && (
+                <section className="rounded-[14px] bg-ink p-5 text-white sm:p-6">
+                  <TileLabel className="text-white/55">{t.reflection}</TileLabel>
+                  <div className="mt-2 flex items-start gap-4">
+                    <PiQuotes className="hidden shrink-0 text-[34px] text-teal sm:block" />
+                    <p className="max-w-[72ch] text-[14px] leading-[1.9] text-white/85 sm:text-[15px]">
+                      {meta.reflection[lang]}
+                    </p>
+                  </div>
+                </section>
+              )}
+            </div>
+          </Tile>
+        </Reveal>
+
+        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <Reveal span={1} index={1}>
+            <ProjectNeighborTile project={prev} lang={lang} direction="prev" label={t.prevProject} />
+          </Reveal>
+          <Reveal span={1} index={2}>
+            <ProjectNeighborTile project={next} lang={lang} direction="next" label={t.nextProject} />
+          </Reveal>
         </div>
 
-        <FadeIn delay={400}>
-          <div className="mt-8">
-            <BackLink href={`/?lang=${lang}#projects`} label={t.backToProjects} />
-          </div>
-        </FadeIn>
+        <div className="mt-8 flex justify-center">
+          <BackLink href={`/?lang=${lang}`} label={t.backToProjects} />
+        </div>
       </div>
     </div>
   )

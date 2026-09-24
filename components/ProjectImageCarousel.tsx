@@ -24,7 +24,7 @@ export function ProjectImageCarousel({
 
   return (
     <div
-      className="relative h-[240px] sm:h-[420px] bg-white flex items-center justify-center overflow-hidden"
+      className="relative flex h-[240px] w-full items-center justify-center overflow-hidden bg-tile p-4 sm:h-[420px] sm:p-8"
       style={{ perspective: '1400px' }}
     >
       <div
@@ -65,7 +65,7 @@ export function ProjectImageCarousel({
               rotateY: [0, 90, 180],
             }}
             transition={{ duration: 1.5, ease: [0.45, 0, 0.2, 1] }}
-            className="absolute max-h-full max-w-full object-contain rounded-[4px] border border-[#e8e8e8] shadow-[0_20px_40px_-20px_rgba(0,0,0,0.35)]"
+            className="absolute max-h-full max-w-full object-contain rounded-[10px] border border-soft shadow-[0_24px_48px_-24px_rgba(13,27,42,0.35)]"
             style={{ transformStyle: 'preserve-3d' }}
           />
         </AnimatePresence>
@@ -79,7 +79,7 @@ export function ProjectImageCarousel({
               onClick={() => setIndex(i)}
               aria-label={`Show image ${i + 1}`}
               className={`h-[6px] rounded-full transition-all duration-300 ${
-                i === index ? 'w-[18px] bg-[#1a1a1a]' : 'w-[6px] bg-[#ccc] hover:bg-[#999]'
+                i === index ? 'w-[18px] bg-ink' : 'w-[6px] bg-ground hover:bg-mute'
               }`}
             />
           ))}
