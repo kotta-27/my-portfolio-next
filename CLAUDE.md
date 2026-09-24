@@ -8,6 +8,11 @@
 ## Stack
 - Next.js 14 (App Router) / TypeScript / Tailwind CSS / React Icons
 
+## Design (Bento)
+- トップは `components/BentoGrid.tsx` に `components/tiles/*` のタイルを敷くベント―グリッド。タイルは必ず `components/Tile.tsx`（`span`/`rows`/`dark`/`pad`）を使う
+- 色は `tailwind.config.ts` のトークンのみ: `ground` `tile` `ink` `teal` `coral` `mute` `soft`。生の HEX を className に書かない
+- 書体: `font-sans`（Plus Jakarta Sans / Noto Sans JP）、数値は `font-mono`（JetBrains Mono）+ `tabular-nums`
+
 ## Structure
 - `app/` — ページ・レイアウト (App Router)
 - `components/` — 再利用コンポーネント

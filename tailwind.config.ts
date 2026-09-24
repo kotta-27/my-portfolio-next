@@ -8,10 +8,18 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-jakarta)', 'var(--font-noto-jp)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-jetbrains)', 'ui-monospace', 'monospace'],
       },
       colors: {
-        bg: '#edeae3',
+        // Bento palette
+        ground: '#e5e9ef',
+        tile: '#ffffff',
+        ink: '#0d1b2a',
+        teal: '#0e8a8c',
+        coral: '#ee6c4d',
+        mute: '#5d6b7a',
+        soft: '#edf1f5',
       },
       keyframes: {
         fadeInUp: {
