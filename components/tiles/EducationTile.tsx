@@ -10,14 +10,16 @@ export function EducationTile({ lang }: { lang: Lang }) {
   return (
     <Tile>
       <TileLabel>{t.education}</TileLabel>
-      <div className="mt-auto">
+      <div className="mt-1">
         <p className="text-[13.5px] font-extrabold leading-tight">{a.university}</p>
         <p className="mt-[3px] text-[11.5px] leading-[1.45] text-mute">
           {a.degree}
           <br />
           {a.research}
         </p>
-        <p className="mt-[6px] text-[11px] text-mute">
+      </div>
+      <div className="mt-auto">
+        <p className="text-[11px] text-mute">
           {a.labGroupPrefix}{' '}
           <a
             href="http://watabegroup.quie.ise.shibaura-it.ac.jp/"
