@@ -79,8 +79,8 @@ export const activitiesData: ActivityItem[] = [
     category: 'event',
     interview: {
       url: 'https://nqc.nict.go.jp/report/250528_02.html',
-      en: 'Read the interview',
-      ja: 'インタビュー記事を読む',
+      en: 'NQC Experience Program — Interview',
+      ja: 'NQC体験型プログラム インタビュー',
       thumbnail: '/nqc_interview.png',
     },
   },
