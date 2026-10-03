@@ -102,6 +102,12 @@ export const activitiesData: ActivityItem[] = [
 
 export const articles: ArticleLink[] = [
   {
+    en: 'Defending APIs that let unauthenticated users call an LLM',
+    ja: '未認証ユーザに LLM を叩かせる API をどう守るか',
+    href: 'https://zenn.dev/studist/articles/unauthenticated-ai-search-defense-in-depth',
+    source: 'Zenn',
+  },
+  {
     en: '[Qiskit] How to use QuantumCircuit.draw() for circuit visualization',
     ja: '【Qiskit】量子回路描画QuantumCircuit.draw()の使い方',
     href: 'https://zenn.dev/kotap/articles/acfc7bdcf478e5',
