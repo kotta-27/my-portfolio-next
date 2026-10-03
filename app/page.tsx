@@ -3,6 +3,8 @@ import { cookies } from 'next/headers'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { projectsData } from '@/data/projects'
+import { careerData } from '@/data/career'
+import { skillsData } from '@/data/skills'
 import { collectOutputs, groupOf, OUTPUT_GROUPS } from '@/lib/outputs'
 import { ViewProvider } from '@/components/ViewContext'
 import { Nav } from '@/components/Nav'
@@ -37,6 +39,13 @@ export default async function Page({
   const t = ui[lang]
   // イントロはセッションで 1 回だけ。見たかどうかをサーバーで判断し、2 回目以降は描画しない
   const showIntro = !(await cookies()).has(INTRO_COOKIE)
+  // スマホのタブ一覧に出す件数。データ本体をクライアントに送らないようサーバーで数える
+  const navCounts = {
+    career: careerData.length,
+    skills: skillsData.reduce((sum, g) => sum + g.skills.length, 0),
+    projects: projectsData.length,
+    writing: collectOutputs().length,
+  }
 
   const items: BentoItemDef[] = [
     { key: 'hero', views: ['all'], span: 2, rows: 2, node: <HeroTile lang={lang} /> },
@@ -74,7 +83,7 @@ export default async function Page({
       {showIntro && <IntroOverlay />}
       {/* --intro: タイルの登場をイントロが抜けるタイミングまで遅らせる */}
       <div className="min-h-screen bg-ground font-sans text-ink" style={{ '--intro': showIntro ? '800ms' : '0ms' } as CSSProperties}>
-        <Nav lang={lang} />
+        <Nav lang={lang} counts={navCounts} />
         <main className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
           <BentoGrid items={items} labels={{ more: t.tiles.moreProjects, less: t.tiles.lessProjects }} />
           <footer className="flex flex-col items-center gap-3 pt-10">

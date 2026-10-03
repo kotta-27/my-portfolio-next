@@ -10,6 +10,8 @@ type UiStrings = {
     contact: string
   }
   nav: { label: string; view: View }[]
+  /** スマホのタブ一覧で Overview の右に出す文言 */
+  navAll: string
   tiles: {
     currently: string
     education: string
@@ -79,6 +81,7 @@ export const ui: Record<Lang, UiStrings> = {
       lessProjects: 'Show less',
       contactTitle: "Let's talk.",
     },
+    navAll: 'All',
     internships: 'Internships',
     articlesLabel: 'Articles',
     footer: '© 2026 Kota Mizuno — Built brick by brick.',
@@ -130,6 +133,7 @@ export const ui: Record<Lang, UiStrings> = {
       lessProjects: '閉じる',
       contactTitle: "Let's talk.",
     },
+    navAll: 'すべて',
     internships: 'インターン経験',
     articlesLabel: '技術記事',
     footer: '© 2026 水野航太 — Built brick by brick.',
