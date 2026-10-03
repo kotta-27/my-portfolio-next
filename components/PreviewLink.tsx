@@ -32,7 +32,7 @@ export function PreviewLink({ card }: { card: LinkCardData }) {
         {open && (
           <motion.span
             role="tooltip"
-            className={`pointer-events-none absolute left-0 z-50 block w-[300px] ${below ? 'top-full mt-2' : 'bottom-full mb-2'} max-w-[calc(100vw-48px)] overflow-hidden rounded-[14px] bg-tile shadow-[0_24px_48px_-16px_rgba(13,27,42,0.35)] ring-1 ring-ink/5`}
+            className={`pointer-events-none absolute left-0 z-50 block w-[300px] ${below ? 'top-full mt-2' : 'bottom-full mb-2'} max-w-[calc(100vw-48px)] overflow-hidden rounded-[14px] border border-ink/15 bg-tile shadow-[0_24px_48px_-16px_rgba(13,27,42,0.35)]`}
             initial={{ opacity: 0, y: below ? -6 : 6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: below ? -6 : 6, scale: 0.98 }}
