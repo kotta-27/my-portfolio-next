@@ -1,7 +1,7 @@
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { projectsData } from '@/data/projects'
-import { collectOutputs } from '@/lib/outputs'
+import { collectOutputs, groupOf, OUTPUT_GROUPS } from '@/lib/outputs'
 import { ViewProvider } from '@/components/ViewContext'
 import { Nav } from '@/components/Nav'
 import { IntroOverlay } from '@/components/IntroOverlay'
@@ -16,6 +16,7 @@ import { CareerTile } from '@/components/tiles/CareerTile'
 import { AwardsTile } from '@/components/tiles/AwardsTile'
 import { OutputTile } from '@/components/tiles/OutputTile'
 import { OutputCard } from '@/components/tiles/OutputCard'
+import { OutputHeadTile } from '@/components/tiles/OutputHeadTile'
 import { ProjectTile } from '@/components/tiles/ProjectTile'
 import { ProjectsHeadTile } from '@/components/tiles/ProjectsHeadTile'
 import { ContactTile } from '@/components/tiles/ContactTile'
@@ -51,11 +52,16 @@ export default async function Page({
     { key: 'awards', views: ['all'], span: 2, node: <AwardsTile lang={lang} /> },
     // Overview は Output を 1 タイルにまとめ、Output ビューでは 1 件ずつカードにする
     { key: 'writing', views: ['all'], span: 2, node: <OutputTile lang={lang} /> },
-    ...collectOutputs().map((item) => ({
-      key: `output-${item.url}`,
-      views: ['writing' as const],
-      node: <OutputCard item={item} lang={lang} />,
-    })),
+    // Output ビューは区分ごとに見出しタイル → カードの順
+    ...OUTPUT_GROUPS.flatMap((g, gi) => {
+      const members = collectOutputs().filter((o) => groupOf(o.kind) === g.id)
+      if (members.length === 0) return []
+      const tone = (['accent', 'dark', 'light', 'light'] as const)[gi]
+      return [
+        { key: `output-head-${g.id}`, views: ['writing' as const], node: <OutputHeadTile label={g.label[lang]} blurb={g.blurb[lang]} count={members.length} tone={tone} /> },
+        ...members.map((item) => ({ key: `output-${item.url}`, views: ['writing' as const], node: <OutputCard item={item} lang={lang} /> })),
+      ]
+    }),
     { key: 'contact', views: ['all'], node: <ContactTile lang={lang} /> },
   ]
 

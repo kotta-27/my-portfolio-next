@@ -50,3 +50,20 @@ export function collectOutputs(): OutputItem[] {
   const order: OutputKind[] = ['article', 'interview', 'blog', 'talk', 'press', 'page']
   return out.sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind))
 }
+
+/** Output ビューの区分 */
+export type OutputGroup = 'blog' | 'interview' | 'talk' | 'press'
+
+export const OUTPUT_GROUPS: { id: OutputGroup; label: Record<Lang, string>; blurb: Record<Lang, string> }[] = [
+  { id: 'blog', label: { en: 'Tech Blog', ja: 'Tech Blog' }, blurb: { en: 'Zenn posts and the company tech blog.', ja: 'Zenn と会社の Tech Blog。' } },
+  { id: 'interview', label: { en: 'Interview', ja: 'Interview' }, blurb: { en: 'Conversations about internships and work.', ja: 'インターンや仕事についてのインタビュー。' } },
+  { id: 'talk', label: { en: 'Talk', ja: 'Talk' }, blurb: { en: 'Slides and talks.', ja: '登壇・スライド。' } },
+  { id: 'press', label: { en: 'Press Release', ja: 'Press Release' }, blurb: { en: 'Announcements I was part of.', ja: '関わった発表・プレスリリース。' } },
+]
+
+export function groupOf(kind: OutputKind): OutputGroup {
+  if (kind === 'article' || kind === 'blog') return 'blog'
+  if (kind === 'interview') return 'interview'
+  if (kind === 'talk') return 'talk'
+  return 'press'
+}
