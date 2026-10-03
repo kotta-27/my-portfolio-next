@@ -4,7 +4,10 @@ import type { ArticleLink } from '@/data/awards'
 import { fetchOgImage } from '@/lib/fetchOgImage'
 import { Tile } from '@/components/Tile'
 
-/** One article as its own card; used in the Writing view. */
+/**
+ * Writing ビューの 1 記事カード。Zenn などの OG 画像にはタイトルが入っているので画像だけを見せる。
+ * 画像が取れなかったときだけテキストで表示する。
+ */
 export async function ArticleTile({ article, lang }: { article: ArticleLink; lang: Lang }) {
   const thumbnail = await fetchOgImage(article.href)
   return (
@@ -13,32 +16,24 @@ export async function ArticleTile({ article, lang }: { article: ArticleLink; lan
         href={article.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group flex h-full flex-col no-underline"
+        title={article[lang]}
+        aria-label={`${article.source}: ${article[lang]}`}
+        className="group relative flex h-full flex-col no-underline"
       >
-        <div className="relative aspect-[16/9] w-full overflow-hidden bg-soft">
-          {thumbnail && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={thumbnail}
-              alt=""
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-            />
-          )}
-        </div>
-        <div className="flex flex-1 flex-col gap-[6px] px-[14px] py-[12px]">
-          {/* OG 画像側にタイトルやロゴが入っているので、ラベルは画像に重ねず本文側に置く */}
-          <div className="flex items-center justify-between gap-2">
-            <span className="rounded-full bg-soft px-[8px] py-[3px] text-[10px] font-extrabold uppercase tracking-[.06em] text-mute">
-              {article.source}
-            </span>
-            <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-soft text-mute transition-colors duration-200 group-hover:bg-ink group-hover:text-white">
-              <PiArrowUpRight className="text-[13px]" />
-            </span>
+        {thumbnail ? (
+          <div className="relative aspect-[1200/630] w-full overflow-hidden bg-soft">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={thumbnail} alt={article[lang]} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
           </div>
-          <p className="line-clamp-3 text-[12.5px] font-bold leading-[1.5] text-ink group-hover:text-teal transition-colors duration-150">
-            {article[lang]}
-          </p>
-        </div>
+        ) : (
+          <div className="flex flex-1 flex-col gap-[6px] px-[14px] py-[12px]">
+            <span className="w-fit rounded-full bg-soft px-[8px] py-[3px] text-[10px] font-extrabold uppercase tracking-[.06em] text-mute">{article.source}</span>
+            <p className="text-[12.5px] font-bold leading-[1.5] text-ink">{article[lang]}</p>
+          </div>
+        )}
+        <span className="absolute bottom-[10px] right-[10px] flex h-[26px] w-[26px] items-center justify-center rounded-full bg-ink/85 text-white opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100">
+          <PiArrowUpRight className="text-[14px]" />
+        </span>
       </a>
     </Tile>
   )
