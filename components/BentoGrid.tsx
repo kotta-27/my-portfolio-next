@@ -5,7 +5,7 @@ import { AnimatePresence, motion, type Transition, type Variants } from 'framer-
 import type { View } from '@/types'
 import { useView } from '@/components/ViewContext'
 import { Tile } from '@/components/Tile'
-import { colSpan, gridClass, rowSpan, type Rows, type Span } from '@/components/gridSpans'
+import { colSpan, gridClass, gridClassOrdered, rowSpan, type Rows, type Span } from '@/components/gridSpans'
 
 export type BentoItemDef = {
   key: string
@@ -54,7 +54,7 @@ export function BentoGrid({ items, labels }: Props) {
   const visible = inView.filter((item) => view !== 'all' || expanded || !item.overflow)
 
   return (
-    <motion.div layout className={gridClass}>
+    <motion.div layout className={view === 'writing' ? gridClassOrdered : gridClass}>
       <AnimatePresence mode="popLayout">
         {visible.map((item, i) => (
           <motion.div

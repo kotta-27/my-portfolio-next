@@ -10,3 +10,5 @@ export const colSpan: Record<Span, string> = {
 export const rowSpan: Record<Rows, string> = { 1: 'row-span-1', 2: 'row-span-2' }
 
 export const gridClass = 'grid grid-flow-dense grid-cols-2 gap-3 lg:grid-cols-4'
+/** 帯で区切るビュー用: 空きマスを後続で埋めず、順番どおりに並べる */
+export const gridClassOrdered = 'grid grid-cols-2 gap-3 lg:grid-cols-4'
