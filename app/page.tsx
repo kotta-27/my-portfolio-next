@@ -1,7 +1,7 @@
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { projectsData } from '@/data/projects'
-import { articles } from '@/data/awards'
+import { collectOutputs } from '@/lib/outputs'
 import { ViewProvider } from '@/components/ViewContext'
 import { Nav } from '@/components/Nav'
 import { IntroOverlay } from '@/components/IntroOverlay'
@@ -14,8 +14,8 @@ import { HobbiesTile } from '@/components/tiles/HobbiesTile'
 import { SkillsTile } from '@/components/tiles/SkillsTile'
 import { CareerTile } from '@/components/tiles/CareerTile'
 import { AwardsTile } from '@/components/tiles/AwardsTile'
-import { ArticlesTile } from '@/components/tiles/ArticlesTile'
-import { ArticleTile } from '@/components/tiles/ArticleTile'
+import { OutputTile } from '@/components/tiles/OutputTile'
+import { OutputCard } from '@/components/tiles/OutputCard'
 import { ProjectTile } from '@/components/tiles/ProjectTile'
 import { ProjectsHeadTile } from '@/components/tiles/ProjectsHeadTile'
 import { ContactTile } from '@/components/tiles/ContactTile'
@@ -49,12 +49,12 @@ export default async function Page({
       node: <ProjectTile project={project} lang={lang} />,
     })),
     { key: 'awards', views: ['all'], span: 2, node: <AwardsTile lang={lang} /> },
-    // Overview shows one Writing tile; the Writing view breaks it into one card per article
-    { key: 'writing', views: ['all'], span: 2, node: <ArticlesTile lang={lang} /> },
-    ...articles.map((article) => ({
-      key: `article-${article.href}`,
+    // Overview は Output を 1 タイルにまとめ、Output ビューでは 1 件ずつカードにする
+    { key: 'writing', views: ['all'], span: 2, node: <OutputTile lang={lang} /> },
+    ...collectOutputs().map((item) => ({
+      key: `output-${item.url}`,
       views: ['writing' as const],
-      node: <ArticleTile article={article} lang={lang} />,
+      node: <OutputCard item={item} lang={lang} />,
     })),
     { key: 'contact', views: ['all'], node: <ContactTile lang={lang} /> },
   ]
