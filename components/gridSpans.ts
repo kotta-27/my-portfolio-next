@@ -9,4 +9,4 @@ export const colSpan: Record<Span, string> = {
 }
 export const rowSpan: Record<Rows, string> = { 1: 'row-span-1', 2: 'row-span-2' }
 
-export const gridClass = 'grid grid-flow-dense grid-cols-2 auto-rows-[minmax(120px,auto)] gap-3 lg:grid-cols-4'
+export const gridClass = 'grid grid-flow-dense grid-cols-2 gap-3 lg:grid-cols-4'

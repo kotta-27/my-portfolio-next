@@ -17,6 +17,8 @@ export type BentoItemDef = {
   mobileFull?: boolean
   /** Hidden in the overview until "more" is pressed. */
   overflow?: boolean
+  /** 区切り帯など、ホバーで持ち上げない要素 */
+  static?: boolean
   node: ReactNode
 }
 
@@ -64,7 +66,7 @@ export function BentoGrid({ items, labels }: Props) {
             initial="hidden"
             animate={introDone ? 'show' : 'hidden'}
             exit="exit"
-            whileHover={{ y: -2 }}
+            whileHover={item.static ? undefined : { y: -2 }}
             transition={spring}
           >
             {item.node}

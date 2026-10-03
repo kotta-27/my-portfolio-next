@@ -24,7 +24,7 @@ export function Tile({ children, id, tone = 'light', pad = true, clip = true, cl
   return (
     <div
       id={id}
-      className={`relative flex w-full flex-col gap-[6px] rounded-[18px] ${clip ? 'overflow-hidden' : ''} ${pad ? 'p-4' : ''} ${surface} ${className}`}
+      className={`relative flex min-h-[120px] w-full flex-col gap-[6px] rounded-[18px] ${clip ? 'overflow-hidden' : ''} ${pad ? 'p-4' : ''} ${surface} ${className}`}
     >
       {children}
     </div>
