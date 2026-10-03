@@ -8,3 +8,47 @@ html {
   /* ビュー切替でページ高さが変わってもスクロールバー分の幅を常に確保し、左右のズレを防ぐ */
   scrollbar-gutter: stable;
 }
+
+/*
+ * 初回描画のアニメーション。JS（framer-motion）の読み込みを待たず、HTML が届いた時点で動く。
+ * fill-mode は backwards: 終了後は何も上書きしないので、framer の layout/hover アニメと干渉しない。
+ */
+@keyframes tile-in {
+  from { opacity: 0; transform: translateY(18px) scale(0.96); }
+  to { opacity: 1; transform: none; }
+}
+.tile-enter {
+  animation: tile-in 0.55s cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
+  animation-delay: calc(var(--intro, 0ms) + var(--i, 0) * 45ms);
+}
+/*
+ * 先頭タイル（ヒーロー = LCP 要素）は透明から始めない。
+ * opacity 0 の間はブラウザが「まだ描画されていない」と数えるため、フェードさせると LCP がアニメーション分遅れる。
+ */
+@keyframes tile-in-solid {
+  from { transform: translateY(18px) scale(0.96); }
+  to { transform: none; }
+}
+.tile-enter.tile-enter-solid { animation-name: tile-in-solid; }
+
+/* イントロ: 0.75 秒見せてから上に抜ける。visibility を落として操作も邪魔しない */
+@keyframes intro-lift {
+  to { transform: translateY(-100%); visibility: hidden; }
+}
+@keyframes intro-mark {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.12) rotate(45deg); }
+  100% { transform: scale(1) rotate(90deg); }
+}
+@keyframes intro-name {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.intro-overlay { animation: intro-lift 0.6s cubic-bezier(0.76, 0, 0.24, 1) 0.75s forwards; }
+.intro-mark { animation: intro-mark 0.9s ease-in-out infinite; }
+.intro-name { animation: intro-name 0.4s ease-out 0.15s backwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-enter, .tile-enter-solid, .intro-mark, .intro-name { animation: none; }
+  .intro-overlay { display: none; }
+}

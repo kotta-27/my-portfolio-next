@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react'
 import { AnimatePresence, motion, type Transition, type Variants } from 'framer-motion'
 import type { View } from '@/types'
 import { useView } from '@/components/ViewContext'
@@ -29,25 +29,32 @@ type Props = {
 
 const spring: Transition = { type: 'spring', stiffness: 380, damping: 34, mass: 0.9 }
 
-/** First paint staggers tiles in after the intro; later view changes animate without delay. */
+/** View changes after the first load animate tiles in/out with framer. */
 const tileVariants: Variants = {
   hidden: { opacity: 0, y: 18, scale: 0.96 },
-  show: (delay: number) => ({ opacity: 1, y: 0, scale: 1, transition: { ...spring, delay } }),
+  show: { opacity: 1, y: 0, scale: 1, transition: spring },
   exit: { opacity: 0, scale: 0.94, transition: spring },
 }
-const STAGGER_S = 0.045
+/** 初回の CSS スタッガーが終わるまでの時間（最大遅延 + 長さ + イントロ分の余裕） */
+const BOOT_MS = 2000
+/** スタッガーの段数の上限（下の方のタイルを待たせすぎない） */
+const MAX_STAGGER = 14
 
 export function BentoGrid({ items, labels }: Props) {
-  const { view, introDone } = useView()
+  const { view } = useView()
   const [expanded, setExpanded] = useState(false)
+  // 初回はサーバー描画のまま表示し、登場は CSS（.tile-enter）に任せる。
+  // それが終わったら、以降の表示切替で入ってくるタイルは framer で登場させる。
   const [booted, setBooted] = useState(false)
-
-  // Once the first staggered reveal has played, later entrances are immediate.
   useEffect(() => {
-    if (!introDone) return
-    const id = setTimeout(() => setBooted(true), 1200)
+    const id = setTimeout(() => setBooted(true), BOOT_MS)
     return () => clearTimeout(id)
-  }, [introDone])
+  }, [])
+  const enter = (i: number) => ({
+    // 先頭（ヒーロー）は LCP を遅らせないよう、フェードなしで着地させる
+    className: `flex w-full ${booted ? '' : `tile-enter ${i === 0 ? 'tile-enter-solid' : ''}`}`,
+    style: { '--i': Math.min(i, MAX_STAGGER) } as CSSProperties,
+  })
 
   const inView = items.filter((item) => item.views.includes(view))
   const overflowCount = view === 'all' ? inView.filter((item) => item.overflow).length : 0
@@ -62,14 +69,13 @@ export function BentoGrid({ items, labels }: Props) {
             layout
             className={`${item.mobileFull ? 'col-span-2 lg:col-span-1' : colSpan[item.span ?? 1]} ${rowSpan[item.rows ?? 1]} flex`}
             variants={tileVariants}
-            custom={booted ? 0 : i * STAGGER_S}
-            initial="hidden"
-            animate={introDone ? 'show' : 'hidden'}
+            initial={booted ? 'hidden' : false}
+            animate="show"
             exit="exit"
             whileHover={item.static ? undefined : { y: -2 }}
             transition={spring}
           >
-            {item.node}
+            <div {...enter(i)}>{item.node}</div>
           </motion.div>
         ))}
 
@@ -79,24 +85,25 @@ export function BentoGrid({ items, labels }: Props) {
             layout
             className="col-span-1 row-span-1 flex"
             variants={tileVariants}
-            custom={booted ? 0 : visible.length * STAGGER_S}
-            initial="hidden"
-            animate={introDone ? 'show' : 'hidden'}
+            initial={booted ? 'hidden' : false}
+            animate="show"
             exit="exit"
             transition={spring}
           >
-            <Tile pad={false}>
-              <button
-                type="button"
-                onClick={() => setExpanded((v) => !v)}
-                className="flex h-full w-full flex-col items-center justify-center gap-[2px] p-4 text-ink transition-colors duration-150 hover:bg-soft"
-              >
-                <span className="text-[30px] font-extrabold leading-none tracking-[-0.04em] tabular-nums">
-                  {expanded ? '−' : `+${overflowCount}`}
-                </span>
-                <span className="text-[11.5px] font-bold text-mute">{expanded ? labels.less : labels.more}</span>
-              </button>
-            </Tile>
+            <div {...enter(visible.length)}>
+              <Tile pad={false}>
+                <button
+                  type="button"
+                  onClick={() => setExpanded((v) => !v)}
+                  className="flex h-full w-full flex-col items-center justify-center gap-[2px] p-4 text-ink transition-colors duration-150 hover:bg-soft"
+                >
+                  <span className="text-[30px] font-extrabold leading-none tracking-[-0.04em] tabular-nums">
+                    {expanded ? '−' : `+${overflowCount}`}
+                  </span>
+                  <span className="text-[11.5px] font-bold text-mute">{expanded ? labels.less : labels.more}</span>
+                </button>
+              </Tile>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

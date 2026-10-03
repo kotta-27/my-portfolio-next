@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { PiArrowUpRight, PiMedalFill } from 'react-icons/pi'
 import type { Lang } from '@/types'
@@ -9,11 +10,12 @@ export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lan
     <Tile pad={false} className="gap-0">
       <Link href={`/projects/${project.slug}?lang=${lang}`} className="group flex h-full flex-col no-underline">
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-soft">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={project.image}
             alt={project.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            fill
+            sizes="(min-width: 1100px) 260px, (min-width: 1024px) 24vw, 50vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
           {project.badge && (
             <span className="absolute left-[10px] top-[10px] inline-flex items-center gap-[3px] rounded-full bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-white">

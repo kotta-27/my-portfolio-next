@@ -1,3 +1,5 @@
+import type { CSSProperties } from 'react'
+import { cookies } from 'next/headers'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { projectsData } from '@/data/projects'
@@ -5,6 +7,7 @@ import { collectOutputs, groupOf, OUTPUT_GROUPS } from '@/lib/outputs'
 import { ViewProvider } from '@/components/ViewContext'
 import { Nav } from '@/components/Nav'
 import { IntroOverlay } from '@/components/IntroOverlay'
+import { INTRO_COOKIE } from '@/lib/intro'
 import { BentoGrid, type BentoItemDef } from '@/components/BentoGrid'
 import { HeroTile } from '@/components/tiles/HeroTile'
 import { NowTile } from '@/components/tiles/NowTile'
@@ -32,6 +35,8 @@ export default async function Page({
   const { lang: rawLang } = await searchParams
   const lang: Lang = rawLang === 'ja' ? 'ja' : 'en'
   const t = ui[lang]
+  // イントロはセッションで 1 回だけ。見たかどうかをサーバーで判断し、2 回目以降は描画しない
+  const showIntro = !(await cookies()).has(INTRO_COOKIE)
 
   const items: BentoItemDef[] = [
     { key: 'hero', views: ['all'], span: 2, rows: 2, node: <HeroTile lang={lang} /> },
@@ -66,8 +71,9 @@ export default async function Page({
 
   return (
     <ViewProvider>
-      <IntroOverlay />
-      <div className="min-h-screen bg-ground font-sans text-ink">
+      {showIntro && <IntroOverlay />}
+      {/* --intro: タイルの登場をイントロが抜けるタイミングまで遅らせる */}
+      <div className="min-h-screen bg-ground font-sans text-ink" style={{ '--intro': showIntro ? '800ms' : '0ms' } as CSSProperties}>
         <Nav lang={lang} />
         <main className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
           <BentoGrid items={items} labels={{ more: t.tiles.moreProjects, less: t.tiles.lessProjects }} />

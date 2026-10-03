@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { JetBrains_Mono, Noto_Sans_JP, Plus_Jakarta_Sans } from 'next/font/google'
+import { JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
 
 const jakarta = Plus_Jakarta_Sans({
@@ -14,11 +14,6 @@ const jetbrains = JetBrains_Mono({
   variable: '--font-jetbrains',
 })
 
-const notoJp = Noto_Sans_JP({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-noto-jp',
-})
 
 export const metadata: Metadata = {
   // OGP 画像などの相対 URL をこのドメイン基準の絶対 URL にする
@@ -50,7 +45,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${jetbrains.variable} ${notoJp.variable}`}>
+    <html lang="en" className={`${jakarta.variable} ${jetbrains.variable}`}>
       <body className="bg-ground antialiased">{children}</body>
     </html>
   )

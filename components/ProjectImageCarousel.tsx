@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { getImageProps } from 'next/image'
 
 export function ProjectImageCarousel({
   images,
@@ -41,7 +42,7 @@ export function ProjectImageCarousel({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <motion.img
             key={images[index]}
-            src={images[index]}
+            {...optimized(images[index], alt)}
             alt={alt}
             initial={{
               opacity: 0.85,
@@ -87,4 +88,13 @@ export function ProjectImageCarousel({
       )}
     </div>
   )
+}
+
+/**
+ * next/image の最適化 URL（縮小・AVIF/WebP）だけを借りる。width/height は付けず、
+ * 表示サイズは今まで通り CSS（max-w/max-h + object-contain）で決める。
+ */
+function optimized(src: string, alt: string): { src: string; srcSet?: string; sizes?: string } {
+  const { props } = getImageProps({ src, alt, width: 1600, height: 1000, sizes: '(min-width: 768px) 900px, 100vw' })
+  return { src: props.src, srcSet: props.srcSet, sizes: props.sizes }
 }

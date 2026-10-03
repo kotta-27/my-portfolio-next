@@ -63,7 +63,7 @@ export async function CareerTile({ lang }: { lang: Lang }) {
                 <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   {item.logo && (
                     <span className="relative top-[3px] h-[18px] w-[18px] shrink-0">
-                      <Image src={item.logo} alt={item[lang].company} fill className="object-contain" />
+                      <Image src={item.logo} alt={item[lang].company} fill sizes="18px" className="object-contain" />
                     </span>
                   )}
                   <span className="text-[13.5px] font-extrabold">{item[lang].company}</span>

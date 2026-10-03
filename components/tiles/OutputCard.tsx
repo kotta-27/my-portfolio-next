@@ -3,6 +3,7 @@ import type { Lang } from '@/types'
 import { fetchOgImage } from '@/lib/fetchOgImage'
 import type { OutputItem } from '@/lib/outputs'
 import { Tile } from '@/components/Tile'
+import { Thumb } from '@/components/Thumb'
 
 /**
  * Output ビューの 1 枚カード。サムネイルを主役にし、hover で下からソースとタイトルが出る。
@@ -22,8 +23,12 @@ export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang 
       >
         {thumbnail ? (
           <div className="relative aspect-[1200/630] w-full overflow-hidden bg-soft">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={thumbnail} alt={item.label[lang]} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]" />
+            <Thumb
+              src={thumbnail}
+              alt={item.label[lang]}
+              sizes="(min-width: 1100px) 260px, (min-width: 1024px) 24vw, 50vw"
+              className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+            />
             <div className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-ink/90 to-ink/0 px-3 pb-3 pt-8 text-white transition-transform duration-200 group-hover:translate-y-0">
               <span className="text-[9.5px] font-extrabold uppercase tracking-[.08em] text-white/70">{item.source}</span>
               <p className="line-clamp-2 text-[12px] font-bold leading-[1.4]">{item.label[lang]}</p>

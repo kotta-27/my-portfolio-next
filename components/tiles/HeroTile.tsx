@@ -62,7 +62,7 @@ export function HeroTile({ lang }: { lang: Lang }) {
           </div>
         </div>
         <div className="relative aspect-[5/6] w-[96px] shrink-0 overflow-hidden rounded-[14px] sm:w-[136px]">
-          <Image src="/mepic2.png" alt="Kota Mizuno" fill priority className="object-cover" />
+          <Image src="/mepic2.png" alt="Kota Mizuno" fill priority sizes="(min-width: 640px) 136px, 96px" className="object-cover" />
         </div>
       </div>
     </Tile>

@@ -8,7 +8,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-jakarta)', 'var(--font-noto-jp)', 'system-ui', 'sans-serif'],
+        // 日本語は Web フォントを配信せず OS の日本語フォントを使う（Noto Sans JP は @font-face だけで CSS が 90KB 超になるため）
+        sans: ['var(--font-jakarta)', '"Hiragino Sans"', '"Hiragino Kaku Gothic ProN"', '"Yu Gothic UI"', '"Yu Gothic"', 'Meiryo', '"Noto Sans JP"', '"Noto Sans CJK JP"', 'system-ui', 'sans-serif'],
         mono: ['var(--font-jetbrains)', 'ui-monospace', 'monospace'],
       },
       colors: {

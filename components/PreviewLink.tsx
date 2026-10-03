@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { LinkCard, type LinkCardData } from '@/components/LinkCard'
+import { Thumb } from '@/components/Thumb'
 
 /** LinkCard that also reveals a large thumbnail + title card on hover / focus. */
 export function PreviewLink({ card }: { card: LinkCardData }) {
@@ -39,8 +40,9 @@ export function PreviewLink({ card }: { card: LinkCardData }) {
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
             {card.thumbnail && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={card.thumbnail} alt="" className="aspect-[1200/630] w-full object-cover" />
+              <span className="relative block aspect-[1200/630] w-full bg-soft">
+                <Thumb src={card.thumbnail} alt="" sizes="300px" className="object-cover" />
+              </span>
             )}
             <span className="block p-3">
               <span className="text-[9.5px] font-extrabold uppercase tracking-[.06em] text-mute">{card.source}</span>

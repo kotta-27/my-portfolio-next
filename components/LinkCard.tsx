@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import type { Lang } from '@/types'
+import { Thumb } from '@/components/Thumb'
 
 export type LinkCardData = {
   url: string
@@ -27,9 +28,8 @@ export function LinkCard({ card, lang: _lang, mobileThumbnail = true }: Props) {
       className="w-full flex items-center rounded-[10px] bg-soft overflow-hidden no-underline hover:bg-ground transition-colors duration-150 group"
     >
       {card.thumbnail && (
-        <div className={`${mobileThumbnail ? 'block' : 'hidden sm:block'} w-[80px] h-[52px] shrink-0 bg-ground overflow-hidden`}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={card.thumbnail} alt="" className="w-full h-full object-cover" />
+        <div className={`${mobileThumbnail ? 'block' : 'hidden sm:block'} relative w-[80px] h-[52px] shrink-0 bg-ground overflow-hidden`}>
+          <Thumb src={card.thumbnail} alt="" sizes="80px" className="object-cover" />
         </div>
       )}
       <div className="flex flex-col gap-[2px] px-[12px] py-[8px] min-w-0">

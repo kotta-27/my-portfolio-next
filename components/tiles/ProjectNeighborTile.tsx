@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { PiArrowLeft, PiArrowRight } from 'react-icons/pi'
 import type { Lang } from '@/types'
@@ -21,11 +22,12 @@ export function ProjectNeighborTile({ project, lang, direction, label }: Props) 
         className={`group flex h-full min-h-[120px] items-stretch no-underline ${direction === 'prev' ? 'flex-row' : 'flex-row-reverse'}`}
       >
         <div className="relative w-[38%] shrink-0 overflow-hidden bg-soft">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={project.image}
             alt={project.name}
-            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+            fill
+            sizes="(min-width: 640px) 200px, 38vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
           />
         </div>
         <div className={`flex flex-1 flex-col justify-between gap-2 p-4 ${direction === 'prev' ? 'items-start' : 'items-end text-right'}`}>
