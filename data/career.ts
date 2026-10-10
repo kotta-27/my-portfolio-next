@@ -56,7 +56,7 @@ export const careerData: CareerItem[] = [
         url: 'https://speakerdeck.com/kotap/xin-zu-dakarakosoiroirotiao-zhan-suruzonojuan',
         label: '新卒だからこそいろいろ挑戦するぞの巻',
         source: 'Talk',
-        thumbnail: null,
+        thumbnail: '/thumb_speakerdeck_talk.jpg',
       },
     ],
   },

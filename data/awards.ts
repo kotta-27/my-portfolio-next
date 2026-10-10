@@ -64,6 +64,7 @@ export const activitiesData: ActivityItem[] = [
       url: 'https://www.shibaura-it.ac.jp/headline/detail/20250730_3727.html',
       en: 'Press release (Shibaura Institute of Technology)',
       ja: 'プレスリリース（芝浦工業大学）',
+      thumbnail: '/thumb_shibaura_press.jpg',
     },
   },
   {
