@@ -319,11 +319,3 @@ export const projectsData: ProjectItem[] = [
     },
   },
 ]
-
-export const techStrip = [
-  'React · Next.js',
-  'Vue.js · TypeScript',
-  'Python · Ruby on Rails',
-  'Qiskit · Quantum',
-  'AWS · Docker',
-]

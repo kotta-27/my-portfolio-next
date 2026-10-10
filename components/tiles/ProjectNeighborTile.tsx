@@ -5,6 +5,7 @@ import type { Lang } from '@/types'
 import type { ProjectItem } from '@/data/projects'
 import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
+import { ArrowBadge } from '@/components/ArrowBadge'
 
 type Props = {
   project: ProjectItem
@@ -36,9 +37,7 @@ export function ProjectNeighborTile({ project, lang, direction, label }: Props) 
             <p className="text-[15px] font-extrabold leading-tight text-ink">{project.name}</p>
             <p className="mt-[3px] line-clamp-2 text-[11.5px] leading-[1.5] text-mute">{project[lang]}</p>
           </div>
-          <span className="flex h-[26px] w-[26px] items-center justify-center rounded-full bg-soft text-mute transition-colors duration-200 group-hover:bg-ink group-hover:text-white">
-            <Arrow className="text-[14px]" />
-          </span>
+          <ArrowBadge icon={Arrow} size="md" />
         </div>
       </Link>
     </Tile>

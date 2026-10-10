@@ -4,6 +4,7 @@ import { PiArrowUpRight, PiMedalFill } from 'react-icons/pi'
 import type { Lang } from '@/types'
 import type { ProjectItem } from '@/data/projects'
 import { Tile } from '@/components/Tile'
+import { ArrowBadge } from '@/components/ArrowBadge'
 
 export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lang }) {
   return (
@@ -29,9 +30,7 @@ export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lan
             <p className="truncate text-[13px] font-extrabold text-ink">{project.name}</p>
             <p className="truncate text-[10.5px] font-semibold text-mute">{project.tags.join(' · ')}</p>
           </div>
-          <span className="flex h-[24px] w-[24px] shrink-0 items-center justify-center rounded-full bg-soft text-mute transition-colors duration-200 group-hover:bg-ink group-hover:text-white">
-            <PiArrowUpRight className="text-[13px]" />
-          </span>
+          <ArrowBadge icon={PiArrowUpRight} size="sm" />
         </div>
       </Link>
     </Tile>

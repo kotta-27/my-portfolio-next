@@ -8,6 +8,7 @@ import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 import { Tag } from '@/components/Tag'
 import { PreviewLink } from '@/components/PreviewLink'
+import { Pill } from '@/components/Pill'
 
 /** 'Sep 2023 – Mar 2024' / 'Apr 2026 —' の開始月を比較用の数値にする */
 function startOf(period: string): number {
@@ -57,7 +58,7 @@ export async function CareerTile({ lang }: { lang: Lang }) {
                   {current ? (
                     <span className="rounded-full bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-white">now</span>
                   ) : (
-                    <span className="rounded-full bg-soft px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-mute">{t.tiles.intern}</span>
+                    <Pill size="xs">{t.tiles.intern}</Pill>
                   )}
                 </div>
                 <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">

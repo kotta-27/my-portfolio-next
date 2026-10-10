@@ -4,6 +4,7 @@ import { ui } from '@/data/ui'
 import { activitiesData, categoryLabel, type SubLinkCard } from '@/data/awards'
 import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
+import { Pill } from '@/components/Pill'
 
 function SubLink({ card, source, lang }: { card: SubLinkCard; source: string; lang: Lang }) {
   return (
@@ -33,9 +34,9 @@ export function AwardsTile({ lang }: { lang: Lang }) {
       <ul className="mt-2 flex flex-col divide-y divide-soft">
         {activitiesData.map((item) => (
           <li key={item.en} className="flex items-start gap-3 py-[9px] last:pb-0">
-            <span className="mt-[2px] w-[68px] shrink-0 rounded-full bg-soft px-[7px] py-[2px] text-center text-[9.5px] font-bold uppercase tracking-[.06em] text-mute">
+            <Pill size="xs" className="mt-[2px] w-[68px] shrink-0 text-center">
               {categoryLabel[item.category][lang]}
-            </span>
+            </Pill>
             <div className="min-w-0 flex-1">
               {item.link ? (
                 <a
