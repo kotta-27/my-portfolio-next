@@ -4,10 +4,14 @@ import { fetchOgImage } from '@/lib/fetchOgImage'
 import type { OutputItem } from '@/lib/outputs'
 import { Tile } from '@/components/Tile'
 import { Thumb } from '@/components/Thumb'
+import { Pill } from '@/components/Pill'
 
 /**
  * Output ビューの 1 枚カード。サムネイルを主役にし、hover で下からソースとタイトルが出る。
  * 画像が取れなかったときだけ最初からテキストで表示する。
+ *
+ * 呼び出し側で <Suspense> に包むこと。ここで直接 await することで、他のタイルを
+ * ブロックせずこのカードだけストリーミングで後から差し込まれる(ページ全体を待たせない)。
  */
 export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang }) {
   const thumbnail = item.thumbnail ?? (await fetchOgImage(item.url))
@@ -36,7 +40,7 @@ export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang 
           </div>
         ) : (
           <div className="flex flex-1 flex-col gap-[6px] px-[14px] py-[12px]">
-            <span className="w-fit rounded-full bg-soft px-[8px] py-[3px] text-[10px] font-extrabold uppercase tracking-[.06em] text-mute">{item.source}</span>
+            <Pill size="sm" className="w-fit font-extrabold">{item.source}</Pill>
             <p className="text-[12.5px] font-bold leading-[1.5] text-ink">{item.label[lang]}</p>
           </div>
         )}

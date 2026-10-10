@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react'
+import { Suspense } from 'react'
 import { cookies } from 'next/headers'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
@@ -11,6 +12,7 @@ import { Nav } from '@/components/Nav'
 import { IntroOverlay } from '@/components/IntroOverlay'
 import { INTRO_COOKIE } from '@/lib/intro'
 import { BentoGrid, type BentoItemDef } from '@/components/BentoGrid'
+import { TileSkeleton } from '@/components/TileSkeleton'
 import { HeroTile } from '@/components/tiles/HeroTile'
 import { NowTile } from '@/components/tiles/NowTile'
 import { ClockTile } from '@/components/tiles/ClockTile'
@@ -55,7 +57,16 @@ export default async function Page({
     { key: 'education', views: ['all'], mobileFull: true, node: <EducationTile lang={lang} /> },
     { key: 'hobbies', views: ['all'], mobileFull: true, node: <HobbiesTile lang={lang} /> },
     { key: 'skills', views: ['all', 'skills'], span: 4, node: <SkillsTile lang={lang} /> },
-    { key: 'career', views: ['all', 'career'], span: 4, node: <CareerTile lang={lang} /> },
+    {
+      key: 'career',
+      views: ['all', 'career'],
+      span: 4,
+      node: (
+        <Suspense fallback={<TileSkeleton className="h-full" />}>
+          <CareerTile lang={lang} />
+        </Suspense>
+      ),
+    },
     { key: 'projects-head', views: ['all', 'projects'], node: <ProjectsHeadTile lang={lang} count={projectsData.length} /> },
     ...projectsData.map((project, i) => ({
       key: `project-${project.slug}`,
@@ -65,14 +76,31 @@ export default async function Page({
     })),
     { key: 'awards', views: ['all'], span: 2, node: <AwardsTile lang={lang} /> },
     // Overview は Output を 1 タイルにまとめ、Output ビューでは 1 件ずつカードにする
-    { key: 'writing', views: ['all'], span: 2, node: <OutputTile lang={lang} /> },
+    {
+      key: 'writing',
+      views: ['all'],
+      span: 2,
+      node: (
+        <Suspense fallback={<TileSkeleton className="h-full" />}>
+          <OutputTile lang={lang} />
+        </Suspense>
+      ),
+    },
     // Output ビューは区分ごとに「帯 → カード」の順
     ...OUTPUT_GROUPS.flatMap((g) => {
       const members = collectOutputs().filter((o) => groupOf(o.kind) === g.id)
       if (members.length === 0) return []
       return [
         { key: `output-band-${g.id}`, views: ['writing' as const], span: 4 as const, static: true, node: <BandRow label={g.label[lang]} count={members.length} /> },
-        ...members.map((item) => ({ key: `output-${item.url}`, views: ['writing' as const], node: <OutputCard item={item} lang={lang} /> })),
+        ...members.map((item) => ({
+          key: `output-${item.url}`,
+          views: ['writing' as const],
+          node: (
+            <Suspense fallback={<TileSkeleton className="h-full" />}>
+              <OutputCard item={item} lang={lang} />
+            </Suspense>
+          ),
+        })),
       ]
     }),
     { key: 'contact', views: ['all'], node: <ContactTile lang={lang} /> },

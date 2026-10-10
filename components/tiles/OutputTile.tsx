@@ -6,7 +6,10 @@ import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 import { PreviewLink } from '@/components/PreviewLink'
 
-/** Overview の Output タイル。記事・インタビュー・ブログ・登壇をまとめて一覧 */
+/**
+ * Overview の Output タイル。記事・インタビュー・ブログ・登壇をまとめて一覧。
+ * 呼び出し側で <Suspense> に包むこと(このタイル単体がストリーミングで後から届く)。
+ */
 export async function OutputTile({ lang }: { lang: Lang }) {
   const t = ui[lang].tiles
   const items = await Promise.all(
