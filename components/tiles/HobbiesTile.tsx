@@ -5,7 +5,7 @@ import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 
 function Chips({ items, accent }: { items: string[]; accent: boolean }) {
-  const tone = accent ? 'bg-teal/10 text-teal' : 'bg-soft text-ink'
+  const tone = accent ? 'bg-teal/8 text-teal' : 'bg-soft text-ink'
   return (
     <div className="flex flex-wrap gap-[6px]">
       {items.map((item) => (

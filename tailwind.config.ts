@@ -17,9 +17,10 @@ const config: Config = {
         ground: '#e5e9ef',
         tile: '#ffffff',
         ink: '#0d1b2a',
-        teal: '#0e8a8c',
-        coral: '#ee6c4d',
-        mute: '#5d6b7a',
+        // teal/coral/mute は元の色相を保ったまま、WCAG AA (4.5:1) を満たすよう少し暗くしてある
+        teal: '#0c7a7c',
+        coral: '#c84a2c',
+        mute: '#4f5c67',
         soft: '#edf1f5',
       },
       keyframes: {
