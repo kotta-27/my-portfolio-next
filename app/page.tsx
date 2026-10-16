@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react'
 import { Suspense } from 'react'
 import { cookies } from 'next/headers'
-import type { Lang } from '@/types'
+import { parseView, type Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { projectsData } from '@/data/projects'
 import { careerData } from '@/data/career'
@@ -13,6 +13,7 @@ import { IntroOverlay } from '@/components/IntroOverlay'
 import { INTRO_COOKIE } from '@/lib/intro'
 import { BentoGrid, type BentoItemDef } from '@/components/BentoGrid'
 import { TileSkeleton } from '@/components/TileSkeleton'
+import { ScrollToHash } from '@/components/ScrollToHash'
 import { HeroTile } from '@/components/tiles/HeroTile'
 import { NowTile } from '@/components/tiles/NowTile'
 import { ClockTile } from '@/components/tiles/ClockTile'
@@ -34,9 +35,9 @@ const VISIBLE_PROJECTS = 7
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ lang?: string }>
+  searchParams: Promise<{ lang?: string; view?: string }>
 }) {
-  const { lang: rawLang } = await searchParams
+  const { lang: rawLang, view: rawView } = await searchParams
   const lang: Lang = rawLang === 'ja' ? 'ja' : 'en'
   const t = ui[lang]
   // イントロはセッションで 1 回だけ。見たかどうかをサーバーで判断し、2 回目以降は描画しない
@@ -107,7 +108,8 @@ export default async function Page({
   ]
 
   return (
-    <ViewProvider>
+    <ViewProvider initial={parseView(rawView)}>
+      <ScrollToHash />
       {showIntro && <IntroOverlay />}
       {/* --intro: タイルの登場をイントロが抜けるタイミングまで遅らせる */}
       <div className="min-h-screen bg-ground font-sans text-ink" style={{ '--intro': showIntro ? '800ms' : '0ms' } as CSSProperties}>

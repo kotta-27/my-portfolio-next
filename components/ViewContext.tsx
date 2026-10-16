@@ -10,8 +10,8 @@ type ViewContextValue = {
 
 const ViewContext = createContext<ViewContextValue | null>(null)
 
-export function ViewProvider({ children }: { children: ReactNode }) {
-  const [view, setView] = useState<View>('all')
+export function ViewProvider({ children, initial = 'all' }: { children: ReactNode; initial?: View }) {
+  const [view, setView] = useState<View>(initial)
   return <ViewContext.Provider value={{ view, setView }}>{children}</ViewContext.Provider>
 }
 

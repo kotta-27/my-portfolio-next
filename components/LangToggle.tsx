@@ -1,7 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import type { Lang } from '@/types'
 
@@ -11,12 +11,15 @@ const LANGS: Lang[] = ['en', 'ja']
 export function LangToggle({ lang }: { lang: Lang }) {
   const router = useRouter()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
   function switchTo(target: Lang) {
     if (target === lang) return
     startTransition(() => {
-      router.push(`${pathname}?lang=${target}`, { scroll: false })
+      const params = new URLSearchParams(searchParams.toString())
+      params.set('lang', target)
+      router.push(`${pathname}?${params.toString()}`, { scroll: false })
     })
   }
 

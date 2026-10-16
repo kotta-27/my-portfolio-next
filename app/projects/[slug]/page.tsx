@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { PiArrowUpRight, PiCheckCircleFill, PiMedalFill, PiQuotes } from 'react-icons/pi'
-import type { Lang } from '@/types'
+import { parseView, type Lang } from '@/types'
 import { projectsData } from '@/data/projects'
 import { ui } from '@/data/ui'
 import { Reveal } from '@/components/Reveal'
@@ -21,11 +21,14 @@ export default async function ProjectPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ lang?: string }>
+  searchParams: Promise<{ lang?: string; from?: string }>
 }) {
   const { slug } = await params
-  const { lang: rawLang } = await searchParams
+  const { lang: rawLang, from: rawFrom } = await searchParams
   const lang: Lang = rawLang === 'ja' ? 'ja' : 'en'
+  const from = parseView(rawFrom)
+  // 来たビューに戻す。Overview から来たならプロジェクト一覧の位置へ
+  const backHref = from === 'all' ? `/?lang=${lang}#projects` : `/?lang=${lang}&view=${from}`
 
   const index = projectsData.findIndex((p) => p.slug === slug)
   if (index === -1) notFound()
@@ -33,6 +36,7 @@ export default async function ProjectPage({
   const prev = projectsData[(index - 1 + projectsData.length) % projectsData.length]
   const next = projectsData[(index + 1) % projectsData.length]
   const t = ui[lang].projectMeta
+  const backLabel = from === 'projects' ? t.backToProjects : t.back
   const meta = project.meta
 
   const facts: { label: string; value: string }[] = [
@@ -46,7 +50,7 @@ export default async function ProjectPage({
     <div className="min-h-screen bg-ground font-sans text-ink">
       <div className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
         <div className="relative z-[200] mb-3 flex items-center justify-between">
-          <BackLink href={`/?lang=${lang}`} label={t.back} />
+          <BackLink href={backHref} label={backLabel} />
           <LangToggle lang={lang} />
         </div>
 
@@ -165,15 +169,15 @@ export default async function ProjectPage({
 
         <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Reveal span={1} index={1}>
-            <ProjectNeighborTile project={prev} lang={lang} direction="prev" label={t.prevProject} />
+            <ProjectNeighborTile project={prev} lang={lang} direction="prev" label={t.prevProject} from={from} />
           </Reveal>
           <Reveal span={1} index={2}>
-            <ProjectNeighborTile project={next} lang={lang} direction="next" label={t.nextProject} />
+            <ProjectNeighborTile project={next} lang={lang} direction="next" label={t.nextProject} from={from} />
           </Reveal>
         </div>
 
         <div className="mt-8 flex justify-center">
-          <BackLink href={`/?lang=${lang}`} label={t.backToProjects} />
+          <BackLink href={backHref} label={backLabel} />
         </div>
       </div>
     </div>

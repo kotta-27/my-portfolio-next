@@ -1,15 +1,15 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { PiArrowUpRight, PiMedalFill } from 'react-icons/pi'
 import type { Lang } from '@/types'
 import type { ProjectItem } from '@/data/projects'
 import { Tile } from '@/components/Tile'
 import { ArrowBadge } from '@/components/ArrowBadge'
+import { ViewLink } from '@/components/ViewLink'
 
 export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lang }) {
   return (
     <Tile pad={false} className="gap-0">
-      <Link href={`/projects/${project.slug}?lang=${lang}`} className="group flex h-full flex-col no-underline">
+      <ViewLink href={`/projects/${project.slug}?lang=${lang}`} className="group flex h-full flex-col no-underline">
         <div className="relative aspect-[16/10] w-full overflow-hidden bg-soft">
           <Image
             src={project.image}
@@ -32,7 +32,7 @@ export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lan
           </div>
           <ArrowBadge icon={PiArrowUpRight} size="sm" />
         </div>
-      </Link>
+      </ViewLink>
     </Tile>
   )
 }

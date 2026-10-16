@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { PiArrowLeft, PiArrowRight } from 'react-icons/pi'
-import type { Lang } from '@/types'
+import type { Lang, View } from '@/types'
 import type { ProjectItem } from '@/data/projects'
 import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
@@ -11,15 +11,16 @@ type Props = {
   project: ProjectItem
   lang: Lang
   direction: 'prev' | 'next'
+  from: View
   label: string
 }
 
-export function ProjectNeighborTile({ project, lang, direction, label }: Props) {
+export function ProjectNeighborTile({ project, lang, direction, label, from }: Props) {
   const Arrow = direction === 'prev' ? PiArrowLeft : PiArrowRight
   return (
     <Tile pad={false}>
       <Link
-        href={`/projects/${project.slug}?lang=${lang}`}
+        href={`/projects/${project.slug}?lang=${lang}&from=${from}`}
         className={`group flex h-full min-h-[120px] items-stretch no-underline ${direction === 'prev' ? 'flex-row' : 'flex-row-reverse'}`}
       >
         <div className="relative w-[38%] shrink-0 overflow-hidden bg-soft">
