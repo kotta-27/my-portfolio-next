@@ -38,7 +38,7 @@ export function collectOutputs(): OutputItem[] {
   for (const a of articles) push({ url: a.href, label: { en: a.en, ja: a.ja }, source: a.source, kind: 'article', thumbnail: null })
 
   for (const c of careerData) {
-    for (const l of c.links) push({ url: l.url, label: { en: l.label, ja: l.label }, source: l.source, kind: kindOf(l.source), thumbnail: l.thumbnail })
+    for (const l of c.links) push({ url: l.url, label: l.label, source: l.source, kind: kindOf(l.source), thumbnail: l.thumbnail })
   }
 
   for (const act of activitiesData) {

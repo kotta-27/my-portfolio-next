@@ -1,6 +1,8 @@
+import type { Lang } from '@/types'
+
 export type CareerLink = {
   url: string
-  label: string
+  label: Record<Lang, string>
   source: string
   thumbnail: string | null
 }
@@ -42,19 +44,28 @@ export const careerData: CareerItem[] = [
     links: [
       {
         url: 'https://path.progate.com/career-stories/studist-intern',
-        label: 'ハッカソンから始まった長期インターン。その出会いが変えた就活観とは？',
+        label: {
+          en: 'From a hackathon to a long-term internship — how that meeting changed my job hunt',
+          ja: 'ハッカソンから始まった長期インターン。その出会いが変えた就活観とは？',
+        },
         source: 'Interview',
         thumbnail: '/thumb_progate.png',
       },
       {
         url: 'https://studist.tech/longterm-intern-mizuno-2779a93df71c',
-        label: 'CREチームで学んだ"ユーザファーストな開発"',
+        label: {
+          en: 'What the CRE team taught me about "user-first development"',
+          ja: 'CREチームで学んだ"ユーザファーストな開発"',
+        },
         source: 'Tech Blog',
         thumbnail: '/thumb_studist_tech.webp',
       },
       {
         url: 'https://speakerdeck.com/kotap/xin-zu-dakarakosoiroirotiao-zhan-suruzonojuan',
-        label: '新卒だからこそいろいろ挑戦するぞの巻',
+        label: {
+          en: 'Trying everything — because I\'m a new grad',
+          ja: '新卒だからこそいろいろ挑戦するぞの巻',
+        },
         source: 'Talk',
         thumbnail: '/thumb_speakerdeck_talk.jpg',
       },
@@ -80,7 +91,10 @@ export const careerData: CareerItem[] = [
     links: [
       {
         url: 'https://www.j-ij.com/ja/recruit/interview-mizuno',
-        label: 'サマーインターンシップ インタビュー',
+        label: {
+          en: 'Summer internship interview',
+          ja: 'サマーインターンシップ インタビュー',
+        },
         source: 'Interview',
         thumbnail: '/thumb_jij_interview.webp',
       },

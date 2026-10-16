@@ -21,7 +21,7 @@ export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lan
           {project.badge && (
             <span className="absolute left-[10px] top-[10px] inline-flex items-center gap-[3px] rounded-full bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-white">
               <PiMedalFill className="text-[11px]" />
-              {project.badge}
+              {project.badge[lang]}
             </span>
           )}
         </div>

@@ -29,7 +29,7 @@ export type ProjectItem = {
   links: ProjectLink[]
   detail: Record<Lang, string>
   meta?: ProjectMeta
-  badge?: string
+  badge?: Record<Lang, string>
 } & Record<Lang, string>
 
 export const projectsData: ProjectItem[] = [
@@ -181,7 +181,7 @@ export const projectsData: ProjectItem[] = [
   {
     name: 'なんJenerator',
     slug: 'nanjenerator',
-    badge: 'ハッカソン最優秀賞',
+    badge: { en: 'Hackathon Best Prize', ja: 'ハッカソン最優秀賞' },
     en: 'AI-powered 2ch-style thread generator using Amazon Bedrock.',
     ja: 'Amazon Bedrockを使ったAI搭載の2ch風スレ生成ツール。',
     detail: {
@@ -229,7 +229,7 @@ export const projectsData: ProjectItem[] = [
         en: ['Full-stack implementation', 'Approval workflow design', 'Discord notification integration'],
         ja: ['フルスタック実装', '承認フロー設計', 'Discord通知連携'],
       },
-      period: { en: '2024-XX（XX日）', ja: '2024-XX（XX日）' },
+      period: { en: '2024-XX (XX days)', ja: '2024-XX（XX日）' },
       role: { en: ['All'], ja: ['すべて'] },
       members: { en: '1 person', ja: '1人' },
     },

@@ -79,7 +79,7 @@ export async function CareerTile({ lang }: { lang: Lang }) {
                 {item.links.length > 0 && (
                   <div className="flex flex-col gap-[6px]">
                     {item.links.map((link) => (
-                      <PreviewLink key={link.url} card={{ url: link.url, label: link.label, source: link.source, thumbnail: link.image }} />
+                      <PreviewLink key={link.url} card={{ url: link.url, label: link.label[lang], source: link.source, thumbnail: link.image }} />
                     ))}
                   </div>
                 )}
