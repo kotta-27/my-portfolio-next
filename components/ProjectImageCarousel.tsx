@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { getImageProps } from 'next/image'
+import { PiArrowsOutSimpleBold } from 'react-icons/pi'
+import { optimizedImage } from '@/lib/optimizedImage'
+import { ImageLightbox } from '@/components/ImageLightbox'
 
 export function ProjectImageCarousel({
   images,
@@ -14,14 +16,16 @@ export function ProjectImageCarousel({
   intervalMs?: number
 }) {
   const [index, setIndex] = useState(0)
+  const [open, setOpen] = useState(false)
 
+  // 全画面表示中は自動送りを止める
   useEffect(() => {
-    if (images.length <= 1) return
+    if (images.length <= 1 || open) return
     const id = setInterval(() => {
       setIndex((i) => (i + 1) % images.length)
     }, intervalMs)
     return () => clearInterval(id)
-  }, [images.length, intervalMs])
+  }, [images.length, intervalMs, open])
 
   return (
     <div
@@ -42,7 +46,7 @@ export function ProjectImageCarousel({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <motion.img
             key={images[index]}
-            {...optimized(images[index], alt)}
+            {...optimizedImage(images[index], alt, { width: 1600, sizes: '(min-width: 768px) 900px, 100vw' })}
             alt={alt}
             initial={{
               opacity: 0.85,
@@ -72,29 +76,37 @@ export function ProjectImageCarousel({
         </AnimatePresence>
       </div>
 
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        aria-label="Open image fullscreen"
+        className="group absolute inset-0 cursor-zoom-in"
+      >
+        <span className="absolute right-3 top-3 grid h-[34px] w-[34px] place-items-center rounded-full bg-ink/70 text-white opacity-70 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 sm:opacity-0">
+          <PiArrowsOutSimpleBold className="text-[15px]" />
+        </span>
+      </button>
+
       {images.length > 1 && (
-        <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-[6px]">
+        <div className="pointer-events-none absolute bottom-3 left-0 right-0 z-10 flex justify-center gap-[6px]">
           {images.map((src, i) => (
             <button
               key={src}
               onClick={() => setIndex(i)}
               aria-label={`Show image ${i + 1}`}
-              className={`h-[6px] rounded-full transition-all duration-300 ${
+              className={`pointer-events-auto h-[6px] rounded-full transition-all duration-300 ${
                 i === index ? 'w-[18px] bg-ink' : 'w-[6px] bg-ground hover:bg-mute'
               }`}
             />
           ))}
         </div>
       )}
+
+      <AnimatePresence>
+        {open && (
+          <ImageLightbox images={images} alt={alt} index={index} onIndexChange={setIndex} onClose={() => setOpen(false)} />
+        )}
+      </AnimatePresence>
     </div>
   )
-}
-
-/**
- * next/image の最適化 URL（縮小・AVIF/WebP）だけを借りる。width/height は付けず、
- * 表示サイズは今まで通り CSS（max-w/max-h + object-contain）で決める。
- */
-function optimized(src: string, alt: string): { src: string; srcSet?: string; sizes?: string } {
-  const { props } = getImageProps({ src, alt, width: 1600, height: 1000, sizes: '(min-width: 768px) 900px, 100vw' })
-  return { src: props.src, srcSet: props.srcSet, sizes: props.sizes }
 }
