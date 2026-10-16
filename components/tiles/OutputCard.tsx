@@ -16,7 +16,7 @@ import { Pill } from '@/components/Pill'
 export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang }) {
   const thumbnail = item.thumbnail ?? (await fetchOgImage(item.url))
   return (
-    <Tile pad={false} className="gap-0">
+    <Tile pad={false} className={`gap-0 ${thumbnail ? '!min-h-0' : ''}`}>
       <a
         href={item.url}
         target="_blank"
