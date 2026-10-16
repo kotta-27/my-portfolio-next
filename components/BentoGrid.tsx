@@ -60,24 +60,31 @@ export function BentoGrid({ items, labels }: Props) {
   const overflowCount = view === 'all' ? inView.filter((item) => item.overflow).length : 0
   const visible = inView.filter((item) => view !== 'all' || expanded || !item.overflow)
 
+  // 展開時は「閉じる」タイルを最後の追加プロジェクトの直後に置く。末尾のままだと余った
+  // プロジェクトが背の高い Awards と同じ行に入り、行の高さまで引き伸ばされるため
+  const lastOverflow = visible.findLastIndex((item) => item.overflow)
+  const togglePos = expanded && lastOverflow >= 0 ? lastOverflow + 1 : visible.length
+
+  const renderItem = (item: BentoItemDef, i: number) => (
+    <motion.div
+      key={item.key}
+      layout
+      className={`${item.mobileFull ? 'col-span-2 lg:col-span-1' : colSpan[item.span ?? 1]} ${rowSpan[item.rows ?? 1]} flex`}
+      variants={tileVariants}
+      initial={booted ? 'hidden' : false}
+      animate="show"
+      exit="exit"
+      whileHover={item.static ? undefined : { y: -2 }}
+      transition={spring}
+    >
+      <div {...enter(i)}>{item.node}</div>
+    </motion.div>
+  )
+
   return (
     <motion.div layout className={view === 'writing' ? gridClassOrdered : gridClass}>
       <AnimatePresence mode="popLayout">
-        {visible.map((item, i) => (
-          <motion.div
-            key={item.key}
-            layout
-            className={`${item.mobileFull ? 'col-span-2 lg:col-span-1' : colSpan[item.span ?? 1]} ${rowSpan[item.rows ?? 1]} flex`}
-            variants={tileVariants}
-            initial={booted ? 'hidden' : false}
-            animate="show"
-            exit="exit"
-            whileHover={item.static ? undefined : { y: -2 }}
-            transition={spring}
-          >
-            <div {...enter(i)}>{item.node}</div>
-          </motion.div>
-        ))}
+        {visible.slice(0, togglePos).map((item, i) => renderItem(item, i))}
 
         {overflowCount > 0 && (
           <motion.div
@@ -90,7 +97,7 @@ export function BentoGrid({ items, labels }: Props) {
             exit="exit"
             transition={spring}
           >
-            <div {...enter(visible.length)}>
+            <div {...enter(togglePos)}>
               <Tile pad={false}>
                 <button
                   type="button"
@@ -106,6 +113,8 @@ export function BentoGrid({ items, labels }: Props) {
             </div>
           </motion.div>
         )}
+
+        {visible.slice(togglePos).map((item, i) => renderItem(item, togglePos + 1 + i))}
       </AnimatePresence>
     </motion.div>
   )
