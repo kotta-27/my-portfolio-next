@@ -103,6 +103,18 @@ export const activitiesData: ActivityItem[] = [
 
 export const articles: ArticleLink[] = [
   {
+    en: 'How images become vectors — why similarity stalls at 0.5 even for the correct image',
+    ja: '画像はどうやってベクトルになるのか — 正解の画像でも類似度が0.5に届かない理由',
+    href: 'https://zenn.dev/kotap/articles/clip-image-embedding',
+    source: 'Zenn',
+  },
+  {
+    en: '"Hosho": 保証 or 補償 or 保障 — "did you mean" in Jev without generation',
+    ja: '「ほしょう」は保証か補償か保障か；Jevで「もしかして」',
+    href: 'https://zenn.dev/kotap/articles/didyoumean-without-generation',
+    source: 'Zenn',
+  },
+  {
     en: 'Defending APIs that let unauthenticated users call an LLM',
     ja: '未認証ユーザに LLM を叩かせる API をどう守るか',
     href: 'https://zenn.dev/studist/articles/unauthenticated-ai-search-defense-in-depth',
