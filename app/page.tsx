@@ -21,6 +21,7 @@ import { EducationTile } from '@/components/tiles/EducationTile'
 import { HobbiesTile } from '@/components/tiles/HobbiesTile'
 import { SkillsTile } from '@/components/tiles/SkillsTile'
 import { CareerTile } from '@/components/tiles/CareerTile'
+import { CareerTimelineTile } from '@/components/tiles/CareerTimelineTile'
 import { AwardsTile } from '@/components/tiles/AwardsTile'
 import { OutputTile } from '@/components/tiles/OutputTile'
 import { OutputCard } from '@/components/tiles/OutputCard'
@@ -60,11 +61,23 @@ export default async function Page({
     { key: 'skills', views: ['all', 'skills'], span: 4, node: <SkillsTile lang={lang} /> },
     {
       key: 'career',
-      views: ['all', 'career'],
+      views: ['all'],
       span: 4,
       node: (
         <Suspense fallback={<TileSkeleton className="h-full" />}>
           <CareerTile lang={lang} />
+        </Suspense>
+      ),
+    },
+    // キャリアタブでは縦のタイムラインで詳しく
+    {
+      key: 'career-timeline',
+      views: ['career'],
+      span: 4,
+      static: true,
+      node: (
+        <Suspense fallback={<TileSkeleton className="h-full" />}>
+          <CareerTimelineTile lang={lang} />
         </Suspense>
       ),
     },
