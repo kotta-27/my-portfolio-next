@@ -11,8 +11,8 @@ export function NowTile({ lang }: { lang: Lang }) {
   return (
     <Tile>
       {/* ロゴは右上の空きスペースにそのまま置く */}
-      <div className="absolute right-3 top-3 h-[40px] w-[40px] sm:right-4 sm:top-4 sm:h-[64px] sm:w-[64px]">
-        <Image src="/studist.png" alt={a.currentCompany} fill sizes="(min-width: 640px) 64px, 40px" className="object-contain" />
+      <div className="absolute right-3 top-3 h-[40px] w-[40px] sm:right-4 sm:top-4 sm:h-[64px] sm:w-[64px] dark:rounded-[10px] dark:bg-white">
+        <Image src="/studist.png" alt={a.currentCompany} fill sizes="(min-width: 640px) 64px, 40px" className="object-contain dark:p-[5px] sm:dark:p-[8px]" />
       </div>
       <TileLabel>{t.currently}</TileLabel>
       <div className="mt-auto">

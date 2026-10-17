@@ -82,7 +82,7 @@ export function ProjectImageCarousel({
         aria-label="Open image fullscreen"
         className="group absolute inset-0 cursor-zoom-in"
       >
-        <span className="absolute right-3 top-3 grid h-[34px] w-[34px] place-items-center rounded-full bg-ink/70 text-white opacity-70 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 sm:opacity-0">
+        <span className="absolute right-3 top-3 grid h-[34px] w-[34px] place-items-center rounded-full bg-night/70 text-white opacity-70 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100 sm:opacity-0">
           <PiArrowsOutSimpleBold className="text-[15px]" />
         </span>
       </button>

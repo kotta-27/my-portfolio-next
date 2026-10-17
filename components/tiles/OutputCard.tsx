@@ -33,7 +33,7 @@ export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang 
               sizes="(min-width: 1100px) 260px, (min-width: 1024px) 24vw, 50vw"
               className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
             />
-            <div className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-ink/90 to-ink/0 px-3 pb-3 pt-8 text-white transition-transform duration-200 group-hover:translate-y-0">
+            <div className="absolute inset-x-0 bottom-0 translate-y-full bg-gradient-to-t from-night/90 to-night/0 px-3 pb-3 pt-8 text-white transition-transform duration-200 group-hover:translate-y-0">
               <span className="text-[9.5px] font-extrabold uppercase tracking-[.08em] text-white/70">{item.source}</span>
               <p className="line-clamp-2 text-[12px] font-bold leading-[1.4]">{item.label[lang]}</p>
             </div>
@@ -44,7 +44,7 @@ export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang 
             <p className="text-[12.5px] font-bold leading-[1.5] text-ink">{item.label[lang]}</p>
           </div>
         )}
-        <span className="absolute right-[10px] top-[10px] flex h-[26px] w-[26px] items-center justify-center rounded-full bg-ink/85 text-white opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100">
+        <span className="absolute right-[10px] top-[10px] flex h-[26px] w-[26px] items-center justify-center rounded-full bg-night/85 text-white opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100">
           <PiArrowUpRight className="text-[14px]" />
         </span>
       </a>

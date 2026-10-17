@@ -14,8 +14,8 @@ type Props = {
 
 const surfaces: Record<Tone, string> = {
   light: 'bg-tile text-ink shadow-[0_1px_0_rgba(13,27,42,0.04)]',
-  dark: 'bg-ink text-white',
-  accent: 'bg-teal text-white',
+  dark: 'bg-slab text-slab-fg',
+  accent: 'bg-teal text-paper',
 }
 
 /** Surface only — grid placement and motion live on the BentoGrid item wrapper. */

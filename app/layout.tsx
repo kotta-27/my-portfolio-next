@@ -39,13 +39,20 @@ export const metadata: Metadata = {
   },
 }
 
+/** 保存した選択 → なければ OS の設定、でダークを決める。描画前に走らせて白いちらつきを防ぐ */
+const THEME_SCRIPT = `try{var t=localStorage.getItem('theme');if(t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.classList.add('dark')}catch(e){}`
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${jakarta.variable} ${jetbrains.variable}`}>
+    // head のスクリプトが描画前に html へ dark クラスを付けるので、その差分は hydration 警告から外す
+    <html lang="en" className={`${jakarta.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="bg-ground antialiased">{children}</body>
     </html>
   )

@@ -41,7 +41,7 @@ export function LangToggle({ lang }: { lang: Lang }) {
             disabled={isPending}
             aria-pressed={active}
             className={`relative rounded-full px-[10px] py-[5px] uppercase tracking-[.06em] transition-colors duration-150 ${
-              active ? 'text-white' : 'text-mute hover:text-ink'
+              active ? 'text-paper' : 'text-mute hover:text-ink'
             }`}
           >
             {active && (

@@ -6,6 +6,7 @@ import { PiCaretDownBold, PiCheckBold } from 'react-icons/pi'
 import type { Lang, View } from '@/types'
 import { ui } from '@/data/ui'
 import { LangToggle } from '@/components/LangToggle'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { useView } from '@/components/ViewContext'
 
 type Props = {
@@ -74,7 +75,7 @@ export function Nav({ lang, counts }: Props) {
             aria-expanded={menuOpen}
             aria-controls="nav-menu"
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-[6px] rounded-full bg-ink px-3 py-[6px] text-[11.5px] font-bold text-white sm:hidden"
+            className="flex items-center gap-[6px] rounded-full bg-ink px-3 py-[6px] text-[11.5px] font-bold text-paper sm:hidden"
           >
             {current.label}
             <PiCaretDownBold className={`text-[10px] transition-transform duration-200 ${menuOpen ? 'rotate-180' : ''}`} />
@@ -90,7 +91,7 @@ export function Nav({ lang, counts }: Props) {
                   onClick={() => choose(item.view)}
                   aria-pressed={active}
                   className={`relative shrink-0 rounded-full px-[10px] py-[5px] transition-colors duration-150 sm:px-3 ${
-                    active ? 'text-white' : 'text-mute hover:text-ink'
+                    active ? 'text-paper' : 'text-mute hover:text-ink'
                   }`}
                 >
                   {active && (
@@ -108,10 +109,11 @@ export function Nav({ lang, counts }: Props) {
           <button
             type="button"
             onClick={goContact}
-            className="hidden rounded-full bg-ink px-4 py-[7px] text-[11.5px] font-bold text-white transition-colors duration-150 hover:bg-teal sm:inline-flex"
+            className="hidden rounded-full bg-ink px-4 py-[7px] text-[11.5px] font-bold text-paper transition-colors duration-150 hover:bg-teal sm:inline-flex"
           >
             Contact
           </button>
+          <ThemeToggle />
           <LangToggle lang={lang} />
         </div>
       </nav>
@@ -122,7 +124,7 @@ export function Nav({ lang, counts }: Props) {
           <>
             <motion.div
               key="nav-backdrop"
-              className="fixed inset-0 z-40 bg-ink/25 sm:hidden"
+              className="fixed inset-0 z-40 bg-night/40 sm:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -134,7 +136,7 @@ export function Nav({ lang, counts }: Props) {
               id="nav-menu"
               role="menu"
               aria-label="Sections"
-              className={`fixed inset-x-3 z-50 rounded-[16px] bg-tile p-[6px] shadow-[0_20px_40px_-12px_rgba(13,27,42,0.35)] sm:hidden ${scrolled ? 'top-[56px]' : 'top-[64px]'}`}
+              className={`fixed inset-x-3 z-50 rounded-[16px] bg-tile p-[6px] shadow-[0_20px_40px_-12px_rgba(13,27,42,0.35)] dark:ring-1 dark:ring-soft sm:hidden ${scrolled ? 'top-[56px]' : 'top-[64px]'}`}
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}

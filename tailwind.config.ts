@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -13,15 +14,23 @@ const config: Config = {
         mono: ['var(--font-jetbrains)', 'ui-monospace', 'monospace'],
       },
       colors: {
-        // Bento palette
-        ground: '#e5e9ef',
-        tile: '#ffffff',
-        ink: '#0d1b2a',
-        // teal/coral/mute は元の色相を保ったまま、WCAG AA (4.5:1) を満たすよう少し暗くしてある
-        teal: '#0c7a7c',
-        coral: '#c84a2c',
-        mute: '#4f5c67',
-        soft: '#edf1f5',
+        // Bento palette。値は globals.css の CSS 変数（ライト / ダークで切り替わる）
+        ground: 'rgb(var(--ground) / <alpha-value>)',
+        tile: 'rgb(var(--tile) / <alpha-value>)',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        teal: 'rgb(var(--teal) / <alpha-value>)',
+        coral: 'rgb(var(--coral) / <alpha-value>)',
+        mute: 'rgb(var(--mute) / <alpha-value>)',
+        soft: 'rgb(var(--soft) / <alpha-value>)',
+        // ink / teal / coral の塗りの上に載せる文字色（ライトは白、ダークは黒寄り）
+        paper: 'rgb(var(--paper) / <alpha-value>)',
+        // 大きな濃色面（Contact・Reflection）。ダークでは反転させず、一段明るい紺にする
+        slab: {
+          DEFAULT: 'rgb(var(--slab) / <alpha-value>)',
+          fg: 'rgb(var(--slab-fg) / <alpha-value>)',
+        },
+        // 写真の上の暗いオーバーレイ用。テーマに関係なく常に暗い
+        night: '#0d1b2a',
       },
       keyframes: {
         fadeInUp: {

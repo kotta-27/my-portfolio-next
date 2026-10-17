@@ -35,7 +35,7 @@ export function HeroTile({ lang }: { lang: Lang }) {
           <Image src="/mepic2.png" alt="Kota Mizuno" fill priority sizes="(min-width: 640px) 136px, 96px" className="object-cover" />
         </div>
         <div className="col-span-2 grid grid-cols-2 gap-2 sm:col-span-1 sm:w-fit">
-          <a href="#projects" className={`${linkBase} bg-ink text-white hover:bg-teal`}>
+          <a href="#projects" className={`${linkBase} bg-ink text-paper hover:bg-teal`}>
             {h.viewWork}
           </a>
           <a

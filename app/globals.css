@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * 配色トークン（RGB チャンネル）。teal/coral/mute は WCAG AA (4.5:1) を満たす値。
+ * ダークでは ink が明るい文字色に、paper（塗りの上の文字色）が暗くなる。
+ */
+:root {
+  --ground: 229 233 239;
+  --tile: 255 255 255;
+  --soft: 237 241 245;
+  --ink: 13 27 42;
+  --mute: 79 92 103;
+  --teal: 12 122 124;
+  --coral: 200 74 44;
+  --paper: 255 255 255; --slab: 13 27 42; --slab-fg: 255 255 255;
+  color-scheme: light;
+}
+html.dark {
+  --ground: 11 17 23;
+  --tile: 21 29 38;
+  --soft: 33 43 54;
+  --ink: 230 237 243;
+  --mute: 152 166 181;
+  --teal: 63 193 189;
+  --coral: 255 143 114;
+  --paper: 11 17 23; --slab: 31 44 60; --slab-fg: 230 237 243;
+  color-scheme: dark;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 70px;

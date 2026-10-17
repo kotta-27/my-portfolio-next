@@ -19,7 +19,7 @@ export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lan
             className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
           />
           {project.badge && (
-            <span className="absolute left-[10px] top-[10px] inline-flex items-center gap-[3px] rounded-full bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-white">
+            <span className="absolute left-[10px] top-[10px] inline-flex items-center gap-[3px] rounded-full bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-paper">
               <PiMedalFill className="text-[11px]" />
               {project.badge[lang]}
             </span>

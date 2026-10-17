@@ -8,6 +8,7 @@ import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 import { Tag } from '@/components/Tag'
 import { LangToggle } from '@/components/LangToggle'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { ProjectImageCarousel } from '@/components/ProjectImageCarousel'
 import { BackLink } from '@/components/BackLink'
 import { ProjectNeighborTile } from '@/components/tiles/ProjectNeighborTile'
@@ -51,7 +52,10 @@ export default async function ProjectPage({
       <div className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
         <div className="relative z-[200] mb-3 flex items-center justify-between">
           <BackLink href={backHref} label={backLabel} />
-          <LangToggle lang={lang} />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <LangToggle lang={lang} />
+          </div>
         </div>
 
         <Reveal span={4}>
@@ -68,7 +72,7 @@ export default async function ProjectPage({
                   <div className="flex items-center gap-2">
                     <TileLabel>{ui[lang].sections.projects}</TileLabel>
                     {project.badge && (
-                      <span className="inline-flex items-center gap-[3px] rounded-full bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-white">
+                      <span className="inline-flex items-center gap-[3px] rounded-full bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-paper">
                         <PiMedalFill className="text-[11px]" />
                         {project.badge[lang]}
                       </span>
@@ -92,7 +96,7 @@ export default async function ProjectPage({
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-[5px] rounded-full bg-ink px-4 py-[9px] text-[11.5px] font-bold text-white no-underline transition-colors duration-150 hover:bg-teal"
+                        className="inline-flex items-center gap-[5px] rounded-full bg-ink px-4 py-[9px] text-[11.5px] font-bold text-paper no-underline transition-colors duration-150 hover:bg-teal"
                       >
                         {link.label}
                         <PiArrowUpRight className="text-[13px]" />
@@ -153,11 +157,11 @@ export default async function ProjectPage({
               )}
 
               {meta?.reflection && (
-                <section className="rounded-[14px] bg-ink p-5 text-white sm:p-6">
-                  <TileLabel className="text-white/55">{t.reflection}</TileLabel>
+                <section className="rounded-[14px] bg-slab p-5 text-slab-fg sm:p-6">
+                  <TileLabel className="text-slab-fg/55">{t.reflection}</TileLabel>
                   <div className="mt-2 flex items-start gap-4">
                     <PiQuotes className="hidden shrink-0 text-[34px] text-teal sm:block" />
-                    <p className="whitespace-pre-line text-[14px] leading-[1.9] text-white/85 sm:text-[15px]">
+                    <p className="whitespace-pre-line text-[14px] leading-[1.9] text-slab-fg/85 sm:text-[15px]">
                       {meta.reflection[lang]}
                     </p>
                   </div>

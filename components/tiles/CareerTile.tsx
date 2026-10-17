@@ -42,15 +42,16 @@ export async function CareerTile({ lang }: { lang: Lang }) {
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className={`font-mono text-[11px] tabular-nums ${current ? 'font-bold text-teal' : 'text-mute'}`}>{companyPeriod(item)}</span>
                   {current ? (
-                    <span className="rounded-full bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-white">now</span>
+                    <span className="rounded-full bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-paper">now</span>
                   ) : (
                     latest.isIntern && <Pill size="xs">{t.tiles.intern}</Pill>
                   )}
                 </div>
                 <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
                   {item.logo && (
-                    <span className="relative top-[3px] h-[18px] w-[18px] shrink-0">
-                      <Image src={item.logo} alt={item.company[lang]} fill sizes="18px" className="object-contain" />
+                    <span className="relative top-[3px] h-[18px] w-[18px] shrink-0 dark:rounded-[4px] dark:bg-white">
+                      {/* 黒いロゴがダークで沈まないよう、ダーク時は白い台に載せる */}
+                      <Image src={item.logo} alt={item.company[lang]} fill sizes="18px" className="object-contain dark:p-[2px]" />
                     </span>
                   )}
                   <span className="text-[13.5px] font-extrabold">{item.company[lang]}</span>

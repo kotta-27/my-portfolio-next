@@ -62,7 +62,7 @@ export async function CareerTimelineTile({ lang }: { lang: Lang }) {
 
                 <div className="flex items-start gap-3">
                   {item.logo && (
-                    <span className="relative h-[40px] w-[40px] shrink-0 overflow-hidden rounded-[10px] border border-soft bg-tile">
+                    <span className="relative h-[40px] w-[40px] shrink-0 overflow-hidden rounded-[10px] border border-soft bg-tile dark:border-transparent dark:bg-white">
                       <Image src={item.logo} alt={item.company[lang]} fill sizes="40px" className="object-contain p-[6px]" />
                     </span>
                   )}
@@ -70,7 +70,7 @@ export async function CareerTimelineTile({ lang }: { lang: Lang }) {
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-[17px] font-extrabold leading-tight tracking-[-0.01em]">{item.company[lang]}</h3>
                       {current ? (
-                        <span className="rounded-full bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-white">now</span>
+                        <span className="rounded-full bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-paper">now</span>
                       ) : (
                         !multiple && latest.isIntern && <Pill size="xs">{t.tiles.intern}</Pill>
                       )}
