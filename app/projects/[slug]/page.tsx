@@ -102,7 +102,7 @@ export default async function ProjectPage({
                 )}
               </header>
 
-              <p className="max-w-[72ch] text-[14px] leading-[1.9] text-ink/80 sm:text-[15px]">{project.detail[lang]}</p>
+              <p className="whitespace-pre-line text-[14px] leading-[1.9] text-ink/80 sm:text-[15px]">{project.detail[lang]}</p>
 
               {facts.length > 0 && (
                 <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -157,7 +157,7 @@ export default async function ProjectPage({
                   <TileLabel className="text-white/55">{t.reflection}</TileLabel>
                   <div className="mt-2 flex items-start gap-4">
                     <PiQuotes className="hidden shrink-0 text-[34px] text-teal sm:block" />
-                    <p className="max-w-[72ch] text-[14px] leading-[1.9] text-white/85 sm:text-[15px]">
+                    <p className="whitespace-pre-line text-[14px] leading-[1.9] text-white/85 sm:text-[15px]">
                       {meta.reflection[lang]}
                     </p>
                   </div>

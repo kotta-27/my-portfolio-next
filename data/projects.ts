@@ -39,8 +39,8 @@ export const projectsData: ProjectItem[] = [
     en: 'A math tool where formulas become graphs you can move — with 77 theorems and interactive figures.',
     ja: '式を入れるとグラフになり、文字を動かすと形が変わる数学ツール。定理77個を図つきで。',
     detail: {
-      en: 'A browser tool for seeing and touching math. Type a formula and it becomes a graph; every letter other than x turns into a slider, so you can watch the shape change. It also breaks a formula into a tree, animates expansions like (a+b)² one step at a time, illustrates trig, derivatives and integrals on the unit circle, and collects 77 theorems across 12 fields with conditions, use cases and examples — 41 of them with figures you can move. Inputs such as x², √x, sin 2x or full-width characters are normalized before parsing.',
-      ja: '「見て、触って、わかる」ための数学ツール。式を入れるとグラフになり、x 以外の文字が自動でスライダーになって形の変化を追える。式を木構造に分解する「構造」、(a+b)² などの展開を1手ずつ再生する「変形」、単位円・微分・積分を図で示す「図形」、12分野77個の定理を条件・使いどころ・例題つきでまとめた「定理」（うち41個は動かせる図つき）を備える。x²・√x・sin 2x・全角文字のような書き方も、解析前に正規化して受け付ける。',
+      en: 'A browser tool for seeing and touching math.\nType a formula and it becomes a graph; every letter other than x turns into a slider, so you can watch the shape change.\nIt also breaks a formula into a tree, animates expansions like (a+b)² one step at a time, illustrates trig, derivatives and integrals on the unit circle, and collects 77 theorems across 12 fields with conditions, use cases and examples — 41 of them with figures you can move.\nInputs such as x², √x, sin 2x or full-width characters are normalized before parsing.',
+      ja: '「見て、触って、わかる」ための数学ツール。\n式を入れるとグラフになり、x 以外の文字が自動でスライダーになって形の変化を追える。\n式を木構造に分解する「構造」、(a+b)² などの展開を1手ずつ再生する「変形」、単位円・微分・積分を図で示す「図形」、12分野77個の定理を条件・使いどころ・例題つきでまとめた「定理」（うち41個は動かせる図つき）を備える。\nx²・√x・sin 2x・全角文字のような書き方も、解析前に正規化して受け付ける。',
     },
     tags: ['React', 'TypeScript', 'math.js'],
     links: [
@@ -75,8 +75,8 @@ export const projectsData: ProjectItem[] = [
     en: 'Group trip planning app with date polling, itinerary, and expense splitting.',
     ja: '日程調整・旅程・割り勘までまとめられる、グループ旅行計画アプリ。',
     detail: {
-      en: 'A web app for planning group trips end to end. Members vote on candidate dates in a Doodle-style poll, build a shared day-by-day itinerary, keep trip notes, and split expenses — all inside one trip, joinable via invite link or code. Built with Next.js, NextAuth, and Drizzle ORM on Neon Postgres.',
-      ja: 'グループ旅行の計画をまとめて管理するWebアプリ。候補日をDoodle形式で投票する日程調整、日別の旅程プラン、メモ、費用の割り勘までを1つのトリップ内で完結。招待リンクやコードでメンバーを招待できる。Next.js + NextAuth + Drizzle ORM(Neon Postgres)で構築。',
+      en: 'A web app for planning group trips end to end.\nMembers vote on candidate dates in a Doodle-style poll, build a shared day-by-day itinerary, keep trip notes, and split expenses — all inside one trip, joinable via invite link or code.\nBuilt with Next.js, NextAuth, and Drizzle ORM on Neon Postgres.',
+      ja: 'グループ旅行の計画をまとめて管理するWebアプリ。\n候補日をDoodle形式で投票する日程調整、日別の旅程プラン、メモ、費用の割り勘までを1つのトリップ内で完結。\n招待リンクやコードでメンバーを招待できる。\nNext.js + NextAuth + Drizzle ORM(Neon Postgres)で構築。',
     },
     tags: ['Next.js', 'PostgreSQL', 'NextAuth'],
     links: [
@@ -109,8 +109,8 @@ export const projectsData: ProjectItem[] = [
     en: 'AI-powered note-taking desktop app with Notion-like blocks, built with Next.js and Electron.',
     ja: 'Notion風ブロックとAIアシストを備えた、Next.js + Electron製のノートデスクトップアプリ。',
     detail: {
-      en: 'A desktop note-taking app that packages a Next.js app inside Electron. Notes are composed of blocks — tables, links, properties — and any selected text can be sent to an AI panel powered by Gemini, which streams answers about the note content back inline. Includes full-text search, an emoji picker, and app settings, all shipped as a native macOS app via electron-builder.',
-      ja: 'Next.jsアプリをElectronに内包したデスクトップ型ノートアプリ。テーブル・リンク・プロパティなどのブロックでノートを構成し、選択したテキストをAIパネルに送るとGemini APIが内容についてストリーミングで回答する。全文検索・絵文字ピッカー・設定画面を備え、electron-builderでmacOSネイティブアプリとして配布。',
+      en: 'A desktop note-taking app that packages a Next.js app inside Electron.\nNotes are composed of blocks — tables, links, properties — and any selected text can be sent to an AI panel powered by Gemini, which streams answers about the note content back inline.\nIncludes full-text search, an emoji picker, and app settings, all shipped as a native macOS app via electron-builder.',
+      ja: 'Next.jsアプリをElectronに内包したデスクトップ型ノートアプリ。\nテーブル・リンク・プロパティなどのブロックでノートを構成し、選択したテキストをAIパネルに送るとGemini APIが内容についてストリーミングで回答する。\n全文検索・絵文字ピッカー・設定画面を備え、electron-builderでmacOSネイティブアプリとして配布。',
     },
     tags: ['Next.js', 'Electron', 'Gemini API'],
     links: [],
@@ -140,8 +140,8 @@ export const projectsData: ProjectItem[] = [
     en: 'Browser-based quantum circuit simulator built with Nuxt.js.',
     ja: 'Nuxt.js で構築したブラウザ上で動く量子回路シミュレータ。',
     detail: {
-      en: 'A browser-based quantum circuit simulator for visually placing and connecting quantum gates to explore quantum computation. Built with Nuxt.js, it simulates qubit state evolution in real time — from ideal probability distributions to noisy sampling — all without any local setup.',
-      ja: '量子ゲートを視覚的に配置・接続し、量子計算を体験できるブラウザ上の量子回路シミュレータ。Nuxt.js で構築し、Qubitの状態変化をリアルタイムにシミュレーション。理想的な確率分布の表示から、ノイズを含めたサンプリングまでをローカル環境不要で量子回路設計を手軽に試せる。',
+      en: 'A browser-based quantum circuit simulator for visually placing and connecting quantum gates to explore quantum computation.\nBuilt with Nuxt.js, it simulates qubit state evolution in real time — from ideal probability distributions to noisy sampling — all without any local setup.',
+      ja: '量子ゲートを視覚的に配置・接続し、量子計算を体験できるブラウザ上の量子回路シミュレータ。\nNuxt.js で構築し、Qubitの状態変化をリアルタイムにシミュレーション。\n理想的な確率分布の表示から、ノイズを含めたサンプリングまでをローカル環境不要で量子回路設計を手軽に試せる。',
     },
     tags: ['Nuxt.js', 'Quantum Computing'],
     links: [
@@ -182,8 +182,8 @@ export const projectsData: ProjectItem[] = [
     en: 'Task management app with habit, routine, and TODO tracking.',
     ja: '習慣・ルーティン・TODOをまとめて管理するタスク管理アプリ。',
     detail: {
-      en: 'A personal productivity app built to unify habits, routines, and TODOs in a single interface — built around the concept of "getting every day on track." Built with Vue.js and Ruby on Rails, backed by PostgreSQL.',
-      ja: '習慣・ルーティン・TODOを一元管理するパーソナル生産性アプリ。ToDoから日課、習慣に繋げ、「毎日を、軌道に乗せる」をコンセプトに作成。Vue.js + Ruby on Rails + PostgreSQL で構築。',
+      en: 'A personal productivity app built to unify habits, routines, and TODOs in a single interface — built around the concept of "getting every day on track."\nBuilt with Vue.js and Ruby on Rails, backed by PostgreSQL.',
+      ja: '習慣・ルーティン・TODOを一元管理するパーソナル生産性アプリ。\nToDoから日課、習慣に繋げ、「毎日を、軌道に乗せる」をコンセプトに作成。\nVue.js + Ruby on Rails + PostgreSQL で構築。',
     },
     tags: ['Vue.js', 'Rails', 'PostgreSQL'],
     links: [
@@ -221,8 +221,8 @@ export const projectsData: ProjectItem[] = [
     en: 'AI-powered 2ch-style thread generator using Amazon Bedrock.',
     ja: 'Amazon Bedrockを使ったAI搭載の2ch風スレ生成ツール。',
     detail: {
-      en: 'Enter any topic and get a fully generated 2ch-style thread complete with OP post and replies, all powered by Amazon Bedrock (Claude). Built at a hackathon, it became unexpectedly popular among friends.',
-      ja: 'テーマを入力すると、Amazon Bedrock（Claude）が2ch風のスレッドをOP・レス込みで丸ごと生成。ハッカソンで制作し、身内に予想外に好評だったツール。',
+      en: 'Enter any topic and get a fully generated 2ch-style thread complete with OP post and replies, all powered by Amazon Bedrock (Claude).\nBuilt at a hackathon, it became unexpectedly popular among friends.',
+      ja: 'テーマを入力すると、Amazon Bedrock（Claude）が2ch風のスレッドをOP・レス込みで丸ごと生成。\nハッカソンで制作し、身内に予想外に好評だったツール。',
     },
     tags: ['React', 'Python', 'AWS Bedrock'],
     links: [],
@@ -248,8 +248,8 @@ export const projectsData: ProjectItem[] = [
     en: 'Purchase request management for research labs with approval workflows.',
     ja: '承認フロー付き、研究室向け購入申請管理システム。',
     detail: {
-      en: 'An internal tool for university research labs to manage equipment and consumable purchase requests. Features a multi-step approval workflow and Discord integration for instant notifications to lab members.',
-      ja: '大学研究室向けの物品購入申請管理システム。承認フローと Discord 通知連携を実装し、研究室内のやり取りを効率化。',
+      en: 'An internal tool for university research labs to manage equipment and consumable purchase requests.\nFeatures a multi-step approval workflow and Discord integration for instant notifications to lab members.',
+      ja: '大学研究室向けの物品購入申請管理システム。\n承認フローと Discord 通知連携を実装し、研究室内のやり取りを効率化。',
     },
     tags: ['React', 'Firebase', 'Discord API'],
     links: [
@@ -276,8 +276,8 @@ export const projectsData: ProjectItem[] = [
     en: 'Educational quantum gate game — learn quantum information by making pizza.',
     ja: 'ピザを作りながら量子情報を学ぶ、量子ゲートの教育ゲーム。',
     detail: {
-      en: 'A browser-based educational game that teaches quantum gate operations through a pizza-making metaphor. Players apply quantum gates (X, H, CNOT…) to qubits to reach target states, making abstract concepts tangible and fun.',
-      ja: 'ピザ作りを通して量子ゲート操作を学ぶブラウザゲーム。X・H・CNOTなどのゲートをクビットに適用して目標状態を目指す。抽象的な概念を直感的に体験できる設計。',
+      en: 'A browser-based educational game that teaches quantum gate operations through a pizza-making metaphor.\nPlayers apply quantum gates (X, H, CNOT…) to qubits to reach target states, making abstract concepts tangible and fun.',
+      ja: 'ピザ作りを通して量子ゲート操作を学ぶブラウザゲーム。\nX・H・CNOTなどのゲートをクビットに適用して目標状態を目指す。\n抽象的な概念を直感的に体験できる設計。',
     },
     tags: ['React', 'Quantum Computing'],
     links: [
@@ -304,8 +304,8 @@ export const projectsData: ProjectItem[] = [
     en: 'AI tool that converts math formula images to LaTeX code using Gemini.',
     ja: 'Gemini APIで数式画像をLaTeXコードに変換するAIツール。',
     detail: {
-      en: 'A web tool that takes a photo or screenshot of a handwritten or printed math formula and returns clean LaTeX code, powered by Google Gemini\'s vision API. Aimed at students and researchers who need to digitize equations quickly.',
-      ja: '手書き・印刷された数式の画像をアップロードすると、Gemini Vision API が LaTeX コードに変換するWebツール。式のデジタル化を素早く行いたい学生・研究者向け。',
+      en: 'A web tool that takes a photo or screenshot of a handwritten or printed math formula and returns clean LaTeX code, powered by Google Gemini\'s vision API.\nAimed at students and researchers who need to digitize equations quickly.',
+      ja: '手書き・印刷された数式の画像をアップロードすると、Gemini Vision API が LaTeX コードに変換するWebツール。\n式のデジタル化を素早く行いたい学生・研究者向け。',
     },
     tags: ['React', 'Gemini API'],
     links: [
@@ -332,8 +332,8 @@ export const projectsData: ProjectItem[] = [
     en: 'Side-scrolling game featuring quantum information technology as in-game elements.',
     ja: '量子情報技術をゲーム要素に組み込んだ横スクロールゲーム。',
     detail: {
-      en: 'A side-scrolling platformer where quantum mechanics aren\'t just a theme — they\'re core mechanics. Superposition, entanglement, and measurement collapse are used as gameplay elements, built in React and deployed on Vercel.',
-      ja: '量子力学をテーマではなくゲームメカニクスそのものに組み込んだ横スクロールアクション。重ね合わせ・もつれ・測定崩壊がプレイ要素として機能する。React + Vercel で構築。',
+      en: 'A side-scrolling platformer where quantum mechanics aren\'t just a theme — they\'re core mechanics.\nSuperposition, entanglement, and measurement collapse are used as gameplay elements, built in React and deployed on Vercel.',
+      ja: '量子力学をテーマではなくゲームメカニクスそのものに組み込んだ横スクロールアクション。\n重ね合わせ・もつれ・測定崩壊がプレイ要素として機能する。\nReact + Vercel で構築。',
     },
     tags: ['React', 'Vercel'],
     links: [
