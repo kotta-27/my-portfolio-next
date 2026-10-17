@@ -34,6 +34,42 @@ export type ProjectItem = {
 
 export const projectsData: ProjectItem[] = [
   {
+    name: 'Mathscope',
+    slug: 'mathscope',
+    en: 'A math tool where formulas become graphs you can move — with 77 theorems and interactive figures.',
+    ja: '式を入れるとグラフになり、文字を動かすと形が変わる数学ツール。定理77個を図つきで。',
+    detail: {
+      en: 'A browser tool for seeing and touching math. Type a formula and it becomes a graph; every letter other than x turns into a slider, so you can watch the shape change. It also breaks a formula into a tree, animates expansions like (a+b)² one step at a time, illustrates trig, derivatives and integrals on the unit circle, and collects 77 theorems across 12 fields with conditions, use cases and examples — 41 of them with figures you can move. Inputs such as x², √x, sin 2x or full-width characters are normalized before parsing.',
+      ja: '「見て、触って、わかる」ための数学ツール。式を入れるとグラフになり、x 以外の文字が自動でスライダーになって形の変化を追える。式を木構造に分解する「構造」、(a+b)² などの展開を1手ずつ再生する「変形」、単位円・微分・積分を図で示す「図形」、12分野77個の定理を条件・使いどころ・例題つきでまとめた「定理」（うち41個は動かせる図つき）を備える。x²・√x・sin 2x・全角文字のような書き方も、解析前に正規化して受け付ける。',
+    },
+    tags: ['React', 'TypeScript', 'math.js'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/mathscope' },
+      { label: 'App', url: 'https://kotta-27.github.io/mathscope/' },
+    ],
+    image: '/mathscope_1.jpg',
+    images: ['/mathscope_1.jpg', '/mathscope_2.jpg', '/mathscope_3.jpg'],
+    meta: {
+      reflection: {
+        en: 'Letting people type formulas the way they write them on paper (x², sin 2x, ax+b) without breaking the parser took a dedicated normalization layer with its own tests. The step-by-step expansion engine was the other hard part: each rewrite has to be small enough to follow, and the changed part highlighted.',
+        ja: 'x²・sin 2x・ax+b のように紙に書く感覚で式を入れても解析できるよう、入力を正規化する層をテストつきで作るのが一番大変でした。もう一つは展開を1手ずつ見せるエンジンで、1手ごとの書き換えを追える細かさにし、変わった箇所を色で示すところに苦労しました。',
+      },
+      contributions: {
+        en: ['Design and implementation', 'Formula normalization and step-by-step expansion engine', '77 theorems and 41 interactive figures'],
+        ja: ['設計と実装', '式の正規化・1手ずつの展開エンジン', '定理77個と動かせる図41個'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['React', 'TypeScript', 'Vite'] },
+        { category: 'Math', items: ['math.js', 'KaTeX'] },
+        { category: 'Test', items: ['Vitest', 'Chrome DevTools Protocol (e2e)'] },
+        { category: 'Infra', items: ['GitHub Pages', 'GitHub Actions'] },
+      ],
+      period: { en: '2026-Oct – ongoing', ja: '2026年10月〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
     name: 'Tabipla',
     slug: 'tabipla',
     en: 'Group trip planning app with date polling, itinerary, and expense splitting.',
