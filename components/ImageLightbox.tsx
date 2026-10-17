@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, type MouseEvent } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, type PanInfo } from 'framer-motion'
 import { PiCaretLeftBold, PiCaretRightBold, PiXBold } from 'react-icons/pi'
@@ -63,6 +63,19 @@ export function ImageLightbox({ images, alt, index, onIndexChange, onClose }: Pr
     if (mounted) closeRef.current?.focus()
   }, [mounted])
 
+  // 画像は枠いっぱい（object-contain）に広げるので、上下左右の余白部分のクリックは背景扱いで閉じる
+  const onImageClick = (e: MouseEvent<HTMLImageElement>) => {
+    e.stopPropagation()
+    const img = e.currentTarget
+    const r = img.getBoundingClientRect()
+    const scale = Math.min(r.width / img.naturalWidth, r.height / img.naturalHeight)
+    const w = img.naturalWidth * scale
+    const h = img.naturalHeight * scale
+    const x = e.clientX - r.left - (r.width - w) / 2
+    const y = e.clientY - r.top - (r.height - h) / 2
+    if (x < 0 || y < 0 || x > w || y > h) onClose()
+  }
+
   const onDragEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x < -SWIPE_PX) go(1)
     else if (info.offset.x > SWIPE_PX) go(-1)
@@ -120,9 +133,9 @@ export function ImageLightbox({ images, alt, index, onIndexChange, onClose }: Pr
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.5}
             onDragEnd={onDragEnd}
-            onClick={(e) => e.stopPropagation()}
+            onClick={onImageClick}
             draggable={false}
-            className="max-h-full max-w-full cursor-grab select-none rounded-[12px] object-contain shadow-[0_32px_64px_-24px_rgba(0,0,0,0.6)] active:cursor-grabbing"
+            className="h-full w-full cursor-grab select-none object-contain active:cursor-grabbing"
           />
         </AnimatePresence>
 
