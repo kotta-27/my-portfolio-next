@@ -22,8 +22,11 @@ export function ContactTile({ lang }: { lang: Lang }) {
       <p className="text-[11.5px] leading-[1.55] text-white/60">{c.body}</p>
       <div className="mt-auto flex flex-col gap-[6px] pt-3">
         <a href="mailto:mizukou27@gmail.com" className={rowClass}>
-          <PiEnvelopeSimple className="text-[15px]" />
-          mizukou27@gmail.com
+          <PiEnvelopeSimple className="shrink-0 text-[15px]" />
+          {/* 狭い 2 列だと 1 語のアドレスが枠からはみ出すので、@ の後で折り返せるようにする */}
+          <span className="min-w-0">
+            mizukou27@<wbr />gmail.com
+          </span>
         </a>
         <a href="https://x.com/Melmol_27" target="_blank" rel="noopener noreferrer" className={rowClass}>
           <FaXTwitter className="text-[13px]" />
