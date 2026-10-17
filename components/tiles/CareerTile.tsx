@@ -6,7 +6,7 @@ import { companyPeriod, isOngoing, loadCareer } from '@/lib/career'
 import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 import { Tag } from '@/components/Tag'
-import { PreviewLink } from '@/components/PreviewLink'
+import { ViewSwitchLink } from '@/components/ViewSwitchLink'
 import { Pill } from '@/components/Pill'
 
 export async function CareerTile({ lang }: { lang: Lang }) {
@@ -17,7 +17,10 @@ export async function CareerTile({ lang }: { lang: Lang }) {
 
   return (
     <Tile id="career" clip={false}>
-      <TileLabel>{t.sections.career}</TileLabel>
+      <div className="flex items-center justify-between gap-3">
+        <TileLabel>{t.sections.career}</TileLabel>
+        <ViewSwitchLink view="career" label={t.tiles.careerMore} />
+      </div>
       <ol className="relative mt-2 grid grid-cols-1 gap-7 lg:grid-cols-4 lg:gap-6">
         {/* 軌道線: スマホは縦、lg では横 */}
         <span aria-hidden className="absolute bottom-0 left-[8px] top-0 w-[2px] rounded-full bg-soft lg:bottom-auto lg:left-0 lg:right-6 lg:top-[8px] lg:h-[2px] lg:w-auto" />
@@ -27,7 +30,6 @@ export async function CareerTile({ lang }: { lang: Lang }) {
         {items.map((item) => {
           const [latest, ...earlier] = item.positions
           const current = isOngoing(latest.period)
-          const links = item.positions.flatMap((p) => p.links)
           return (
             <li key={item.company.en} className="relative pl-8 lg:pl-0 lg:pt-8">
               {/* ノード */}
@@ -66,13 +68,6 @@ export async function CareerTile({ lang }: { lang: Lang }) {
                     <Tag key={tag}>{tag}</Tag>
                   ))}
                 </div>
-                {links.length > 0 && (
-                  <div className="flex flex-col gap-[6px]">
-                    {links.map((link) => (
-                      <PreviewLink key={link.url} card={{ url: link.url, label: link.label[lang], source: link.source, thumbnail: link.image }} />
-                    ))}
-                  </div>
-                )}
               </div>
             </li>
           )

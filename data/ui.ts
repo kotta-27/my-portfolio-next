@@ -26,6 +26,7 @@ type UiStrings = {
     fullTime: string
     careerHighlights: string
     careerLinks: string
+    careerMore: string
     projectsBlurb: string
     moreProjects: string
     lessProjects: string
@@ -82,6 +83,7 @@ export const ui: Record<Lang, UiStrings> = {
       fullTime: 'Full-time',
       careerHighlights: 'What I did',
       careerLinks: 'Related',
+      careerMore: 'See details',
       projectsBlurb: 'Web apps, hackathon builds and research tools.',
       moreProjects: 'more projects',
       lessProjects: 'Show less',
@@ -137,6 +139,7 @@ export const ui: Record<Lang, UiStrings> = {
       fullTime: '正社員',
       careerHighlights: 'やったこと',
       careerLinks: '関連記事',
+      careerMore: '詳しく見る',
       projectsBlurb: 'Webアプリ、ハッカソン作品、研究ツール。',
       moreProjects: 'その他のプロジェクト',
       lessProjects: '閉じる',
