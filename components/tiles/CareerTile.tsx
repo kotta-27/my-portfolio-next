@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { PiCaretRightBold } from 'react-icons/pi'
+import { PiCaretRightBold, PiCaretUpBold } from 'react-icons/pi'
 import type { Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { companyPeriod, isOngoing, loadCareer } from '@/lib/career'
@@ -12,7 +12,7 @@ import { Pill } from '@/components/Pill'
 export async function CareerTile({ lang }: { lang: Lang }) {
   const t = ui[lang]
 
-  // 古い順に左から並べて「流れ」にする
+  // 古い順に並べる。lg では左→右の「流れ」、スマホでは逆順に積んで最新を上にする（Career タブと同じ向き）
   const items = await loadCareer()
 
   return (
@@ -21,9 +21,12 @@ export async function CareerTile({ lang }: { lang: Lang }) {
         <TileLabel>{t.sections.career}</TileLabel>
         <ViewSwitchLink view="career" label={t.tiles.careerMore} />
       </div>
-      <ol className="relative mt-2 grid grid-cols-1 gap-7 lg:grid-cols-4 lg:gap-6">
-        {/* 軌道線: スマホは縦、lg では横 */}
-        <span aria-hidden className="absolute bottom-0 left-[8px] top-0 w-[2px] rounded-full bg-soft lg:bottom-auto lg:left-0 lg:right-6 lg:top-[8px] lg:h-[2px] lg:w-auto" />
+      <ol className="relative mt-2 flex flex-col-reverse gap-7 pt-7 lg:grid lg:grid-cols-4 lg:gap-6 lg:pt-0">
+        {/* 軌道線: スマホは縦（上が新しい）、lg では横（右が新しい） */}
+        <span aria-hidden className="absolute left-0 top-0 w-[18px] text-center text-mute lg:hidden">
+          <PiCaretUpBold className="inline text-[16px]" />
+        </span>
+        <span aria-hidden className="absolute bottom-0 left-[8px] top-[14px] w-[2px] rounded-full bg-soft lg:bottom-auto lg:left-0 lg:right-6 lg:top-[8px] lg:h-[2px] lg:w-auto" />
         <span aria-hidden className="absolute right-0 top-[1px] hidden text-mute lg:block">
           <PiCaretRightBold className="text-[16px]" />
         </span>
