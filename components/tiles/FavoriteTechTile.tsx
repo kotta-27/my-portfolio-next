@@ -26,7 +26,7 @@ export function FavoriteTechTile({ lang }: { lang: Lang }) {
             <li key={tech.icon} className="flex flex-col gap-[6px] rounded-[12px] bg-soft p-4">
               <div className="flex items-center gap-[10px]">
                 <span className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-[10px] bg-tile text-teal">
-                  <Icon className="text-[17px]" />
+                  <Icon aria-hidden className="text-[17px]" />
                 </span>
                 <p className="text-[16px] font-extrabold tracking-[-0.01em]">{typeof tech.name === 'string' ? tech.name : tech.name[lang]}</p>
               </div>
