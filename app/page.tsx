@@ -5,7 +5,6 @@ import { parseView, type Lang } from '@/types'
 import { ui } from '@/data/ui'
 import { projectsData } from '@/data/projects'
 import { careerData } from '@/data/career'
-import { skillsData } from '@/data/skills'
 import { collectOutputs, groupOf, OUTPUT_GROUPS } from '@/lib/outputs'
 import { ViewProvider } from '@/components/ViewContext'
 import { Nav } from '@/components/Nav'
@@ -19,7 +18,7 @@ import { NowTile } from '@/components/tiles/NowTile'
 import { ClockTile } from '@/components/tiles/ClockTile'
 import { EducationTile } from '@/components/tiles/EducationTile'
 import { HobbiesTile } from '@/components/tiles/HobbiesTile'
-import { SkillsTile } from '@/components/tiles/SkillsTile'
+import { FavoriteTechTile } from '@/components/tiles/FavoriteTechTile'
 import { CareerTile } from '@/components/tiles/CareerTile'
 import { CareerTimelineTile } from '@/components/tiles/CareerTimelineTile'
 import { AwardsTile } from '@/components/tiles/AwardsTile'
@@ -46,7 +45,6 @@ export default async function Page({
   // スマホのタブ一覧に出す件数。データ本体をクライアントに送らないようサーバーで数える
   const navCounts = {
     career: careerData.length,
-    skills: skillsData.reduce((sum, g) => sum + g.skills.length, 0),
     projects: projectsData.length,
     writing: collectOutputs().length,
   }
@@ -58,7 +56,7 @@ export default async function Page({
     // 幅の狭い画面では 1 カラムだと詰まるので全幅にする
     { key: 'education', views: ['all'], mobileFull: true, node: <EducationTile lang={lang} /> },
     { key: 'hobbies', views: ['all'], mobileFull: true, node: <HobbiesTile lang={lang} /> },
-    { key: 'skills', views: ['all', 'skills'], span: 4, node: <SkillsTile lang={lang} /> },
+    { key: 'favorite-tech', views: ['all'], span: 4, node: <FavoriteTechTile lang={lang} /> },
     {
       key: 'career',
       views: ['all'],

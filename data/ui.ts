@@ -4,7 +4,6 @@ type UiStrings = {
   sections: {
     about: string
     career: string
-    skills: string
     projects: string
     awards: string
     contact: string
@@ -17,7 +16,7 @@ type UiStrings = {
     education: string
     tokyo: string
     tokyoSub: string
-    skillsYears: string
+    favoriteTech: string
     interests: string
     hobbies: string
     prizes: string
@@ -57,7 +56,6 @@ export const ui: Record<Lang, UiStrings> = {
     sections: {
       about: 'About',
       career: 'Career',
-      skills: 'Skills',
       projects: 'Projects',
       awards: 'Awards',
       contact: 'Contact',
@@ -65,7 +63,6 @@ export const ui: Record<Lang, UiStrings> = {
     nav: [
       { label: 'Overview', view: 'all' },
       { label: 'Career', view: 'career' },
-      { label: 'Skills', view: 'skills' },
       { label: 'Projects', view: 'projects' },
       { label: 'Output', view: 'writing' },
     ],
@@ -74,7 +71,7 @@ export const ui: Record<Lang, UiStrings> = {
       education: 'Education',
       tokyo: 'Tokyo',
       tokyoSub: 'JST',
-      skillsYears: 'Skills · years',
+      favoriteTech: 'Favorite tech',
       interests: 'Interests',
       hobbies: 'Off the clock',
       prizes: 'prizes',
@@ -113,7 +110,6 @@ export const ui: Record<Lang, UiStrings> = {
     sections: {
       about: 'About',
       career: 'Career',
-      skills: 'Skills',
       projects: 'Projects',
       awards: 'Awards',
       contact: 'Contact',
@@ -121,7 +117,6 @@ export const ui: Record<Lang, UiStrings> = {
     nav: [
       { label: 'Overview', view: 'all' },
       { label: 'Career', view: 'career' },
-      { label: 'Skills', view: 'skills' },
       { label: 'Projects', view: 'projects' },
       { label: 'Output', view: 'writing' },
     ],
@@ -130,7 +125,7 @@ export const ui: Record<Lang, UiStrings> = {
       education: '学歴',
       tokyo: '東京',
       tokyoSub: 'JST',
-      skillsYears: 'スキル · 経験年数',
+      favoriteTech: '好きな技術',
       interests: '興味',
       hobbies: '趣味',
       prizes: '受賞',
