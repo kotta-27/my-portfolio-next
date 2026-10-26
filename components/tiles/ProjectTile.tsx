@@ -10,7 +10,8 @@ export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lan
   return (
     <Tile pad={false} className="gap-0">
       <ViewLink href={`/projects/${project.slug}?lang=${lang}`} className="group flex h-full flex-col no-underline">
-        <div className="relative aspect-[16/10] w-full overflow-hidden bg-soft">
+        {/* ブロック同士が横に密着するので、画像は縁まで敷かず内側に収めて隣と区切る */}
+        <div className="relative mx-[10px] mt-[10px] aspect-[16/10] overflow-hidden rounded-[2px] bg-soft">
           <Image
             src={project.image}
             alt={project.name}
@@ -25,7 +26,7 @@ export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lan
             </span>
           )}
         </div>
-        <div className="flex flex-1 items-center justify-between gap-2 px-[14px] py-[10px]">
+        <div className="flex flex-1 items-center justify-between gap-2 px-[14px] pb-[12px] pt-[10px]">
           <div className="min-w-0">
             <p className="truncate text-[13px] font-extrabold text-ink">{project.name}</p>
             <p className="truncate text-[10.5px] font-semibold text-mute">{project.tags.join(' · ')}</p>

@@ -7,7 +7,7 @@ import { IntroSeen } from '@/components/IntroSeen'
 export function IntroOverlay() {
   return (
     <div aria-hidden className="intro-overlay pointer-events-none fixed inset-0 z-[100] flex flex-col items-center justify-center gap-4 bg-ground">
-      <span className="intro-mark block h-[56px] w-[56px] rounded-[14px] bg-teal" />
+      <span className="intro-mark mini-brick h-[34px] w-[56px] rounded-[8px]" />
       <p className="intro-name text-[13px] font-extrabold tracking-[-0.01em] text-ink">Kota Mizuno</p>
       <IntroSeen />
     </div>

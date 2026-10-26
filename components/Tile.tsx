@@ -12,21 +12,26 @@ type Props = {
   className?: string
 }
 
-const surfaces: Record<Tone, string> = {
-  light: 'bg-tile text-ink shadow-[0_1px_0_rgba(13,27,42,0.04)]',
-  dark: 'bg-slab text-slab-fg',
-  accent: 'bg-teal text-paper',
+/** ブロックの色（面・スタッド・側面）は globals.css の .brick--* が持つ。ここでは文字色だけ */
+const tones: Record<Tone, string> = {
+  light: 'brick--light text-ink',
+  dark: 'brick--dark text-slab-fg',
+  accent: 'brick--accent text-paper',
 }
 
-/** Surface only — grid placement and motion live on the BentoGrid item wrapper. */
+/**
+ * レゴブロックに見立てたタイル。外側がスタッド（上の凸）と側面の厚みを描き、内側が面と中身を持つ。
+ * 外側ははみ出す凸を描くので overflow を切らず、切り抜きは内側で行う。
+ * Grid placement and motion live on the BentoGrid item wrapper.
+ */
 export function Tile({ children, id, tone = 'light', pad = true, clip = true, className = '' }: Props) {
-  const surface = surfaces[tone]
   return (
-    <div
-      id={id}
-      className={`relative flex min-h-[120px] w-full flex-col gap-[6px] rounded-[18px] ${clip ? 'overflow-hidden' : ''} ${pad ? 'p-4' : ''} ${surface} ${className}`}
-    >
-      {children}
+    <div id={id} className={`brick ${tones[tone]} w-full`}>
+      <div
+        className={`brick-face relative flex min-h-[120px] w-full flex-1 flex-col gap-[6px] ${clip ? 'overflow-hidden' : ''} ${pad ? 'p-4' : ''} ${className}`}
+      >
+        {children}
+      </div>
     </div>
   )
 }

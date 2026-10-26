@@ -28,16 +28,18 @@ type Props = {
 }
 
 const spring: Transition = { type: 'spring', stiffness: 380, damping: 34, mass: 0.9 }
+/** 上から押し下げられて、少し行き過ぎてはまる */
+const snap: Transition = { type: 'spring', stiffness: 620, damping: 26, mass: 0.7 }
 
-/** View changes after the first load animate tiles in/out with framer. */
+/** View changes after the first load animate tiles in/out with framer: 少し浮いて現れ、下の段へはめ込む／外す */
 const tileVariants: Variants = {
-  hidden: { opacity: 0, y: 18, scale: 0.96 },
-  show: { opacity: 1, y: 0, scale: 1, transition: spring },
-  exit: { opacity: 0, scale: 0.94, transition: spring },
+  hidden: { opacity: 0, y: -14 },
+  show: { opacity: 1, y: 0, transition: snap },
+  exit: { opacity: 0, y: -14, scale: 0.97, transition: spring },
 }
 /** 初回の CSS スタッガーが終わるまでの時間（最大遅延 + 長さ + イントロ分の余裕） */
-const BOOT_MS = 2000
-/** スタッガーの段数の上限（下の方のタイルを待たせすぎない） */
+const BOOT_MS = 2600
+/** 順に現れるタイル数の上限（下の方のタイルを待たせすぎない） */
 const MAX_STAGGER = 14
 
 export function BentoGrid({ items, labels }: Props) {
@@ -50,12 +52,6 @@ export function BentoGrid({ items, labels }: Props) {
     const id = setTimeout(() => setBooted(true), BOOT_MS)
     return () => clearTimeout(id)
   }, [])
-  const enter = (i: number) => ({
-    // 先頭（ヒーロー）は LCP を遅らせないよう、フェードなしで着地させる
-    className: `flex w-full ${booted ? '' : `tile-enter ${i === 0 ? 'tile-enter-solid' : ''}`}`,
-    style: { '--i': Math.min(i, MAX_STAGGER) } as CSSProperties,
-  })
-
   const inView = items.filter((item) => item.views.includes(view))
   const overflowCount = view === 'all' ? inView.filter((item) => item.overflow).length : 0
   const visible = inView.filter((item) => view !== 'all' || expanded || !item.overflow)
@@ -65,19 +61,30 @@ export function BentoGrid({ items, labels }: Props) {
   const lastOverflow = visible.findLastIndex((item) => item.overflow)
   const togglePos = expanded && lastOverflow >= 0 ? lastOverflow + 1 : visible.length
 
+  // 初回の組み上げ: 段ごとに浮かせて隙間を開けたまま順に現れ、出揃ったら一斉に下りてはまる（浮かせ量は AssembleScript が描画前に付ける）
+  const enter = (i: number) => ({
+    // 先頭（ヒーロー）は LCP を遅らせないよう、フェードなしで現れる
+    className: `flex w-full ${booted ? '' : `tile-enter ${i === 0 ? 'tile-enter-solid' : ''}`}`,
+    style: { '--i': Math.min(i, MAX_STAGGER) } as CSSProperties,
+  })
+
   const renderItem = (item: BentoItemDef, i: number) => (
     <motion.div
       key={item.key}
       layout
-      className={`${item.mobileFull ? 'col-span-2 lg:col-span-1' : colSpan[item.span ?? 1]} ${rowSpan[item.rows ?? 1]} flex`}
+      className={`${item.mobileFull ? 'col-span-2 lg:col-span-1' : colSpan[item.span ?? 1]} ${rowSpan[item.rows ?? 1]} relative flex ${item.static ? '' : 'brick-host'}`}
+      // 上の段ほど手前に置き、下の段のスタッドを上のブロックの底に隠す（はまって見える）
+      style={{ zIndex: items.length + 1 - i }}
       variants={tileVariants}
       initial={booted ? 'hidden' : false}
       animate="show"
       exit="exit"
-      whileHover={item.static ? undefined : { y: -2 }}
       transition={spring}
     >
-      <div {...enter(i)}>{item.node}</div>
+      {/* AssembleScript がハイドレーション前に --rise などを書き込むので、style の差分は許容する */}
+      <div {...enter(i)} suppressHydrationWarning>
+        {item.node}
+      </div>
     </motion.div>
   )
 
@@ -90,14 +97,15 @@ export function BentoGrid({ items, labels }: Props) {
           <motion.div
             key="more"
             layout
-            className="col-span-1 row-span-1 flex"
+            className="brick-host relative col-span-1 row-span-1 flex"
+            style={{ zIndex: items.length + 1 - togglePos }}
             variants={tileVariants}
             initial={booted ? 'hidden' : false}
             animate="show"
             exit="exit"
             transition={spring}
           >
-            <div {...enter(togglePos)}>
+            <div {...enter(togglePos)} suppressHydrationWarning>
               <Tile pad={false}>
                 <button
                   type="button"

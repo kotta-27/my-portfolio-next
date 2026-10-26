@@ -37,45 +37,196 @@ html {
 }
 
 /*
- * 初回描画のアニメーション。JS（framer-motion）の読み込みを待たず、HTML が届いた時点で動く。
- * fill-mode は backwards: 終了後は何も上書きしないので、framer の layout/hover アニメと干渉しない。
+ * ===== レゴブロック =====
+ * .brick（外側）: 上辺のスタッドと、下に覗く側面（厚み）。凸がはみ出すので overflow は切らない
+ * .brick-face（内側）: 面。プラスチックの艶（上辺のハイライト）と中身の切り抜き
+ * 色は面の色 --face から、スタッドの光と影・側面を color-mix で作る
  */
-@keyframes tile-in {
-  from { opacity: 0; transform: translateY(18px) scale(0.96); }
-  to { opacity: 1; transform: none; }
+@property --lip {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 5px;
+}
+:root {
+  --stud-pitch: 26px; /* スタッドの間隔。地面のベースプレートと同じ */
+  --stud-h: 6px;
+  /* 段の間に挟む高さ 1 のプレート。見えるのは側面だけ（上面は上のブロックの下） */
+  --plate-h: 6px;
+  --plate-side-h: 2px;
+  --radius-brick: 3px;
+  --shadow-rgb: 13 27 42;
+}
+html.dark { --shadow-rgb: 0 0 0; }
+
+.brick {
+  --side: color-mix(in oklab, var(--face) 80%, rgb(var(--ink)));
+  --stud-light: color-mix(in oklab, var(--face) 45%, white);
+  --stud-mid: color-mix(in oklab, var(--face) 93%, black);
+  --stud-dark: color-mix(in oklab, var(--face) 80%, black);
+  position: relative;
+  display: flex;
+  border-radius: var(--radius-brick);
+  /* 上から: ブロックの側面 → プレートの側面 → プレートの下端 */
+  --plate: color-mix(in oklab, rgb(var(--mute)) 32%, rgb(var(--tile)));
+  --plate-side: color-mix(in oklab, var(--plate) 78%, rgb(var(--ink)));
+  box-shadow:
+    0 var(--lip) 0 0 var(--side),
+    0 calc(var(--lip) + var(--plate-h)) 0 0 var(--plate),
+    0 calc(var(--lip) + var(--plate-h) + var(--plate-side-h)) 0 0 var(--plate-side),
+    /* 積んだ下のブロックに影を落とすと浮いて見えるので、接地のごく短い影だけ */
+    0 calc(var(--lip) + var(--plate-h) + var(--plate-side-h) + 1px) 2px 0 rgb(var(--shadow-rgb) / 0.1);
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+.brick--light { --face: rgb(var(--tile)); }
+.brick--dark { --face: rgb(var(--slab)); }
+.brick--accent { --face: rgb(var(--teal)); }
+html.dark .brick {
+  /* 暗い面は黒を混ぜても地面に沈むので、側面は少し明るい縁で見せる */
+  --side: color-mix(in oklab, var(--face) 70%, rgb(var(--ground)));
+  /* 暗い面同士の境目が埋もれないよう、プレートは明るめのグレーで区切る */
+  --plate: color-mix(in oklab, rgb(var(--mute)) 30%, rgb(var(--tile)));
+  --plate-side: color-mix(in oklab, var(--plate) 70%, black);
+  /* 暗い地面の上では影側が沈んで線に見えるので、スタッドは面より明るく起こす */
+  --stud-light: color-mix(in oklab, var(--face) 62%, white);
+  --stud-mid: color-mix(in oklab, var(--face) 84%, white);
+  --stud-dark: color-mix(in oklab, var(--face) 94%, white);
+}
+
+/*
+ * スタッド: 面と同じ色の円柱を真横から見た形。左上から光が当たる想定で、左寄りにハイライト・右端に影を置く。
+ * background と mask を同じピッチ・同じ repeat: space にして、端に半端な凸を作らずに揃える。
+ */
+.brick::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--radius-brick) + 2px);
+  right: calc(var(--radius-brick) + 2px);
+  top: calc(var(--stud-h) * -1 + 1px);
+  height: var(--stud-h);
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0 5px,
+    var(--stud-mid) 5px,
+    var(--stud-light) 9.5px,
+    var(--face) 12.5px,
+    var(--stud-mid) 17px,
+    var(--stud-dark) 21px,
+    transparent 21px
+  );
+  background-size: var(--stud-pitch) 100%;
+  background-repeat: space no-repeat;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='6'%3E%3Cpath d='M5 6V3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='6'%3E%3Cpath d='M5 6V3a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3z'/%3E%3C/svg%3E");
+  -webkit-mask-size: var(--stud-pitch) 100%;
+  mask-size: var(--stud-pitch) 100%;
+  -webkit-mask-repeat: space no-repeat;
+  mask-repeat: space no-repeat;
+}
+
+.brick-face {
+  border-radius: inherit;
+  background-color: var(--face);
+  /* 成形プラスチックの艶: 上辺に細いハイライト、面の上部にごく薄い光 */
+  background-image: linear-gradient(180deg, rgb(255 255 255 / 0.07), transparent 38%);
+  /* 横に密着した隣のブロックとの継ぎ目: 左右の縁をわずかに落とす */
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.55),
+    inset 1px 0 0 rgb(var(--shadow-rgb) / 0.06),
+    inset -1px 0 0 rgb(var(--shadow-rgb) / 0.1);
+}
+html.dark .brick-face {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.07),
+    inset 1px 0 0 rgb(255 255 255 / 0.04),
+    inset -1px 0 0 rgb(0 0 0 / 0.35);
+}
+
+/* 押すと沈む（hover では動かさない） */
+.brick-host:active .brick { transform: translateY(2px); }
+
+/* 地面: ベースプレートのスタッド列。ブロックと同じピッチで、凹凸だけ薄く見せる */
+.baseplate {
+  background-color: rgb(var(--ground));
+  background-image:
+    radial-gradient(circle at 12px 12px, rgb(255 255 255 / 0.5) 0 3.5px, transparent 4px),
+    radial-gradient(circle at 13px 13.5px, rgb(var(--ink) / 0.045) 0 5px, transparent 5.5px);
+  background-size: var(--stud-pitch) var(--stud-pitch);
+}
+html.dark .baseplate {
+  background-image:
+    radial-gradient(circle at 12px 12px, rgb(255 255 255 / 0.03) 0 3.5px, transparent 4px),
+    radial-gradient(circle at 13px 13.5px, rgb(0 0 0 / 0.28) 0 5px, transparent 5.5px);
+}
+
+/*
+ * 初回描画の組み上げ（浮かせ量 --rise と下り始め --settle は AssembleScript が描画前に付ける）
+ * 1. 各ブロックは段ごとに浮いた位置（上の段ほど高い）に順に現れる。段の間に隙間が開き、下の段のスタッドが見える
+ * 2. 出揃ったら全部が一斉に下り、隙間が閉じてカチッとはまる。一番下の段は動かない
+ * JS（framer-motion）を待たず HTML が届いた時点で動く。fill-mode は backwards なので、終了後は何も上書きしない。
+ */
+@keyframes brick-fade {
+  from { opacity: 0; }
+}
+@keyframes brick-settle {
+  0% { transform: translateY(calc(var(--rise, 0px) * -1)); }
+  78% { transform: translateY(var(--click, 0px)); }
+  100% { transform: none; }
 }
 .tile-enter {
-  animation: tile-in 0.55s cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
-  animation-delay: calc(var(--intro, 0ms) + var(--i, 0) * 45ms);
+  animation:
+    brick-fade 0.3s ease-out backwards,
+    brick-settle 0.5s cubic-bezier(0.45, 0, 0.3, 1) backwards;
+  animation-delay:
+    calc(var(--intro, 0ms) + var(--i, 0) * 35ms),
+    calc(var(--intro, 0ms) + var(--settle, 0ms));
 }
 /*
  * 先頭タイル（ヒーロー = LCP 要素）は透明から始めない。
  * opacity 0 の間はブラウザが「まだ描画されていない」と数えるため、フェードさせると LCP がアニメーション分遅れる。
  */
-@keyframes tile-in-solid {
-  from { transform: translateY(18px) scale(0.96); }
-  to { transform: none; }
+.tile-enter.tile-enter-solid { animation-name: none, brick-settle; }
+
+/* ナビのロゴ・イントロの 2 ポチブロック */
+.mini-brick {
+  --face: rgb(var(--teal));
+  position: relative;
+  display: inline-block;
+  background: var(--face);
+  box-shadow: 0 2px 0 color-mix(in oklab, var(--face) 75%, black);
 }
-.tile-enter.tile-enter-solid { animation-name: tile-in-solid; }
+.mini-brick::before {
+  content: '';
+  position: absolute;
+  inset: auto 18% 100% 18%;
+  height: 28%;
+  background:
+    radial-gradient(closest-side, var(--face) 92%, transparent) left / 38% 100% no-repeat,
+    radial-gradient(closest-side, var(--face) 92%, transparent) right / 38% 100% no-repeat;
+  border-radius: 2px 2px 0 0;
+}
 
 /* イントロ: 0.75 秒見せてから上に抜ける。visibility を落として操作も邪魔しない */
 @keyframes intro-lift {
   to { transform: translateY(-100%); visibility: hidden; }
 }
+/* ブロックが跳ねて着地する。着地の瞬間だけ少し潰れる */
 @keyframes intro-mark {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.12) rotate(45deg); }
-  100% { transform: scale(1) rotate(90deg); }
+  0%, 100% { transform: none; }
+  40% { transform: translateY(-16px); }
+  70% { transform: translateY(0) scale(1.06, 0.9); }
+  82% { transform: translateY(-2px); }
 }
 @keyframes intro-name {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
 .intro-overlay { animation: intro-lift 0.6s cubic-bezier(0.76, 0, 0.24, 1) 0.75s forwards; }
-.intro-mark { animation: intro-mark 0.9s ease-in-out infinite; }
+.intro-mark { animation: intro-mark 0.75s cubic-bezier(0.33, 0, 0.3, 1) infinite; transform-origin: bottom; }
 .intro-name { animation: intro-name 0.4s ease-out 0.15s backwards; }
 
 @media (prefers-reduced-motion: reduce) {
   .tile-enter, .tile-enter-solid, .intro-mark, .intro-name { animation: none; }
+  .brick, .brick-host:active .brick { transition: none; transform: none; }
   .intro-overlay { display: none; }
 }

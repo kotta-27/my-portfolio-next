@@ -13,6 +13,7 @@ import { INTRO_COOKIE } from '@/lib/intro'
 import { BentoGrid, type BentoItemDef } from '@/components/BentoGrid'
 import { TileSkeleton } from '@/components/TileSkeleton'
 import { ScrollToHash } from '@/components/ScrollToHash'
+import { AssembleScript } from '@/components/AssembleScript'
 import { HeroTile } from '@/components/tiles/HeroTile'
 import { NowTile } from '@/components/tiles/NowTile'
 import { ClockTile } from '@/components/tiles/ClockTile'
@@ -123,10 +124,11 @@ export default async function Page({
       <ScrollToHash />
       {showIntro && <IntroOverlay />}
       {/* --intro: タイルの登場をイントロが抜けるタイミングまで遅らせる */}
-      <div className="min-h-screen bg-ground font-sans text-ink" style={{ '--intro': showIntro ? '800ms' : '0ms' } as CSSProperties}>
+      <div className="baseplate min-h-screen font-sans text-ink" style={{ '--intro': showIntro ? '800ms' : '0ms' } as CSSProperties}>
         <Nav lang={lang} counts={navCounts} />
         <main className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
           <BentoGrid items={items} labels={{ more: t.tiles.moreProjects, less: t.tiles.lessProjects }} />
+          <AssembleScript />
           <footer className="flex flex-col items-center gap-3 pt-10">
             <a
               href="?"

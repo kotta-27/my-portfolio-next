@@ -25,8 +25,9 @@ export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang 
         aria-label={`${item.source}: ${item.label[lang]}`}
         className="group relative flex h-full flex-col no-underline"
       >
+        {/* ブロック同士が横に密着するので、画像は縁まで敷かず内側に収めて隣と区切る */}
         {thumbnail ? (
-          <div className="relative aspect-[1200/630] w-full overflow-hidden bg-soft">
+          <div className="relative m-[10px] aspect-[1200/630] overflow-hidden rounded-[2px] bg-soft">
             <Thumb
               src={thumbnail}
               alt={item.label[lang]}
@@ -44,7 +45,7 @@ export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang 
             <p className="text-[12.5px] font-bold leading-[1.5] text-ink">{item.label[lang]}</p>
           </div>
         )}
-        <span className="absolute right-[10px] top-[10px] flex h-[26px] w-[26px] items-center justify-center rounded-full bg-night/85 text-white opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100">
+        <span className="absolute right-[18px] top-[18px] flex h-[26px] w-[26px] items-center justify-center rounded-[3px] bg-night/85 text-white opacity-0 shadow-sm backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100">
           <PiArrowUpRight className="text-[14px]" />
         </span>
       </a>

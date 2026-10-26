@@ -4,6 +4,7 @@ import { parseView, type Lang } from '@/types'
 import { projectsData } from '@/data/projects'
 import { ui } from '@/data/ui'
 import { Reveal } from '@/components/Reveal'
+import { AssembleScript } from '@/components/AssembleScript'
 import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 import { Tag } from '@/components/Tag'
@@ -48,7 +49,7 @@ export default async function ProjectPage({
   ].filter((f): f is { label: string; value: string } => Boolean(f))
 
   return (
-    <div className="min-h-screen bg-ground font-sans text-ink">
+    <div className="baseplate min-h-screen font-sans text-ink">
       <div className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
         <div className="relative z-[200] mb-3 flex items-center justify-between">
           <BackLink href={backHref} label={backLabel} />
@@ -171,7 +172,7 @@ export default async function ProjectPage({
           </Tile>
         </Reveal>
 
-        <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="mt-brick grid grid-cols-1 gap-y-brick sm:grid-cols-2">
           <Reveal span={1} index={1}>
             <ProjectNeighborTile project={prev} lang={lang} direction="prev" label={t.prevProject} from={from} />
           </Reveal>
@@ -179,6 +180,7 @@ export default async function ProjectPage({
             <ProjectNeighborTile project={next} lang={lang} direction="next" label={t.nextProject} from={from} />
           </Reveal>
         </div>
+        <AssembleScript />
 
         <div className="mt-8 flex justify-center">
           <BackLink href={backHref} label={backLabel} />
