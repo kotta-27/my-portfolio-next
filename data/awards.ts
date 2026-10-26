@@ -103,6 +103,12 @@ export const activitiesData: ActivityItem[] = [
 
 export const articles: ArticleLink[] = [
   {
+    en: 'Vector search in Faiss and Lucene, shown in GIFs',
+    ja: 'GIF で見る、Faiss と Lucene のベクトル検索',
+    href: 'https://zenn.dev/kotap/articles/faiss-lucene-ann-gif',
+    source: 'Zenn',
+  },
+  {
     en: 'How images become vectors — why similarity stalls at 0.5 even for the correct image',
     ja: '画像はどうやってベクトルになるのか — 正解の画像でも類似度が0.5に届かない理由',
     href: 'https://zenn.dev/kotap/articles/clip-image-embedding',
