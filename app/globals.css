@@ -187,6 +187,93 @@ html.dark .baseplate {
  */
 .tile-enter.tile-enter-solid { animation-name: none, brick-settle; }
 
+/*
+ * ===== 小さな部品 =====
+ * 押せるもの = スタッド付きのプレート（.plate）、押せないラベル = スタッドなしのタイル（.flat-tile）、
+ * 点 = 真上から見たスタッド（.stud-dot）。どれも面の色 --pface から光・影・厚みを作る。
+ */
+.plate {
+  --pface: rgb(var(--soft));
+  position: relative;
+  border-radius: 3px;
+  box-shadow: 0 3px 0 color-mix(in oklab, var(--pface) 72%, rgb(var(--ink)));
+  transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.12s ease, transform 0.12s ease;
+}
+.plate--dark { --pface: rgb(var(--ink)); }
+.plate--teal { --pface: rgb(var(--teal)); }
+.plate--tile { --pface: rgb(var(--tile)); }
+html.dark .plate--dark { box-shadow: 0 3px 0 color-mix(in oklab, var(--pface) 62%, black); }
+/* 上辺のスタッド（ブロックより小さいピッチ） */
+.plate::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  top: -4px;
+  height: 4px;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0 2.5px,
+    color-mix(in oklab, var(--pface) 85%, rgb(var(--ink))) 2.5px,
+    color-mix(in oklab, var(--pface) 55%, white) 5px,
+    var(--pface) 7.5px,
+    color-mix(in oklab, var(--pface) 78%, rgb(var(--ink))) 11.5px,
+    transparent 11.5px
+  );
+  background-size: 14px 100%;
+  background-repeat: space no-repeat;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='4'%3E%3Cpath d='M2.5 4V2a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v2z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='4'%3E%3Cpath d='M2.5 4V2a2 2 0 0 1 2-2h5a2 2 0 0 1 2 2v2z'/%3E%3C/svg%3E");
+  -webkit-mask-size: 14px 100%;
+  mask-size: 14px 100%;
+  -webkit-mask-repeat: space no-repeat;
+  mask-repeat: space no-repeat;
+}
+html.dark .plate--dark::before {
+  background-image: linear-gradient(
+    90deg,
+    transparent 0 2.5px,
+    color-mix(in oklab, var(--pface) 70%, black) 2.5px,
+    color-mix(in oklab, var(--pface) 70%, white) 5px,
+    var(--pface) 7.5px,
+    color-mix(in oklab, var(--pface) 80%, black) 11.5px,
+    transparent 11.5px
+  );
+}
+/* 押すと厚みのぶん沈む（hover では動かさない） */
+.plate:active { transform: translateY(2px); box-shadow: 0 1px 0 color-mix(in oklab, var(--pface) 72%, rgb(var(--ink))); }
+
+/* スタッドのない平らなタイル。下端の影だけで厚みを出す */
+.flat-tile {
+  border-radius: 2px;
+  box-shadow: 0 2px 0 rgb(var(--shadow-rgb) / 0.14);
+}
+html.dark .flat-tile { box-shadow: 0 2px 0 rgb(0 0 0 / 0.45); }
+
+/* 真上から見たスタッド。左上に光、縁に影 */
+.stud-dot {
+  --sface: rgb(var(--tile));
+  border-radius: 9999px;
+  background: radial-gradient(
+    circle at 38% 32%,
+    color-mix(in oklab, var(--sface) 40%, white) 0 20%,
+    var(--sface) 26% 56%,
+    color-mix(in oklab, var(--sface) 86%, rgb(var(--ink))) 64%
+  );
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in oklab, var(--sface) 72%, rgb(var(--ink))),
+    0 2px 0 color-mix(in oklab, var(--sface) 75%, rgb(var(--ink)));
+}
+html.dark .stud-dot { --sface: rgb(var(--soft)); }
+.stud-dot--on { --sface: rgb(var(--teal)); }
+html.dark .stud-dot--on {
+  --sface: rgb(var(--teal));
+  box-shadow:
+    inset 0 0 0 1.5px color-mix(in oklab, var(--sface) 70%, black),
+    0 2px 0 color-mix(in oklab, var(--sface) 60%, black);
+}
+
 /* ナビのロゴ・イントロの 2 ポチブロック */
 .mini-brick {
   --face: rgb(var(--teal));

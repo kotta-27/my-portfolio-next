@@ -15,7 +15,7 @@ export function ArrowBadge({
   const { box, icon } = SIZE[size]
   return (
     <span
-      className={`flex shrink-0 items-center justify-center rounded-full bg-soft text-mute transition-colors duration-200 group-hover:bg-ink group-hover:text-paper ${box}`}
+      className={`flex shrink-0 items-center justify-center rounded-[3px] bg-soft text-mute transition-colors duration-200 group-hover:bg-ink group-hover:text-paper ${box}`}
     >
       <Icon className={icon} />
     </span>

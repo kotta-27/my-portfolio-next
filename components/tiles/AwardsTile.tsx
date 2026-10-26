@@ -13,7 +13,7 @@ function SubLink({ card, source, lang }: { card: SubLinkCard; source: string; la
       target="_blank"
       rel="noopener noreferrer"
       title={card[lang]}
-      className="inline-flex items-center gap-[3px] rounded-full bg-soft px-[8px] py-[2px] text-[10.5px] font-bold text-mute no-underline hover:bg-ground hover:text-ink transition-colors duration-150"
+      className="flat-tile inline-flex items-center gap-[3px] bg-soft px-[8px] py-[2px] text-[10.5px] font-bold text-mute no-underline hover:bg-ground hover:text-ink transition-colors duration-150"
     >
       {source} ↗
     </a>
@@ -26,7 +26,7 @@ export function AwardsTile({ lang }: { lang: Lang }) {
 
   return (
     <Tile id="awards">
-      <TileLabel>{t.sections.awards}</TileLabel>
+      <TileLabel step={5} qty={activitiesData.length}>{t.sections.awards}</TileLabel>
       <div className="flex items-baseline gap-2">
         <span className="text-[44px] font-extrabold leading-none tracking-[-0.04em] tabular-nums">{prizeCount}</span>
         <span className="text-[12px] font-bold text-mute">{t.tiles.prizes}</span>

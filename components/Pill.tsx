@@ -14,7 +14,7 @@ export function Pill({
 }) {
   return (
     <span
-      className={`rounded-full bg-soft font-bold uppercase tracking-[.06em] text-mute ${SIZE[size]} ${className}`}
+      className={`flat-tile bg-soft font-bold uppercase tracking-[.06em] text-mute ${SIZE[size]} ${className}`}
     >
       {children}
     </span>

@@ -17,7 +17,7 @@ export async function OutputTile({ lang }: { lang: Lang }) {
   )
   return (
     <Tile id="writing" clip={false}>
-      <TileLabel>{t.writing}</TileLabel>
+      <TileLabel step={6} qty={items.length}>{t.writing}</TileLabel>
       <div className="mt-1 flex flex-col gap-[6px]">
         {items.map((o) => (
           <PreviewLink key={o.url} card={{ url: o.url, label: o.label[lang], source: o.source, thumbnail: o.thumbnail }} />

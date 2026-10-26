@@ -9,7 +9,7 @@ function Chips({ items, accent }: { items: string[]; accent: boolean }) {
   return (
     <div className="flex flex-wrap gap-[6px]">
       {items.map((item) => (
-        <span key={item} className={`rounded-full px-[10px] py-[4px] text-[11.5px] font-bold ${tone}`}>
+        <span key={item} className={`flat-tile px-[10px] py-[4px] text-[11.5px] font-bold ${tone}`}>
           {item}
         </span>
       ))}

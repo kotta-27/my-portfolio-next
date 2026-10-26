@@ -14,8 +14,12 @@ export function ContactTile({ lang }: { lang: Lang }) {
   const c = contact[lang]
   return (
     <Tile id="contact" tone="dark">
-      <TileLabel className="text-slab-fg/55">{t.sections.contact}</TileLabel>
-      <span className="absolute right-4 top-4 grid h-[30px] w-[30px] place-items-center rounded-full bg-teal text-paper">
+      <span className="text-slab-fg/70">
+        <TileLabel step={7} className="text-slab-fg/55">
+          {t.sections.contact}
+        </TileLabel>
+      </span>
+      <span className="absolute right-4 top-4 grid h-[30px] w-[30px] place-items-center rounded-[3px] bg-teal text-paper">
         <PiArrowUpRight className="text-[15px]" />
       </span>
       <p className="mt-2 text-[20px] font-extrabold leading-tight tracking-[-0.02em]">{c.title}</p>

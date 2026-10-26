@@ -14,7 +14,7 @@ export function ViewSwitchLink({ view, label }: { view: View; label: string }) {
         setView(view)
         window.scrollTo({ top: 0, behavior: 'smooth' })
       }}
-      className="group inline-flex items-center gap-[5px] rounded-full bg-soft px-[12px] py-[6px] text-[11.5px] font-bold text-ink transition-colors duration-150 hover:bg-ink hover:text-paper"
+      className="plate group inline-flex items-center gap-[5px] bg-soft px-[12px] py-[6px] text-[11.5px] font-bold text-ink"
     >
       {label}
       <PiArrowRightBold className="text-[11px] transition-transform duration-200 group-hover:translate-x-[2px]" />

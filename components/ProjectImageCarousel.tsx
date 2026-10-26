@@ -94,9 +94,7 @@ export function ProjectImageCarousel({
               key={src}
               onClick={() => setIndex(i)}
               aria-label={`Show image ${i + 1}`}
-              className={`pointer-events-auto h-[6px] rounded-full transition-all duration-300 ${
-                i === index ? 'w-[18px] bg-ink' : 'w-[6px] bg-ground hover:bg-mute'
-              }`}
+              className={`stud-dot pointer-events-auto h-[10px] w-[10px] transition-transform duration-200 ${i === index ? 'stud-dot--on' : 'hover:scale-110'}`}
             />
           ))}
         </div>

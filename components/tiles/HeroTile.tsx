@@ -6,13 +6,13 @@ import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 
 const linkBase =
-  'inline-flex items-center justify-center gap-[6px] whitespace-nowrap rounded-full px-[14px] py-[7px] text-[11.5px] font-bold no-underline transition-colors duration-150'
+  'plate inline-flex items-center justify-center gap-[6px] whitespace-nowrap px-[14px] py-[7px] text-[11.5px] font-bold no-underline'
 
 export function HeroTile({ lang }: { lang: Lang }) {
   const h = hero[lang]
   return (
     <Tile id="hero" className="p-5 sm:p-6">
-      <TileLabel>{h.roleTag}</TileLabel>
+      <TileLabel step={1}>{h.roleTag}</TileLabel>
       {/* スマホ: 文章 | 画像 の下にボタンを全幅で。sm 以上: ボタンは文章の下、画像は右に縦通し */}
       <div className="mt-5 grid flex-1 grid-cols-[minmax(0,1fr)_auto] items-end gap-x-4 gap-y-4 sm:grid-rows-[1fr_auto]">
         <div className="min-w-0 self-end">
@@ -34,15 +34,15 @@ export function HeroTile({ lang }: { lang: Lang }) {
         <div className="relative aspect-[5/6] w-[96px] shrink-0 self-end overflow-hidden rounded-[14px] sm:row-span-2 sm:w-[136px]">
           <Image src="/mepic2.png" alt="Kota Mizuno" fill priority sizes="(min-width: 640px) 136px, 96px" className="object-cover" />
         </div>
-        <div className="col-span-2 grid grid-cols-2 gap-2 sm:col-span-1 sm:w-fit">
-          <a href="#projects" className={`${linkBase} bg-ink text-paper hover:bg-teal`}>
+        <div className="col-span-2 grid grid-cols-2 gap-x-2 gap-y-[10px] pt-1 sm:col-span-1 sm:w-fit">
+          <a href="#projects" className={`${linkBase} plate--dark bg-ink text-paper hover:bg-teal`}>
             {h.viewWork}
           </a>
           <a
             href="https://github.com/kotta-27"
             target="_blank"
             rel="noopener noreferrer"
-            className={`${linkBase} bg-soft text-ink hover:bg-ground`}
+            className={`${linkBase} bg-soft text-ink`}
           >
             <FaGithub className="shrink-0 text-[14px]" />
             kotta-27
@@ -51,7 +51,7 @@ export function HeroTile({ lang }: { lang: Lang }) {
             href="https://x.com/Melmol_27"
             target="_blank"
             rel="noopener noreferrer"
-            className={`${linkBase} bg-soft text-ink hover:bg-ground`}
+            className={`${linkBase} bg-soft text-ink`}
           >
             <FaXTwitter className="shrink-0 text-[13px]" />
             @Melmol_27
@@ -60,7 +60,7 @@ export function HeroTile({ lang }: { lang: Lang }) {
             href="https://youtrust.jp/users/356b120bc6d76c20101a4096b1896d95"
             target="_blank"
             rel="noopener noreferrer"
-            className={`${linkBase} bg-soft text-ink hover:bg-ground`}
+            className={`${linkBase} bg-soft text-ink`}
           >
             YouTrust
           </a>

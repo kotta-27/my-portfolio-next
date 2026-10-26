@@ -37,7 +37,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
       title={dark ? 'Light' : 'Dark'}
-      className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-full bg-tile text-mute transition-colors duration-150 hover:text-ink"
+      className="plate plate--tile grid h-[34px] w-[34px] shrink-0 place-items-center bg-tile text-mute hover:text-ink"
     >
       {/* 判定前（SSR 直後）は何も出さず、ちらつきを避ける */}
       {dark === null ? null : dark ? <PiSunBold className="text-[16px]" /> : <PiMoonBold className="text-[15px]" />}

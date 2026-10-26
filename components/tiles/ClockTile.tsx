@@ -23,7 +23,7 @@ export function ClockTile({ label, sub }: { label: string; sub: string }) {
   return (
     <Tile>
       <TileLabel>{label}</TileLabel>
-      <span className="absolute right-4 top-4 h-2 w-2 rounded-full bg-teal shadow-[0_0_0_4px_rgba(14,138,140,0.15)]" />
+      <span aria-hidden className="stud-dot stud-dot--on absolute right-4 top-4 h-[12px] w-[12px]" />
       <p className="mt-auto font-mono text-[28px] font-medium leading-none tracking-[-0.02em] tabular-nums">
         {time}
       </p>

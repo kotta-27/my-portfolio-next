@@ -47,9 +47,7 @@ export async function CareerTimelineTile({ lang }: { lang: Lang }) {
               {/* 軌道: ノードと次の社への線 */}
               <div className="relative flex justify-center">
                 <span
-                  className={`relative z-10 mt-[1px] h-[18px] w-[18px] shrink-0 rounded-full border-2 ${
-                    current ? 'border-teal bg-teal shadow-[0_0_0_5px_rgba(12,122,124,0.18)]' : 'border-mute/60 bg-tile'
-                  }`}
+                  className={`stud-dot relative z-10 mt-[1px] h-[18px] w-[18px] shrink-0 ${current ? 'stud-dot--on' : ''}`}
                 />
                 {!last && <span aria-hidden className="absolute bottom-0 top-[20px] w-[2px] rounded-full bg-soft" />}
               </div>
@@ -70,7 +68,7 @@ export async function CareerTimelineTile({ lang }: { lang: Lang }) {
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-[17px] font-extrabold leading-tight tracking-[-0.01em]">{item.company[lang]}</h3>
                       {current ? (
-                        <span className="rounded-full bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-paper">now</span>
+                        <span className="flat-tile bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-paper">now</span>
                       ) : (
                         !multiple && latest.isIntern && <Pill size="xs">{t.tiles.intern}</Pill>
                       )}

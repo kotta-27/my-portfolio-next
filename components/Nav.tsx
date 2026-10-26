@@ -63,7 +63,7 @@ export function Nav({ lang, counts }: Props) {
         }`}
       >
         <a href="?" className="flex items-center gap-[8px] text-[14px] font-extrabold tracking-[-0.01em] text-ink no-underline">
-          <span className="h-[10px] w-[10px] rounded-[3px] bg-teal" />
+          <span className="mini-brick mt-[3px] h-[9px] w-[15px] rounded-[2.5px]" />
           <span>Kota Mizuno</span>
         </a>
         <div className="flex min-w-0 items-center gap-[10px]">
@@ -75,13 +75,13 @@ export function Nav({ lang, counts }: Props) {
             aria-expanded={menuOpen}
             aria-controls="nav-menu"
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-[6px] rounded-full bg-ink px-3 py-[6px] text-[11.5px] font-bold text-paper sm:hidden"
+            className="plate plate--dark flex items-center gap-[6px] bg-ink px-3 py-[6px] text-[11.5px] font-bold text-paper sm:hidden"
           >
             {current.label}
             <PiCaretDownBold className={`text-[10px] transition-transform duration-200 ${menuOpen ? 'rotate-180' : ''}`} />
           </button>
           {/* PC: 今まで通りのタブ */}
-          <div className="hidden items-center gap-[2px] rounded-full bg-tile p-[3px] text-[11.5px] font-bold sm:flex">
+          <div className="plate plate--tile hidden items-center gap-[2px] bg-tile p-[3px] text-[11.5px] font-bold sm:flex">
             {t.nav.map((item) => {
               const active = view === item.view
               return (
@@ -90,18 +90,19 @@ export function Nav({ lang, counts }: Props) {
                   type="button"
                   onClick={() => choose(item.view)}
                   aria-pressed={active}
-                  className={`relative shrink-0 rounded-full px-[10px] py-[5px] transition-colors duration-150 sm:px-3 ${
+                  className={`relative shrink-0 rounded-[2px] px-[10px] py-[5px] transition-colors duration-150 sm:px-3 ${
                     active ? 'text-paper' : 'text-mute hover:text-ink'
                   }`}
                 >
                   {active && (
                     <motion.span
                       layoutId="nav-pill"
-                      className="absolute inset-0 rounded-full bg-ink"
+                      // 選んでいるタブはプレートの上に乗ったブロック: 少し浮かせ、厚みを見せる
+                      className="absolute inset-0 -translate-y-[3px] rounded-[2px] bg-ink shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.9)]"
                       transition={{ type: 'spring', stiffness: 420, damping: 36 }}
                     />
                   )}
-                  <span className="relative z-10">{item.label}</span>
+                  <span className={`relative z-10 inline-block ${active ? '-translate-y-[3px]' : ''}`}>{item.label}</span>
                 </button>
               )
             })}
@@ -109,7 +110,7 @@ export function Nav({ lang, counts }: Props) {
           <button
             type="button"
             onClick={goContact}
-            className="hidden rounded-full bg-ink px-4 py-[7px] text-[11.5px] font-bold text-paper transition-colors duration-150 hover:bg-teal sm:inline-flex"
+            className="plate plate--dark hidden bg-ink px-4 py-[7px] text-[11.5px] font-bold text-paper hover:bg-teal sm:inline-flex"
           >
             Contact
           </button>

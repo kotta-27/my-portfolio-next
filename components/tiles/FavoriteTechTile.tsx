@@ -18,7 +18,7 @@ export function FavoriteTechTile({ lang }: { lang: Lang }) {
   const t = ui[lang].tiles
   return (
     <Tile id="favorite-tech">
-      <TileLabel>{t.favoriteTech}</TileLabel>
+      <TileLabel step={2} qty={favoriteTech.length}>{t.favoriteTech}</TileLabel>
       <ul className="mt-1 grid grid-cols-1 gap-3 sm:grid-cols-3">
         {favoriteTech.map((tech) => {
           const Icon = ICONS[tech.icon]

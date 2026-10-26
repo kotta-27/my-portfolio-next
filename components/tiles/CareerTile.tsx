@@ -18,7 +18,7 @@ export async function CareerTile({ lang }: { lang: Lang }) {
   return (
     <Tile id="career" clip={false}>
       <div className="flex items-center justify-between gap-3">
-        <TileLabel>{t.sections.career}</TileLabel>
+        <TileLabel step={3} qty={items.length}>{t.sections.career}</TileLabel>
         <ViewSwitchLink view="career" label={t.tiles.careerMore} />
       </div>
       <ol className="relative mt-2 flex flex-col-reverse gap-7 pt-7 lg:grid lg:grid-cols-4 lg:gap-6 lg:pt-0">
@@ -37,15 +37,13 @@ export async function CareerTile({ lang }: { lang: Lang }) {
             <li key={item.company.en} className="relative pl-8 lg:pl-0 lg:pt-8">
               {/* ノード */}
               <span
-                className={`absolute left-0 top-0 h-[18px] w-[18px] rounded-full border-2 ${
-                  current ? 'border-teal bg-teal shadow-[0_0_0_5px_rgba(12,122,124,0.18)]' : 'border-mute/60 bg-tile'
-                }`}
+                className={`stud-dot absolute left-0 top-0 h-[18px] w-[18px] ${current ? 'stud-dot--on' : ''}`}
               />
               <div className="flex flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span className={`font-mono text-[11px] tabular-nums ${current ? 'font-bold text-teal' : 'text-mute'}`}>{companyPeriod(item)}</span>
                   {current ? (
-                    <span className="rounded-full bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-paper">now</span>
+                    <span className="flat-tile bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-paper">now</span>
                   ) : (
                     latest.isIntern && <Pill size="xs">{t.tiles.intern}</Pill>
                   )}

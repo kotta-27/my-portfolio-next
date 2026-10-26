@@ -9,8 +9,12 @@ export function ProjectsHeadTile({ lang, count }: { lang: Lang; count: number })
   const t = ui[lang]
   return (
     <Tile id="projects" tone="accent">
-      <TileLabel className="text-paper/95">{t.sections.projects}</TileLabel>
-      <span className="absolute right-4 top-4 grid h-[30px] w-[30px] place-items-center rounded-full bg-paper/15">
+      <span className="text-paper/95">
+        <TileLabel step={4} qty={count} className="text-paper/95">
+          {t.sections.projects}
+        </TileLabel>
+      </span>
+      <span className="absolute right-4 top-4 grid h-[30px] w-[30px] place-items-center rounded-[3px] bg-paper/15">
         <PiArrowDownRight className="text-[15px]" />
       </span>
       <p className="mt-auto text-[44px] font-extrabold leading-none tracking-[-0.04em] tabular-nums">{count}</p>

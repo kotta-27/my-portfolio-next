@@ -73,7 +73,7 @@ export default async function ProjectPage({
                   <div className="flex items-center gap-2">
                     <TileLabel>{ui[lang].sections.projects}</TileLabel>
                     {project.badge && (
-                      <span className="inline-flex items-center gap-[3px] rounded-full bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-paper">
+                      <span className="flat-tile inline-flex items-center gap-[3px] bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-paper">
                         <PiMedalFill className="text-[11px]" />
                         {project.badge[lang]}
                       </span>
@@ -97,7 +97,7 @@ export default async function ProjectPage({
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-[5px] rounded-full bg-ink px-4 py-[9px] text-[11.5px] font-bold text-paper no-underline transition-colors duration-150 hover:bg-teal"
+                        className="plate plate--dark inline-flex items-center gap-[5px] bg-ink px-4 py-[9px] text-[11.5px] font-bold text-paper no-underline hover:bg-teal"
                       >
                         {link.label}
                         <PiArrowUpRight className="text-[13px]" />
@@ -131,7 +131,7 @@ export default async function ProjectPage({
                             <span className="pt-[3px] text-[11px] font-bold uppercase tracking-[.06em] text-mute">{cat.category}</span>
                             <div className="flex flex-wrap gap-[5px]">
                               {cat.items.map((item) => (
-                                <span key={item} className="rounded-full bg-soft px-[10px] py-[4px] text-[11.5px] font-bold">
+                                <span key={item} className="flat-tile bg-soft px-[10px] py-[4px] text-[11.5px] font-bold">
                                   {item}
                                 </span>
                               ))}
