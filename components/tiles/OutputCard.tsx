@@ -7,7 +7,7 @@ import { Thumb } from '@/components/Thumb'
 import { Pill } from '@/components/Pill'
 import { NoteCover } from '@/components/notes/NoteCover'
 import { notesData } from '@/data/notes'
-import { BLOG_ORIGIN } from '@/lib/blog'
+import { noteUrl } from '@/lib/blog'
 
 /**
  * Output ビューの 1 枚カード。サムネイルを主役にし、hover で下からソースとタイトルが出る。
@@ -18,7 +18,7 @@ import { BLOG_ORIGIN } from '@/lib/blog'
  */
 export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang }) {
   // サイト内のノートは OG 画像を取りに行かず、表紙を描く
-  const note = item.internal ? notesData.find((n) => `${BLOG_ORIGIN}/${n.slug}` === item.url) : undefined
+  const note = item.internal ? notesData.find((n) => noteUrl(n.slug) === item.url) : undefined
   if (note) {
     return (
       <Tile pad={false} className="gap-0 !min-h-0">
