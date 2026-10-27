@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { PiFileTextFill, PiFolderSimpleFill, PiGitBranchBold, PiPencilSimpleFill } from 'react-icons/pi'
+import { useTr } from '@/components/notes/i18n'
 
 export type FolderState = {
   name: string
@@ -17,6 +18,7 @@ export type FolderState = {
 /** 作業フォルダ 1 つ。connector を付けると下（.git）へ線を伸ばす */
 export function FolderBrick({ f, connector = false }: { f: FolderState; connector?: boolean }) {
   const ghost = f.kind === 'ghost'
+  const tr = useTr()
   const tone = f.error ? 'border-coral' : f.highlight || f.active ? 'border-teal' : ghost ? 'border-mute/50' : 'border-ink/15'
   return (
     <motion.div
@@ -50,7 +52,7 @@ export function FolderBrick({ f, connector = false }: { f: FolderState; connecto
         {/* 幅の狭い画面では 3 列に収まらないので省く（本文と図の説明で補える） */}
         <span className="hidden items-center gap-[5px] font-mono text-[10.5px] text-mute sm:flex">
           {f.kind === 'main' ? <PiFolderSimpleFill className="text-[12px]" /> : <PiFileTextFill className="text-[12px]" />}
-          {f.kind === 'main' ? '.git/（本体）' : ghost ? 'フォルダは削除済み' : '.git（ファイル）'}
+          {f.kind === 'main' ? tr('.git/（本体）', '.git/ (main)') : ghost ? tr('フォルダは削除済み', 'folder deleted') : tr('.git（ファイル）', '.git (file)')}
         </span>
         {f.dirty && (
           <motion.span
@@ -59,13 +61,13 @@ export function FolderBrick({ f, connector = false }: { f: FolderState; connecto
             className="inline-flex w-fit items-center gap-[4px] text-[10.5px] font-bold text-coral"
           >
             <PiPencilSimpleFill className="text-[11px]" />
-            未コミットの変更
+            {tr('未コミットの変更', 'uncommitted changes')}
           </motion.span>
         )}
         {f.active && (
           <span className="inline-flex items-center gap-[4px] text-[10px] font-bold text-teal">
             <span className="h-[7px] w-[7px] rounded-full bg-teal" />
-            作業中
+            {tr('作業中', 'working')}
           </span>
         )}
       </div>

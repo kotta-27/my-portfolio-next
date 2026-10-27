@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import type { Vec } from '@/components/notes/hnsw/hnsw'
+import { useTr } from '@/components/notes/i18n'
 
 /*
  * 2 次元の点とつながりを描く。座標は 0〜1 を 0〜100 の viewBox に写す。
@@ -162,20 +163,20 @@ export function Plot({ points, nodes, edges = [], path = [], tones = {}, probes 
 /** 図の凡例。その図で使っている役割だけを並べる */
 export type LegendItem = Tone | 'query' | 'path' | 'cut' | 'edge' | 'same'
 
-const LEGEND_TEXT: Record<LegendItem, string> = {
-  base: 'まだ測っていない点',
-  faint: '点',
-  visited: '距離を測った点',
-  current: '今いる点',
-  found: '着いた点',
-  entry: '入口',
-  truth: '本当に一番近い点',
-  new: '新しく入れる点',
-  query: '探している場所',
-  path: 'たどった道',
-  cut: '切られたつながり',
-  edge: 'つながり',
-  same: '同じ点（層をまたぐ）',
+const LEGEND_TEXT: Record<LegendItem, [string, string]> = {
+  base: ['まだ測っていない点', 'not measured yet'],
+  faint: ['点', 'point'],
+  visited: ['距離を測った点', 'distance measured'],
+  current: ['今いる点', 'current point'],
+  found: ['着いた点', 'result'],
+  entry: ['入口', 'entry point'],
+  truth: ['本当に一番近い点', 'true nearest'],
+  new: ['新しく入れる点', 'new point'],
+  query: ['探している場所', 'query'],
+  path: ['たどった道', 'path taken'],
+  cut: ['切られたつながり', 'dropped link'],
+  edge: ['つながり', 'link'],
+  same: ['同じ点（層をまたぐ）', 'same point (across layers)'],
 }
 
 function Swatch({ item }: { item: LegendItem }) {
@@ -196,12 +197,14 @@ function Swatch({ item }: { item: LegendItem }) {
   )
 }
 
-/** 項目は役割だけ、または [役割, その図での呼び方] */
-export function Legend({ items }: { items: (LegendItem | [LegendItem, string])[] }) {
+/** 項目は役割だけ、または [役割, その図での呼び方（日本語）, （英語）] */
+export function Legend({ items }: { items: (LegendItem | [LegendItem, string, string])[] }) {
+  const tr = useTr()
   return (
     <ul className="flex flex-wrap gap-x-4 gap-y-[6px]">
       {items.map((it) => {
-        const [item, text] = Array.isArray(it) ? it : [it, LEGEND_TEXT[it]]
+        const [item, ja, en] = Array.isArray(it) ? it : [it, ...LEGEND_TEXT[it]]
+        const text = tr(ja, en)
         return (
           <li key={item} className="flex items-center gap-[6px] text-[11.5px] font-semibold text-mute">
             <Swatch item={item} />

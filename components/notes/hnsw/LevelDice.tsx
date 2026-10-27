@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { PiDiceFiveBold } from 'react-icons/pi'
 import { FigButton, FigureFrame } from '@/components/notes/FigureFrame'
 import { rng } from '@/components/notes/hnsw/hnsw'
+import { useTr } from '@/components/notes/i18n'
 
 const N = 10000
 const MS = [4, 8, 16] as const
@@ -18,6 +19,7 @@ function simulate(M: number, seed: number) {
 }
 
 export function LevelDice() {
+  const tr = useTr()
   const [M, setM] = useState<(typeof MS)[number]>(4)
   const [seed, setSeed] = useState(1)
   const counts = useMemo(() => simulate(M, seed * 7919 + M), [M, seed])
@@ -36,14 +38,14 @@ export function LevelDice() {
         </div>
         <FigButton onClick={() => setSeed((s) => s + 1)}>
           <PiDiceFiveBold />
-          {N.toLocaleString()} 点を振り直す
+          {tr(`${N.toLocaleString()} 点を振り直す`, `Re-roll ${N.toLocaleString()} points`)}
         </FigButton>
       </div>
 
       <div className="flex flex-col gap-[6px]">
         {layers.map(({ l, c, expect }) => (
-          <div key={l} className="grid grid-cols-[44px_minmax(0,1fr)_120px] items-center gap-3">
-            <span className="text-[12px] font-extrabold">層 {l}</span>
+          <div key={l} className="grid grid-cols-[56px_minmax(0,1fr)_120px] items-center gap-3">
+            <span className="text-[12px] font-extrabold">{tr(`層 ${l}`, `Layer ${l}`)}</span>
             <span className="flex h-[22px] items-center justify-center">
               <motion.span
                 className={`block h-full rounded-[4px] ${l === 0 ? 'bg-ink/45' : 'bg-teal'}`}
@@ -54,14 +56,17 @@ export function LevelDice() {
             </span>
             <span className="font-mono text-[11.5px] tabular-nums">
               <span className="font-bold">{c.toLocaleString()}</span>
-              <span className="text-mute"> / 期待 {expect >= 10 ? Math.round(expect).toLocaleString() : expect.toFixed(1)}</span>
+              <span className="text-mute"> / {tr('期待', 'expected')} {expect >= 10 ? Math.round(expect).toLocaleString() : expect.toFixed(1)}</span>
             </span>
           </div>
         ))}
       </div>
 
       <p className="border-t border-ink/10 pt-4 text-[13.5px] font-semibold leading-[1.75]">
-        1 つ上の層に載る確率はいつも 1/{M}。だから層が 1 つ上がるごとに点はおよそ 1/{M} に減り、全体は {N.toLocaleString()} 点でも層の数は {counts.length} 段ほどで済む。層の数は点の数の対数（log）でしか増えない。
+        {tr(
+          `1 つ上の層に載る確率はいつも 1/${M}。だから層が 1 つ上がるごとに点はおよそ 1/${M} に減り、全体は ${N.toLocaleString()} 点でも層の数は ${counts.length} 段ほどで済む。層の数は点の数の対数（log）でしか増えない。`,
+          `The chance of reaching the next layer is always 1/${M}, so each layer up has about 1/${M} of the points. Even with ${N.toLocaleString()} points there are only about ${counts.length} layers. The number of layers grows only with the logarithm of the number of points.`,
+        )}
       </p>
     </FigureFrame>
   )

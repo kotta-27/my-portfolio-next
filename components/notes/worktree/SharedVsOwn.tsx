@@ -6,15 +6,17 @@ import { PiArrowLeftBold, PiArrowRightBold, PiEyeBold, PiFolderSimpleFill } from
 import { FigButton, FigureFrame, StepDots } from '@/components/notes/FigureFrame'
 import { useStepper } from '@/components/notes/useStepper'
 import { BRANCH_TONE, type Branch } from '@/components/notes/worktree/branches'
+import { useTr } from '@/components/notes/i18n'
 
 const STEPS = [
-  { note: '上の 2 つはそれぞれの worktree だけが持つもの、下はリポジトリにあって全員で 1 つを使うもの。' },
-  { note: 'app-hotfix で app.ts を直してステージに載せる。ステージ（index）は worktree ごとにあるので、app 側には何も起きない。' },
-  { note: 'コミットすると、コミットは共有の置き場に入り、hotfix ブランチがそれを指すよう進む。' },
-  { note: 'app の HEAD とファイルはそのまま。それでも共有なので、app からも新しいコミットと hotfix がすぐ見える。push も fetch も要らない。' },
+  { note: ['上の 2 つはそれぞれの worktree だけが持つもの、下はリポジトリにあって全員で 1 つを使うもの。', 'The two on top belong to each worktree alone. The one below lives in the repository and is shared by everyone.'] as [string, string] },
+  { note: ['app-hotfix で app.ts を直してステージに載せる。ステージ（index）は worktree ごとにあるので、app 側には何も起きない。', 'Fix app.ts in app-hotfix and stage it. Each worktree has its own staging area (index), so nothing happens on the app side.'] as [string, string] },
+  { note: ['コミットすると、コミットは共有の置き場に入り、hotfix ブランチがそれを指すよう進む。', 'On commit, the commit goes into the shared store, and the hotfix branch moves forward to point at it.'] as [string, string] },
+  { note: ['app の HEAD とファイルはそのまま。それでも共有なので、app からも新しいコミットと hotfix がすぐ見える。push も fetch も要らない。', 'The HEAD and files of app stay as they are. But because the store is shared, app can see the new commit and hotfix right away. No push or fetch needed.'] as [string, string] },
 ]
 
 export function SharedVsOwn() {
+  const tr = useTr()
   const s = useStepper(STEPS.length, 2000)
   const step = s.step
   const staged = step === 1
@@ -33,7 +35,7 @@ export function SharedVsOwn() {
               step === 3 && (
                 <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-[5px] text-[11px] font-bold text-teal">
                   <PiEyeBold />
-                  下の h1 と hotfix が見えている
+                  {tr('下の h1 と hotfix が見えている', 'sees h1 and hotfix below')}
                 </motion.span>
               )
             }
@@ -45,7 +47,7 @@ export function SharedVsOwn() {
                 className="w-fit rounded-[5px] bg-coral px-[7px] py-[2px] font-mono text-[10.5px] font-bold text-paper"
                 transition={{ type: 'spring', stiffness: 260, damping: 28 }}
               >
-                app.ts の修正
+                {tr('app.ts の修正', 'fix to app.ts')}
               </motion.span>
             )}
           </OwnCard>
@@ -54,11 +56,11 @@ export function SharedVsOwn() {
         {/* 共有の層 */}
         <div className={`flex flex-col gap-4 rounded-[10px] border-2 bg-tile p-4 transition-colors duration-300 ${step >= 2 ? 'border-teal' : 'border-ink/10'}`}>
           <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="text-[13px] font-extrabold">リポジトリ（.git）— 共有</span>
-            <span className="text-[11.5px] text-mute">どの worktree から見ても同じ 1 つ</span>
+            <span className="text-[13px] font-extrabold">{tr('リポジトリ（.git）— 共有', 'Repository (.git) — shared')}</span>
+            <span className="text-[11.5px] text-mute">{tr('どの worktree から見ても同じ 1 つ', 'The same one, from every worktree')}</span>
           </span>
           <div className="grid gap-4 sm:grid-cols-3">
-            <SharedSlot title="コミット" sub="objects">
+            <SharedSlot title={tr('コミット', 'Commits')} sub="objects">
               <div className="flex flex-wrap items-center gap-[5px]">
                 {['c1', 'c2', 'c3'].map((c) => (
                   <span key={c} className="rounded-[5px] bg-ink/10 px-[7px] py-[2px] font-mono text-[10.5px] font-bold">
@@ -76,7 +78,7 @@ export function SharedVsOwn() {
                 )}
               </div>
             </SharedSlot>
-            <SharedSlot title="ブランチ" sub="refs">
+            <SharedSlot title={tr('ブランチ', 'Branches')} sub="refs">
               <div className="flex flex-col gap-[5px] font-mono text-[11px]">
                 <span>
                   <span className={`rounded-[5px] px-[6px] py-[1px] font-bold ${BRANCH_TONE.main.fill}`}>main</span> → c3
@@ -91,8 +93,8 @@ export function SharedVsOwn() {
                 </span>
               </div>
             </SharedSlot>
-            <SharedSlot title="設定" sub="config">
-              <span className="font-mono text-[11px] text-mute">user.name など</span>
+            <SharedSlot title={tr('設定', 'Config')} sub="config">
+              <span className="font-mono text-[11px] text-mute">{tr('user.name など', 'user.name, etc.')}</span>
             </SharedSlot>
           </div>
         </div>
@@ -100,15 +102,15 @@ export function SharedVsOwn() {
 
       <div className="flex flex-col gap-4 border-t border-ink/10 pt-4">
         <p aria-live="polite" className="min-h-[3.4em] text-[13.5px] font-semibold leading-[1.7]">
-          {STEPS[step].note}
+          {tr(...STEPS[step].note)}
         </p>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <FigButton onClick={s.prev} disabled={step === 0} label="前へ">
+            <FigButton onClick={s.prev} disabled={step === 0} label={tr('前へ', 'Previous')}>
               <PiArrowLeftBold />
             </FigButton>
             <FigButton onClick={s.atEnd ? () => s.setStep(0) : s.next} active={!s.atEnd}>
-              {s.atEnd ? '最初から' : '次へ'}
+              {s.atEnd ? tr('最初から', 'Restart') : tr('次へ', 'Next')}
               {!s.atEnd && <PiArrowRightBold />}
             </FigButton>
           </div>
@@ -137,6 +139,7 @@ function OwnCard({
   editing?: boolean
 }) {
   const tone = BRANCH_TONE[branch]
+  const tr = useTr()
   return (
     <div
       className={`flex min-w-0 flex-col gap-3 rounded-[10px] border-2 bg-tile p-3 transition-all duration-300 ${highlight ? tone.border : 'border-ink/10'} ${
@@ -145,21 +148,21 @@ function OwnCard({
     >
       <span className="flex items-center gap-[6px] font-mono text-[12.5px] font-bold">
         <PiFolderSimpleFill className="text-[14px] text-mute" />
-        {folder}/<span className="ml-auto text-[10px] font-bold text-mute">この worktree だけ</span>
+        {folder}/<span className="ml-auto text-[10px] font-bold text-mute">{tr('この worktree だけ', 'this worktree only')}</span>
       </span>
       <dl className="grid grid-cols-[auto_1fr] items-center gap-x-3 gap-y-[7px] text-[11.5px]">
         <dt className="font-mono font-bold">HEAD</dt>
         <dd className="flex items-center gap-2">
           <span className={`rounded-[5px] px-[6px] py-[1px] font-mono text-[10.5px] font-bold ${tone.fill}`}>{branch}</span>
-          <span className="text-mute">今いるブランチ</span>
+          <span className="text-mute">{tr('今いるブランチ', 'current branch')}</span>
         </dd>
         <dt className="font-mono font-bold">index</dt>
         <dd className="flex min-h-[22px] flex-wrap items-center gap-2">
           {children}
-          <span className="text-mute">次のコミットに入れるもの</span>
+          <span className="text-mute">{tr('次のコミットに入れるもの', 'what goes into the next commit')}</span>
         </dd>
         <dt className="font-mono font-bold">files</dt>
-        <dd className="text-mute">{editing && branch === 'hotfix' ? 'app.ts を編集中' : '手元のファイル'}</dd>
+        <dd className="text-mute">{editing && branch === 'hotfix' ? tr('app.ts を編集中', 'editing app.ts') : tr('手元のファイル', 'local files')}</dd>
       </dl>
       {footer}
     </div>

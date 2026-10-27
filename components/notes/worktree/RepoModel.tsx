@@ -6,38 +6,48 @@ import { PiArrowDownBold, PiFileTextBold, PiFolderSimpleFill } from 'react-icons
 import { FigButton, FigureFrame } from '@/components/notes/FigureFrame'
 import { CommitGraph, type GraphProps } from '@/components/notes/worktree/CommitGraph'
 import { BRANCH_TONE, type Branch } from '@/components/notes/worktree/branches'
+import { useTr } from '@/components/notes/i18n'
 
 type Mode = 'single' | 'switch' | 'worktree'
 
 /** ブランチごとの中身。作業ツリーには、HEAD が指すブランチの先端のファイルが並ぶ */
-const FILES: Record<Branch, { name: string; mark?: string }[]> = {
+const FILES: Record<Branch, { name: string; mark?: { ja: string; en: string } }[]> = {
   main: [{ name: 'index.ts' }, { name: 'app.ts' }, { name: 'README.md' }],
-  feature: [{ name: 'index.ts' }, { name: 'app.ts' }, { name: 'search.ts', mark: '追加' }, { name: 'README.md' }],
-  hotfix: [{ name: 'index.ts' }, { name: 'app.ts', mark: '修正' }, { name: 'README.md' }],
+  feature: [{ name: 'index.ts' }, { name: 'app.ts' }, { name: 'search.ts', mark: { ja: '追加', en: 'new' } }, { name: 'README.md' }],
+  hotfix: [{ name: 'index.ts' }, { name: 'app.ts', mark: { ja: '修正', en: 'fixed' } }, { name: 'README.md' }],
 }
 
-const MODES: { id: Mode; label: string; trees: { folder: string; branch: Branch }[]; note: string }[] = [
+const MODES: { id: Mode; label: [string, string]; trees: { folder: string; branch: Branch }[]; note: [string, string] }[] = [
   {
     id: 'single',
-    label: 'ふつうの状態',
+    label: ['ふつうの状態', 'Normally'],
     trees: [{ folder: 'app', branch: 'main' }],
-    note: 'リポジトリ（.git）は全部のブランチの履歴を持っている。作業フォルダに出ているのは、そのうち HEAD が指す 1 本（main）の中身だけ。',
+    note: [
+      'リポジトリ（.git）は全部のブランチの履歴を持っている。作業フォルダに出ているのは、そのうち HEAD が指す 1 本（main）の中身だけ。',
+      'The repository (.git) holds the history of every branch. The working folder shows only one of them: the branch HEAD points to (main).',
+    ],
   },
   {
     id: 'switch',
-    label: 'switch すると',
+    label: ['switch すると', 'After switch'],
     trees: [{ folder: 'app', branch: 'feature' }],
-    note: 'switch は HEAD を feature に付け替えて、同じフォルダの中身を feature の状態に書き換える。作業フォルダは 1 つのまま。',
+    note: [
+      'switch は HEAD を feature に付け替えて、同じフォルダの中身を feature の状態に書き換える。作業フォルダは 1 つのまま。',
+      'switch moves HEAD to feature and rewrites the same folder to match feature. There is still only one working folder.',
+    ],
   },
   {
     id: 'worktree',
-    label: 'worktree を使うと',
+    label: ['worktree を使うと', 'With worktrees'],
     trees: [
       { folder: 'app', branch: 'main' },
       { folder: 'app-feature', branch: 'feature' },
       { folder: 'app-hotfix', branch: 'hotfix' },
     ],
-    note: 'worktree は作業フォルダを増やし、それぞれに HEAD を持たせる。リポジトリは 1 つのまま、3 本のブランチを同時に開いておける。',
+    note: [
+      'worktree は作業フォルダを増やし、それぞれに HEAD を持たせる。リポジトリは 1 つのまま、3 本のブランチを同時に開いておける。',
+      'A worktree adds working folders, each with its own HEAD. The repository is still one, and three branches stay open at the same time.',
+    ],
   },
 ]
 
@@ -67,23 +77,24 @@ const TIPS: { branch: Branch; at: [number, number] }[] = [
 ]
 
 export function RepoModel() {
+  const tr = useTr()
   const [mode, setMode] = useState<Mode>('single')
   const current = MODES.find((m) => m.id === mode) as (typeof MODES)[number]
   const tips = TIPS.map((t) => ({ ...t, heads: current.trees.filter((tr) => tr.branch === t.branch).map((tr) => `${tr.folder}/`) }))
 
   return (
     <FigureFrame className="flex flex-col gap-6 p-4 sm:p-6">
-      <div className="flex flex-wrap gap-2" role="group" aria-label="状態">
+      <div className="flex flex-wrap gap-2" role="group" aria-label={tr('状態', 'State')}>
         {MODES.map((m) => (
           <FigButton key={m.id} active={mode === m.id} onClick={() => setMode(m.id)}>
-            {m.label}
+            {tr(...m.label)}
           </FigButton>
         ))}
       </div>
 
       {/* 上の層: 作業ツリー */}
       <div className="flex flex-col gap-3">
-        <LayerLabel title="作業ツリー" text="ファイルを開いて編集する場所（ただのフォルダ）" />
+        <LayerLabel title={tr('作業ツリー', 'Working trees')} text={tr('ファイルを開いて編集する場所（ただのフォルダ）', 'Where you open and edit files (just folders)')} />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <AnimatePresence mode="popLayout" initial={false}>
             {current.trees.map((t) => {
@@ -121,7 +132,7 @@ export function RepoModel() {
                         >
                           <PiFileTextBold className="shrink-0 text-[12px] text-mute" />
                           {f.name}
-                          {f.mark && <span className={`text-[10px] font-bold ${tone.text}`}>{f.mark}</span>}
+                          {f.mark && <span className={`text-[10px] font-bold ${tone.text}`}>{tr(f.mark.ja, f.mark.en)}</span>}
                         </motion.li>
                       ))}
                     </AnimatePresence>
@@ -135,12 +146,12 @@ export function RepoModel() {
 
       <div className="flex items-center justify-center gap-2 text-[11.5px] font-bold text-mute">
         <PiArrowDownBold className="rotate-180" />
-        HEAD が指すブランチの中身を取り出している
+        {tr('HEAD が指すブランチの中身を取り出している', 'Each one checks out the branch its HEAD points to')}
       </div>
 
       {/* 下の層: リポジトリ */}
       <div className="flex flex-col gap-3 rounded-[10px] border border-ink/10 bg-tile p-4">
-        <LayerLabel title="リポジトリ（.git）" text="全部のコミットとブランチを持っている。いつでも 1 つだけ" />
+        <LayerLabel title={tr('リポジトリ（.git）', 'Repository (.git)')} text={tr('全部のコミットとブランチを持っている。いつでも 1 つだけ', 'Holds every commit and branch. Always just one')} />
         <CommitGraph {...GRAPH} tips={tips} />
       </div>
 
@@ -154,7 +165,7 @@ export function RepoModel() {
           aria-live="polite"
           className="border-t border-ink/10 pt-4 text-[13.5px] font-semibold leading-[1.75]"
         >
-          {current.note}
+          {tr(...current.note)}
         </motion.p>
       </AnimatePresence>
     </FigureFrame>

@@ -62,7 +62,7 @@ export function Terminal({ lines, title = 'zsh' }: { lines: { cmd?: string; out?
         <span className="h-[9px] w-[9px] rounded-full bg-white/20" />
         <span className="h-[9px] w-[9px] rounded-full bg-white/20" />
         <span className="ml-2 font-mono text-[11px] text-white/45">{title}</span>
-        {cmds.length > 1 && <CopyButton text={cmds.join('\n')} label="コマンドをまとめてコピー" showText className="ml-auto" />}
+        {cmds.length > 1 && <CopyButton text={cmds.join('\n')} label={['コマンドをまとめてコピー', 'Copy all commands']} showText className="ml-auto" />}
       </div>
       <div className="overflow-x-auto py-3 font-mono text-[12.5px] leading-[1.75] text-white/80">
         {lines.map((l, i) => (
@@ -73,7 +73,7 @@ export function Terminal({ lines, title = 'zsh' }: { lines: { cmd?: string; out?
                   <span className="select-none text-teal">$ </span>
                   <span className="text-white">{l.cmd}</span>
                 </code>
-                <CopyButton text={l.cmd} label={`コピー: ${l.cmd}`} className="opacity-100 sm:opacity-0 sm:focus-visible:opacity-100 sm:group-hover:opacity-100" />
+                <CopyButton text={l.cmd} label={[`コピー: ${l.cmd}`, `Copy: ${l.cmd}`]} className="opacity-100 sm:opacity-0 sm:focus-visible:opacity-100 sm:group-hover:opacity-100" />
               </div>
             )}
             {l.out && <pre className="whitespace-pre px-4 text-white/60">{l.out}</pre>}
@@ -125,7 +125,7 @@ export function CodeBlock({ code, title }: { code: string; title: string }) {
     <div className="w-full overflow-hidden rounded-[10px] bg-night">
       <div className="flex items-center gap-[6px] border-b border-white/10 py-[6px] pl-4 pr-2">
         <span className="font-mono text-[11px] text-white/45">{title}</span>
-        <CopyButton text={code} label="コードをコピー" showText className="ml-auto" />
+        <CopyButton text={code} label={['コードをコピー', 'Copy code']} showText className="ml-auto" />
       </div>
       <pre className="overflow-x-auto px-4 py-4 font-mono text-[12.5px] leading-[1.75] text-white/85">
         <code>{code}</code>

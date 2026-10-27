@@ -6,6 +6,7 @@ import { PiArrowCounterClockwiseBold } from 'react-icons/pi'
 import { FigButton, FigureFrame } from '@/components/notes/FigureFrame'
 import { Legend, Plot } from '@/components/notes/hnsw/Plot'
 import { HNSW_RUN, POINTS, QUERY, TRUTH } from '@/components/notes/hnsw/demo'
+import { useTr } from '@/components/notes/i18n'
 
 // HNSW がたどった点（層をまたいで同じ点が続くところは 1 つにまとめる）
 const route = HNSW_RUN.layers.flatMap((l) => l.expands.map((e) => e.node)).filter((n, i, a) => n !== a[i - 1])
@@ -18,10 +19,11 @@ const sweepOrder = POINTS.map((p, i) => [i, p[1] * 2 + p[0]] as const)
   .map(([i]) => i)
 
 export function BruteVsHnsw() {
+  const tr = useTr()
   const [run, setRun] = useState(0)
   const total = POINTS.length
   const rows = [
-    { label: '総当たり', count: total, tone: 'bg-ink/45' },
+    { label: tr('総当たり', 'Brute force'), count: total, tone: 'bg-ink/45' },
     { label: 'HNSW', count: HNSW_RUN.distanceCount, tone: 'bg-teal' },
   ]
 
@@ -29,34 +31,36 @@ export function BruteVsHnsw() {
     <FigureFrame className="flex flex-col gap-5 p-4 sm:p-6">
       <div className="flex items-center justify-between gap-3">
         <span className="text-[12.5px] font-bold text-mute">
-          <span className="text-coral">＋</span> の位置に一番近い点を、{total} 点の中から探す
+          {tr('', 'Find the point nearest to ')}
+          <span className="text-coral">＋</span>
+          {tr(` の位置に一番近い点を、${total} 点の中から探す`, `, among ${total} points`)}
         </span>
         <FigButton onClick={() => setRun((r) => r + 1)}>
           <PiArrowCounterClockwiseBold />
-          もう一度
+          {tr('もう一度', 'Replay')}
         </FigButton>
       </div>
 
       <Legend items={['query', 'visited', 'entry', 'path', 'found']} />
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <Panel title="総当たり" sub="全部の点と距離を測って比べる">
-          <Plot points={POINTS} query={QUERY} sweep={{ order: sweepOrder, duration: 2.4, key: run }} tones={{ [TRUTH]: 'truth' }} label="総当たりで全点を測る図" />
+        <Panel title={tr('総当たり', 'Brute force')} sub={tr('全部の点と距離を測って比べる', 'measure every point and compare')}>
+          <Plot points={POINTS} query={QUERY} sweep={{ order: sweepOrder, duration: 2.4, key: run }} tones={{ [TRUTH]: 'truth' }} label={tr('総当たりで全点を測る図', 'Brute force measuring every point')} />
         </Panel>
-        <Panel title="HNSW" sub="近い点へ飛び移りながら、一部だけ測る">
+        <Panel title="HNSW" sub={tr('近い点へ飛び移りながら、一部だけ測る', 'hop toward the target, measuring only some')}>
           <Plot
             key={run}
             points={POINTS}
             query={QUERY}
             path={routeEdges}
             tones={Object.fromEntries([...measured.map((n) => [n, 'visited']), [route[0], 'entry'], [HNSW_RUN.result[0], 'found']])}
-            label="HNSW で一部の点だけを測る図"
+            label={tr('HNSW で一部の点だけを測る図', 'HNSW measuring only some points')}
           />
         </Panel>
       </div>
 
       <div className="flex flex-col gap-2 border-t border-ink/10 pt-4">
-        <span className="text-[12px] font-bold text-mute">距離を測った回数</span>
+        <span className="text-[12px] font-bold text-mute">{tr('距離を測った回数', 'Distances measured')}</span>
         {rows.map((r) => (
           <div key={r.label} className="grid grid-cols-[72px_minmax(0,1fr)_44px] items-center gap-3">
             <span className="text-[12.5px] font-bold">{r.label}</span>
@@ -73,7 +77,10 @@ export function BruteVsHnsw() {
           </div>
         ))}
         <p className="pt-2 text-[13.5px] font-semibold leading-[1.7]">
-          どちらも同じ点にたどり着く。HNSW は {total} 点のうち {HNSW_RUN.distanceCount} 点しか測っていない。点が 100 万個になると、この差が何桁にもなる。
+          {tr(
+            `どちらも同じ点にたどり着く。HNSW は ${total} 点のうち ${HNSW_RUN.distanceCount} 点しか測っていない。点が 100 万個になると、この差が何桁にもなる。`,
+            `Both reach the same point. HNSW measured only ${HNSW_RUN.distanceCount} of the ${total} points. With a million points, the gap grows by orders of magnitude.`,
+          )}
         </p>
       </div>
     </FigureFrame>

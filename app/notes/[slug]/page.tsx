@@ -15,6 +15,7 @@ import { LangToggle } from '@/components/LangToggle'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { BackLink } from '@/components/BackLink'
 import { NoteProgress } from '@/components/notes/NoteProgress'
+import { NoteLangProvider } from '@/components/notes/i18n'
 
 export function generateStaticParams() {
   return notesData.map((n) => ({ slug: n.slug }))
@@ -25,7 +26,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const note = notesData.find((n) => n.slug === slug)
   if (!note) return {}
   // 正式な URL は blog.kotap.dev 側。kotap.dev/notes/... はその写し
-  return { title: `${note.title.ja} — Kota Mizuno`, description: note.summary.ja, alternates: { canonical: `${BLOG_ORIGIN}/${note.slug}` } }
+  const lang = await getLang()
+  return { title: `${note.title[lang]} — Kota Mizuno`, description: note.summary[lang], alternates: { canonical: `${BLOG_ORIGIN}/${note.slug}` } }
 }
 
 export default async function NotePage({
@@ -38,6 +40,7 @@ export default async function NotePage({
   const note = notesData.find((n) => n.slug === slug)
   const body = noteBodies[slug]
   if (!note || !body) notFound()
+  const Body = body.Body[lang]
   // 戻り先はポートフォリオの Output。blog.kotap.dev からは本体のドメインへ戻す
   const onBlog = isBlogHost((await headers()).get('host'))
   const backHref = `${onBlog ? SITE_ORIGIN : ''}/?view=writing`
@@ -65,23 +68,18 @@ export default async function NotePage({
                     {note.date.replaceAll('-', '.')}
                   </time>
                 </div>
-                <h1 className="text-[28px] font-extrabold leading-[1.25] tracking-[-0.03em] sm:text-[38px]">{note.title.ja}</h1>
-                <p className="text-[14.5px] leading-[1.9] text-mute">{note.summary.ja}</p>
+                <h1 className="text-[28px] font-extrabold leading-[1.25] tracking-[-0.03em] sm:text-[38px]">{note.title[lang]}</h1>
+                <p className="text-[14.5px] leading-[1.9] text-mute">{note.summary[lang]}</p>
                 <div className="flex flex-wrap gap-[5px]">
                   {note.tags.map((t) => (
                     <Tag key={t}>{t}</Tag>
                   ))}
                 </div>
-                {lang === 'en' && (
-                  <p className="w-fit rounded-[8px] bg-soft px-3 py-2 text-[12.5px] font-semibold text-mute">
-                    This note is written in Japanese. — {note.summary.en}
-                  </p>
-                )}
               </header>
 
               {/* 目次 */}
-              <nav aria-label="目次" className="mx-auto w-full max-w-[720px] border-y border-ink/10 py-5">
-                <span className="text-[10.5px] font-bold uppercase tracking-[.08em] text-mute">目次</span>
+              <nav aria-label={lang === 'ja' ? '目次' : 'Contents'} className="mx-auto w-full max-w-[720px] border-y border-ink/10 py-5">
+                <span className="text-[10.5px] font-bold uppercase tracking-[.08em] text-mute">{lang === 'ja' ? '目次' : 'Contents'}</span>
                 <ol className="mt-3 flex flex-col gap-[6px]">
                   {body.toc.map((s, i) => (
                     <li key={s.id}>
@@ -89,14 +87,16 @@ export default async function NotePage({
                         <span className="grid h-[22px] w-[22px] shrink-0 place-items-center rounded-[6px] border-[1.5px] border-current font-mono text-[11px] tabular-nums">
                           {i + 1}
                         </span>
-                        {s.title}
+                        {s.title[lang]}
                       </a>
                     </li>
                   ))}
                 </ol>
               </nav>
 
-              <body.Body />
+              <NoteLangProvider lang={lang}>
+                <Body />
+              </NoteLangProvider>
             </article>
           </Tile>
         </Reveal>

@@ -1,4 +1,7 @@
+'use client'
+
 import type { ReactNode } from 'react'
+import { useTr } from '@/components/notes/i18n'
 
 /*
  * 学習ノートの図の部品。図は中身の理解が主役なので、サイトのレゴ表現は持ち込まず素直な見た目にする。
@@ -72,14 +75,15 @@ export function StepNav({
   onSelect: (i: number) => void
 }) {
   const atEnd = step >= count - 1
+  const tr = useTr()
   return (
     <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="flex items-center gap-2">
-        <FigButton onClick={onPrev} disabled={step === 0} label="前へ">
+        <FigButton onClick={onPrev} disabled={step === 0} label={tr('前へ', 'Previous')}>
           ←
         </FigButton>
         <FigButton onClick={atEnd ? () => onSelect(0) : onNext} active={!atEnd}>
-          {atEnd ? '最初から' : '次へ →'}
+          {atEnd ? tr('最初から', 'Restart') : tr('次へ →', 'Next →')}
         </FigButton>
       </div>
       <StepDots count={count} step={step} onSelect={onSelect} />

@@ -5,6 +5,7 @@ import { FigButton, FigureFrame, StepDots } from '@/components/notes/FigureFrame
 import { useStepper } from '@/components/notes/useStepper'
 import { Legend, Plot } from '@/components/notes/hnsw/Plot'
 import { GRAPH, GREEDY_RUN, POINTS, QUERY, TRUTH, layerEdges } from '@/components/notes/hnsw/demo'
+import { useTr } from '@/components/notes/i18n'
 
 const EDGES = layerEdges(0)
 const EXPANDS = GREEDY_RUN.expands
@@ -12,6 +13,7 @@ const EXPANDS = GREEDY_RUN.expands
 const COUNT = EXPANDS.length + 1
 
 export function GreedyWalk() {
+  const tr = useTr()
   const s = useStepper(COUNT, 1500)
   const k = Math.min(s.step, EXPANDS.length - 1)
   const end = s.step === COUNT - 1
@@ -27,18 +29,24 @@ export function GreedyWalk() {
   if (end) tones[TRUTH] = 'truth'
 
   const note = end
-    ? `でも本当に一番近い点（赤い破線の輪）は別の場所にある。そこへ続く隣を持っていなかったので、たどり着けなかった。これが「局所解」。測った回数は ${GREEDY_RUN.distanceCount} 回。`
+    ? tr(
+        `でも本当に一番近い点（赤い破線の輪）は別の場所にある。そこへ続く隣を持っていなかったので、たどり着けなかった。これが「局所解」。測った回数は ${GREEDY_RUN.distanceCount} 回。`,
+        `But the truly nearest point (dashed red ring) is somewhere else. The walk had no neighbor leading there, so it never arrived. This is a local minimum. Distances measured: ${GREEDY_RUN.distanceCount}.`,
+      )
     : k === 0
-      ? `入口（黒い四角）から始める。つながっている ${cur.checked.length} 点との距離を測り、＋ に一番近い点へ移る。`
+      ? tr(
+          `入口（黒い四角）から始める。つながっている ${cur.checked.length} 点との距離を測り、＋ に一番近い点へ移る。`,
+          `Start from the entry point (black square). Measure the distance to its ${cur.checked.length} linked points and move to the one closest to ＋.`,
+        )
       : k === EXPANDS.length - 1
-        ? 'つながっている点を測っても、どれも今いる点より ＋ から遠い。ここで止まる。'
-        : `移った先でも同じことをする。まだ測っていない隣 ${cur.checked.length} 点を測り、近い方へ。`
+        ? tr('つながっている点を測っても、どれも今いる点より ＋ から遠い。ここで止まる。', 'Every linked point is farther from ＋ than the current one. The walk stops here.')
+        : tr(`移った先でも同じことをする。まだ測っていない隣 ${cur.checked.length} 点を測り、近い方へ。`, `Do the same from the new point: measure its ${cur.checked.length} unmeasured neighbors and move closer.`)
 
   return (
     <FigureFrame className="flex flex-col gap-5 p-4 sm:p-6">
       <Legend items={['query', 'entry', 'current', 'visited', 'path', 'truth', 'edge']} />
       <div className="mx-auto w-full max-w-[460px] rounded-[10px] border border-ink/10 bg-tile p-3">
-        <Plot points={POINTS} edges={EDGES} path={routeEdges} probes={end ? [] : cur.checked.map((n) => [cur.node, n] as [number, number])} tones={tones} query={QUERY} label="グラフを貪欲にたどる図" />
+        <Plot points={POINTS} edges={EDGES} path={routeEdges} probes={end ? [] : cur.checked.map((n) => [cur.node, n] as [number, number])} tones={tones} query={QUERY} label={tr('グラフを貪欲にたどる図', 'Greedy walk on the graph')} />
       </div>
       <div className="flex flex-col gap-4 border-t border-ink/10 pt-4">
         <p aria-live="polite" className="min-h-[3.4em] text-[13.5px] font-semibold leading-[1.7]">
@@ -49,11 +57,11 @@ export function GreedyWalk() {
         </p>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <FigButton onClick={s.prev} disabled={s.step === 0} label="前へ">
+            <FigButton onClick={s.prev} disabled={s.step === 0} label={tr('前へ', 'Previous')}>
               <PiArrowLeftBold />
             </FigButton>
             <FigButton onClick={s.atEnd ? () => s.setStep(0) : s.next} active={!s.atEnd}>
-              {s.atEnd ? '最初から' : '次へ'}
+              {s.atEnd ? tr('最初から', 'Restart') : tr('次へ', 'Next')}
               {!s.atEnd && <PiArrowRightBold />}
             </FigButton>
           </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { FigureFrame } from '@/components/notes/FigureFrame'
+import { useTr } from '@/components/notes/i18n'
 
 /*
  * この記事の HNSW 実装（components/notes/hnsw/hnsw.ts）で実際に測った値。
@@ -26,6 +27,7 @@ const gx = (c: number) => 8 + (c / 900) * 88
 const gy = (r: number) => 92 - ((r - 0.65) / 0.35) * 84
 
 export function EfTradeoff() {
+  const tr = useTr()
   const [i, setI] = useState(3)
   const row = ROWS[i]
 
@@ -33,7 +35,7 @@ export function EfTradeoff() {
     <FigureFrame className="flex flex-col gap-5 p-4 sm:p-6">
       <label className="flex flex-col gap-2">
         <span className="flex items-baseline justify-between">
-          <span className="text-[12.5px] font-bold text-mute">efSearch（最下層で持っておく候補の数）</span>
+          <span className="text-[12.5px] font-bold text-mute">{tr('efSearch（最下層で持っておく候補の数）', 'efSearch (candidates kept on the bottom layer)')}</span>
           <span className="font-mono text-[20px] font-extrabold tabular-nums">{row.ef}</span>
         </span>
         <input
@@ -50,16 +52,18 @@ export function EfTradeoff() {
 
       <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <div className="flex flex-col gap-4">
-          <Meter label="正解できた割合（recall@10）" value={`${(row.recall * 100).toFixed(1)}%`} ratio={row.recall} tone="bg-teal" />
-          <Meter label={`距離を測った回数（総当たりは ${N.toLocaleString()} 回）`} value={`${row.count} 回`} ratio={row.count / N} tone="bg-ink/45" />
+          <Meter label={tr('正解できた割合（recall@10）', 'Share found (recall@10)')} value={`${(row.recall * 100).toFixed(1)}%`} ratio={row.recall} tone="bg-teal" />
+          <Meter label={tr(`距離を測った回数（総当たりは ${N.toLocaleString()} 回）`, `Distances measured (brute force: ${N.toLocaleString()})`)} value={tr(`${row.count} 回`, `${row.count}`)} ratio={row.count / N} tone="bg-ink/45" />
           <p className="text-[13px] leading-[1.75] text-ink/80">
-            総当たりの <span className="font-bold">{((row.count / N) * 100).toFixed(0)}%</span> の計算で、本当の上位 10 件のうち平均{' '}
-            <span className="font-bold">{(row.recall * 10).toFixed(1)}</span> 件を当てている。
+            {tr(
+              `総当たりの ${((row.count / N) * 100).toFixed(0)}% の計算で、本当の上位 10 件のうち平均 ${(row.recall * 10).toFixed(1)} 件を当てている。`,
+              `With ${((row.count / N) * 100).toFixed(0)}% of the brute-force work, it finds ${(row.recall * 10).toFixed(1)} of the true top 10 on average.`,
+            )}
           </p>
         </div>
 
         <div className="rounded-[10px] border border-ink/10 bg-tile p-3">
-          <svg viewBox="0 0 100 100" className="block h-auto w-full" role="img" aria-label="efSearch ごとの recall と計算量">
+          <svg viewBox="0 0 100 100" className="block h-auto w-full" role="img" aria-label={tr('efSearch ごとの recall と計算量', 'Recall and cost for each efSearch')}>
             {[0.7, 0.8, 0.9, 1].map((r) => (
               <g key={r}>
                 <line x1={8} x2={96} y1={gy(r)} y2={gy(r)} className="stroke-ink/10" strokeWidth={0.3} />
@@ -74,7 +78,7 @@ export function EfTradeoff() {
             ))}
             <motion.circle initial={false} animate={{ cx: gx(row.count), cy: gy(row.recall) }} r={2.2} className="fill-teal stroke-tile stroke-[0.6]" />
             <text x={96} y={98} textAnchor="end" className="fill-mute text-[3px]">
-              測った回数 →
+              {tr('測った回数 →', 'distances measured →')}
             </text>
             <text x={8} y={5} className="fill-mute text-[3px]">
               ↑ recall
@@ -84,7 +88,10 @@ export function EfTradeoff() {
       </div>
 
       <p className="border-t border-ink/10 pt-4 text-[13.5px] font-semibold leading-[1.75]">
-        efSearch を上げると、候補を広く持つぶん取りこぼしが減り、そのぶん計算が増える。最初は少し上げるだけで大きく良くなり、100% に近づくほど効きが鈍る。
+        {tr(
+          'efSearch を上げると、候補を広く持つぶん取りこぼしが減り、そのぶん計算が増える。最初は少し上げるだけで大きく良くなり、100% に近づくほど効きが鈍る。',
+          'Raising efSearch keeps a wider set of candidates, so fewer results are missed, at the cost of more computation. A small increase helps a lot at first, and the gains slow down as recall approaches 100%.',
+        )}
       </p>
     </FigureFrame>
   )

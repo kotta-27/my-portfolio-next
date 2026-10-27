@@ -8,6 +8,7 @@ import { Line2 } from 'three/addons/lines/Line2.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
 import { GRAPH, HNSW_RUN, POINTS, QUERY, inLayer, layerEdges } from '@/components/notes/hnsw/demo'
+import type { Lang } from '@/types'
 
 /*
  * HNSW の層を立体で重ねて見せる。下が層 0（全部の点）、上ほど点が少ない。
@@ -42,7 +43,7 @@ function routePoints(untilLayerIndex: number) {
   return pts
 }
 
-export default function Layer3DCanvas({ step, onFail }: { step: number; onFail: () => void }) {
+export default function Layer3DCanvas({ step, lang, onFail }: { step: number; lang: Lang; onFail: () => void }) {
   const host = useRef<HTMLDivElement>(null)
   const stepRef = useRef(step)
   const api = useRef<{ setStep: (s: number) => void } | null>(null)
@@ -129,7 +130,7 @@ export default function Layer3DCanvas({ step, onFail }: { step: number; onFail: 
         // ラベル
         const tag = document.createElement('span')
         tag.className = 'rounded-[5px] bg-tile/90 px-[6px] py-[1px] font-sans text-[11px] font-extrabold text-ink shadow-sm'
-        tag.textContent = `層 ${l}（${inLayer(l).length} 点）`
+        tag.textContent = lang === 'ja' ? `層 ${l}（${inLayer(l).length} 点）` : `Layer ${l} (${inLayer(l).length} pts)`
         const label = new CSS2DObject(tag)
         label.position.set(-(SIZE + 1) / 2, y, -(SIZE + 1) / 2)
         base.add(label)
