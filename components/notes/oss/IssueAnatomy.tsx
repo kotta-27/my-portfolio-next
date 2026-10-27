@@ -1,8 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { FigButton, FigureFrame } from '@/components/notes/FigureFrame'
 import { useTr } from '@/components/notes/i18n'
 
 type Part = { id: string; head: string; lines: number; template?: boolean; what: [string, string]; role: [string, string] }
@@ -131,87 +128,31 @@ const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: 
   },
 }
 
-export function IssueAnatomy() {
+/** Issue の節ごとに「書いたこと」と「その節の役割」を並べる。操作はいらない */
+export function IssueAnatomy({ which }: { which: 'bug' | 'feature' }) {
   const tr = useTr()
-  const [which, setWhich] = useState<'bug' | 'feature'>('bug')
   const issue = ISSUES[which]
-  const [id, setId] = useState('repro')
-  const cur = issue.parts.find((p) => p.id === id) ?? issue.parts[0]
-
-  function choose(w: 'bug' | 'feature') {
-    setWhich(w)
-    setId(w === 'bug' ? 'repro' : 'problem')
-  }
-
   return (
-    <FigureFrame className="flex flex-col gap-4 p-4 sm:p-6">
-      <div className="flex flex-wrap gap-2" role="group" aria-label={tr('Issue の種類', 'Issue type')}>
-        <FigButton active={which === 'bug'} onClick={() => choose('bug')}>
-          {tr('バグ報告', 'Bug report')} #23303
-        </FigButton>
-        <FigButton active={which === 'feature'} onClick={() => choose('feature')}>
-          {tr('機能要望', 'Feature request')} #23429
-        </FigButton>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
-        {/* Issue の紙面 */}
-        <div className="flex flex-col gap-[6px] rounded-[10px] border border-ink/10 bg-tile p-3" role="tablist" aria-label={tr('Issue の節', 'Issue sections')}>
-          <span className="mb-1 flex items-center gap-2 px-1 font-mono text-[11px] text-mute">
-            <span className="rounded-full bg-teal px-[7px] py-[1px] font-sans text-[10px] font-bold text-paper">Open</span>
-            opensearch-project/OpenSearch #{issue.number}
+    <ol className="mx-auto flex w-full max-w-[720px] flex-col divide-y divide-ink/10 overflow-hidden rounded-[10px] border border-ink/10">
+      {issue.parts.map((p) => (
+        <li key={p.id} className="flex flex-col gap-2 px-5 py-4">
+          <span className="flex flex-wrap items-center gap-2">
+            <span className={`text-[14px] font-extrabold ${p.template ? 'font-mono' : ''}`}>
+              {p.id === 'title' ? tr('タイトル', 'Title') : p.id === 'cause' ? tr('原因', 'Cause') : p.id === 'fix' ? tr('修正案', 'Possible fix') : `### ${p.head}`}
+            </span>
+            {p.template ? (
+              <span className="rounded-[4px] bg-ink/[0.07] px-[6px] py-[1px] text-[10.5px] font-bold text-mute">{tr('テンプレート', 'template')}</span>
+            ) : (
+              p.id !== 'title' && <span className="rounded-[4px] bg-teal/10 px-[6px] py-[1px] text-[10.5px] font-bold text-teal">{tr('追加した節', 'added section')}</span>
+            )}
           </span>
-          {issue.parts.map((p) => {
-            const on = p.id === cur.id
-            return (
-              <button
-                key={p.id}
-                type="button"
-                role="tab"
-                aria-selected={on}
-                onClick={() => setId(p.id)}
-                className={`flex flex-col gap-[5px] rounded-[7px] border-2 px-3 py-[8px] text-left transition-colors duration-150 ${
-                  on ? 'border-teal bg-teal/[0.06]' : 'border-transparent hover:bg-ink/[0.04]'
-                }`}
-              >
-                <span className="flex flex-wrap items-center gap-2">
-                  <span className={`min-w-0 break-words text-[12.5px] font-extrabold ${p.id === 'title' ? '' : 'font-mono'}`}>{p.id === 'title' ? issue.title : `### ${p.head}`}</span>
-                  {p.template && <span className="rounded-[4px] bg-ink/[0.07] px-[5px] text-[9.5px] font-bold text-mute">{tr('テンプレート', 'template')}</span>}
-                </span>
-                {/* 本文の量を灰色の線で */}
-                <span className="flex flex-col gap-[4px]">
-                  {Array.from({ length: Math.min(p.lines, 3) }, (_, i) => (
-                    <span key={i} className={`h-[5px] rounded-full ${on ? 'bg-teal/40' : 'bg-ink/10'} ${i === Math.min(p.lines, 3) - 1 ? 'w-2/3' : 'w-full'}`} />
-                  ))}
-                </span>
-              </button>
-            )
-          })}
-        </div>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${which}-${cur.id}`}
-            initial={{ opacity: 0, x: 10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.2 }}
-            className="flex flex-col gap-4 self-start rounded-[10px] border border-ink/10 bg-tile p-4 sm:p-5"
-            role="tabpanel"
-            aria-live="polite"
-          >
-            <span className="break-words text-[16px] font-extrabold">{cur.id === 'cause' || cur.id === 'fix' ? `${cur.head}${tr('（テンプレートにない節）', ' (not in the template)')}` : cur.head}</span>
-            <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-bold uppercase tracking-[.06em] text-mute">{tr('書いたこと', 'What I wrote')}</span>
-              <p className="text-[13.5px] leading-[1.75]">{tr(...cur.what)}</p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <span className="text-[11px] font-bold uppercase tracking-[.06em] text-teal">{tr('この節の役割', 'What this section is for')}</span>
-              <p className="text-[13.5px] leading-[1.75] text-ink/80">{tr(...cur.role)}</p>
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </FigureFrame>
+          <p className="text-[14px] leading-[1.8] text-ink/85">{tr(...p.what)}</p>
+          <p className="flex gap-2 text-[13.5px] leading-[1.8] text-mute">
+            <span className="shrink-0 font-bold text-teal">{tr('役割', 'Role')}</span>
+            <span>{tr(...p.role)}</span>
+          </p>
+        </li>
+      ))}
+    </ol>
   )
 }

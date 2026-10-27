@@ -1,8 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { FigureFrame, StepNav } from '@/components/notes/FigureFrame'
 import { useTr } from '@/components/notes/i18n'
 
 /*
@@ -102,79 +99,36 @@ function since(iso: string, base: string): [string, string] {
   return [`${Math.round(h / 24)} 日`, `${Math.round(h / 24)} days`]
 }
 
+/** 出したあとの出来事を、日時と経過時間つきで上から順に並べる。操作はいらない */
 export function IssueTimeline() {
   const tr = useTr()
-  const [i, setI] = useState(0)
-  const ev = EVENTS[i]
-  const base = EVENTS.find((e) => e.lane === ev.lane && e.who === 'me')?.at ?? EVENTS[0].at
-
   return (
-    <FigureFrame className="flex flex-col gap-5 p-4 sm:p-6">
-      {/* 2 本の時間軸。最初の数時間に出来事が集まるので、時間の比率ではなく順番に等間隔で並べ、経過時間を添える */}
-      <div className="flex flex-col gap-5 rounded-[10px] border border-ink/10 bg-tile px-4 pb-4 pt-5">
-        {(['bug', 'feature'] as const).map((lane) => {
-          const items = EVENTS.map((e, k) => ({ e, k })).filter(({ e }) => e.lane === lane && !e.now)
-          const laneBase = items[0].e.at
-          return (
-            <div key={lane} className="grid grid-cols-[64px_minmax(0,1fr)] items-start gap-3">
-              <span className="pt-[2px] text-[11.5px] font-extrabold">{lane === 'bug' ? tr('バグ報告', 'Bug') : tr('機能要望', 'Feature')}</span>
-              <ol className="relative grid grid-cols-5 gap-1">
-                <span className="absolute left-[10%] right-[10%] top-[9px] h-[2px] rounded-full bg-ink/10" aria-hidden />
-                {items.map(({ e, k }) => (
-                  <li key={e.at} className="relative flex flex-col items-center gap-[6px]">
-                    <button
-                      type="button"
-                      onClick={() => setI(k)}
-                      aria-label={tr(...e.title)}
-                      className={`h-[18px] w-[18px] rounded-full border-[3px] border-tile transition-transform duration-150 ${WHO[e.who].dot} ${
-                        k === i ? 'scale-125 ring-2 ring-teal ring-offset-1 ring-offset-tile' : 'hover:scale-110'
-                      }`}
-                    />
-                    <span className={`text-center font-mono text-[10px] leading-[1.3] ${k === i ? 'font-bold text-ink' : 'text-mute'}`}>
-                      {e.who === 'me' ? jst(e.at) : `+${tr(...since(e.at, laneBase))}`}
-                    </span>
-                  </li>
-                ))}
-              </ol>
+    <ol className="mx-auto flex w-full max-w-[720px] flex-col">
+      {EVENTS.map((ev, i) => {
+        const base = EVENTS.find((e) => e.lane === ev.lane && e.who === 'me')?.at ?? EVENTS[0].at
+        const last = i === EVENTS.length - 1
+        return (
+          <li key={ev.at} className="grid grid-cols-[18px_minmax(0,1fr)] gap-x-4">
+            <div className="flex flex-col items-center">
+              <span className={`mt-[5px] h-[14px] w-[14px] shrink-0 rounded-full ${WHO[ev.who].dot} ${ev.now ? 'opacity-40' : ''}`} />
+              {!last && <span aria-hidden className="w-[2px] flex-1 bg-ink/10" />}
             </div>
-          )
-        })}
-        <div className="flex flex-wrap gap-x-4 gap-y-1 border-t border-ink/10 pt-3">
-          {Object.values(WHO).map((w) => (
-            <span key={w.dot} className="flex items-center gap-[6px] text-[11px] font-semibold text-mute">
-              <span className={`h-[9px] w-[9px] rounded-full ${w.dot}`} />
-              {tr(...w.label)}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.2 }}
-          className="flex flex-col gap-2 rounded-[10px] border border-ink/10 bg-tile p-4 sm:p-5"
-          aria-live="polite"
-        >
-          <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="font-mono text-[12px] font-bold text-mute">{ev.now ? '10/28' : `${jst(ev.at)} JST`}</span>
-            {ev.who !== 'me' && !ev.now && (
-              <span className="text-[11.5px] font-bold text-teal">{tr(`出してから約 ${since(ev.at, base)[0]}後`, `about ${since(ev.at, base)[1]} after filing`)}</span>
-            )}
-            <span className="flex items-center gap-[5px] text-[11px] font-bold text-mute">
-              <span className={`h-[8px] w-[8px] rounded-full ${WHO[ev.who].dot}`} />
-              {ev.now ? tr('現在', 'now') : tr(...WHO[ev.who].label)}
-            </span>
-          </span>
-          <span className="text-[16px] font-extrabold">{tr(...ev.title)}</span>
-          <p className="text-[13.5px] leading-[1.75] text-ink/85">{tr(...ev.text)}</p>
-        </motion.div>
-      </AnimatePresence>
-
-      <StepNav step={i} count={EVENTS.length} onPrev={() => setI((v) => Math.max(0, v - 1))} onNext={() => setI((v) => Math.min(EVENTS.length - 1, v + 1))} onSelect={setI} />
-    </FigureFrame>
+            <div className={`flex min-w-0 flex-col gap-1 ${last ? '' : 'pb-6'}`}>
+              <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[12px]">
+                <span className="font-mono font-bold text-mute">{ev.now ? '10/28' : `${jst(ev.at)} JST`}</span>
+                {ev.who !== 'me' && !ev.now && (
+                  <span className="font-bold text-teal">{tr(`出してから約 ${since(ev.at, base)[0]}後`, `about ${since(ev.at, base)[1]} after filing`)}</span>
+                )}
+                <span className="font-bold text-mute">
+                  {ev.lane === 'bug' ? tr('バグ報告', 'bug report') : tr('機能要望', 'feature request')} · {ev.now ? tr('現在', 'now') : tr(...WHO[ev.who].label)}
+                </span>
+              </span>
+              <span className="text-[15px] font-extrabold">{tr(...ev.title)}</span>
+              <p className="text-[14px] leading-[1.8] text-ink/85">{tr(...ev.text)}</p>
+            </div>
+          </li>
+        )
+      })}
+    </ol>
   )
 }

@@ -123,9 +123,7 @@ export function OssIssue() {
         <P>
           気づいてから出すまでに、8 つのことをしました。順番は前後しますが、どれも「メンテナーが読んで、すぐ動ける」ためのものです。
         </P>
-        <Figure kind="animation" n={1} caption="出すまでにやったこと。アイコンを押すとその段階に飛ぶ。「なぜ」はそれをやった理由。">
-          <IssueFlow />
-        </Figure>
+        <IssueFlow />
         <P>
           中でも時間をかけたのが<Strong>再現を小さくする</Strong>ことです。最初に気づいたときの状況には、関係のない設定やデータがたくさん混ざっています。それを 1 つずつ外し、curl だけで動く、1
           ノード・1 シャードのスクリプトにしました。件数 <C>N</C> を変えるだけで規模を変えられるので、「ドキュメントが多いときだけ起きる」といった条件も確かめられます。
@@ -147,9 +145,7 @@ export function OssIssue() {
         <Figure kind="image" n={1} caption="OpenSearch のバグ報告のテンプレート。タイトルは「[BUG] <title>」から始まり、必須の欄（*）が順に並ぶ。bug と untriaged のラベルは最初から付いている。">
           <Shot src="/notes/oss-issue/bug-template.png" alt="GitHub の New issue 画面に表示された OpenSearch のバグ報告テンプレート" width={2702} height={1740} />
         </Figure>
-        <Figure kind="animation" n={2} caption="実際に出した 2 つの Issue の節ごとの中身と役割。左の節を押すと右に出る。">
-          <IssueAnatomy />
-        </Figure>
+        <IssueAnatomy which="bug" />
         <P>
           修正案は、近似を有効にする処理を「本命のクエリのときだけ」に絞る 1 行の条件です。ただし、これは参照が同じかどうかで本命のクエリを見分けるので、誰かが本命のクエリを包み直すと近似が効かなくなる、という弱点があります。結果が間違うことはなく遅くなるだけ、という点も含めて本文に書き、別の直し方の案も添えました。
         </P>
@@ -163,9 +159,7 @@ export function OssIssue() {
 
       <NoteSection step={5} id="after" title="出したあと">
         <P>出したあとの流れは、思っていたよりずっと機械的で、そして速いものでした。</P>
-        <Figure kind="animation" n={3} caption="2 つの Issue に起きたこと（日本時間）。点を押すとその出来事に飛ぶ。">
-          <IssueTimeline />
-        </Figure>
+        <IssueTimeline />
         <P>
           出した直後に、テンプレートと自動処理でラベルが付き、プロジェクトのボードに載りました。<C>untriaged</C> は「まだ誰も仕分けていない」の印で、メンテナーが中身を見て担当の領域を決めると外れます。バグ報告では、約 3
           日後に検索まわりのトリアージで外れ、レビュー担当が指名されました。
@@ -195,6 +189,7 @@ export function OssIssue() {
           バグ報告との違いは、<Strong>「正しい動作」が決まっていない</Strong>ことです。なので、困っている問題を再現できる形で示し、ほしい形を具体的な JSON で見せ、すでにある機能（<C>_cat/segments</C>
           や Profile API など）ではなぜ足りないかを 1 つずつ書きました。機能要望は「それなら〇〇で足りるのでは」と返されやすいので、代わりの案を先に調べて潰しておくのが大事だと考えました。こちらはまだトリアージ待ちです。
         </P>
+        <IssueAnatomy which="feature" />
       </NoteSection>
 
       <NoteSection step={7} id="mindset" title="心構え">
@@ -270,9 +265,7 @@ export function OssIssueEn() {
         <P>
           Between noticing the problem and filing it, I did eight things. The order shifted a bit, but each one was meant to let a maintainer read it and act right away.
         </P>
-        <Figure kind="animation" n={1} caption="What I did before filing. Click an icon to jump to that stage. &ldquo;Why&rdquo; is the reason for each step.">
-          <IssueFlow />
-        </Figure>
+        <IssueFlow />
         <P>
           The part that took the most time was <Strong>shrinking the reproduction</Strong>. The situation where I first noticed it had lots of unrelated settings and data mixed in. I
           removed them one by one until it was a script that runs with curl alone, on one node and one shard. Changing the document count <C>N</C> changes the scale, so I could also
@@ -297,9 +290,7 @@ export function OssIssueEn() {
         <Figure kind="image" n={1} caption="OpenSearch&rsquo;s bug report template. The title starts with &ldquo;[BUG] <title>&rdquo;, required fields (*) come in order, and the bug and untriaged labels are already attached.">
           <Shot src="/notes/oss-issue/bug-template.png" alt="OpenSearch bug report template on GitHub's New issue page" width={2702} height={1740} />
         </Figure>
-        <Figure kind="animation" n={2} caption="What each section of the two issues says, and what it is for. Click a section on the left to see it on the right.">
-          <IssueAnatomy />
-        </Figure>
+        <IssueAnatomy which="bug" />
         <P>
           The fix is a one-line condition that limits approximation to the main query. It has a weak spot, though: it recognizes the main query by reference equality, so if something
           wraps the main query, approximation silently stops applying. I wrote that down, including that results stay correct and only performance suffers, and added an alternative
@@ -316,9 +307,7 @@ export function OssIssueEn() {
 
       <NoteSection step={5} id="after" title="After filing">
         <P>What happened after filing was far more mechanical, and faster, than I expected.</P>
-        <Figure kind="animation" n={3} caption="What happened to the two issues (JST). Click a dot to jump to that event.">
-          <IssueTimeline />
-        </Figure>
+        <IssueTimeline />
         <P>
           Right after filing, the template and automation added labels and put the issue on a project board. <C>untriaged</C> means no one has sorted it yet; it comes off once a
           maintainer reads it and assigns an area. For the bug report, it came off about three days later in search triage, and reviewers were named.
@@ -350,6 +339,7 @@ export function OssIssueEn() {
           shape I wanted as concrete JSON, and went through why existing features (<C>_cat/segments</C>, the Profile API and so on) are not enough. Feature requests tend to get
           &ldquo;can&rsquo;t you just use X?&rdquo; as a reply, so I thought it was important to check the alternatives first. This one is still waiting for triage.
         </P>
+        <IssueAnatomy which="feature" />
       </NoteSection>
 
       <NoteSection step={7} id="mindset" title="Mindset">

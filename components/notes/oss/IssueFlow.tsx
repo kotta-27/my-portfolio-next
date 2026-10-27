@@ -1,6 +1,5 @@
 'use client'
 
-import { AnimatePresence, motion } from 'framer-motion'
 import {
   PiBinocularsBold,
   PiBugBeetleBold,
@@ -12,8 +11,6 @@ import {
   PiScissorsBold,
 } from 'react-icons/pi'
 import type { IconType } from 'react-icons'
-import { FigureFrame, StepNav } from '@/components/notes/FigureFrame'
-import { useStepper } from '@/components/notes/useStepper'
 import { useTr } from '@/components/notes/i18n'
 
 /** #23303 を出すまでにやったこと。中身は Issue 本文に書いた内容から起こしている */
@@ -68,77 +65,37 @@ const STEPS: { icon: IconType; title: [string, string]; did: [string, string]; w
   },
 ]
 
+/** 出すまでにやったことを、上から順に読めるリストで並べる（操作はいらない） */
 export function IssueFlow() {
   const tr = useTr()
-  const s = useStepper(STEPS.length, 2600)
-  const cur = STEPS[s.step]
-  const Icon = cur.icon
-
   return (
-    <FigureFrame className="flex flex-col gap-5 p-4 sm:p-6">
-      {/* 全体の道のり。済んだところまで線が伸びる */}
-      <ol className="grid grid-cols-8 gap-1" aria-label={tr('出すまでの流れ', 'Steps before filing')}>
-        {STEPS.map((st, i) => {
-          const StIcon = st.icon
-          const done = i <= s.step
-          return (
-            <li key={st.title[1]} className="relative flex flex-col items-center gap-2">
-              {i > 0 && (
-                <span className="absolute right-1/2 top-[17px] h-[2px] w-full bg-ink/10">
-                  <motion.span className="block h-full bg-teal" initial={false} animate={{ width: done ? '100%' : '0%' }} transition={{ duration: 0.35 }} />
-                </span>
-              )}
-              <button
-                type="button"
-                onClick={() => s.setStep(i)}
-                aria-label={tr(...st.title)}
-                aria-current={i === s.step ? 'step' : undefined}
-                className={`relative z-[1] grid h-[36px] w-[36px] place-items-center rounded-full border-2 transition-colors duration-200 ${
-                  i === s.step ? 'border-teal bg-teal text-paper' : done ? 'border-teal bg-tile text-teal' : 'border-ink/15 bg-tile text-mute'
-                }`}
-              >
-                <StIcon className="text-[16px]" />
-              </button>
-              <span className={`hidden text-center text-[10.5px] font-bold leading-[1.35] md:block ${i === s.step ? 'text-ink' : 'text-mute'}`}>{tr(...st.title)}</span>
-            </li>
-          )
-        })}
-      </ol>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={s.step}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.2 }}
-          className="grid gap-3 rounded-[10px] border border-ink/10 bg-tile p-4 sm:grid-cols-[auto_minmax(0,1fr)] sm:gap-5 sm:p-5"
-        >
-          <span className="grid h-[48px] w-[48px] place-items-center rounded-[12px] bg-teal/10 text-teal">
-            <Icon className="text-[24px]" />
-          </span>
-          <div className="flex min-w-0 flex-col gap-3">
-            <span className="flex items-baseline gap-2">
-              <span className="font-mono text-[12px] font-bold text-mute">
-                {s.step + 1}/{STEPS.length}
+    <ol className="mx-auto flex w-full max-w-[720px] flex-col" aria-label={tr('出すまでの流れ', 'Steps before filing')}>
+      {STEPS.map((st, i) => {
+        const Icon = st.icon
+        const last = i === STEPS.length - 1
+        return (
+          <li key={st.title[1]} className="grid grid-cols-[40px_minmax(0,1fr)] gap-x-4">
+            {/* 左の縦線で、上から順に進むことを示す */}
+            <div className="flex flex-col items-center">
+              <span className="grid h-[40px] w-[40px] shrink-0 place-items-center rounded-full bg-teal/10 text-teal">
+                <Icon className="text-[19px]" />
               </span>
-              <span className="text-[16px] font-extrabold">{tr(...cur.title)}</span>
-            </span>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="flex flex-col gap-1">
-                <span className="text-[11px] font-bold uppercase tracking-[.06em] text-mute">{tr('やったこと', 'What I did')}</span>
-                <p className="text-[13.5px] leading-[1.75]">{tr(...cur.did)}</p>
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-[11px] font-bold uppercase tracking-[.06em] text-teal">{tr('なぜ', 'Why')}</span>
-                <p className="text-[13.5px] leading-[1.75] text-ink/80">{tr(...cur.why)}</p>
-              </div>
+              {!last && <span aria-hidden className="w-[2px] flex-1 bg-ink/10" />}
             </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-
-      <StepNav step={s.step} count={STEPS.length} onPrev={s.prev} onNext={s.next} onSelect={s.setStep} />
-    </FigureFrame>
+            <div className={`flex min-w-0 flex-col gap-2 pt-[7px] ${last ? '' : 'pb-7'}`}>
+              <span className="flex items-baseline gap-2">
+                <span className="font-mono text-[12px] font-bold text-mute">{i + 1}</span>
+                <span className="text-[16px] font-extrabold">{tr(...st.title)}</span>
+              </span>
+              <p className="text-[14.5px] leading-[1.85] text-ink/85">{tr(...st.did)}</p>
+              <p className="flex gap-2 text-[13.5px] leading-[1.8] text-mute">
+                <span className="shrink-0 font-bold text-teal">{tr('なぜ', 'Why')}</span>
+                <span>{tr(...st.why)}</span>
+              </p>
+            </div>
+          </li>
+        )
+      })}
+    </ol>
   )
 }
