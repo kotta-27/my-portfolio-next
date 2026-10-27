@@ -27,7 +27,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!note) return {}
   // 正式な URL は blog.kotap.dev 側。kotap.dev/notes/... はその写し
   const lang = await getLang()
-  return { title: `${note.title[lang]} — Kota Mizuno`, description: note.summary[lang], alternates: { canonical: `${BLOG_ORIGIN}/${note.slug}` } }
+  const title = `${note.title[lang]} — Kota Mizuno`
+  const url = `${BLOG_ORIGIN}/${note.slug}`
+  // 正式な URL は blog.kotap.dev 側。OGP 画像の URL もこのドメインで組み立てる
+  return {
+    metadataBase: new URL(BLOG_ORIGIN),
+    title,
+    description: note.summary[lang],
+    alternates: { canonical: url },
+    openGraph: { type: 'article', title, description: note.summary[lang], url, siteName: 'Kota Mizuno — Notes', locale: lang === 'ja' ? 'ja_JP' : 'en_US', publishedTime: note.date },
+    twitter: { card: 'summary_large_image', title, description: note.summary[lang], creator: '@Melmol_27' },
+  }
 }
 
 export default async function NotePage({

@@ -25,6 +25,8 @@ export function middleware(req: NextRequest) {
   }
 
   const { pathname, search } = req.nextUrl
+  // OGP 画像（/notes/<slug>/opengraph-image など）はどのホストでもそのまま返す。SNS のクローラーを転送で迷わせない
+  if (/\/(opengraph|twitter)-image/.test(pathname)) return NextResponse.next()
   const isNotes = pathname === '/notes' || pathname.startsWith('/notes/')
   const short = pathname.replace(/^\/notes/, '') || '/'
 

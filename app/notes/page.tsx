@@ -14,10 +14,16 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { BackLink } from '@/components/BackLink'
 import { NoteCover } from '@/components/notes/NoteCover'
 
+const NOTES_TITLE = 'Notes — Kota Mizuno'
+const NOTES_DESC = '水野航太の勉強の記録。仕組みを動く図で整理したノート。'
+
 export const metadata: Metadata = {
-  title: 'Notes — Kota Mizuno',
-  description: '水野航太の勉強の記録。仕組みを動く図で整理したノート。',
+  metadataBase: new URL(BLOG_ORIGIN),
+  title: NOTES_TITLE,
+  description: NOTES_DESC,
   alternates: { canonical: `${BLOG_ORIGIN}/` },
+  openGraph: { type: 'website', title: NOTES_TITLE, description: NOTES_DESC, url: `${BLOG_ORIGIN}/`, siteName: 'Kota Mizuno — Notes', locale: 'ja_JP' },
+  twitter: { card: 'summary_large_image', title: NOTES_TITLE, description: NOTES_DESC, creator: '@Melmol_27' },
 }
 
 /** ノートの一覧。blog.kotap.dev のトップ（middleware が / をここに振り替える） */
