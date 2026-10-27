@@ -3,6 +3,7 @@ import { articles } from '@/data/awards'
 import { activitiesData } from '@/data/awards'
 import { careerData } from '@/data/career'
 import { notesData } from '@/data/notes'
+import { BLOG_ORIGIN } from '@/lib/blog'
 
 export type OutputKind = 'note' | 'article' | 'interview' | 'blog' | 'talk' | 'press' | 'page'
 
@@ -14,7 +15,7 @@ export type OutputItem = {
   kind: OutputKind
   /** 既知のサムネイル。無ければ OG 画像を取りに行く */
   thumbnail: string | null
-  /** サイト内のページ（学習ノート）。同じタブで開く */
+  /** 自分のサイトのページ（学習ノート）。同じタブで開く */
   internal?: boolean
 }
 
@@ -38,9 +39,9 @@ export function collectOutputs(): OutputItem[] {
     out.push(item)
   }
 
-  // サイト内の学習ノート。新しい順
+  // 学習ノート。新しい順。blog.kotap.dev 側を開く（自分のサイトなので同じタブ）
   for (const n of [...notesData].sort((a, b) => b.date.localeCompare(a.date))) {
-    push({ url: `/notes/${n.slug}`, label: n.title, source: 'Note', kind: 'note', thumbnail: null, internal: true })
+    push({ url: `${BLOG_ORIGIN}/${n.slug}`, label: n.title, source: 'Note', kind: 'note', thumbnail: null, internal: true })
   }
 
   for (const a of articles) push({ url: a.href, label: { en: a.en, ja: a.ja }, source: a.source, kind: 'article', thumbnail: null })

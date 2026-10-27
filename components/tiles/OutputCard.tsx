@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { PiArrowRight, PiArrowUpRight } from 'react-icons/pi'
 import type { Lang } from '@/types'
 import { fetchOgImage } from '@/lib/fetchOgImage'
@@ -8,6 +7,7 @@ import { Thumb } from '@/components/Thumb'
 import { Pill } from '@/components/Pill'
 import { NoteCover } from '@/components/notes/NoteCover'
 import { notesData } from '@/data/notes'
+import { BLOG_ORIGIN } from '@/lib/blog'
 
 /**
  * Output ビューの 1 枚カード。サムネイルを主役にし、hover で下からソースとタイトルが出る。
@@ -18,11 +18,11 @@ import { notesData } from '@/data/notes'
  */
 export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang }) {
   // サイト内のノートは OG 画像を取りに行かず、表紙を描く
-  const note = item.internal ? notesData.find((n) => `/notes/${n.slug}` === item.url) : undefined
+  const note = item.internal ? notesData.find((n) => `${BLOG_ORIGIN}/${n.slug}` === item.url) : undefined
   if (note) {
     return (
       <Tile pad={false} className="gap-0 !min-h-0">
-        <Link
+        <a
           href={`${item.url}?lang=${lang}`}
           aria-label={`${item.source}: ${item.label[lang]}`}
           className="group relative flex h-full flex-col no-underline"
@@ -33,7 +33,7 @@ export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang 
           <span className="absolute right-[18px] top-[18px] flex h-[26px] w-[26px] items-center justify-center rounded-[3px] bg-teal text-paper opacity-0 shadow-sm transition-opacity duration-200 group-hover:opacity-100">
             <PiArrowRight className="text-[14px]" />
           </span>
-        </Link>
+        </a>
       </Tile>
     )
   }
