@@ -56,3 +56,33 @@ export function StepDots({ count, step, onSelect }: { count: number; step: numbe
     </div>
   )
 }
+
+/** コマ送りの操作一式: 前へ・次へ（最後は最初から）・コマ位置 */
+export function StepNav({
+  step,
+  count,
+  onPrev,
+  onNext,
+  onSelect,
+}: {
+  step: number
+  count: number
+  onPrev: () => void
+  onNext: () => void
+  onSelect: (i: number) => void
+}) {
+  const atEnd = step >= count - 1
+  return (
+    <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex items-center gap-2">
+        <FigButton onClick={onPrev} disabled={step === 0} label="前へ">
+          ←
+        </FigButton>
+        <FigButton onClick={atEnd ? () => onSelect(0) : onNext} active={!atEnd}>
+          {atEnd ? '最初から' : '次へ →'}
+        </FigButton>
+      </div>
+      <StepDots count={count} step={step} onSelect={onSelect} />
+    </div>
+  )
+}

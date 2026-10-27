@@ -117,3 +117,32 @@ export function Figure({ kind, n, caption, children }: { kind: keyof typeof LABE
     </figure>
   )
 }
+
+/** シェル以外のコード。右上のボタンで全体をコピーできる */
+export function CodeBlock({ code, title }: { code: string; title: string }) {
+  return (
+    <div className="w-full overflow-hidden rounded-[10px] bg-night">
+      <div className="flex items-center gap-[6px] border-b border-white/10 py-[6px] pl-4 pr-2">
+        <span className="font-mono text-[11px] text-white/45">{title}</span>
+        <CopyButton text={code} label="コードをコピー" showText className="ml-auto" />
+      </div>
+      <pre className="overflow-x-auto px-4 py-4 font-mono text-[12.5px] leading-[1.75] text-white/85">
+        <code>{code}</code>
+      </pre>
+    </div>
+  )
+}
+
+/** 本文中のリンク。外部は新しいタブ */
+export function A({ href, children }: { href: string; children: ReactNode }) {
+  const external = href.startsWith('http')
+  return (
+    <a
+      href={href}
+      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      className="font-semibold text-teal underline decoration-teal/40 underline-offset-[3px] hover:decoration-teal"
+    >
+      {children}
+    </a>
+  )
+}
