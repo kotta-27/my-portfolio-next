@@ -1,42 +1,62 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { motion } from 'framer-motion'
 import { LinkCard, type LinkCardData } from '@/components/LinkCard'
 import { Thumb } from '@/components/Thumb'
 
+const CARD_W = 300
+const GAP = 8
+const EDGE = 24
+
+type Place = { x: number; y: number; w: number; below: boolean }
+
 /** LinkCard that also reveals a large thumbnail + title card on hover / focus. */
 export function PreviewLink({ card }: { card: LinkCardData }) {
-  const [open, setOpen] = useState(false)
-  const [below, setBelow] = useState(false)
+  const [place, setPlace] = useState<Place | null>(null)
   const ref = useRef<HTMLSpanElement>(null)
+  const pop = useRef<HTMLSpanElement>(null)
 
-  // 画面上部（固定ナビの近く）では上に出すと隠れるので、下に出す
+  // ブロックは上の段ほど手前に重ねているので、z-index では上の段に隠れる。
+  // popover で top layer に出し、位置はリンクの座標から fixed で置く
   function show() {
-    const top = ref.current?.getBoundingClientRect().top ?? 0
-    setBelow(top < 320)
-    setOpen(true)
+    const r = ref.current?.getBoundingClientRect()
+    if (!r) return
+    const w = Math.min(CARD_W, window.innerWidth - EDGE * 2)
+    // 画面上部（固定ナビの近く）では上に出すと隠れるので、下に出す
+    const below = r.top < 320
+    setPlace({ x: Math.max(EDGE, Math.min(r.left, window.innerWidth - w - EDGE)), y: below ? r.bottom + GAP : r.top - GAP, w, below })
+    pop.current?.showPopover()
   }
 
+  function hide() {
+    pop.current?.hidePopover()
+    setPlace(null)
+  }
+
+  // fixed で置いているので、スクロールしたら位置がずれる前に閉じる
+  useEffect(() => {
+    if (!place) return
+    window.addEventListener('scroll', hide, { passive: true })
+    return () => window.removeEventListener('scroll', hide)
+  }, [place])
+
   return (
-    <span
-      ref={ref}
-      className="relative block"
-      onMouseEnter={show}
-      onMouseLeave={() => setOpen(false)}
-      onFocus={show}
-      onBlur={() => setOpen(false)}
-    >
+    <span ref={ref} className="relative block" onMouseEnter={show} onMouseLeave={hide} onFocus={show} onBlur={hide}>
       <LinkCard card={card} mobileThumbnail={false} />
 
-      <AnimatePresence>
-        {open && (
+      <span
+        ref={pop}
+        popover="manual"
+        role="tooltip"
+        className={`pointer-events-none fixed inset-auto left-[var(--px)] top-[var(--py)] m-0 w-[var(--pw)] overflow-visible border-0 bg-transparent p-0 ${place?.below ? '' : '-translate-y-full'}`}
+        style={place ? ({ '--px': `${place.x}px`, '--py': `${place.y}px`, '--pw': `${place.w}px` } as CSSProperties) : undefined}
+      >
+        {place && (
           <motion.span
-            role="tooltip"
-            className={`pointer-events-none absolute left-0 z-50 block w-[300px] ${below ? 'top-full mt-2' : 'bottom-full mb-2'} max-w-[calc(100vw-48px)] overflow-hidden rounded-[14px] border border-ink/15 bg-tile shadow-[0_24px_48px_-16px_rgba(13,27,42,0.35)]`}
-            initial={{ opacity: 0, y: below ? -6 : 6, scale: 0.98 }}
+            className="block overflow-hidden rounded-[14px] border border-ink/15 bg-tile shadow-[0_24px_48px_-16px_rgba(13,27,42,0.35)]"
+            initial={{ opacity: 0, y: place.below ? -6 : 6, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: below ? -6 : 6, scale: 0.98 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
           >
             {card.thumbnail && (
@@ -50,7 +70,7 @@ export function PreviewLink({ card }: { card: LinkCardData }) {
             </span>
           </motion.span>
         )}
-      </AnimatePresence>
+      </span>
     </span>
   )
 }
