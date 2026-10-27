@@ -1,6 +1,6 @@
 'use client'
 
-import { useTr } from '@/components/notes/i18n'
+import { Rich, useTr } from '@/components/notes/i18n'
 
 /*
  * 2 つの Issue の出来事。時刻は GitHub のタイムライン（UTC）を日本時間に直したもの。
@@ -14,7 +14,7 @@ const EVENTS: Ev[] = [
     at: '2026-10-11T12:47:58Z',
     lane: 'bug',
     who: 'me',
-    title: ['バグ報告 #23303 を出す', 'File bug report #23303'],
+    title: ['バグ報告 #23303 を出す', 'File `bug` report #23303'],
     text: ['テンプレートに沿って、再現・バージョン表・原因・修正案まで書いて出した。', 'Filed following the template, with a reproduction, a table of versions, the cause and a possible fix.'],
   },
   {
@@ -23,8 +23,8 @@ const EVENTS: Ev[] = [
     who: 'bot',
     title: ['ラベルとボードが自動で付く', 'Labels and a board are added automatically'],
     text: [
-      '10 秒ほどの間に bug・untriaged・lucene・Search:Performance のラベルが付き、プロジェクトのボードに載った。untriaged は「まだ誰も仕分けていない」の印。',
-      'Within about 10 seconds, the labels bug, untriaged, lucene and Search:Performance were added, and the issue went onto a project board. untriaged means no one has sorted it yet.',
+      '10 秒ほどの間に `bug`・`untriaged`・`lucene`・`Search:Performance` のラベルが付き、プロジェクトのボードに載った。`untriaged` は「まだ誰も仕分けていない」の印。',
+      'Within about 10 seconds, the labels `bug`, `untriaged`, `lucene` and `Search:Performance` were added, and the issue went onto a project board. `untriaged` means no one has sorted it yet.',
     ],
   },
   {
@@ -53,8 +53,8 @@ const EVENTS: Ev[] = [
     who: 'maintainer',
     title: ['トリアージされる', 'Triaged'],
     text: [
-      '約 3 日後。メンテナーが「[Search Triage]」としてお礼を書き、レビュー担当を 2 人指名した。untriaged と lucene のラベルが外れた。',
-      'About three days later. A maintainer thanked us under “[Search Triage]” and named two reviewers. The untriaged and lucene labels were removed.',
+      '約 3 日後。メンテナーが「[Search Triage]」としてお礼を書き、レビュー担当を 2 人指名した。`untriaged` と `lucene` のラベルが外れた。',
+      'About three days later. A maintainer thanked us under “[Search Triage]” and named two reviewers. The `untriaged` and `lucene` labels were removed.',
     ],
   },
   {
@@ -62,7 +62,7 @@ const EVENTS: Ev[] = [
     lane: 'feature',
     who: 'me',
     title: ['機能要望 #23429 を出す', 'File feature request #23429'],
-    text: ['数秒で untriaged・Search・lucene のラベルが付き、ボードに載った。', 'Within seconds, the labels untriaged, Search and lucene were added, and it went onto the board.'],
+    text: ['数秒で `untriaged`・`Search`・`lucene` のラベルが付き、ボードに載った。', 'Within seconds, the labels `untriaged`, `Search` and `lucene` were added, and it went onto the board.'],
   },
   {
     at: '2026-10-28T00:00:00Z',
@@ -72,7 +72,7 @@ const EVENTS: Ev[] = [
     title: ['今: どちらもオープン', 'Now: both still open'],
     text: [
       'バグ報告は PR のレビュー待ち。機能要望はまだトリアージ待ちで、コメントは付いていない。',
-      'The bug report is waiting on the PR review. The feature request is still waiting for triage, with no comments yet.',
+      'The `bug` report is waiting on the PR review. The feature request is still waiting for triage, with no comments yet.',
     ],
   },
 ]
@@ -124,7 +124,9 @@ export function IssueTimeline() {
                 </span>
               </span>
               <span className="text-[15px] font-extrabold">{tr(...ev.title)}</span>
-              <p className="text-[14px] leading-[1.8] text-ink/85">{tr(...ev.text)}</p>
+              <p className="text-[14px] leading-[1.8] text-ink/85">
+                <Rich text={tr(...ev.text)} />
+              </p>
             </div>
           </li>
         )

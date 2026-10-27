@@ -1,4 +1,5 @@
 import { A, C, Callout, Cite, CodeBlock, Figure, Li, NoteSection, P, References, Shot, Strong, type Reference } from '@/components/notes/Prose'
+import { LinkPreview } from '@/components/notes/LinkPreview'
 import { IssueFlow } from '@/components/notes/oss/IssueFlow'
 import { IssueAnatomy } from '@/components/notes/oss/IssueAnatomy'
 import { IssueTimeline } from '@/components/notes/oss/IssueTimeline'
@@ -98,7 +99,11 @@ export function OssIssue() {
   return (
     <>
       <P>
-        2026 年 10 月、検索エンジンの <Strong>OpenSearch</Strong> に Issue を 2 件出しました。1 件はバグ報告、1 件は機能要望です。OpenSearch は GitHub のスターが 1 万を超える大きめの OSS で、Issue
+        2026 年 10 月、検索エンジンの{' '}
+        <Strong>
+          <A href="https://opensearch.org/">OpenSearch</A>
+        </Strong>{' '}
+        に Issue を 2 件出しました。1 件はバグ報告、1 件は機能要望です。OpenSearch は GitHub のスターが 1 万を超える大きめの OSS で、Issue
         の書き方にもテンプレートや仕分けの決まりがあります。この記事では主にバグ報告の 1 件について、何をどんな順番で調べ、どう書き、出したあと何が起きたかを、心構えと一緒にまとめます。
       </P>
 
@@ -117,6 +122,11 @@ export function OssIssue() {
           バグ報告は、OpenSearch 3.x の検索の最適化（range クエリの近似）が、本来かかってはいけない場所にもかかってしまい、条件に合うドキュメントがエラーもなく黙って結果から落ちる、というものです<Cite n={1} />
           。この記事では中身より「どう出したか」に絞るので、詳しくは Issue の本文を見てください。
         </P>
+        <LinkPreview
+          url="https://github.com/opensearch-project/OpenSearch/issues/23303"
+          source="GitHub · opensearch-project/OpenSearch #23303"
+          title="[BUG] Range query approximation is applied to post_filter, rescore_query, named queries and inner_hits, silently dropping matches"
+        />
       </NoteSection>
 
       <NoteSection step={3} id="flow" title="出すまでの流れ">
@@ -181,6 +191,11 @@ export function OssIssue() {
           2 件目は機能要望です<Cite n={3} />。近似 k-NN 検索（Faiss エンジン）と <C>post_filter</C> を組み合わせると、同じクエリなのに、無関係なフィールドを更新しただけで結果が変わる、という現象を追っていました。原因は、k
           件を選ぶ処理がセグメントごとに行われることです<Cite n={6} />。
         </P>
+        <LinkPreview
+          url="https://github.com/opensearch-project/OpenSearch/issues/23429"
+          source="GitHub · opensearch-project/OpenSearch #23429"
+          title="[Feature Request] Expose which Lucene segment each search hit came from (opt-in, for debugging)"
+        />
         <P>
           これを確かめるには「どのヒットがどのセグメントから来たか」が分かればよいのですが、それを返す API はありません。ソートの値とセグメント一覧を突き合わせる回避策は使えたものの、前提が多く壊れやすい。そこで、
           <C>version</C> などと同じ形のオプトインのフラグで、ヒットごとのセグメントを返せるようにしてほしい、という提案にしました。
@@ -238,7 +253,11 @@ export function OssIssueEn() {
   return (
     <>
       <P>
-        In October 2026 I filed two issues to the search engine <Strong>OpenSearch</Strong>: one bug report and one feature request. OpenSearch is a fairly large OSS project with
+        In October 2026 I filed two issues to the search engine{' '}
+        <Strong>
+          <A href="https://opensearch.org/">OpenSearch</A>
+        </Strong>
+        : one bug report and one feature request. OpenSearch is a fairly large OSS project with
         more than 10,000 stars on GitHub, and it has templates and triage rules for how issues are written. This note focuses on the bug report: what I investigated and in what
         order, how I wrote it, and what happened after I filed it, along with the mindset behind it.
       </P>
@@ -259,6 +278,11 @@ export function OssIssueEn() {
           The bug report is about a search optimization in OpenSearch 3.x (approximation of range queries) that was also being applied where it should not be, so matching documents
           silently dropped out of the results with no error <Cite n={1} />. This note is about how I filed it rather than the bug itself, so see the issue for the details.
         </P>
+        <LinkPreview
+          url="https://github.com/opensearch-project/OpenSearch/issues/23303"
+          source="GitHub · opensearch-project/OpenSearch #23303"
+          title="[BUG] Range query approximation is applied to post_filter, rescore_query, named queries and inner_hits, silently dropping matches"
+        />
       </NoteSection>
 
       <NoteSection step={3} id="flow" title="Before filing">
@@ -330,6 +354,11 @@ export function OssIssueEn() {
           The second issue is a feature request <Cite n={3} />. I was chasing a behavior where combining approximate k-NN search (Faiss engine) with <C>post_filter</C> gives different
           results for the same query just because an unrelated field was updated. The cause is that the step that picks k results runs per segment <Cite n={6} />.
         </P>
+        <LinkPreview
+          url="https://github.com/opensearch-project/OpenSearch/issues/23429"
+          source="GitHub · opensearch-project/OpenSearch #23429"
+          title="[Feature Request] Expose which Lucene segment each search hit came from (opt-in, for debugging)"
+        />
         <P>
           To confirm it, you need to know which segment each hit came from, but no API returns that. A workaround that matches sort values against the segment list worked, but it
           relies on many assumptions and breaks easily. So I proposed an opt-in flag, shaped like <C>version</C> and similar options, that returns the segment of each hit.

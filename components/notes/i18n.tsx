@@ -17,3 +17,20 @@ export function useTr() {
   const lang = useNoteLang()
   return (ja: string, en: string) => (lang === 'ja' ? ja : en)
 }
+
+/** 文中の `...` をコード表記にして返す（図やリストの文字列用。本文の <C> と同じ見た目） */
+export function Rich({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(`[^`]+`)/).map((part, i) =>
+        part.startsWith('`') && part.endsWith('`') ? (
+          <code key={i} className="rounded-[4px] bg-ink/[0.07] px-[5px] py-[1px] font-mono text-[0.88em] font-semibold text-ink">
+            {part.slice(1, -1)}
+          </code>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  )
+}

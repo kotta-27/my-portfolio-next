@@ -1,6 +1,6 @@
 'use client'
 
-import { useTr } from '@/components/notes/i18n'
+import { Rich, useTr } from '@/components/notes/i18n'
 
 type Part = { id: string; head: string; lines: number; template?: boolean; what: [string, string]; role: [string, string] }
 
@@ -14,7 +14,7 @@ const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: 
         id: 'title',
         head: 'Title',
         lines: 1,
-        what: ['[BUG] Range query approximation is applied to post_filter, rescore_query, named queries and inner_hits, silently dropping matches', '[BUG] Range query approximation is applied to post_filter, rescore_query, named queries and inner_hits, silently dropping matches'],
+        what: ['[BUG] Range query approximation is applied to `post_filter`, rescore_query, named queries and inner_hits, silently dropping matches', '[BUG] Range query approximation is applied to `post_filter`, rescore_query, named queries and inner_hits, silently dropping matches'],
         role: ['何が・どこで・どうなるかを 1 行に入れる。一覧で見たメンテナーが、自分の担当か、どれくらい深刻かを開かずに判断できる。', 'Fit what, where and how into one line. Scanning the list, a maintainer can tell whether it is theirs and how serious it is without opening it.'],
       },
       {
@@ -22,7 +22,7 @@ const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: 
         head: 'Describe the bug',
         lines: 5,
         template: true,
-        what: ['症状（エラーなしで一致が落ちる、件数が eq のまま減る）、影響する 6 か所、影響するバージョン（3.0.0〜3.9.0 と main、2.19.5 は影響なし）。', 'The symptom (matches silently drop with no error; the count shrinks but is still reported as eq), the 6 affected places, and the affected versions (3.0.0–3.9.0 and main; 2.19.5 is not affected).'],
+        what: ['症状（エラーなしで一致が落ちる、件数が `eq` のまま減る）、影響する 6 か所、影響するバージョン（3.0.0〜3.9.0 と `main`、2.19.5 は影響なし）。', 'The symptom (matches silently drop with no error; the count shrinks but is still reported as `eq`), the 6 affected places, and the affected versions (3.0.0–3.9.0 and `main`; 2.19.5 is not affected).'],
         role: ['最初の数行で「誰に関係あるか」が分かるようにする。影響範囲が広いことも、ここで伝わる。', 'Make the first few lines tell who it affects. They also convey how wide the impact is.'],
       },
       {
@@ -46,7 +46,7 @@ const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: 
         head: 'Expected behavior',
         lines: 1,
         template: true,
-        what: ['post_filter などでは range を正確に評価してほしい（2.19 と同じ）。近似してよいのは本命のクエリだけ。', 'post_filter and the others should evaluate the range exactly (as on 2.19). Only the main query should be approximated.'],
+        what: ['`post_filter` などでは `range` を正確に評価してほしい（2.19 と同じ）。近似してよいのは本命のクエリだけ。', '`post_filter` and the others should evaluate the `range` exactly (as on 2.19). Only the main query should be approximated.'],
         role: ['「何が正しいか」を一文で。ここが曖昧だと、仕様なのかバグなのかの議論から始まってしまう。', 'State what is correct in one sentence. If this is vague, the discussion starts with whether it is a bug or by design.'],
       },
       {
@@ -89,7 +89,7 @@ const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: 
         head: 'Is your feature request related to a problem? Please describe',
         lines: 6,
         template: true,
-        what: ['k-NN と post_filter を組み合わせると、ドキュメントがどのセグメントにいるかで結果が変わる現象。curl の再現と、今の回避策（_doc ソート + _cat/segments）が壊れやすい理由。', 'Combining k-NN with post_filter makes results depend on which segment a document is in. A curl reproduction, and why the current workaround (_doc sort + _cat/segments) is fragile.'],
+        what: ['k-NN と `post_filter` を組み合わせると、ドキュメントがどのセグメントにいるかで結果が変わる現象。curl の再現と、今の回避策（`_doc` ソート + `_cat/segments`）が壊れやすい理由。', 'Combining k-NN with `post_filter` makes results depend on which segment a document is in. A curl reproduction, and why the current workaround (`_doc` sort + `_cat/segments`) is fragile.'],
         role: ['機能要望でも、まず「困っていること」を再現できる形で示す。ほしい機能の必要性は、問題の具体さで決まる。', 'Even for a feature request, first show the problem in a reproducible form. How much the feature is needed depends on how concrete the problem is.'],
       },
       {
@@ -97,7 +97,7 @@ const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: 
         head: 'Describe the solution you\'d like',
         lines: 5,
         template: true,
-        what: ['version や seq_no_primary_term と同じ形の opt-in フラグ。返す JSON の例と、fetch の段階で読めるので小さく作れそうだという見立て。', 'An opt-in flag shaped like version or seq_no_primary_term, an example of the returned JSON, and a guess that it can be small because the segment is readable in the fetch phase.'],
+        what: ['`version` や `seq_no_primary_term` と同じ形の opt-in フラグ。返す JSON の例と、fetch の段階で読めるので小さく作れそうだという見立て。', 'An opt-in flag shaped like `version` or `seq_no_primary_term`, an example of the returned JSON, and a guess that it can be small because the segment is readable in the fetch phase.'],
         role: ['既存の API に似た形にすると、受け入れる側の想像がしやすい。完成形の例を見せると話が早い。', 'A shape similar to existing APIs is easier for them to picture. Showing the finished result speeds things up.'],
       },
       {
@@ -113,7 +113,7 @@ const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: 
         head: 'Describe alternatives you\'ve considered',
         lines: 5,
         template: true,
-        what: ['_cat/segments、_shard_doc、k-NN の explain、Profile API、efficient filtering。それぞれで何が分かって何が分からないか。', '_cat/segments, _shard_doc, k-NN explain, the Profile API and efficient filtering: what each one tells you and what it does not.'],
+        what: ['`_cat/segments`、`_shard_doc`、k-NN の explain、Profile API、efficient filtering。それぞれで何が分かって何が分からないか。', '`_cat/segments`, `_shard_doc`, k-NN explain, the Profile API and efficient filtering: what each one tells you and what it does not.'],
         role: ['「それなら〇〇で足りるのでは」を先回りして潰す。既存の機能をよく調べたことも伝わる。', 'Heads off “can’t you just use X?” in advance. It also shows you have studied the existing features.'],
       },
       {
@@ -146,10 +146,12 @@ export function IssueAnatomy({ which }: { which: 'bug' | 'feature' }) {
               p.id !== 'title' && <span className="rounded-[4px] bg-teal/10 px-[6px] py-[1px] text-[10.5px] font-bold text-teal">{tr('追加した節', 'added section')}</span>
             )}
           </span>
-          <p className="text-[14px] leading-[1.8] text-ink/85">{tr(...p.what)}</p>
+          <p className="text-[14px] leading-[1.8] text-ink/85"><Rich text={tr(...p.what)} /></p>
           <p className="flex gap-2 text-[13.5px] leading-[1.8] text-mute">
             <span className="shrink-0 font-bold text-teal">{tr('役割', 'Role')}</span>
-            <span>{tr(...p.role)}</span>
+            <span>
+              <Rich text={tr(...p.role)} />
+            </span>
           </p>
         </li>
       ))}

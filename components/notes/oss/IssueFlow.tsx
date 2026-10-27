@@ -11,20 +11,20 @@ import {
   PiScissorsBold,
 } from 'react-icons/pi'
 import type { IconType } from 'react-icons'
-import { useTr } from '@/components/notes/i18n'
+import { Rich, useTr } from '@/components/notes/i18n'
 
 /** #23303 を出すまでにやったこと。中身は Issue 本文に書いた内容から起こしている */
 const STEPS: { icon: IconType; title: [string, string]; did: [string, string]; why: [string, string] }[] = [
   {
     icon: PiBugBeetleBold,
     title: ['おかしいと気づく', 'Notice something is off'],
-    did: ['post_filter に range を置くと、当てはまるはずの件数より少ない。エラーは出ず、件数は「ちょうど」と報告される。', 'With a range in post_filter, fewer documents match than should. No error is returned, and the count is reported as exact.'],
+    did: ['`post_filter` に `range` を置くと、当てはまるはずの件数より少ない。エラーは出ず、件数は「ちょうど」と報告される。', 'With a `range` in `post_filter`, fewer documents match than should. No error is returned, and the count is reported as exact.'],
     why: ['エラーにならない間違いは気づきにくく、気づいた人が報告しないと残り続ける。', 'Mistakes that raise no error are easy to miss, and they stay unless whoever notices reports them.'],
   },
   {
     icon: PiScissorsBold,
     title: ['再現を小さくする', 'Shrink the reproduction'],
-    did: ['単一ノード・1 シャード・curl だけのスクリプトに削った。データは value = (i × 7919) % N で、件数 N を変えるだけで規模を変えられる。', 'Cut it down to a script with one node, one shard and only curl. The data is value = (i × 7919) % N, so changing N changes the scale.'],
+    did: ['単一ノード・1 シャード・curl だけのスクリプトに削った。データは `value = (i × 7919) % N` で、件数 `N` を変えるだけで規模を変えられる。', 'Cut it down to a script with one node, one shard and only curl. The data is `value = (i × 7919) % N`, so changing `N` changes the scale.'],
     why: ['メンテナーが手元でそのまま動かせる形にする。前提が少ないほど、別の原因を疑われにくい。', 'Make it something a maintainer can run as is. The fewer assumptions, the less likely another cause gets suspected.'],
   },
   {
@@ -42,8 +42,8 @@ const STEPS: { icon: IconType; title: [string, string]; did: [string, string]; w
   {
     icon: PiMagnifyingGlassBold,
     title: ['原因をコードで追う', 'Trace the cause in the code'],
-    did: ['近似を有効にする処理が、本命のクエリ以外（post_filter など）にもかかっていた。該当箇所はバージョンのタグに固定したリンクで示した。', 'The code that enables approximation was also applied to queries other than the main one (post_filter and others). Linked the relevant lines, pinned to a version tag.'],
-    why: ['main ブランチへのリンクは、コードが変わると行がずれる。タグに固定すれば、後から読んでも同じ行を指す。', 'Links to the main branch drift as the code changes. Pinned to a tag, they point to the same lines later.'],
+    did: ['近似を有効にする処理が、本命のクエリ以外（`post_filter` など）にもかかっていた。該当箇所はバージョンのタグに固定したリンクで示した。', 'The code that enables approximation was also applied to queries other than the main one (`post_filter` and others). Linked the relevant lines, pinned to a version tag.'],
+    why: ['`main` ブランチへのリンクは、コードが変わると行がずれる。タグに固定すれば、後から読んでも同じ行を指す。', 'Links to the `main` branch drift as the code changes. Pinned to a tag, they point to the same lines later.'],
   },
   {
     icon: PiCodeBold,
@@ -87,10 +87,12 @@ export function IssueFlow() {
                 <span className="font-mono text-[12px] font-bold text-mute">{i + 1}</span>
                 <span className="text-[16px] font-extrabold">{tr(...st.title)}</span>
               </span>
-              <p className="text-[14.5px] leading-[1.85] text-ink/85">{tr(...st.did)}</p>
+              <p className="text-[14.5px] leading-[1.85] text-ink/85"><Rich text={tr(...st.did)} /></p>
               <p className="flex gap-2 text-[13.5px] leading-[1.8] text-mute">
                 <span className="shrink-0 font-bold text-teal">{tr('なぜ', 'Why')}</span>
-                <span>{tr(...st.why)}</span>
+                <span>
+                  <Rich text={tr(...st.why)} />
+                </span>
               </p>
             </div>
           </li>
