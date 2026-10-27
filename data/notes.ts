@@ -12,6 +12,19 @@ export type NoteMeta = {
 
 export const notesData: NoteMeta[] = [
   {
+    slug: 'oss-issue',
+    title: {
+      en: 'Filing issues to a large OSS project (OpenSearch)',
+      ja: '大きめの OSS に Issue を出してみた（OpenSearch）',
+    },
+    summary: {
+      en: 'How I prepared, wrote and followed up a bug report (and a feature request) to OpenSearch — the flow, the structure of the issue, what happened after, and the mindset.',
+      ja: 'OpenSearch に出したバグ報告を中心に、出すまでの流れ・Issue の組み立て・出したあとに起きたこと・心構えを、図でまとめた記録。機能要望の 1 件にも触れる。',
+    },
+    date: '2026-10-28',
+    tags: ['OSS', 'OpenSearch'],
+  },
+  {
     slug: 'hnsw',
     title: {
       en: 'How HNSW works',
