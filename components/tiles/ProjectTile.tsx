@@ -9,7 +9,7 @@ import { ViewLink } from '@/components/ViewLink'
 export function ProjectTile({ project, lang }: { project: ProjectItem; lang: Lang }) {
   return (
     <Tile pad={false} className="gap-0">
-      <ViewLink href={`/projects/${project.slug}?lang=${lang}`} className="group flex h-full flex-col no-underline">
+      <ViewLink href={`/projects/${project.slug}`} className="group flex h-full flex-col no-underline">
         {/* ブロック同士が横に密着するので、画像は縁まで敷かず内側に収めて隣と区切る */}
         <div className="relative mx-[10px] mt-[10px] aspect-[16/10] overflow-hidden rounded-[2px] bg-soft">
           <Image

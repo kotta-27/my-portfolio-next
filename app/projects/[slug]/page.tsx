@@ -3,6 +3,7 @@ import { PiArrowUpRight, PiCheckCircleFill, PiMedalFill, PiQuotes } from 'react-
 import { parseView, type Lang } from '@/types'
 import { projectsData } from '@/data/projects'
 import { ui } from '@/data/ui'
+import { getLang } from '@/lib/lang'
 import { Reveal } from '@/components/Reveal'
 import { AssembleScript } from '@/components/AssembleScript'
 import { Tile } from '@/components/Tile'
@@ -23,14 +24,14 @@ export default async function ProjectPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ lang?: string; from?: string }>
+  searchParams: Promise<{ from?: string }>
 }) {
   const { slug } = await params
-  const { lang: rawLang, from: rawFrom } = await searchParams
-  const lang: Lang = rawLang === 'ja' ? 'ja' : 'en'
+  const { from: rawFrom } = await searchParams
+  const lang: Lang = await getLang()
   const from = parseView(rawFrom)
   // 来たビューに戻す。Overview から来たならプロジェクト一覧の位置へ
-  const backHref = from === 'all' ? `/?lang=${lang}#projects` : `/?lang=${lang}&view=${from}`
+  const backHref = from === 'all' ? '/#projects' : `/?view=${from}`
 
   const index = projectsData.findIndex((p) => p.slug === slug)
   if (index === -1) notFound()

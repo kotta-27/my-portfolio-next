@@ -20,7 +20,7 @@ export function ProjectNeighborTile({ project, lang, direction, label, from }: P
   return (
     <Tile pad={false}>
       <Link
-        href={`/projects/${project.slug}?lang=${lang}&from=${from}`}
+        href={`/projects/${project.slug}?from=${from}`}
         className={`group flex h-full min-h-[120px] items-stretch no-underline ${direction === 'prev' ? 'flex-row' : 'flex-row-reverse'}`}
       >
         <div className="relative w-[38%] shrink-0 overflow-hidden bg-soft">

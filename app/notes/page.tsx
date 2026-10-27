@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { headers } from 'next/headers'
 import type { Lang } from '@/types'
 import { notesData } from '@/data/notes'
+import { getLang } from '@/lib/lang'
 import { BLOG_ORIGIN, SITE_ORIGIN, isBlogHost } from '@/lib/blog'
 import { Reveal } from '@/components/Reveal'
 import { AssembleScript } from '@/components/AssembleScript'
@@ -20,13 +21,12 @@ export const metadata: Metadata = {
 }
 
 /** ノートの一覧。blog.kotap.dev のトップ（middleware が / をここに振り替える） */
-export default async function NotesIndex({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
-  const { lang: rawLang } = await searchParams
-  const lang: Lang = rawLang === 'ja' ? 'ja' : 'en'
+export default async function NotesIndex() {
+  const lang: Lang = await getLang()
   const onBlog = isBlogHost((await headers()).get('host'))
   // blog.kotap.dev では /hnsw、kotap.dev では /notes/hnsw
-  const hrefOf = (slug: string) => `${onBlog ? '' : '/notes'}/${slug}?lang=${lang}`
-  const siteHref = onBlog ? `${SITE_ORIGIN}/?lang=${lang}` : `/?lang=${lang}`
+  const hrefOf = (slug: string) => `${onBlog ? '' : '/notes'}/${slug}`
+  const siteHref = onBlog ? `${SITE_ORIGIN}/` : '/'
   const notes = [...notesData].sort((a, b) => b.date.localeCompare(a.date))
 
   return (

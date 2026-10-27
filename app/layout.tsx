@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
+import { getLang } from '@/lib/lang'
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ['latin'],
@@ -45,14 +46,14 @@ export const metadata: Metadata = {
  */
 const THEME_SCRIPT = `try{var m=document.cookie.match(/(?:^|; )theme=(dark|light)/),t=m?m[1]:localStorage.getItem('theme');if(t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.classList.add('dark')}catch(e){}`
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   return (
     // head のスクリプトが描画前に html へ dark クラスを付けるので、その差分は hydration 警告から外す
-    <html lang="en" className={`${jakarta.variable} ${jetbrains.variable}`} suppressHydrationWarning>
+    <html lang={await getLang()} className={`${jakarta.variable} ${jetbrains.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>

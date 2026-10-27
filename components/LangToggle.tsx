@@ -1,7 +1,7 @@
 'use client'
 
 import { useTransition } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import type { Lang } from '@/types'
 
@@ -10,17 +10,14 @@ const LANGS: Lang[] = ['en', 'ja']
 /** EN / JA segmented switch; the teal pill slides to the active language. */
 export function LangToggle({ lang }: { lang: Lang }) {
   const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
+  // 言語は URL に載せず cookie に保存する。kotap.dev 上では www と blog で共有する
   function switchTo(target: Lang) {
     if (target === lang) return
-    startTransition(() => {
-      const params = new URLSearchParams(searchParams.toString())
-      params.set('lang', target)
-      router.push(`${pathname}?${params.toString()}`, { scroll: false })
-    })
+    const domain = location.hostname.endsWith('kotap.dev') ? '; domain=.kotap.dev' : ''
+    document.cookie = `lang=${target}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax${domain}`
+    startTransition(() => router.refresh())
   }
 
   return (

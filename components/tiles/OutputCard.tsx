@@ -23,7 +23,7 @@ export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang 
     return (
       <Tile pad={false} className="gap-0 !min-h-0">
         <a
-          href={`${item.url}?lang=${lang}`}
+          href={item.url}
           aria-label={`${item.source}: ${item.label[lang]}`}
           className="group relative flex h-full flex-col no-underline"
         >

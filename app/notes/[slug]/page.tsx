@@ -3,6 +3,7 @@ import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import type { Lang } from '@/types'
 import { notesData } from '@/data/notes'
+import { getLang } from '@/lib/lang'
 import { BLOG_ORIGIN, SITE_ORIGIN, isBlogHost } from '@/lib/blog'
 import { noteBodies } from '@/components/notes/registry'
 import { Reveal } from '@/components/Reveal'
@@ -29,20 +30,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function NotePage({
   params,
-  searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ lang?: string }>
 }) {
   const { slug } = await params
-  const { lang: rawLang } = await searchParams
-  const lang: Lang = rawLang === 'ja' ? 'ja' : 'en'
+  const lang: Lang = await getLang()
   const note = notesData.find((n) => n.slug === slug)
   const body = noteBodies[slug]
   if (!note || !body) notFound()
   // 戻り先はポートフォリオの Output。blog.kotap.dev からは本体のドメインへ戻す
   const onBlog = isBlogHost((await headers()).get('host'))
-  const backHref = `${onBlog ? SITE_ORIGIN : ''}/?lang=${lang}&view=writing`
+  const backHref = `${onBlog ? SITE_ORIGIN : ''}/?view=writing`
   const backLabel = lang === 'ja' ? 'Output に戻る' : 'Back to Output'
 
   return (

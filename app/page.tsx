@@ -10,6 +10,7 @@ import { ViewProvider } from '@/components/ViewContext'
 import { Nav } from '@/components/Nav'
 import { IntroOverlay } from '@/components/IntroOverlay'
 import { INTRO_COOKIE } from '@/lib/intro'
+import { getLang } from '@/lib/lang'
 import { BentoGrid, type BentoItemDef } from '@/components/BentoGrid'
 import { TileSkeleton } from '@/components/TileSkeleton'
 import { ScrollToHash } from '@/components/ScrollToHash'
@@ -36,10 +37,10 @@ const VISIBLE_PROJECTS = 7
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ lang?: string; view?: string }>
+  searchParams: Promise<{ view?: string }>
 }) {
-  const { lang: rawLang, view: rawView } = await searchParams
-  const lang: Lang = rawLang === 'ja' ? 'ja' : 'en'
+  const { view: rawView } = await searchParams
+  const lang: Lang = await getLang()
   const t = ui[lang]
   // イントロはセッションで 1 回だけ。見たかどうかをサーバーで判断し、2 回目以降は描画しない
   const showIntro = !(await cookies()).has(INTRO_COOKIE)
