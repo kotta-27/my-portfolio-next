@@ -39,8 +39,11 @@ export const metadata: Metadata = {
   },
 }
 
-/** 保存した選択 → なければ OS の設定、でダークを決める。描画前に走らせて白いちらつきを防ぐ */
-const THEME_SCRIPT = `try{var t=localStorage.getItem('theme');if(t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.classList.add('dark')}catch(e){}`
+/**
+ * 保存した選択 → なければ OS の設定、でダークを決める。描画前に走らせて白いちらつきを防ぐ。
+ * 選択は www.kotap.dev と blog.kotap.dev で共有する cookie（Domain=.kotap.dev）を先に見て、無ければ localStorage を見る。
+ */
+const THEME_SCRIPT = `try{var m=document.cookie.match(/(?:^|; )theme=(dark|light)/),t=m?m[1]:localStorage.getItem('theme');if(t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.classList.add('dark')}catch(e){}`
 
 export default function RootLayout({
   children,
