@@ -29,14 +29,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const lang = await getLang()
   const title = `${note.title[lang]} — Kota Mizuno`
   const url = `${BLOG_ORIGIN}/${note.slug}`
-  // 正式な URL は blog.kotap.dev 側。OGP 画像の URL もこのドメインで組み立てる
+  // 正式な URL は blog.kotap.dev 側。OGP 画像の URL もこのドメインで組み立てる。SNS のカードのタイトルは記事名だけ（サイト名は og:site_name に出る）
   return {
     metadataBase: new URL(BLOG_ORIGIN),
     title,
     description: note.summary[lang],
     alternates: { canonical: url },
-    openGraph: { type: 'article', title, description: note.summary[lang], url, siteName: 'Kota Mizuno — Notes', locale: lang === 'ja' ? 'ja_JP' : 'en_US', publishedTime: note.date },
-    twitter: { card: 'summary_large_image', title, description: note.summary[lang], creator: '@Melmol_27' },
+    openGraph: { type: 'article', title: note.title[lang], description: note.summary[lang], url, siteName: 'Kota Mizuno — Notes', locale: lang === 'ja' ? 'ja_JP' : 'en_US', publishedTime: note.date },
+    twitter: { card: 'summary_large_image', title: note.title[lang], description: note.summary[lang], creator: '@Melmol_27' },
   }
 }
 
