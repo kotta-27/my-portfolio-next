@@ -160,7 +160,7 @@ export function Plot({ points, nodes, edges = [], path = [], tones = {}, probes 
 }
 
 /** 図の凡例。その図で使っている役割だけを並べる */
-export type LegendItem = Tone | 'query' | 'path' | 'cut' | 'edge'
+export type LegendItem = Tone | 'query' | 'path' | 'cut' | 'edge' | 'same'
 
 const LEGEND_TEXT: Record<LegendItem, string> = {
   base: 'まだ測っていない点',
@@ -175,6 +175,7 @@ const LEGEND_TEXT: Record<LegendItem, string> = {
   path: 'たどった道',
   cut: '切られたつながり',
   edge: 'つながり',
+  same: '同じ点（層をまたぐ）',
 }
 
 function Swatch({ item }: { item: LegendItem }) {
@@ -182,6 +183,7 @@ function Swatch({ item }: { item: LegendItem }) {
     <svg viewBox="0 0 10 10" className="h-[14px] w-[14px] shrink-0" aria-hidden>
       {item === 'query' && <path d="M2 5H8M5 2V8" className="stroke-coral" strokeWidth={1.4} strokeLinecap="round" />}
       {item === 'path' && <line x1={1} y1={5} x2={9} y2={5} className="stroke-teal" strokeWidth={1.8} strokeLinecap="round" />}
+      {item === 'same' && <line x1={5} y1={1} x2={5} y2={9} className="stroke-mute" strokeWidth={1.1} strokeDasharray="1.4 1" />}
       {item === 'edge' && <line x1={1} y1={5} x2={9} y2={5} className="stroke-ink/30" strokeWidth={0.8} />}
       {item === 'cut' && <line x1={1} y1={5} x2={9} y2={5} className="stroke-coral" strokeWidth={1.2} strokeDasharray="1.6 1.2" />}
       {item === 'entry' && <rect x={2} y={2} width={6} height={6} rx={0.8} className="fill-ink" />}
