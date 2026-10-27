@@ -146,3 +146,52 @@ export function A({ href, children }: { href: string; children: ReactNode }) {
     </a>
   )
 }
+
+/** 本文中の参考文献の番号。押すと末尾の一覧へ飛ぶ */
+export function Cite({ n }: { n: number | number[] }) {
+  const ns = Array.isArray(n) ? n : [n]
+  return (
+    <sup className="ml-[1px] font-mono text-[0.72em] font-bold">
+      [
+      {ns.map((x, i) => (
+        <span key={x}>
+          {i > 0 && ','}
+          <a href={`#ref-${x}`} className="text-teal no-underline hover:underline">
+            {x}
+          </a>
+        </span>
+      ))}
+      ]
+    </sup>
+  )
+}
+
+export type Reference = { authors: string; title: string; source: string; url: string; extra?: { label: string; url: string } }
+
+/** 参考文献の一覧。番号は配列の順（1 始まり） */
+export function References({ items }: { items: Reference[] }) {
+  return (
+    <ol className={`${COLUMN} flex flex-col gap-3`}>
+      {items.map((r, i) => (
+        <li key={r.url} id={`ref-${i + 1}`} className="grid scroll-mt-6 grid-cols-[32px_minmax(0,1fr)] text-[13.5px] leading-[1.75] target:rounded-[6px] target:bg-teal/10">
+          <span className="font-mono font-bold text-mute">[{i + 1}]</span>
+          <span className="min-w-0 break-words">
+            {r.authors}.{' '}
+            <a href={r.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-teal underline decoration-teal/40 underline-offset-[3px] hover:decoration-teal">
+              {r.title}
+            </a>
+            . <span className="text-mute">{r.source}</span>
+            {r.extra && (
+              <>
+                {' '}
+                <a href={r.extra.url} target="_blank" rel="noopener noreferrer" className="font-mono text-[12px] text-mute underline underline-offset-[3px] hover:text-ink">
+                  {r.extra.label}
+                </a>
+              </>
+            )}
+          </span>
+        </li>
+      ))}
+    </ol>
+  )
+}
