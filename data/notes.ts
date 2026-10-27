@@ -12,6 +12,19 @@ export type NoteMeta = {
 
 export const notesData: NoteMeta[] = [
   {
+    slug: 'hnsw',
+    title: {
+      en: 'How HNSW works',
+      ja: 'HNSW アルゴリズムの仕組み',
+    },
+    summary: {
+      en: 'How HNSW finds nearest vectors fast: greedy graph search, stacked layers, random levels, insertion and the M / ef parameters — with a small working HNSW in the page.',
+      ja: '近いベクトルを速く探す HNSW を、グラフの貪欲探索・層の重ね方・層の決め方・点の入れ方・パラメータの順に、ページ内で実際に動かした図で整理した勉強の記録。',
+    },
+    date: '2026-10-27',
+    tags: ['Vector Search', 'Algorithm'],
+  },
+  {
     slug: 'git-worktree',
     title: {
       en: 'What is git worktree?',
