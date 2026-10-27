@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import type { Lang } from '@/types'
 import { notesData } from '@/data/notes'
+import { BLOG_ORIGIN, isBlogHost } from '@/lib/blog'
 import { noteBodies } from '@/components/notes/registry'
 import { Reveal } from '@/components/Reveal'
 import { AssembleScript } from '@/components/AssembleScript'
@@ -21,7 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params
   const note = notesData.find((n) => n.slug === slug)
   if (!note) return {}
-  return { title: `${note.title.ja} — Kota Mizuno`, description: note.summary.ja }
+  // 正式な URL は blog.kotap.dev 側。kotap.dev/notes/... はその写し
+  return { title: `${note.title.ja} — Kota Mizuno`, description: note.summary.ja, alternates: { canonical: `${BLOG_ORIGIN}/${note.slug}` } }
 }
 
 export default async function NotePage({
@@ -37,8 +40,10 @@ export default async function NotePage({
   const note = notesData.find((n) => n.slug === slug)
   const body = noteBodies[slug]
   if (!note || !body) notFound()
-  const backHref = `/?lang=${lang}&view=writing`
-  const backLabel = lang === 'ja' ? 'Output に戻る' : 'Back to Output'
+  // blog.kotap.dev で開いているときは、戻り先をノートの一覧にする
+  const onBlog = isBlogHost((await headers()).get('host'))
+  const backHref = onBlog ? `/?lang=${lang}` : `/?lang=${lang}&view=writing`
+  const backLabel = onBlog ? (lang === 'ja' ? 'ノート一覧' : 'All notes') : lang === 'ja' ? 'Output に戻る' : 'Back to Output'
 
   return (
     <div className="baseplate min-h-screen font-sans text-ink">
