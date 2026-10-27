@@ -10,12 +10,13 @@ export function NowTile({ lang }: { lang: Lang }) {
   const a = about[lang]
   return (
     <Tile>
-      {/* ロゴは右上の空きスペースにそのまま置く */}
-      <div className="absolute right-3 top-3 h-[40px] w-[40px] sm:right-4 sm:top-4 sm:h-[64px] sm:w-[64px] dark:rounded-[10px] dark:bg-white">
-        <Image src="/studist.png" alt={a.currentCompany} fill sizes="(min-width: 640px) 64px, 40px" className="object-contain dark:p-[5px] sm:dark:p-[8px]" />
+      {/* ロゴは PC ではブロックの右に上下中央で置く。モバイルは幅が狭く文字と重なるので出さない */}
+      <div className="absolute right-4 top-1/2 hidden h-[64px] w-[64px] -translate-y-1/2 sm:block dark:rounded-[10px] dark:bg-white">
+        <Image src="/studist.png" alt={a.currentCompany} fill sizes="64px" className="object-contain dark:p-[8px]" />
       </div>
       <TileLabel>{t.currently}</TileLabel>
-      <div className="mt-auto">
+      {/* 会社名・役職・期間はラベルのすぐ下に上揃えで（学歴タイルと同じ間隔） */}
+      <div className="mt-1">
         <a
           href="https://studist.jp/"
           target="_blank"
