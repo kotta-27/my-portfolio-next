@@ -282,6 +282,8 @@ html.dark .stud-dot--on {
   background: var(--face);
   box-shadow: 0 2px 0 color-mix(in oklab, var(--face) 75%, black);
 }
+.mini-brick--coral { --face: rgb(var(--coral)); }
+.mini-brick--soft { --face: rgb(var(--soft)); }
 .mini-brick::before {
   content: '';
   position: absolute;

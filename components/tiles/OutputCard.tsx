@@ -1,10 +1,13 @@
-import { PiArrowUpRight } from 'react-icons/pi'
+import Link from 'next/link'
+import { PiArrowRight, PiArrowUpRight } from 'react-icons/pi'
 import type { Lang } from '@/types'
 import { fetchOgImage } from '@/lib/fetchOgImage'
 import type { OutputItem } from '@/lib/outputs'
 import { Tile } from '@/components/Tile'
 import { Thumb } from '@/components/Thumb'
 import { Pill } from '@/components/Pill'
+import { NoteCover } from '@/components/notes/NoteCover'
+import { notesData } from '@/data/notes'
 
 /**
  * Output ビューの 1 枚カード。サムネイルを主役にし、hover で下からソースとタイトルが出る。
@@ -14,6 +17,26 @@ import { Pill } from '@/components/Pill'
  * ブロックせずこのカードだけストリーミングで後から差し込まれる(ページ全体を待たせない)。
  */
 export async function OutputCard({ item, lang }: { item: OutputItem; lang: Lang }) {
+  // サイト内のノートは OG 画像を取りに行かず、表紙を描く
+  const note = item.internal ? notesData.find((n) => `/notes/${n.slug}` === item.url) : undefined
+  if (note) {
+    return (
+      <Tile pad={false} className="gap-0 !min-h-0">
+        <Link
+          href={`${item.url}?lang=${lang}`}
+          aria-label={`${item.source}: ${item.label[lang]}`}
+          className="group relative flex h-full flex-col no-underline"
+        >
+          <div className="relative m-[10px] aspect-[1200/630] overflow-hidden rounded-[2px]">
+            <NoteCover title={note.title[lang]} date={note.date} tags={note.tags} />
+          </div>
+          <span className="absolute right-[18px] top-[18px] flex h-[26px] w-[26px] items-center justify-center rounded-[3px] bg-teal text-paper opacity-0 shadow-sm transition-opacity duration-200 group-hover:opacity-100">
+            <PiArrowRight className="text-[14px]" />
+          </span>
+        </Link>
+      </Tile>
+    )
+  }
   const thumbnail = item.thumbnail ?? (await fetchOgImage(item.url))
   return (
     <Tile pad={false} className={`gap-0 ${thumbnail ? '!min-h-0' : ''}`}>

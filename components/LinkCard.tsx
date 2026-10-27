@@ -9,6 +9,8 @@ export type LinkCardData = {
   label: string
   source: string
   thumbnail?: string | null
+  /** サイト内のページ。同じタブで開く */
+  internal?: boolean
 }
 
 type Props = {
@@ -21,8 +23,7 @@ export function LinkCard({ card, lang: _lang, mobileThumbnail = true }: Props) {
   return (
     <motion.a
       href={card.url}
-      target="_blank"
-      rel="noopener noreferrer"
+      {...(card.internal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
       whileHover={{ scale: 1.015 }}
       whileTap={{ scale: 0.985 }}
       className="w-full flex items-center rounded-[10px] bg-soft overflow-hidden no-underline hover:bg-ground transition-colors duration-150 group"
@@ -39,7 +40,7 @@ export function LinkCard({ card, lang: _lang, mobileThumbnail = true }: Props) {
         </span>
       </div>
       <span className="ml-auto pr-[14px] text-mute text-[13px] shrink-0 group-hover:text-ink transition-colors duration-150">
-        ↗
+        {card.internal ? '→' : '↗'}
       </span>
     </motion.a>
   )

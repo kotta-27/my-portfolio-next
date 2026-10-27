@@ -13,14 +13,14 @@ import { PreviewLink } from '@/components/PreviewLink'
 export async function OutputTile({ lang }: { lang: Lang }) {
   const t = ui[lang].tiles
   const items = await Promise.all(
-    collectOutputs().map(async (o) => ({ ...o, thumbnail: o.thumbnail ?? (await fetchOgImage(o.url)) }))
+    collectOutputs().map(async (o) => ({ ...o, thumbnail: o.thumbnail ?? (o.internal ? null : await fetchOgImage(o.url)) }))
   )
   return (
     <Tile id="writing" clip={false}>
       <TileLabel step={6} qty={items.length}>{t.writing}</TileLabel>
       <div className="mt-1 flex flex-col gap-[6px]">
         {items.map((o) => (
-          <PreviewLink key={o.url} card={{ url: o.url, label: o.label[lang], source: o.source, thumbnail: o.thumbnail }} />
+          <PreviewLink key={o.url} card={{ url: o.internal ? `${o.url}?lang=${lang}` : o.url, label: o.label[lang], source: o.source, thumbnail: o.thumbnail, internal: o.internal }} />
         ))}
       </div>
     </Tile>
