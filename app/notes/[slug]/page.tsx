@@ -3,7 +3,7 @@ import { headers } from 'next/headers'
 import { notFound } from 'next/navigation'
 import type { Lang } from '@/types'
 import { notesData } from '@/data/notes'
-import { BLOG_ORIGIN, isBlogHost } from '@/lib/blog'
+import { BLOG_ORIGIN, SITE_ORIGIN, isBlogHost } from '@/lib/blog'
 import { noteBodies } from '@/components/notes/registry'
 import { Reveal } from '@/components/Reveal'
 import { AssembleScript } from '@/components/AssembleScript'
@@ -40,10 +40,10 @@ export default async function NotePage({
   const note = notesData.find((n) => n.slug === slug)
   const body = noteBodies[slug]
   if (!note || !body) notFound()
-  // blog.kotap.dev で開いているときは、戻り先をノートの一覧にする
+  // 戻り先はポートフォリオの Output。blog.kotap.dev からは本体のドメインへ戻す
   const onBlog = isBlogHost((await headers()).get('host'))
-  const backHref = onBlog ? `/?lang=${lang}` : `/?lang=${lang}&view=writing`
-  const backLabel = onBlog ? (lang === 'ja' ? 'ノート一覧' : 'All notes') : lang === 'ja' ? 'Output に戻る' : 'Back to Output'
+  const backHref = `${onBlog ? SITE_ORIGIN : ''}/?lang=${lang}&view=writing`
+  const backLabel = lang === 'ja' ? 'Output に戻る' : 'Back to Output'
 
   return (
     <div className="baseplate min-h-screen font-sans text-ink">
