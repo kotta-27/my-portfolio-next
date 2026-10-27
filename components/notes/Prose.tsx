@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import type { ReactNode } from 'react'
 import { PiLightbulbFilament, PiWarning } from 'react-icons/pi'
 import { SectionLink } from '@/components/notes/SectionLink'
@@ -193,5 +194,14 @@ export function References({ items }: { items: Reference[] }) {
         </li>
       ))}
     </ol>
+  )
+}
+
+/** 図としての画像（スクリーンショットなど）。Figure kind="image" の中に置く */
+export function Shot({ src, alt, width, height }: { src: string; alt: string; width: number; height: number }) {
+  return (
+    <div className="overflow-hidden rounded-[10px] border border-ink/10 bg-tile">
+      <Image src={src} alt={alt} width={width} height={height} sizes="(min-width: 960px) 920px, 100vw" className="block h-auto w-full" />
+    </div>
   )
 }
