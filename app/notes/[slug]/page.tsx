@@ -16,6 +16,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { BackLink } from '@/components/BackLink'
 import { NoteProgress } from '@/components/notes/NoteProgress'
 import { NoteLangProvider } from '@/components/notes/i18n'
+import { LikeButton } from '@/components/notes/LikeButton'
 
 export function generateStaticParams() {
   return notesData.map((n) => ({ slug: n.slug }))
@@ -106,6 +107,7 @@ export default async function NotePage({
 
               <NoteLangProvider lang={lang}>
                 <Body />
+                <LikeButton slug={note.slug} />
               </NoteLangProvider>
             </article>
           </Tile>
