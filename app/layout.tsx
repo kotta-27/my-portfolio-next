@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 import { JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google'
 import './globals.css'
+import { Analytics } from '@vercel/analytics/next'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { getLang } from '@/lib/lang'
 
 const jakarta = Plus_Jakarta_Sans({
@@ -57,7 +59,12 @@ export default async function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
-      <body className="bg-ground antialiased">{children}</body>
+      <body className="bg-ground antialiased">
+        {children}
+        {/* Vercel のアクセス解析と表示速度の計測。本番のデプロイでだけ送信される */}
+        <Analytics />
+        <SpeedInsights />
+      </body>
     </html>
   )
 }
