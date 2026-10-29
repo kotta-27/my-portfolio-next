@@ -419,3 +419,17 @@ html.dark .technic-axle {
 @media (prefers-reduced-motion: reduce) {
   .clock-colon { animation: none; }
 }
+
+/*
+ * ノートの表紙（NoteCover）。画像と同じく枠の幅に比例して縮むよう、寸法はすべて --u（枠の幅の 1/240）の倍数。
+ * PC の Output タブのカード（幅およそ 240px）で、文字や余白が元の px 値と同じになる。
+ */
+.note-cover { --u: calc(100cqw / 240); padding: calc(14 * var(--u)); }
+.note-cover__date { font-size: calc(10 * var(--u)); letter-spacing: calc(0.6 * var(--u)); }
+.note-cover__title { font-size: calc(14 * var(--u)); }
+.note-cover__foot { gap: calc(8 * var(--u)); }
+.note-cover__tags { gap: calc(4 * var(--u)); }
+.note-cover__tag { font-size: calc(9.5 * var(--u)); padding: calc(2 * var(--u)) calc(6 * var(--u)); }
+.note-cover__bricks { gap: calc(5 * var(--u)); }
+.note-cover__bricks > span:last-child { gap: calc(3 * var(--u)); }
+.note-cover__bricks .mini-brick { width: calc(18 * var(--u)); height: calc(9 * var(--u)); }
