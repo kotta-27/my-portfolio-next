@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { PiArrowUpRight, PiCaretUpBold, PiCheckCircleFill } from 'react-icons/pi'
+import { PiArrowUpRight, PiCheckCircleFill } from 'react-icons/pi'
 import type { Lang } from '@/types'
 import type { ResolvedCareerPosition } from '@/data/career'
 import { ui } from '@/data/ui'
@@ -20,12 +20,12 @@ export async function CareerTimelineTile({ lang }: { lang: Lang }) {
     <Tile id="career-timeline" clip={false} className="p-5 sm:p-8">
       <TileLabel>{t.sections.career}</TileLabel>
       <ol className="mt-4">
-        {/* 軌道の先端: 上へ行くほど新しい */}
+        {/* 軌道の先端: 矢印とレゴテクニックの軸の端。上へ行くほど新しい */}
         <li aria-hidden className="grid grid-cols-[18px_minmax(0,1fr)] gap-x-4 sm:grid-cols-[150px_18px_minmax(0,1fr)] sm:gap-x-6">
           <div className="hidden sm:block" />
-          <div className="flex h-[30px] flex-col items-center">
-            <PiCaretUpBold className="shrink-0 text-[16px] text-mute" />
-            <span className="-mt-[2px] w-[2px] flex-1 rounded-full bg-soft" />
+          <div className="flex h-[42px] flex-col items-center">
+            <span className="technic-axle-tip shrink-0" />
+            <span className="technic-axle flex-1" />
           </div>
           <div />
         </li>
@@ -44,12 +44,12 @@ export async function CareerTimelineTile({ lang }: { lang: Lang }) {
                 <p className="mt-[2px] text-[11px] text-mute">{duration}</p>
               </div>
 
-              {/* 軌道: ノードと次の社への線 */}
+              {/* 軌道: ノードと、次の社まで通るテクニックの軸 */}
               <div className="relative flex justify-center">
                 <span
                   className={`stud-dot relative z-10 mt-[1px] h-[18px] w-[18px] shrink-0 ${current ? 'stud-dot--on' : ''}`}
                 />
-                {!last && <span aria-hidden className="absolute bottom-0 top-[20px] w-[2px] rounded-full bg-soft" />}
+                {!last && <span aria-hidden className="technic-axle absolute bottom-0 top-0" />}
               </div>
 
               <div className={`min-w-0 ${last ? '' : 'pb-12'}`}>
