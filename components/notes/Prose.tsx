@@ -15,7 +15,7 @@ export function NoteSection({ step, id, title, children }: { step: number; id: s
   return (
     <section id={id} className="flex scroll-mt-6 flex-col gap-6">
       <h2 className={`${COLUMN} group flex items-center gap-3 pt-6 text-[22px] font-extrabold leading-[1.35] tracking-[-0.02em] sm:text-[26px]`}>
-        <span className="grid h-[34px] w-[34px] shrink-0 place-items-center rounded-[8px] border-2 border-current font-mono text-[15px] font-bold tabular-nums">
+        <span className="shrink-0 tabular-nums text-mute">
           {step}
         </span>
         {title}

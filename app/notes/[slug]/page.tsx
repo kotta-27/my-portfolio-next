@@ -95,7 +95,7 @@ export default async function NotePage({
                   {body.toc.map((s, i) => (
                     <li key={s.id}>
                       <a href={`#${s.id}`} className="group flex items-center gap-3 py-[3px] text-[13.5px] font-bold text-ink/80 no-underline hover:text-teal">
-                        <span className="grid h-[22px] w-[22px] shrink-0 place-items-center rounded-[6px] border-[1.5px] border-current font-mono text-[11px] tabular-nums">
+                        <span className="w-[18px] shrink-0 font-mono text-[12px] tabular-nums text-mute group-hover:text-teal">
                           {i + 1}
                         </span>
                         {s.title[lang]}
