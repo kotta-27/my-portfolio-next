@@ -27,6 +27,7 @@ type UiStrings = {
     careerMore: string
     projectsBlurb: string
     moreProjects: string
+    moreOutputs: string
     lessProjects: string
     contactTitle: string
   }
@@ -81,6 +82,7 @@ export const ui: Record<Lang, UiStrings> = {
       careerMore: 'See details',
       projectsBlurb: 'Web apps, hackathon builds and research tools.',
       moreProjects: 'more projects',
+      moreOutputs: 'more outputs',
       lessProjects: 'Show less',
       contactTitle: "Let's talk.",
     },
@@ -134,6 +136,7 @@ export const ui: Record<Lang, UiStrings> = {
       careerMore: '詳しく見る',
       projectsBlurb: 'Webアプリ、ハッカソン作品、研究ツール。',
       moreProjects: 'その他のプロジェクト',
+      moreOutputs: 'その他のアウトプット',
       lessProjects: '閉じる',
       contactTitle: "Let's talk.",
     },

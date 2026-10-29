@@ -29,7 +29,7 @@ export async function OutputTile({ lang }: { lang: Lang }) {
         <TileLabel qty={all.length}>{t.writing}</TileLabel>
         <ViewSwitchLink view="writing" label={t.careerMore} />
       </div>
-      {/* 新しいものから 4 件を、サムネイル付きのカードで 2 列に並べる */}
+      {/* 新しいものから 4 件を、サムネイルだけで 2 列に並べる（タイトルは画像の中にあるので重ねて書かない） */}
       <div className="mt-1 grid grid-cols-1 gap-3 sm:grid-cols-2">
         {items.map((o) => {
           const note = o.internal ? notesData.find((n) => noteUrl(n.slug) === o.url) : undefined
@@ -38,7 +38,9 @@ export async function OutputTile({ lang }: { lang: Lang }) {
               key={o.url}
               href={o.url}
               {...(o.internal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
-              className="group flex flex-col overflow-hidden rounded-[6px] bg-soft no-underline transition-colors duration-150 hover:bg-ground"
+              aria-label={`${o.source}: ${o.label[lang]}`}
+              title={o.label[lang]}
+              className="group block overflow-hidden rounded-[6px] bg-soft no-underline"
             >
               <div className="relative aspect-[1200/630] overflow-hidden bg-soft">
                 {note ? (
@@ -47,14 +49,16 @@ export async function OutputTile({ lang }: { lang: Lang }) {
                   <Thumb src={o.thumbnail} alt="" sizes="(min-width: 1024px) 240px, (min-width: 640px) 45vw, 90vw" className="object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
                 ) : null}
               </div>
-              <div className="flex flex-1 flex-col gap-[3px] px-3 pb-3 pt-[10px]">
-                <span className="text-[9.5px] font-extrabold uppercase tracking-[.08em] text-mute">{o.source}</span>
-                <p className="line-clamp-2 text-[12.5px] font-bold leading-[1.45] text-ink group-hover:text-teal">{o.label[lang]}</p>
-              </div>
             </a>
           )
         })}
       </div>
+      {/* 残りの件数。押すと Output タブで全件を見られる */}
+      {all.length > items.length && (
+        <div className="mt-2 flex justify-center">
+          <ViewSwitchLink view="writing" label={`+${all.length - items.length} ${t.moreOutputs}`} />
+        </div>
+      )}
     </Tile>
   )
 }
