@@ -10,7 +10,7 @@ export function ProjectsHeadTile({ lang, count }: { lang: Lang; count: number })
   return (
     <Tile id="projects" tone="accent">
       <span className="text-paper/95">
-        <TileLabel step={4} qty={count} className="text-paper/95">
+        <TileLabel qty={count} className="text-paper/95">
           {t.sections.projects}
         </TileLabel>
       </span>

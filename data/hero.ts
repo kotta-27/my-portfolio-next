@@ -19,7 +19,7 @@ export const hero: Record<Lang, HeroStrings> = {
     hobbies: ['LEGO', 'Escape Rooms', 'Cafés'],
   },
   ja: {
-    roleTag: 'ソフトウェアエンジニア',
+    roleTag: 'Software Engineer · Tokyo, Japan',
     tagline: '26卒のwebエンジニア。',
     currentlyAt: '',
     viewWork: '実績を見る',

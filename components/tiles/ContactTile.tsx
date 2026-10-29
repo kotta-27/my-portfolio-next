@@ -15,7 +15,7 @@ export function ContactTile({ lang }: { lang: Lang }) {
   return (
     <Tile id="contact" tone="dark">
       <span className="text-slab-fg/70">
-        <TileLabel step={7} className="text-slab-fg/55">
+        <TileLabel className="text-slab-fg/55">
           {t.sections.contact}
         </TileLabel>
       </span>

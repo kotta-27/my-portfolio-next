@@ -12,7 +12,7 @@ export function HeroTile({ lang }: { lang: Lang }) {
   const h = hero[lang]
   return (
     <Tile id="hero" className="p-5 sm:p-6">
-      <TileLabel step={1}>{h.roleTag}</TileLabel>
+      <TileLabel>{h.roleTag}</TileLabel>
       {/* スマホ: 文章 | 画像 の下にボタンを全幅で。sm 以上: ボタンは文章の下、画像は右に縦通し */}
       <div className="mt-5 grid flex-1 grid-cols-[minmax(0,1fr)_auto] items-end gap-x-4 gap-y-4 sm:grid-rows-[1fr_auto]">
         <div className="min-w-0 self-end">

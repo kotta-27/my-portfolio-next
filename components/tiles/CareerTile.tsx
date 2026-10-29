@@ -18,7 +18,7 @@ export async function CareerTile({ lang }: { lang: Lang }) {
   return (
     <Tile id="career" clip={false}>
       <div className="flex items-center justify-between gap-3">
-        <TileLabel step={3} qty={items.length}>{t.sections.career}</TileLabel>
+        <TileLabel qty={items.length}>{t.sections.career}</TileLabel>
         <ViewSwitchLink view="career" label={t.tiles.careerMore} />
       </div>
       <ol className="relative mt-2 flex flex-col-reverse gap-7 pt-7 lg:grid lg:grid-cols-4 lg:gap-6 lg:pt-0">

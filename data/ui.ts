@@ -19,7 +19,6 @@ type UiStrings = {
     favoriteTech: string
     interests: string
     hobbies: string
-    prizes: string
     writing: string
     intern: string
     fullTime: string
@@ -74,7 +73,6 @@ export const ui: Record<Lang, UiStrings> = {
       favoriteTech: 'Favorite tech',
       interests: 'Interests',
       hobbies: 'Off the clock',
-      prizes: 'prizes',
       writing: 'Output',
       intern: 'Intern',
       fullTime: 'Full-time',
@@ -121,19 +119,18 @@ export const ui: Record<Lang, UiStrings> = {
       { label: 'Output', view: 'writing' },
     ],
     tiles: {
-      currently: '現職',
-      education: '学歴',
-      tokyo: '東京',
+      currently: 'Currently',
+      education: 'Education',
+      tokyo: 'Tokyo',
       tokyoSub: 'JST',
-      favoriteTech: '好きな技術',
-      interests: '興味',
-      hobbies: '趣味',
-      prizes: '受賞',
-      writing: 'アウトプット',
+      favoriteTech: 'Favorite tech',
+      interests: 'Interests',
+      hobbies: 'Off the clock',
+      writing: 'Output',
       intern: 'インターン',
       fullTime: '正社員',
-      careerHighlights: 'やったこと',
-      careerLinks: '関連記事',
+      careerHighlights: 'What I did',
+      careerLinks: 'Related',
       careerMore: '詳しく見る',
       projectsBlurb: 'Webアプリ、ハッカソン作品、研究ツール。',
       moreProjects: 'その他のプロジェクト',
@@ -145,17 +142,17 @@ export const ui: Record<Lang, UiStrings> = {
     articlesLabel: '技術記事',
     footer: '© 2026 水野航太 — Built brick by brick.',
     projectMeta: {
-      reflection: '感想',
-      contributions: '貢献',
-      techStack: '使用技術',
+      reflection: 'Reflection',
+      contributions: 'Contributions',
+      techStack: 'Tech Stack',
       period: '開発期間',
       role: '担当',
       members: 'メンバー',
       event: '発表',
       back: 'TOPに戻る',
       backToProjects: 'Projectsに戻る',
-      prevProject: '前のプロジェクト',
-      nextProject: '次のプロジェクト',
+      prevProject: 'Previous',
+      nextProject: 'Next',
     },
     showMoreProjects: 'もっと見る',
     showLessProjects: '閉じる',
