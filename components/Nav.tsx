@@ -97,12 +97,12 @@ export function Nav({ lang, counts }: Props) {
                   {active && (
                     <motion.span
                       layoutId="nav-pill"
-                      // 選んでいるタブはプレートの上に乗ったブロック: 少し浮かせ、厚みを見せる
-                      className="absolute inset-0 -translate-y-[3px] rounded-[2px] bg-ink shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.9)]"
+                      // 選んでいるタブはプレートの上に乗ったブロック: 位置は他のタブと揃え、下に厚みだけ見せる
+                      className="absolute inset-0 rounded-[2px] bg-ink shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.9)]"
                       transition={{ type: 'spring', stiffness: 420, damping: 36 }}
                     />
                   )}
-                  <span className={`relative z-10 inline-block ${active ? '-translate-y-[3px]' : ''}`}>{item.label}</span>
+                  <span className="relative z-10 inline-block">{item.label}</span>
                 </button>
               )
             })}
