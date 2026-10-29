@@ -6,6 +6,9 @@ import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 import { Pill } from '@/components/Pill'
 
+/** タイルに出す件数。受賞と展示までにし、それより下（スタッフ参加など）は出さない。インタビュー記事は Output に残る */
+const SHOWN = 5
+
 function SubLink({ card, source, lang }: { card: SubLinkCard; source: string; lang: Lang }) {
   return (
     <a
@@ -21,18 +24,11 @@ function SubLink({ card, source, lang }: { card: SubLinkCard; source: string; la
 }
 
 export function AwardsTile({ lang }: { lang: Lang }) {
-  const t = ui[lang]
-  const prizeCount = activitiesData.filter((item) => item.award).length
-
   return (
     <Tile id="awards">
-      <TileLabel step={5} qty={activitiesData.length}>{t.sections.awards}</TileLabel>
-      <div className="flex items-baseline gap-2">
-        <span className="text-[44px] font-extrabold leading-none tracking-[-0.04em] tabular-nums">{prizeCount}</span>
-        <span className="text-[12px] font-bold text-mute">{t.tiles.prizes}</span>
-      </div>
-      <ul className="mt-2 flex flex-col divide-y divide-soft">
-        {activitiesData.map((item) => (
+      <TileLabel qty={SHOWN}>{ui[lang].sections.awards}</TileLabel>
+      <ul className="mt-1 flex flex-col divide-y divide-soft">
+        {activitiesData.slice(0, SHOWN).map((item) => (
           <li key={item.en} className="flex items-start gap-3 py-[9px] last:pb-0">
             <Pill size="xs" className="mt-[2px] w-[68px] shrink-0 text-center">
               {categoryLabel[item.category][lang]}
