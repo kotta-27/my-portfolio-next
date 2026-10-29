@@ -1,5 +1,7 @@
 'use client'
 
+import { Fragment } from 'react'
+import { PiArrowDownBold } from 'react-icons/pi'
 import { Rich, useTr } from '@/components/notes/i18n'
 
 /*
@@ -77,11 +79,11 @@ const EVENTS: Ev[] = [
   },
 ]
 
-const WHO: Record<Ev['who'], { label: [string, string]; dot: string }> = {
-  me: { label: ['自分', 'me'], dot: 'bg-teal' },
-  bot: { label: ['自動', 'automation'], dot: 'bg-mute' },
-  other: { label: ['ほかの人', 'someone else'], dot: 'bg-ink' },
-  maintainer: { label: ['メンテナー', 'maintainer'], dot: 'bg-coral' },
+const WHO: Record<Ev['who'], { label: [string, string] }> = {
+  me: { label: ['自分', 'me'] },
+  bot: { label: ['自動', 'automation'] },
+  other: { label: ['ほかの人', 'someone else'] },
+  maintainer: { label: ['メンテナー', 'maintainer'] },
 }
 
 function jst(iso: string) {
@@ -99,38 +101,33 @@ function since(iso: string, base: string): [string, string] {
   return [`${Math.round(h / 24)} 日`, `${Math.round(h / 24)} days`]
 }
 
-/** 出したあとの出来事を、日時と経過時間つきで上から順に並べる。操作はいらない */
+/** 出したあとの出来事を、普通のブログと同じく小見出しと段落で上から順に並べる */
 export function IssueTimeline() {
   const tr = useTr()
   return (
-    <ol className="mx-auto flex w-full max-w-[720px] flex-col">
+    <div className="mx-auto flex w-full max-w-[720px] flex-col gap-4">
       {EVENTS.map((ev, i) => {
         const base = EVENTS.find((e) => e.lane === ev.lane && e.who === 'me')?.at ?? EVENTS[0].at
-        const last = i === EVENTS.length - 1
+        const meta = [
+          ev.now ? '10/28' : `${jst(ev.at)} JST`,
+          ev.who !== 'me' && !ev.now ? tr(`出してから約 ${since(ev.at, base)[0]}後`, `about ${since(ev.at, base)[1]} after filing`) : null,
+          ev.lane === 'bug' ? tr('バグ報告', 'bug report') : tr('機能要望', 'feature request'),
+          ev.now ? tr('現在', 'now') : tr(...WHO[ev.who].label),
+        ].filter(Boolean)
         return (
-          <li key={ev.at} className="grid grid-cols-[18px_minmax(0,1fr)] gap-x-4">
-            <div className="flex flex-col items-center">
-              <span className={`mt-[5px] h-[14px] w-[14px] shrink-0 rounded-full ${WHO[ev.who].dot} ${ev.now ? 'opacity-40' : ''}`} />
-              {!last && <span aria-hidden className="w-[2px] flex-1 bg-ink/10" />}
-            </div>
-            <div className={`flex min-w-0 flex-col gap-1 ${last ? '' : 'pb-6'}`}>
-              <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[12px]">
-                <span className="font-mono font-bold text-mute">{ev.now ? '10/28' : `${jst(ev.at)} JST`}</span>
-                {ev.who !== 'me' && !ev.now && (
-                  <span className="font-bold text-teal">{tr(`出してから約 ${since(ev.at, base)[0]}後`, `about ${since(ev.at, base)[1]} after filing`)}</span>
-                )}
-                <span className="font-bold text-mute">
-                  {ev.lane === 'bug' ? tr('バグ報告', 'bug report') : tr('機能要望', 'feature request')} · {ev.now ? tr('現在', 'now') : tr(...WHO[ev.who].label)}
-                </span>
-              </span>
-              <span className="text-[15px] font-extrabold">{tr(...ev.title)}</span>
-              <p className="text-[14px] leading-[1.8] text-ink/85">
+          <Fragment key={ev.at}>
+            {/* 前の出来事から続いていることを矢印で示す */}
+            {i > 0 && <PiArrowDownBold aria-hidden className="mx-auto text-[22px] text-mute/60" />}
+            <section className="flex flex-col gap-2">
+              <h3 className="text-[17px] font-extrabold leading-[1.5] sm:text-[19px]">{tr(...ev.title)}</h3>
+              <p className="text-[13px] text-mute">{meta.join(' · ')}</p>
+              <p className="text-[15px] leading-[2] text-ink/85 sm:text-[16px]">
                 <Rich text={tr(...ev.text)} />
               </p>
-            </div>
-          </li>
+            </section>
+          </Fragment>
         )
       })}
-    </ol>
+    </div>
   )
 }

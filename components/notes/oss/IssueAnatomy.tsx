@@ -4,8 +4,8 @@ import { Rich, useTr } from '@/components/notes/i18n'
 
 type Part = { id: string; head: string; lines: number; template?: boolean; what: [string, string]; role: [string, string] }
 
-/** 2 つの Issue の本文を、上から順に節に分けたもの。左が Issue の形、右がその節の中身と役割 */
-const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: Part[] }> = {
+/** バグ報告 #23303 の本文を、上から順に節に分けたもの。節ごとに書いた中身と役割 */
+const ISSUES: Record<'bug', { number: number; title: string; parts: Part[] }> = {
   bug: {
     number: 23303,
     title: '[BUG] Range query approximation…',
@@ -73,88 +73,28 @@ const ISSUES: Record<'bug' | 'feature', { number: number; title: string; parts: 
       },
     ],
   },
-  feature: {
-    number: 23429,
-    title: '[Feature Request] Expose which Lucene segment…',
-    parts: [
-      {
-        id: 'title',
-        head: 'Title',
-        lines: 1,
-        what: ['[Feature Request] Expose which Lucene segment each search hit came from (opt-in, for debugging)', '[Feature Request] Expose which Lucene segment each search hit came from (opt-in, for debugging)'],
-        role: ['何がほしいかに加えて、「opt-in」「for debugging」で影響の小ささと用途を先に伝える。', 'Besides what is wanted, “opt-in” and “for debugging” signal up front that the impact is small and what it is for.'],
-      },
-      {
-        id: 'problem',
-        head: 'Is your feature request related to a problem? Please describe',
-        lines: 6,
-        template: true,
-        what: ['k-NN と `post_filter` を組み合わせると、ドキュメントがどのセグメントにいるかで結果が変わる現象。curl の再現と、今の回避策（`_doc` ソート + `_cat/segments`）が壊れやすい理由。', 'Combining k-NN with `post_filter` makes results depend on which segment a document is in. A curl reproduction, and why the current workaround (`_doc` sort + `_cat/segments`) is fragile.'],
-        role: ['機能要望でも、まず「困っていること」を再現できる形で示す。ほしい機能の必要性は、問題の具体さで決まる。', 'Even for a feature request, first show the problem in a reproducible form. How much the feature is needed depends on how concrete the problem is.'],
-      },
-      {
-        id: 'solution',
-        head: 'Describe the solution you\'d like',
-        lines: 5,
-        template: true,
-        what: ['`version` や `seq_no_primary_term` と同じ形の opt-in フラグ。返す JSON の例と、fetch の段階で読めるので小さく作れそうだという見立て。', 'An opt-in flag shaped like `version` or `seq_no_primary_term`, an example of the returned JSON, and a guess that it can be small because the segment is readable in the fetch phase.'],
-        role: ['既存の API に似た形にすると、受け入れる側の想像がしやすい。完成形の例を見せると話が早い。', 'A shape similar to existing APIs is easier for them to picture. Showing the finished result speeds things up.'],
-      },
-      {
-        id: 'component',
-        head: 'Related component',
-        lines: 1,
-        template: true,
-        what: ['Search', 'Search'],
-        role: ['ラベルになり、担当の領域に届く。', 'It becomes a label and reaches the owners of that area.'],
-      },
-      {
-        id: 'alternatives',
-        head: 'Describe alternatives you\'ve considered',
-        lines: 5,
-        template: true,
-        what: ['`_cat/segments`、`_shard_doc`、k-NN の explain、Profile API、efficient filtering。それぞれで何が分かって何が分からないか。', '`_cat/segments`, `_shard_doc`, k-NN explain, the Profile API and efficient filtering: what each one tells you and what it does not.'],
-        role: ['「それなら〇〇で足りるのでは」を先回りして潰す。既存の機能をよく調べたことも伝わる。', 'Heads off “can’t you just use X?” in advance. It also shows you have studied the existing features.'],
-      },
-      {
-        id: 'context',
-        head: 'Additional context',
-        lines: 2,
-        template: true,
-        what: ['2.19.5 と 3.9.0 で同じ結果になること、関連するドキュメントへのリンク。', 'That 2.19.5 and 3.9.0 give the same results, and a link to the related docs.'],
-        role: ['前提をそろえる。', 'Gets everyone on the same page.'],
-      },
-    ],
-  },
 }
 
 /** Issue の節ごとに「書いたこと」と「その節の役割」を並べる。操作はいらない */
-export function IssueAnatomy({ which }: { which: 'bug' | 'feature' }) {
+export function IssueAnatomy() {
   const tr = useTr()
-  const issue = ISSUES[which]
+  const issue = ISSUES.bug
   return (
-    <ol className="mx-auto flex w-full max-w-[720px] flex-col divide-y divide-ink/10 overflow-hidden rounded-[10px] border border-ink/10">
+    <div className="mx-auto flex w-full max-w-[720px] flex-col gap-8">
       {issue.parts.map((p) => (
-        <li key={p.id} className="flex flex-col gap-2 px-5 py-4">
-          <span className="flex flex-wrap items-center gap-2">
-            <span className={`text-[14px] font-extrabold ${p.template ? 'font-mono' : ''}`}>
-              {p.id === 'title' ? tr('タイトル', 'Title') : p.id === 'cause' ? tr('原因', 'Cause') : p.id === 'fix' ? tr('修正案', 'Possible fix') : `### ${p.head}`}
-            </span>
-            {p.template ? (
-              <span className="rounded-[4px] bg-ink/[0.07] px-[6px] py-[1px] text-[10.5px] font-bold text-mute">{tr('テンプレート', 'template')}</span>
-            ) : (
-              p.id !== 'title' && <span className="rounded-[4px] bg-teal/10 px-[6px] py-[1px] text-[10.5px] font-bold text-teal">{tr('追加した節', 'added section')}</span>
-            )}
-          </span>
-          <p className="text-[14px] leading-[1.8] text-ink/85"><Rich text={tr(...p.what)} /></p>
-          <p className="flex gap-2 text-[13.5px] leading-[1.8] text-mute">
-            <span className="shrink-0 font-bold text-teal">{tr('役割', 'Role')}</span>
-            <span>
-              <Rich text={tr(...p.role)} />
-            </span>
+        <section key={p.id} className="flex flex-col gap-3">
+          <h3 className="text-[17px] font-extrabold leading-[1.5] sm:text-[19px]">
+            {p.id === 'title' ? tr('タイトル', 'Title') : p.id === 'cause' ? tr('原因', 'Cause') : p.id === 'fix' ? tr('修正案', 'Possible fix') : p.head}
+          </h3>
+          {/* 実際に Issue に書いた中身は、引用として地の文と分ける */}
+          <blockquote className="border-l-4 border-ink/15 py-1 pl-4 text-[14.5px] leading-[1.9] text-ink/70 sm:text-[15px]">
+            <Rich text={tr(...p.what)} />
+          </blockquote>
+          <p className="text-[15px] leading-[2] text-ink/85 sm:text-[16px]">
+            <Rich text={tr(...p.role)} />
           </p>
-        </li>
+        </section>
       ))}
-    </ol>
+    </div>
   )
 }

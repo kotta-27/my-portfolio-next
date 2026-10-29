@@ -155,7 +155,7 @@ export function OssIssue() {
         <Figure kind="image" n={1} caption="OpenSearch のバグ報告のテンプレート。タイトルは「[BUG] <title>」から始まり、必須の欄（*）が順に並ぶ。bug と untriaged のラベルは最初から付いている。">
           <Shot src="/notes/oss-issue/bug-template.png" alt="GitHub の New issue 画面に表示された OpenSearch のバグ報告テンプレート" width={2702} height={1740} />
         </Figure>
-        <IssueAnatomy which="bug" />
+        <IssueAnatomy />
         <P>
           修正案は、近似を有効にする処理を「本命のクエリのときだけ」に絞る 1 行の条件です。ただし、これは参照が同じかどうかで本命のクエリを見分けるので、誰かが本命のクエリを包み直すと近似が効かなくなる、という弱点があります。結果が間違うことはなく遅くなるだけ、という点も含めて本文に書き、別の直し方の案も添えました。
         </P>
@@ -204,7 +204,6 @@ export function OssIssue() {
           バグ報告との違いは、<Strong>「正しい動作」が決まっていない</Strong>ことです。なので、困っている問題を再現できる形で示し、ほしい形を具体的な JSON で見せ、すでにある機能（<C>_cat/segments</C>
           や Profile API など）ではなぜ足りないかを 1 つずつ書きました。機能要望は「それなら〇〇で足りるのでは」と返されやすいので、代わりの案を先に調べて潰しておくのが大事だと考えました。こちらはまだトリアージ待ちです。
         </P>
-        <IssueAnatomy which="feature" />
       </NoteSection>
 
       <NoteSection step={7} id="mindset" title="心構え">
@@ -223,9 +222,6 @@ export function OssIssue() {
         </Callout>
         <Callout title="作法に乗る">
           テンプレートの順に書く。同じ Issue がないか探し、探したことを書く。ラベルや担当の割り当ては相手に任せる。CONTRIBUTING.md には一度目を通しておく<Cite n={4} />。
-        </Callout>
-        <Callout title="出したら待つ">
-          仕分け（トリアージ）には日にちがかかる。今回は 3 日ほどだった。返事がなくても催促はせず、新しく分かったことがあればコメントで足す。
         </Callout>
       </NoteSection>
 
@@ -314,7 +310,7 @@ export function OssIssueEn() {
         <Figure kind="image" n={1} caption="OpenSearch&rsquo;s bug report template. The title starts with &ldquo;[BUG] <title>&rdquo;, required fields (*) come in order, and the bug and untriaged labels are already attached.">
           <Shot src="/notes/oss-issue/bug-template.png" alt="OpenSearch bug report template on GitHub's New issue page" width={2702} height={1740} />
         </Figure>
-        <IssueAnatomy which="bug" />
+        <IssueAnatomy />
         <P>
           The fix is a one-line condition that limits approximation to the main query. It has a weak spot, though: it recognizes the main query by reference equality, so if something
           wraps the main query, approximation silently stops applying. I wrote that down, including that results stay correct and only performance suffers, and added an alternative
@@ -368,7 +364,6 @@ export function OssIssueEn() {
           shape I wanted as concrete JSON, and went through why existing features (<C>_cat/segments</C>, the Profile API and so on) are not enough. Feature requests tend to get
           &ldquo;can&rsquo;t you just use X?&rdquo; as a reply, so I thought it was important to check the alternatives first. This one is still waiting for triage.
         </P>
-        <IssueAnatomy which="feature" />
       </NoteSection>
 
       <NoteSection step={7} id="mindset" title="Mindset">
@@ -389,9 +384,6 @@ export function OssIssueEn() {
         </Callout>
         <Callout title="Follow the conventions">
           Write in the template&rsquo;s order. Search for existing issues, and say that you did. Leave labels and assignment to them. Read CONTRIBUTING.md once <Cite n={4} />.
-        </Callout>
-        <Callout title="Then wait">
-          Triage takes days; this time it took about three. Don&rsquo;t chase them if there is no reply; if you learn something new, add it as a comment.
         </Callout>
       </NoteSection>
 
