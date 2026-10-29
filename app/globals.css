@@ -410,3 +410,12 @@ html.dark .technic-axle {
   --axle: color-mix(in oklab, rgb(var(--mute)) 55%, rgb(var(--tile)));
   --axle-dark: color-mix(in oklab, var(--axle) 60%, black);
 }
+
+/* デジタル時計の「:」は 1 秒ごとに点滅する */
+@keyframes clock-blink {
+  50% { opacity: 0.15; }
+}
+.clock-colon { animation: clock-blink 1s steps(1, end) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .clock-colon { animation: none; }
+}
