@@ -14,5 +14,5 @@ export const rowSpan: Record<Rows, string> = { 1: 'row-span-1', 2: 'row-span-2' 
  * 重なりの前後は BentoGrid / Reveal が「上の段ほど手前」になるよう z-index を付けている。
  */
 export const gridClass = 'grid grid-flow-dense grid-cols-2 gap-y-brick lg:grid-cols-4'
-/** 帯で区切るビュー用: 空きマスを後続で埋めず、順番どおりに並べる */
-export const gridClassOrdered = 'grid grid-cols-2 gap-y-brick lg:grid-cols-4'
+/** 帯で区切るビュー用: 空きマスを後続で埋めず、順番どおりに並べる。カードは 1 枚ずつ独立したブロックなので、横にも隙間を空け、段の間にブロックを挟まない（.bento-loose） */
+export const gridClassOrdered = 'bento-loose grid grid-cols-2 gap-x-3 gap-y-brick lg:grid-cols-4'

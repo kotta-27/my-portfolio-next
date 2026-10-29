@@ -9,7 +9,7 @@ const config: Config = {
   theme: {
     extend: {
       // 段の間隔 = ブロックの厚み（--lip 5px）+ 間に挟むプレート（--plate-h 6px + --plate-side-h 2px）。globals.css と揃える
-      spacing: { brick: '13px' },
+      spacing: { brick: '29px' },
       fontFamily: {
         // 日本語は Web フォントを配信せず OS の日本語フォントを使う（Noto Sans JP は @font-face だけで CSS が 90KB 超になるため）
         sans: ['var(--font-jakarta)', '"Hiragino Sans"', '"Hiragino Kaku Gothic ProN"', '"Yu Gothic UI"', '"Yu Gothic"', 'Meiryo', '"Noto Sans JP"', '"Noto Sans CJK JP"', 'system-ui', 'sans-serif'],

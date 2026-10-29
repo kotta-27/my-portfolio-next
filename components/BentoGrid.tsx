@@ -19,6 +19,12 @@ export type BentoItemDef = {
   overflow?: boolean
   /** 区切り帯など、ホバーで持ち上げない要素 */
   static?: boolean
+  /** 下の段との間に挟むのをブロックではなくプレート（1/3 の高さ）にする。同じかたまりの中の段に使う */
+  plate?: boolean
+  /** 上の段がプレートのとき、その分だけ持ち上げて隙間を詰める */
+  onPlate?: boolean
+  /** 同じかたまりのタイル（1 マスずつ順に並ぶもの）。段の間はプレートになり、段の割り振りは列数から計算する */
+  group?: string
   node: ReactNode
 }
 
@@ -61,6 +67,30 @@ export function BentoGrid({ items, labels }: Props) {
   const lastOverflow = visible.findLastIndex((item) => item.overflow)
   const togglePos = expanded && lastOverflow >= 0 ? lastOverflow + 1 : visible.length
 
+  // かたまり（group）の中の段の間はプレートにする。どれも 1 マスなので、並び順と列数（スマホ 2 / lg 4）から段が決まる。
+  // 畳んでいるとき「もっと見る」は末尾に置かれて空きマスに詰められるので、かたまりに含めるのは開いているときだけ
+  const order = [...visible.slice(0, togglePos).map((item) => item.key), ...(overflowCount > 0 && expanded ? ['more'] : []), ...visible.slice(togglePos).map((item) => item.key)]
+  const groupOf = (key: string) => (key === 'more' ? visible[togglePos - 1]?.group : items.find((item) => item.key === key)?.group)
+  const plateClass = (key: string) => {
+    const group = groupOf(key)
+    if (!group) return ''
+    const members = order.filter((k) => groupOf(k) === group)
+    const idx = members.indexOf(key)
+    if (idx < 0) return ''
+    return (
+      [
+        [2, 'sm'],
+        [4, 'lg'],
+      ] as const
+    )
+      .flatMap(([cols, bp]) => {
+        const row = Math.floor(idx / cols)
+        const last = Math.floor((members.length - 1) / cols)
+        return [row < last ? `bento-plate-${bp}` : '', row > 0 ? `bento-on-plate-${bp}` : '']
+      })
+      .join(' ')
+  }
+
   // 初回の組み上げ: 段ごとに浮かせて隙間を開けたまま順に現れ、出揃ったら一斉に下りてはまる（浮かせ量は AssembleScript が描画前に付ける）
   const enter = (i: number) => ({
     // 先頭（ヒーロー）は LCP を遅らせないよう、フェードなしで現れる
@@ -72,7 +102,7 @@ export function BentoGrid({ items, labels }: Props) {
     <motion.div
       key={item.key}
       layout
-      className={`${item.mobileFull ? 'col-span-2 lg:col-span-1' : colSpan[item.span ?? 1]} ${rowSpan[item.rows ?? 1]} relative flex ${item.static ? '' : 'brick-host'}`}
+      className={`${item.mobileFull ? 'col-span-2 lg:col-span-1' : colSpan[item.span ?? 1]} ${rowSpan[item.rows ?? 1]} relative flex ${item.static ? '' : 'brick-host'} ${item.plate ? 'bento-plate' : ''} ${item.onPlate ? 'bento-on-plate' : ''} ${plateClass(item.key)}`}
       // 上の段ほど手前に置き、下の段のスタッドを上のブロックの底に隠す（はまって見える）
       style={{ zIndex: items.length + 1 - i }}
       variants={tileVariants}
@@ -97,7 +127,7 @@ export function BentoGrid({ items, labels }: Props) {
           <motion.div
             key="more"
             layout
-            className="brick-host relative col-span-1 row-span-1 flex"
+            className={`brick-host relative col-span-1 row-span-1 flex ${expanded ? plateClass('more') : ''}`}
             style={{ zIndex: items.length + 1 - togglePos }}
             variants={tileVariants}
             initial={booted ? 'hidden' : false}

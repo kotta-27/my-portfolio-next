@@ -8,6 +8,7 @@ import { careerData } from '@/data/career'
 import { collectOutputs, groupOf, OUTPUT_GROUPS } from '@/lib/outputs'
 import { ViewProvider } from '@/components/ViewContext'
 import { Nav } from '@/components/Nav'
+import { GroundBricks } from '@/components/GroundBricks'
 import { IntroOverlay } from '@/components/IntroOverlay'
 import { INTRO_COOKIE } from '@/lib/intro'
 import { getLang } from '@/lib/lang'
@@ -53,11 +54,11 @@ export default async function Page({
 
   const items: BentoItemDef[] = [
     { key: 'hero', views: ['all'], span: 2, rows: 2, node: <HeroTile lang={lang} /> },
-    { key: 'now', views: ['all'], node: <NowTile lang={lang} /> },
-    { key: 'clock', views: ['all'], node: <ClockTile label={t.tiles.tokyo} sub={t.tiles.tokyoSub} /> },
+    { key: 'now', views: ['all'], plate: true, node: <NowTile lang={lang} /> },
+    { key: 'clock', views: ['all'], plate: true, node: <ClockTile label={t.tiles.tokyo} sub={t.tiles.tokyoSub} /> },
     // 幅の狭い画面では 1 カラムだと詰まるので全幅にする
-    { key: 'education', views: ['all'], mobileFull: true, node: <EducationTile lang={lang} /> },
-    { key: 'hobbies', views: ['all'], mobileFull: true, node: <HobbiesTile lang={lang} /> },
+    { key: 'education', views: ['all'], mobileFull: true, onPlate: true, node: <EducationTile lang={lang} /> },
+    { key: 'hobbies', views: ['all'], mobileFull: true, onPlate: true, node: <HobbiesTile lang={lang} /> },
     { key: 'favorite-tech', views: ['all'], span: 4, node: <FavoriteTechTile lang={lang} /> },
     {
       key: 'career',
@@ -81,11 +82,12 @@ export default async function Page({
         </Suspense>
       ),
     },
-    { key: 'projects-head', views: ['all', 'projects'], node: <ProjectsHeadTile lang={lang} count={projectsData.length} /> },
+    { key: 'projects-head', views: ['all', 'projects'], group: 'projects', node: <ProjectsHeadTile lang={lang} count={projectsData.length} /> },
     ...projectsData.map((project, i) => ({
       key: `project-${project.slug}`,
       views: ['all' as const, 'projects' as const],
       overflow: i >= VISIBLE_PROJECTS,
+      group: 'projects',
       node: <ProjectTile project={project} lang={lang} />,
     })),
     { key: 'awards', views: ['all'], span: 2, node: <AwardsTile lang={lang} /> },
@@ -125,9 +127,10 @@ export default async function Page({
       <ScrollToHash />
       {showIntro && <IntroOverlay />}
       {/* --intro: タイルの登場をイントロが抜けるタイミングまで遅らせる */}
-      <div className="baseplate min-h-screen font-sans text-ink" style={{ '--intro': showIntro ? '800ms' : '0ms' } as CSSProperties}>
+      <div className="baseplate relative min-h-screen font-sans text-ink" style={{ '--intro': showIntro ? '800ms' : '0ms' } as CSSProperties}>
+        <GroundBricks />
         <Nav lang={lang} counts={navCounts} />
-        <main className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
+        <main className="relative mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
           <BentoGrid items={items} labels={{ more: t.tiles.moreProjects, less: t.tiles.lessProjects }} />
           <AssembleScript />
           <footer className="flex flex-col items-center gap-3 pt-10">
