@@ -60,6 +60,17 @@ export default async function Page({
     { key: 'education', views: ['all'], mobileFull: true, onPlate: true, node: <EducationTile lang={lang} /> },
     { key: 'hobbies', views: ['all'], mobileFull: true, onPlate: true, node: <HobbiesTile lang={lang} /> },
     { key: 'favorite-tech', views: ['all'], span: 4, node: <FavoriteTechTile lang={lang} /> },
+    // Overview は Output を 1 タイルにまとめ、Output ビューでは 1 件ずつカードにする。アウトプットを先に見せたいので Career の上に全幅で置く
+    {
+      key: 'writing',
+      views: ['all'],
+      span: 4,
+      node: (
+        <Suspense fallback={<TileSkeleton className="h-full" />}>
+          <OutputTile lang={lang} />
+        </Suspense>
+      ),
+    },
     {
       key: 'career',
       views: ['all'],
@@ -91,17 +102,6 @@ export default async function Page({
       node: <ProjectTile project={project} lang={lang} />,
     })),
     { key: 'awards', views: ['all'], span: 2, node: <AwardsTile lang={lang} /> },
-    // Overview は Output を 1 タイルにまとめ、Output ビューでは 1 件ずつカードにする
-    {
-      key: 'writing',
-      views: ['all'],
-      span: 2,
-      node: (
-        <Suspense fallback={<TileSkeleton className="h-full" />}>
-          <OutputTile lang={lang} />
-        </Suspense>
-      ),
-    },
     // Output ビューは区分ごとに「帯 → カード」の順
     ...OUTPUT_GROUPS.flatMap((g) => {
       const members = collectOutputs().filter((o) => groupOf(o.kind) === g.id)
