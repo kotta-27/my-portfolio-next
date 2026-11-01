@@ -70,6 +70,37 @@ export const projectsData: ProjectItem[] = [
     },
   },
   {
+    name: 'pachi',
+    slug: 'pachi',
+    en: 'A study companion that is just a pair of eyes on a black screen. It blinks, daydreams and suggests a break.',
+    ja: '黒い画面に目だけ。まばたきして、ときどき考えて、休憩に誘ってくれる勉強・作業の相棒。',
+    detail: {
+      en: 'A study and work companion made of nothing but two eyes on a black screen.\nProp your phone sideways at the edge of your desk and press Start: it blinks, its gaze drifts, and now and then it does something on its own, like thinking, dozing off or nodding.\nAfter a set time (50 minutes by default) it asks if you want a break, then closes its eyes and counts down until you come back.\nStroke the screen and the eyes follow your finger; tap for a wink, long-press and they lean toward you.\nThe black screen stays dim at night, and it works in the browser with no login or install. Add it to your home screen for full screen.',
+      ja: '黒い画面に白い目が2つだけの、勉強・作業の相棒。\nスマホを横向きにして机の端に立てかけ、「はじめる」を押すと、まばたきして視線が泳ぎ、ときどき考え事やウトウトなどのしぐさをする。\n決めた時間（既定 50 分）がたつと「そろそろ休憩しない？」と誘い、休憩中は目を閉じてカウントダウンする。\n画面をなでると指を追い、タップでウインク、長押しで指のほうへ寄ってくる。\n黒ベタなので夜でも眩しくなく、ログインもインストールも不要。ホーム画面に追加すると全画面で使える。',
+    },
+    tags: ['Preact', 'TypeScript', 'Vite'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/pachi' },
+      { label: 'App', url: 'https://kotta-27.github.io/pachi/' },
+      { label: 'LP', url: 'https://kotta-27.github.io/pachi/lp/' },
+    ],
+    image: '/pachi_1.jpg',
+    images: ['/pachi_1.jpg', '/pachi_2.jpg', '/pachi_3.jpg'],
+    meta: {
+      contributions: {
+        en: ['Design and implementation', 'Eye engine for blinking, gaze and gestures', 'Landing page with a live demo'],
+        ja: ['設計と実装', 'まばたき・視線・しぐさを動かす目のエンジン', '実際に触れるデモ付きの紹介ページ'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['Preact', 'TypeScript', 'Vite'] },
+        { category: 'Infra', items: ['GitHub Pages', 'GitHub Actions'] },
+      ],
+      period: { en: '2026-Oct – ongoing', ja: '2026年10月〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
     name: 'Tabipla',
     slug: 'tabipla',
     en: 'Group trip planning app with date polling, itinerary, and expense splitting.',
