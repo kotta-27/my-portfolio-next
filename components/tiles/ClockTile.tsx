@@ -5,7 +5,7 @@ import { Tile } from '@/components/Tile'
 import { TileLabel } from '@/components/TileLabel'
 
 /*
- * 7 セグメントの数字（デジタル時計の表示）。点いていないセグメントも薄く描き、液晶らしく見せる。
+ * 7 セグメントの数字（デジタル時計の表示）。点いていないセグメントも薄く描き、デジタル時計らしく見せる。
  * 1 文字は 12×21 の枠。セグメントは a（上）から時計回りに b c d e f、g が中央。
  */
 const H = (yc: number) => `2.2,${yc} 3.2,${yc - 1} 8.8,${yc - 1} 9.8,${yc} 8.8,${yc + 1} 3.2,${yc + 1}`
@@ -38,7 +38,7 @@ function Digit({ ch }: { ch: string }) {
   return (
     <svg viewBox="0 0 12 21" className="h-full w-auto">
       {Object.entries(SEGMENTS).map(([k, pts]) => (
-        <polygon key={k} points={pts} className={on.includes(k) ? 'fill-teal' : 'fill-slab-fg/[0.07]'} />
+        <polygon key={k} points={pts} className={on.includes(k) ? 'fill-ink' : 'fill-ink/[0.06]'} />
       ))}
     </svg>
   )
@@ -66,19 +66,19 @@ export function ClockTile({ label, sub }: { label: string; sub: string }) {
     <Tile>
       <TileLabel>{label}</TileLabel>
       <span aria-hidden className="stud-dot stud-dot--on absolute right-4 top-4 h-[12px] w-[12px]" />
-      {/* 液晶パネル。読み上げには時刻をそのまま渡す */}
-      <div role="img" aria-label={`${time} ${sub}`} className="relative mx-auto my-auto flex w-fit items-end gap-2 rounded-[6px] bg-slab px-3 pb-[10px] pt-[12px]">
-        <div aria-hidden className="flex h-[36px] -skew-x-6 items-center gap-[5px]">
+      {/* 7 セグメントの表示。タイルの中のカード（bg-soft）に、本文と同じ色で描く。読み上げには時刻をそのまま渡す */}
+      <div role="img" aria-label={`${time} ${sub}`} className="relative mx-auto my-auto flex w-fit items-end gap-2 rounded-[10px] bg-soft px-4 pb-[12px] pt-[14px]">
+        <div aria-hidden className="flex h-[34px] items-center gap-[5px]">
           <Digit ch={h1} />
           <Digit ch={h2} />
           <span className="flex h-full flex-col justify-center gap-[9px]">
-            <span className="clock-colon h-[4px] w-[4px] bg-teal" />
-            <span className="clock-colon h-[4px] w-[4px] bg-teal" />
+            <span className="clock-colon h-[4px] w-[4px] rounded-full bg-teal" />
+            <span className="clock-colon h-[4px] w-[4px] rounded-full bg-teal" />
           </span>
           <Digit ch={m1} />
           <Digit ch={m2} />
         </div>
-        <span aria-hidden className="font-mono text-[10px] font-bold leading-none text-teal/70">{sub}</span>
+        <span aria-hidden className="text-[10.5px] font-bold uppercase leading-none tracking-[.08em] text-mute">{sub}</span>
       </div>
     </Tile>
   )
