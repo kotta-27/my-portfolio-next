@@ -44,11 +44,11 @@ export function LangToggle({ lang }: { lang: Lang }) {
             {active && (
               <motion.span
                 layoutId="lang-pill"
-                className="absolute inset-0 -translate-y-[3px] rounded-[2px] bg-teal shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.6)]"
+                className="absolute inset-0 rounded-[2px] bg-teal shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.6)]"
                 transition={{ type: 'spring', stiffness: 420, damping: 36 }}
               />
             )}
-            <span className={`relative z-10 inline-block ${active ? '-translate-y-[3px]' : ''}`}>{target}</span>
+            <span className="relative z-10 inline-block">{target}</span>
           </button>
         )
       })}
