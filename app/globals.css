@@ -377,39 +377,21 @@ html.dark .stud-dot--on {
 html.dark .ground-brick { opacity: 0.8; }
 
 /*
- * レゴテクニックの軸（十字断面）を真横から見た形。キャリアのタイムラインの縦線に使う。
- * 手前の羽根（中央）と左右の羽根の縁が明るく、その間の溝が暗い。
+ * キャリアのタイムラインの縦線（上向きの矢印）。ひと色の細い線と、先端の小さな三角だけ。
  */
 .technic-axle {
-  --axle: color-mix(in oklab, rgb(var(--mute)) 42%, rgb(var(--tile)));
-  --axle-light: color-mix(in oklab, var(--axle) 55%, white);
-  --axle-dark: color-mix(in oklab, var(--axle) 70%, rgb(var(--ink)));
-  width: 8px;
-  background: linear-gradient(
-    90deg,
-    var(--axle-dark) 0 1px,
-    var(--axle) 1px 2px,
-    var(--axle-dark) 2px 3px,
-    var(--axle-light) 3px 4.5px,
-    var(--axle) 4.5px 5px,
-    var(--axle-dark) 5px 6px,
-    var(--axle) 6px 7px,
-    var(--axle-dark) 7px 8px
-  );
+  width: 3px;
+  border-radius: 9999px;
+  background: color-mix(in oklab, rgb(var(--mute)) 35%, rgb(var(--tile)));
 }
-/* 軸の先端（上）: 軸と同じ材質の矢じり。左の面を明るく、右の面を暗くして立体に見せる */
 .technic-axle-tip {
-  --axle: color-mix(in oklab, rgb(var(--mute)) 42%, rgb(var(--tile)));
-  width: 18px;
-  height: 12px;
-  background: linear-gradient(90deg, color-mix(in oklab, var(--axle) 55%, white) 50%, color-mix(in oklab, var(--axle) 70%, rgb(var(--ink))) 50%);
+  width: 11px;
+  height: 7px;
+  background: color-mix(in oklab, rgb(var(--mute)) 35%, rgb(var(--tile)));
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
-html.dark .technic-axle-tip { --axle: color-mix(in oklab, rgb(var(--mute)) 55%, rgb(var(--tile))); }
-html.dark .technic-axle {
-  --axle: color-mix(in oklab, rgb(var(--mute)) 55%, rgb(var(--tile)));
-  --axle-dark: color-mix(in oklab, var(--axle) 60%, black);
-}
+html.dark .technic-axle,
+html.dark .technic-axle-tip { background: color-mix(in oklab, rgb(var(--mute)) 50%, rgb(var(--tile))); }
 
 /* デジタル時計の「:」は 1 秒ごとに点滅する */
 @keyframes clock-blink {
