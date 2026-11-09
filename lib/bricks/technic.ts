@@ -105,3 +105,14 @@ export function cylinderZ(r: number, len: number, segments = 18) {
 export function roundedBox(w: number, h: number, d: number, radius: number) {
   return new RoundedBoxGeometry(w, h, d, 3, radius)
 }
+
+/** テクニックのピン（摩擦あり）。z 方向に長さ len、真ん中につば（2 つの部品の境目に来る） */
+export function pinGeometry(len = 8.6) {
+  const h = len / 2
+  const profile: [number, number][] = [
+    [0, -h], [2.0, -h], [2.35, -h + 0.5], [2.35, -0.55], [3.05, -0.55], [3.05, 0.55], [2.35, 0.55], [2.35, h - 0.5], [2.0, h], [0, h],
+  ]
+  const g = new THREE.LatheGeometry(profile.map(([r, y]) => new THREE.Vector2(r, y)), 20)
+  g.rotateX(Math.PI / 2)
+  return g
+}

@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import { PARTS, PITCH, PLATE, createBrickMaterial, footprint, partGeometry, setBrickColor, type PartId } from '@/lib/bricks/geometry'
-import { axleGeometry, cylinderZ, escapeWheelGeometry, gearGeometry, liftarmGeometry, meshPhase, roundedBox } from '@/lib/bricks/technic'
+import { axleGeometry, cylinderZ, escapeWheelGeometry, gearGeometry, liftarmGeometry, meshPhase, pinGeometry, roundedBox } from '@/lib/bricks/technic'
 
 /*
  * トップのヒーローの 3D シーン「6 段減速の時計」。10×10 のプレートの上に、テクニック部品で組んだ骨組みの時計。
@@ -108,7 +108,8 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
   rig.add(studs)
 
   // ── 歯車の塔。軸 0（下）が針、軸 5（上）が脱進機 ──
-  const AX = [V(-20, TOP + 24)]
+  // 奥行き（z）の層: 歯車 -10.7〜11.7 / 軸受けのリフトアーム 前 14.4・18.2、後 -13.2・-17 / 柱 -21.8 / 梁 -25.6
+  const AX = [V(-16, TOP + 21.8)] // 下の軸は、台の上のテクニックブロックの穴（高さ 5.8）から 2 穴上
   for (const deg of [50, 78, 40, 74, 46]) {
     const prev = AX[AX.length - 1]
     AX.push(prev.clone().add(V(16 * Math.cos((deg * Math.PI) / 180), 16 * Math.sin((deg * Math.PI) / 180))))
@@ -120,7 +121,8 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
     // 組 (k, k+1): 上の軸 k+1 の 8T が、下の軸 k の 24T を回す（面 p_k）
     big: k < 5 ? put(rig, gearGeometry(24), bigTones[k], p.x, p.y, plane(k)) : null,
     small: k > 0 ? put(rig, gearGeometry(8), 'dbg', p.x, p.y, plane(k - 1)) : null,
-    shaft: put(rig, axleGeometry(30), 'black', p.x, p.y, 2),
+    // 下の軸だけ、文字盤の針まで前に伸ばす
+    shaft: k === 0 ? put(rig, axleGeometry(50), 'black', p.x, p.y, 3) : put(rig, axleGeometry(44), 'black', p.x, p.y, 0.5),
     big0: 0,
     small0: 0,
   }))
@@ -130,51 +132,72 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
     axles[k + 1].small0 = ps
     axles[k].big0 = pb
   }
-  for (const p of AX) {
-    put(rig, cylinderZ(3, 2.6), 'coral', p.x, p.y, 17.5)
-    put(rig, cylinderZ(2.3, 9), 'black', p.x, p.y, -16)
-  }
   const E = AX[5]
   const escape = put(rig, escapeWheelGeometry(24), 'mustard', E.x, E.y, plane(5))
 
-  // ── 背面の枠と、振り子を吊る梁 ──
-  beam(11, 'dbg', V(-30, TOP + 6, -15), Math.PI / 2)
-  beam(11, 'dbg', V(30, TOP + 6, -15), Math.PI / 2)
-  beam(4, 'dbg', V(30, TOP + 86, -15), Math.PI / 2)
-  // 斜めの梁は柱の 1 枚うしろ（厚み 3.4 + すき間）に重ねて、柱とぶつからないようにする
-  beamBetween(V(-30, TOP + 30, -18.8), V(30, TOP + 46, -18.8), 'lbg')
-  beamBetween(V(-30, TOP + 70, -18.8), V(30, TOP + 94, -18.8), 'lbg')
-  const Q = V(E.x, E.y + 17)
-  beam(3, 'dbg', V(Q.x - 16, Q.y, 22), 0)
-  put(rig, axleGeometry(44), 'black', Q.x, Q.y, 2)
+  // 軸受け: 隣り合う軸は 16mm（2 穴）なので、3 穴のリフトアームで前後から挟んでつなぐ。隣どうしは層を交互にずらす
+  for (let k = 0; k < 5; k++) {
+    const d = AX[k + 1].clone().sub(AX[k])
+    const phi = Math.atan2(d.y, d.x)
+    beam(3, k % 2 ? 'dbg' : 'lbg', V(AX[k].x, AX[k].y, k % 2 ? -17 : -13.2), phi)
+    beam(3, k % 2 ? 'dbg' : 'lbg', V(AX[k].x, AX[k].y, k % 2 ? 18.2 : 14.4), phi)
+  }
+  for (const p of AX.slice(1)) put(rig, cylinderZ(3, 2.6), 'coral', p.x, p.y, 21.6)
+
+  // 上の軸（脱進機）は、右の柱の穴へ 2 穴のリフトアームでつなぐ
+  {
+    const hole = V(E.x + 8, TOP + 6 + 10 * 8)
+    beamBetween(V(E.x, E.y, -17), V(hole.x, hole.y, -17), 'dbg')
+    put(rig, pinGeometry(), 'black', hole.x, hole.y, -19.4)
+  }
+
+  // 台への固定: 下の軸から 2 穴下へ縦のリフトアーム → 台の上の 1×2 テクニックブロックにピンで留める
+  const foot = V(AX[0].x, TOP + 5.8)
+  beam(3, 'dbg', V(AX[0].x, AX[0].y, -17), -Math.PI / 2)
+  brick('b1x2', 'navy', AX[0].x / PITCH - 1, -23 / PITCH - 0.5)
+  put(rig, cylinderZ(2.5, 0.3, 24), 'black', foot.x, foot.y, -18.85)
+  put(rig, pinGeometry(), 'black', foot.x, foot.y, -19)
+
+  // ── 枠: 柱 2 本（14 穴）と、斜めの梁・てっぺんの梁。交わるところはピンで留める ──
+  const xl = E.x - 56, xr = E.x + 8 // てっぺんの梁の穴に、振り子の軸（E の真上）が来るように
+  const yTop = TOP + 6 + 13 * 8
+  beam(14, 'dbg', V(xl, TOP + 6, -21.8), Math.PI / 2)
+  beam(14, 'dbg', V(xr, TOP + 6, -21.8), Math.PI / 2)
+  beamBetween(V(xl, TOP + 22, -25.6), V(xr, TOP + 70, -25.6), 'lbg') // 64 × 48 → 80（11 穴）
+  beam(9, 'lbg', V(xl, yTop, -25.6), 0)
+  for (const p of [V(xl, TOP + 22), V(xr, TOP + 70), V(xl, yTop), V(xr, yTop)]) put(rig, pinGeometry(), 'black', p.x, p.y, -23.7)
+  const Q = V(E.x, yTop)
+  put(rig, axleGeometry(56), 'black', Q.x, Q.y, 0)
+  put(rig, cylinderZ(3, 2.6), 'coral', Q.x, Q.y, -28.2)
 
   // ── アンクルと振り子（一緒に揺れる） ──
   const swing = new THREE.Group()
   swing.position.copy(Q)
   rig.add(swing)
+  const drop = Q.y - E.y
   for (const side of [-1, 1]) {
-    const tip = V(side * 12.6 * Math.sin(0.62), -17 + 12.6 * Math.cos(0.62))
+    const tip = V(side * 12.6 * Math.sin(0.62), -drop + 12.6 * Math.cos(0.62))
     const arm = put(swing, roundedBox(2.6, tip.length() + 2, 4, 0.6), 'navy', tip.x / 2, tip.y / 2, plane(5))
     arm.rotation.z = Math.atan2(tip.y, tip.x) - Math.PI / 2
     put(swing, cylinderZ(1.1, 5, 10), 'coral', tip.x, tip.y + 0.6, plane(5))
   }
-  const rodLen = 80
-  put(swing, new THREE.CylinderGeometry(0.9, 0.9, rodLen, 10), 'metal', 0, -rodLen / 2, 24)
-  put(swing, cylinderZ(9, 3.4, 40), 'mustard', 0, -rodLen, 24)
-  put(swing, cylinderZ(3.6, 4.6, 20), 'metal', 0, -rodLen, 24)
+  const rodLen = 82
+  put(swing, new THREE.CylinderGeometry(0.9, 0.9, rodLen, 10), 'metal', 0, -rodLen / 2, 25)
+  put(swing, cylinderZ(9, 3.4, 40), 'mustard', 0, -rodLen, 25)
+  put(swing, cylinderZ(3.6, 4.6, 20), 'metal', 0, -rodLen, 25)
 
-  // ── 文字盤（骨組みの輪と 12 の目盛り）と針 ──
+  // ── 文字盤（骨組みの輪と 12 の目盛り）と針。前の軸受けより手前 ──
   const P0 = AX[0]
   const ring = new THREE.Shape()
-  ring.absarc(0, 0, 19, 0, TAU, false)
+  ring.absarc(0, 0, 18, 0, TAU, false)
   const inner = new THREE.Path()
-  inner.absarc(0, 0, 15.5, 0, TAU, true)
+  inner.absarc(0, 0, 14.5, 0, TAU, true)
   ring.holes.push(inner)
-  put(rig, new THREE.ExtrudeGeometry(ring, { depth: 2, bevelEnabled: true, bevelThickness: 0.3, bevelSize: 0.3, bevelSegments: 2, curveSegments: 64 }), 'white', P0.x, P0.y, 16)
+  put(rig, new THREE.ExtrudeGeometry(ring, { depth: 2, bevelEnabled: true, bevelThickness: 0.3, bevelSize: 0.3, bevelSegments: 2, curveSegments: 64 }), 'white', P0.x, P0.y, 22.4)
   for (let i = 0; i < 12; i++) {
     const a = (i * TAU) / 12
     const big = i % 3 === 0
-    const tick = put(rig, new THREE.BoxGeometry(big ? 2 : 1.2, big ? 3.4 : 2.2, 1), 'navy', P0.x + 17.2 * Math.sin(a), P0.y + 17.2 * Math.cos(a), 18.6)
+    const tick = put(rig, new THREE.BoxGeometry(big ? 2 : 1.2, big ? 3.4 : 2.2, 1), 'navy', P0.x + 16.2 * Math.sin(a), P0.y + 16.2 * Math.cos(a), 25)
     tick.rotation.z = -a
   }
   const hand = (len: number, w: number, z: number) => {
@@ -184,15 +207,15 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
     put(h, roundedBox(w, len, 1.2, 0.4), 'navy', 0, len / 2 - 3, 0)
     return h
   }
-  const minuteHand = hand(16, 1.8, 19.4)
-  const hourHand = hand(10, 2.6, 20.8)
-  put(rig, cylinderZ(2, 3, 16), 'coral', P0.x, P0.y, 21.4)
-  brick('b2x2', 'teal', 2, 2)
-  brick('b1x2', 'coral', 3, 0.5, 1)
+  const minuteHand = hand(15, 1.8, 25.8)
+  const hourHand = hand(9.5, 2.6, 27.2)
+  put(rig, cylinderZ(2, 3, 16), 'coral', P0.x, P0.y, 28)
+  brick('b2x2', 'teal', 1, 2)
+  brick('b1x2', 'coral', 3, 1, 1)
 
   // ── カメラ ──
   const camera = new THREE.PerspectiveCamera(26, 1, 10, 3000)
-  const target = V(2, 56, 0)
+  const target = V(2, 60, 0)
   const baseDir = V(100, 90, 260).normalize()
   const up = V(0, 1, 0)
   let dist = 370
@@ -204,7 +227,7 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
     renderer.setSize(w, h, false)
     camera.aspect = w / h
     // 縦に長い時計が収まる距離。横幅が狭いときはさらに引く
-    dist = 76 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) / Math.min(1, camera.aspect / 0.9)
+    dist = 82 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) / Math.min(1, camera.aspect / 0.9)
     camera.updateProjectionMatrix()
     needsRender = true
   }
