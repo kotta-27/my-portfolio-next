@@ -39,11 +39,11 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
               <p className="text-[14.5px] leading-[1.9] text-ink/75 sm:text-[16px]">{t.hero.sub}</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <a href="#projects" className="rounded-[12px] bg-ink px-6 py-[15px] text-[15px] font-bold text-paper no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.9)] transition-transform duration-150 active:translate-y-[2px]">
+              <a href="#projects" className="rounded-[12px] bg-ink px-6 py-[15px] text-[15px] font-bold text-paper no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.9)] transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[2px] hover:bg-teal hover:shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.9)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.9)]">
                 {t.hero.work}
               </a>
-              <a href="https://github.com/kotta-27" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-[12px] bg-tile px-6 py-[15px] text-[15px] font-bold text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.14)] transition-transform duration-150 active:translate-y-[2px]">
-                <FaGithub className="text-[18px]" />
+              <a href="https://github.com/kotta-27" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 rounded-[12px] bg-tile px-6 py-[15px] text-[15px] font-bold text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.14)] transition-[transform,box-shadow,color] duration-150 hover:-translate-y-[2px] hover:text-teal hover:shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.14)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.14)]">
+                <FaGithub className="text-[18px] transition-transform duration-300 group-hover:rotate-[-12deg]" />
                 GitHub
               </a>
             </div>
