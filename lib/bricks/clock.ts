@@ -108,11 +108,17 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
   rig.add(studs)
 
   // ── 歯車の塔。軸 0（下）が針、軸 5（上）が脱進機 ──
-  // 奥行き（z）の層: 歯車 -10.7〜11.7 / 軸受けのリフトアーム 前 14.4・18.2、後 -13.2・-17 / 柱 -21.8 / 梁 -25.6
+  // 奥行き（z）の層: 歯車 -10.7〜11.7 / 軸受けのリフトアーム 前 14.4・18.2、後 -13.2・-17 / 柱・足 -22.3 / 梁 -26.1 / 台のブロック -32〜-24
   const AX = [V(-16, TOP + 21.8)] // 下の軸は、台の上のテクニックブロックの穴（高さ 5.8）から 2 穴上
-  for (const deg of [50, 78, 40, 74, 46]) {
+  for (const deg of [50, 78, 40, 74]) {
     const prev = AX[AX.length - 1]
     AX.push(prev.clone().add(V(16 * Math.cos((deg * Math.PI) / 180), 16 * Math.sin((deg * Math.PI) / 180))))
+  }
+  // 一番上（脱進機）は x = 24 に置く。枠の柱（x = ±32）がプレートのスタッドの格子にそろう
+  {
+    const prev = AX[AX.length - 1]
+    const dx = 24 - prev.x
+    AX.push(V(24, prev.y + Math.sqrt(16 * 16 - dx * dx)))
   }
   const plane = (k: number) => -9 + k * 3.8
   const bigTones: Tone[] = ['lbg', 'teal', 'lbg', 'coral', 'lbg']
@@ -146,29 +152,32 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
 
   // 上の軸（脱進機）は、右の柱の穴へ 2 穴のリフトアームでつなぐ
   {
-    const hole = V(E.x + 8, TOP + 6 + 10 * 8)
+    const hole = V(E.x + 8, TOP + 5.8 + 10 * 8)
     beamBetween(V(E.x, E.y, -17), V(hole.x, hole.y, -17), 'dbg')
-    put(rig, pinGeometry(), 'black', hole.x, hole.y, -19.4)
+    put(rig, pinGeometry(), 'black', hole.x, hole.y, -19.65)
   }
 
-  // 台への固定: 下の軸から 2 穴下へ縦のリフトアーム → 台の上の 1×2 テクニックブロックにピンで留める
-  const foot = V(AX[0].x, TOP + 5.8)
-  beam(3, 'dbg', V(AX[0].x, AX[0].y, -17), -Math.PI / 2)
-  brick('b1x2', 'navy', AX[0].x / PITCH - 1, -23 / PITCH - 0.5)
-  put(rig, cylinderZ(2.5, 0.3, 24), 'black', foot.x, foot.y, -18.85)
-  put(rig, pinGeometry(), 'black', foot.x, foot.y, -19)
+  // 台への固定: プレートの奥の列（z = -28）に 1×2 のテクニックブロックを 3 つ置き、
+  // 下の軸から下ろした縦のリフトアームと、左右の柱の下端の穴を、ブロックの穴（高さ 5.8）にピンで留める
+  const footX = [AX[0].x, -32, 32]
+  for (const x of footX) {
+    brick('b1x2', 'navy', x / PITCH - 1, -4)
+    put(rig, cylinderZ(2.5, 0.3, 24), 'black', x, TOP + 5.8, -23.85)
+    put(rig, pinGeometry(), 'black', x, TOP + 5.8, -24)
+  }
+  beam(3, 'dbg', V(AX[0].x, AX[0].y, -22.3), -Math.PI / 2)
 
   // ── 枠: 柱 2 本（14 穴）と、斜めの梁・てっぺんの梁。交わるところはピンで留める ──
-  const xl = E.x - 56, xr = E.x + 8 // てっぺんの梁の穴に、振り子の軸（E の真上）が来るように
-  const yTop = TOP + 6 + 13 * 8
-  beam(14, 'dbg', V(xl, TOP + 6, -21.8), Math.PI / 2)
-  beam(14, 'dbg', V(xr, TOP + 6, -21.8), Math.PI / 2)
-  beamBetween(V(xl, TOP + 22, -25.6), V(xr, TOP + 70, -25.6), 'lbg') // 64 × 48 → 80（11 穴）
-  beam(9, 'lbg', V(xl, yTop, -25.6), 0)
-  for (const p of [V(xl, TOP + 22), V(xr, TOP + 70), V(xl, yTop), V(xr, yTop)]) put(rig, pinGeometry(), 'black', p.x, p.y, -23.7)
+  const xl = E.x - 56, xr = E.x + 8 // -32 と 32。てっぺんの梁の穴に、振り子の軸（E の真上）が来る
+  const yTop = TOP + 5.8 + 13 * 8
+  beam(14, 'dbg', V(xl, TOP + 5.8, -22.3), Math.PI / 2)
+  beam(14, 'dbg', V(xr, TOP + 5.8, -22.3), Math.PI / 2)
+  beamBetween(V(xl, TOP + 21.8, -26.1), V(xr, TOP + 69.8, -26.1), 'lbg') // 64 × 48 → 80（11 穴）
+  beam(9, 'lbg', V(xl, yTop, -26.1), 0)
+  for (const p of [V(xl, TOP + 21.8), V(xr, TOP + 69.8), V(xl, yTop), V(xr, yTop)]) put(rig, pinGeometry(), 'black', p.x, p.y, -24.2)
   const Q = V(E.x, yTop)
   put(rig, axleGeometry(56), 'black', Q.x, Q.y, 0)
-  put(rig, cylinderZ(3, 2.6), 'coral', Q.x, Q.y, -28.2)
+  put(rig, cylinderZ(3, 2.6), 'coral', Q.x, Q.y, -28.7)
 
   // ── アンクルと振り子（一緒に揺れる） ──
   const swing = new THREE.Group()
