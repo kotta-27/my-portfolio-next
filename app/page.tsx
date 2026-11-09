@@ -1,4 +1,5 @@
 import { redirect } from 'next/navigation'
+import { FaGithub } from 'react-icons/fa6'
 import type { Lang } from '@/types'
 import { home } from '@/data/home'
 import { getLang } from '@/lib/lang'
@@ -41,7 +42,8 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
               <a href="#projects" className="rounded-[12px] bg-ink px-6 py-[15px] text-[15px] font-bold text-paper no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.9)] transition-transform duration-150 active:translate-y-[2px]">
                 {t.hero.work}
               </a>
-              <a href="https://github.com/kotta-27" target="_blank" rel="noopener noreferrer" className="rounded-[12px] bg-tile px-6 py-[15px] text-[15px] font-bold text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.14)] transition-transform duration-150 active:translate-y-[2px]">
+              <a href="https://github.com/kotta-27" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-[12px] bg-tile px-6 py-[15px] text-[15px] font-bold text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.14)] transition-transform duration-150 active:translate-y-[2px]">
+                <FaGithub className="text-[18px]" />
                 GitHub
               </a>
             </div>
