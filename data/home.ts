@@ -34,7 +34,7 @@ export const home: Record<Lang, HomeStrings> = {
       headline: '検索と、触ってわかる UI をつくるエンジニア。',
       sub: 'OpenSearch の中身まで追いかけるのも、数式や 3D を動かして見せるのも好きです。',
       work: '作ったものを見る',
-      sceneLabel: '灰色のプレートの上に、緑・オレンジ・白・紺・黄のブロックで組んだ小さな作品',
+      sceneLabel: 'テクニック部品で組んだ骨組みの時計。振り子が脱進機を 1 歯ずつ進め、6 段の歯車で減速して、文字盤の針が今の時刻を指す',
       sceneHint: 'ドラッグで回す',
     },
     facts: [
@@ -69,7 +69,7 @@ export const home: Record<Lang, HomeStrings> = {
       headline: 'I build search, and UI you can understand by touching it.',
       sub: 'I like digging into the internals of OpenSearch as much as showing math and 3D in motion.',
       work: 'See my work',
-      sceneLabel: 'A small build of teal, orange, white, navy and yellow bricks on a gray baseplate',
+      sceneLabel: 'A skeleton clock built from Technic parts: a pendulum steps the escape wheel one tooth at a time, six gear stages slow it down, and the hands show the current time',
       sceneHint: 'Drag to rotate',
     },
     facts: [

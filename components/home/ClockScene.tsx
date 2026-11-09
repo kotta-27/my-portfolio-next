@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import type { Workbench } from '@/lib/bricks/workbench'
+import type { ClockBench } from '@/lib/bricks/clock'
 
 type Props = {
   /** 作品の説明（読み上げ用） */
@@ -14,26 +14,26 @@ type Props = {
 const isDark = () => document.documentElement.classList.contains('dark')
 
 /**
- * ヒーローの 3D シーン。three は大きいので、ここが画面に入ってから読み込む。
+ * ヒーローの 3D シーン（6 段減速の時計）。three は大きいので、ここが画面に入ってから読み込む。
  * 読み込むまでと、WebGL が使えないときは、同じ構図で描いておいた静止画を出す。
  */
-export function WorkbenchScene({ label, hint }: Props) {
+export function ClockScene({ label, hint }: Props) {
   const host = useRef<HTMLDivElement>(null)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
     const el = host.current
     if (!el) return
-    let bench: Workbench | undefined
+    let bench: ClockBench | undefined
     let cancelled = false
 
     const canvas = document.createElement('canvas')
     const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl')
     if (!gl) return
 
-    import('@/lib/bricks/workbench').then(({ mountWorkbench }) => {
+    import('@/lib/bricks/clock').then(({ mountClock }) => {
       if (cancelled) return
-      bench = mountWorkbench(el, {
+      bench = mountClock(el, {
         theme: isDark() ? 'dark' : 'light',
         reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
         onReady: () => setReady(true),
@@ -54,7 +54,7 @@ export function WorkbenchScene({ label, hint }: Props) {
   return (
     <div role="img" aria-label={label} className="relative h-full w-full">
       <Image
-        src="/hero-workbench.png"
+        src="/hero-clock.png"
         alt=""
         fill
         priority

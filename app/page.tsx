@@ -5,7 +5,7 @@ import { getLang } from '@/lib/lang'
 import { loadCareer } from '@/lib/career'
 import { collectOutputs } from '@/lib/outputs'
 import { SiteShell } from '@/components/home/SiteShell'
-import { WorkbenchScene } from '@/components/home/WorkbenchScene'
+import { ClockScene } from '@/components/home/ClockScene'
 import { CareerStrip, ContactBand, FactCards, FeaturedProjects, OutputCards } from '@/components/home/Sections'
 
 /** 以前のタブ表示（?view=…）へのリンクは、それぞれの一覧ページへ送る */
@@ -47,7 +47,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
             </div>
           </div>
           <div className="relative -mx-5 h-[300px] sm:mx-0 sm:h-[460px] lg:-mr-16 lg:h-[clamp(480px,74vh,640px)]">
-            <WorkbenchScene label={t.hero.sceneLabel} hint={t.hero.sceneHint} />
+            <ClockScene label={t.hero.sceneLabel} hint={t.hero.sceneHint} />
           </div>
         </section>
 
