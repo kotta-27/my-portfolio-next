@@ -9,6 +9,9 @@ import { notesData } from '@/data/notes'
 import type { ResolvedCareerItem } from '@/data/career'
 import type { OutputItem } from '@/lib/outputs'
 import { companyPeriod, isOngoing } from '@/lib/career'
+import { fetchOgImage } from '@/lib/fetchOgImage'
+import { Thumb } from '@/components/Thumb'
+import { NoteCover } from '@/components/notes/NoteCover'
 
 /*
  * トップページ（リニューアル版）の各セクション。どれも「左に見出し、右に中身」の 2 列（lg 以上）で、狭い画面では縦に積む。
@@ -166,38 +169,33 @@ export function CareerStrip({ lang, items }: { lang: Lang; items: ResolvedCareer
   )
 }
 
-/** 書いたもの 1 件のカード。ノートは紺、記事・ブログ・インタビューなどは白 */
-export function OutputItemCard({ item, lang }: { item: OutputItem; lang: Lang }) {
-  const t = home[lang].output
+/** 書いたもの 1 件のカード。サムネイルだけ（タイトルは画像の中にある）。ノートは表紙を描き、ほかはリンク先の OGP 画像 */
+export async function OutputItemCard({ item, lang }: { item: OutputItem; lang: Lang }) {
   const note = item.kind === 'note' ? notesData.find((n) => item.url.endsWith(`/${n.slug}`)) : undefined
-  if (note) {
-    return (
-      <a href={item.url} className="flex h-[176px] flex-col justify-between rounded-[14px] bg-slab p-5 text-slab-fg no-underline transition-transform duration-200 hover:-translate-y-[2px]">
-        <span className="font-mono text-[11px] font-bold text-slab-fg/55">NOTE · {note.date.replaceAll('-', '.')}</span>
-        <span className="line-clamp-3 text-[17px] font-extrabold leading-[1.4]">{note.title[lang]}</span>
-        <span className="flex gap-[5px]">
-          {note.tags.map((tag) => (
-            <span key={tag} className="rounded-[5px] bg-slab-fg/10 px-2 py-[3px] text-[11px] font-bold">
-              {tag}
-            </span>
-          ))}
-        </span>
-      </a>
-    )
-  }
+  const thumbnail = note ? null : (item.thumbnail ?? (await fetchOgImage(item.url)))
   return (
     <a
       href={item.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex h-[176px] flex-col justify-between rounded-[14px] bg-tile p-5 text-ink no-underline shadow-[inset_0_0_0_1px_rgb(var(--ink)/0.08)] transition-transform duration-200 hover:-translate-y-[2px]"
+      {...(item.internal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
+      aria-label={`${item.source}: ${item.label[lang]}`}
+      title={item.label[lang]}
+      className="group relative block aspect-[1200/630] overflow-hidden rounded-[14px] bg-soft shadow-[inset_0_0_0_1px_rgb(var(--ink)/0.08)] transition-transform duration-200 hover:-translate-y-[2px]"
     >
-      <span className="font-mono text-[11px] font-bold uppercase text-mute">{item.source}</span>
-      <span className="line-clamp-3 text-[16px] font-extrabold leading-[1.5]">{item.label[lang]}</span>
-      <span className="inline-flex items-center gap-1 text-[12px] font-bold text-teal">
-        {t.read}
-        <PiArrowUpRightBold className="text-[11px]" />
-      </span>
+      {note ? (
+        <NoteCover title={note.title[lang]} date={note.date} tags={note.tags} />
+      ) : thumbnail ? (
+        <Thumb src={thumbnail} alt="" sizes="(min-width: 1280px) 300px, (min-width: 640px) 45vw, 90vw" className="object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
+      ) : (
+        <span className="flex h-full flex-col justify-between bg-tile p-5">
+          <span className="font-mono text-[11px] font-bold uppercase text-mute">{item.source}</span>
+          <span className="line-clamp-3 text-[16px] font-extrabold leading-[1.5]">{item.label[lang]}</span>
+        </span>
+      )}
+      {!item.internal && (
+        <span className="absolute right-3 top-3 grid h-[28px] w-[28px] place-items-center rounded-full bg-night/75 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <PiArrowUpRightBold className="text-[13px]" />
+        </span>
+      )}
     </a>
   )
 }
