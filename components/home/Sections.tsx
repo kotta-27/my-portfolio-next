@@ -142,9 +142,20 @@ export function FeaturedProjects({ lang }: { lang: Lang }) {
   )
 }
 
-/** 経歴: 古い順に左から右へ（スマホは新しい順に上から） */
+/** 会社のロゴ（白い角丸の枠。ダークでも白地のまま見せる） */
+function CompanyLogo({ src, alt, size }: { src: string; alt: string; size: 'sm' | 'lg' }) {
+  return (
+    <span className={`relative block shrink-0 overflow-hidden rounded-[12px] bg-white shadow-[inset_0_0_0_1px_rgb(var(--ink)/0.08)] ${size === 'lg' ? 'h-[56px] w-[56px]' : 'h-[48px] w-[48px]'}`}>
+      <Image src={src} alt={alt} fill sizes="56px" className="object-contain p-[8px]" />
+    </span>
+  )
+}
+
+/** 経歴: 今の会社を大きな白いカードに、過去の会社はロゴ付きの小さなカードで新しい順に */
 export function CareerStrip({ lang, items }: { lang: Lang; items: ResolvedCareerItem[] }) {
   const t = home[lang].career
+  const current = items.find((item) => isOngoing(item.positions[0].period))
+  const past = items.filter((item) => item !== current).reverse()
   return (
     <Split
       id="career"
@@ -154,29 +165,55 @@ export function CareerStrip({ lang, items }: { lang: Lang; items: ResolvedCareer
         </SectionHead>
       }
     >
-      <div className="relative rounded-[18px] bg-tile p-6 sm:p-8">
-        <span aria-hidden className="absolute left-[41px] right-8 top-[38px] hidden h-[7px] rounded-[2px] bg-soft shadow-[0_2px_0_rgb(var(--ink)/0.08)] lg:block" />
-        <ol className="relative flex flex-col-reverse gap-6 lg:grid lg:grid-cols-4">
-          {items.map((item) => {
-            const [latest] = item.positions
-            const now = isOngoing(latest.period)
-            return (
-              <li key={item.company.en} className="grid grid-cols-[18px_minmax(0,1fr)] gap-x-3 lg:flex lg:flex-col lg:gap-[10px]">
-                {/* 真上から見たスタッド。今の会社だけ緑 */}
-                <span aria-hidden className={`stud-dot mt-[3px] block h-[18px] w-[18px] lg:mt-0 ${now ? 'stud-dot--on' : ''}`} />
-                <span className="flex flex-col gap-[6px]">
-                  <span className={`flex items-center gap-2 font-mono text-[12px] tabular-nums ${now ? 'font-bold text-teal' : 'text-mute'}`}>
-                    {companyPeriod(item)}
-                    {now && <span className="rounded-[5px] bg-teal px-[6px] py-[2px] text-[10px] font-extrabold text-paper">{t.now}</span>}
-                  </span>
-                  <span className="text-[19px] font-extrabold">{item.company[lang]}</span>
-                  <span className="text-[13.5px] text-mute">{latest.role[lang]}</span>
-                  <span className="line-clamp-4 text-[13.5px] leading-[1.7] text-ink/80">{latest.description[lang]}</span>
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        {current && (
+          <div className="relative flex flex-col justify-between gap-6 overflow-hidden rounded-[20px] bg-tile p-7 sm:p-8">
+            <span aria-hidden className="absolute inset-x-0 top-0 h-[6px] bg-teal" />
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between gap-3">
+                <CompanyLogo src={current.logo} alt="" size="lg" />
+                <span className="rounded-[6px] bg-teal px-[10px] py-[5px] font-mono text-[11px] font-extrabold text-paper">
+                  {t.now} · {companyPeriod(current)}
                 </span>
+              </div>
+              <h3 className="text-[26px] font-extrabold leading-tight tracking-[-0.02em] sm:text-[32px]">{current.company[lang]}</h3>
+              {/* インターンから正社員のように、同じ会社で役割が変わったときは流れで見せる */}
+              <p className="text-[16px] font-bold text-teal">
+                {[...current.positions].reverse().map((pos) => pos.role[lang]).join(' → ')}
+              </p>
+              <p className="text-[14.5px] leading-[1.85] text-ink/80">{current.positions[0].description[lang]}</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {current.tags.map((tag) => (
+                <span key={tag} className="rounded-[6px] bg-soft px-[10px] py-[5px] text-[12px] font-bold">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+        <ul className="flex flex-col justify-between gap-3">
+          {past.map((item) => {
+            const [latest] = item.positions
+            return (
+              <li key={item.company.en} className="flex items-center gap-4 rounded-[16px] bg-tile px-5 py-[18px]">
+                <CompanyLogo src={item.logo} alt="" size="sm" />
+                <div className="flex min-w-0 flex-col gap-[3px]">
+                  <span className="text-[16px] font-extrabold">
+                    {item.company[lang]}
+                    {/* 狭い画面では役割を次の行に */}
+                    <span className="block text-[12.5px] font-medium text-mute sm:ml-1 sm:inline">
+                      <span className="hidden sm:inline">· </span>
+                      {latest.role[lang]}
+                    </span>
+                  </span>
+                  <span className="line-clamp-2 text-[13px] leading-[1.6] text-mute">{latest.description[lang]}</span>
+                  <span className="font-mono text-[11.5px] tabular-nums text-mute">{companyPeriod(item)}</span>
+                </div>
               </li>
             )
           })}
-        </ol>
+        </ul>
       </div>
     </Split>
   )
