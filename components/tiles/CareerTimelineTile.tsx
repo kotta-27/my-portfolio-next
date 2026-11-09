@@ -12,14 +12,12 @@ import { Thumb } from '@/components/Thumb'
 import { ArrowBadge } from '@/components/ArrowBadge'
 
 /** キャリアタブ用。最新を一番上に、下へ遡る縦のタイムラインで各社の詳細まで見せる */
-export async function CareerTimelineTile({ lang }: { lang: Lang }) {
+/** bare: ブロックの見た目と見出しを付けず、白いカードだけにする（リニューアル版の /career 用） */
+export async function CareerTimelineTile({ lang, bare = false }: { lang: Lang; bare?: boolean }) {
   const t = ui[lang]
   const items = (await loadCareer()).reverse()
-
-  return (
-    <Tile id="career-timeline" clip={false} className="p-5 sm:p-8">
-      <TileLabel>{t.sections.career}</TileLabel>
-      <ol className="mt-4">
+  const list = (
+      <ol className={bare ? '' : 'mt-4'}>
         {/* 軌道の先端: 上向きの矢印。上へ行くほど新しい */}
         <li aria-hidden className="grid grid-cols-[18px_minmax(0,1fr)] gap-x-4 sm:grid-cols-[150px_18px_minmax(0,1fr)] sm:gap-x-6">
           <div className="hidden sm:block" />
@@ -110,6 +108,13 @@ export async function CareerTimelineTile({ lang }: { lang: Lang }) {
           )
         })}
       </ol>
+  )
+
+  if (bare) return <div className="rounded-[18px] bg-tile p-5 sm:p-8">{list}</div>
+  return (
+    <Tile id="career-timeline" clip={false} className="p-5 sm:p-8">
+      <TileLabel>{t.sections.career}</TileLabel>
+      {list}
     </Tile>
   )
 }
