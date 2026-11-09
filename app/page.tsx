@@ -1,149 +1,66 @@
-import type { CSSProperties } from 'react'
-import { Suspense } from 'react'
-import { cookies } from 'next/headers'
-import { parseView, type Lang } from '@/types'
-import { ui } from '@/data/ui'
-import { projectsData } from '@/data/projects'
-import { careerData } from '@/data/career'
-import { collectOutputs, groupOf, OUTPUT_GROUPS } from '@/lib/outputs'
-import { ViewProvider } from '@/components/ViewContext'
-import { Nav } from '@/components/Nav'
-import { GroundBricks } from '@/components/GroundBricks'
-import { IntroOverlay } from '@/components/IntroOverlay'
-import { INTRO_COOKIE } from '@/lib/intro'
+import { redirect } from 'next/navigation'
+import { FaGithub } from 'react-icons/fa6'
+import type { Lang } from '@/types'
+import { home } from '@/data/home'
 import { getLang } from '@/lib/lang'
-import { BentoGrid, type BentoItemDef } from '@/components/BentoGrid'
-import { TileSkeleton } from '@/components/TileSkeleton'
-import { ScrollToHash } from '@/components/ScrollToHash'
-import { AssembleScript } from '@/components/AssembleScript'
-import { HeroTile } from '@/components/tiles/HeroTile'
-import { NowTile } from '@/components/tiles/NowTile'
-import { ClockTile } from '@/components/tiles/ClockTile'
-import { EducationTile } from '@/components/tiles/EducationTile'
-import { HobbiesTile } from '@/components/tiles/HobbiesTile'
-import { FavoriteTechTile } from '@/components/tiles/FavoriteTechTile'
-import { CareerTile } from '@/components/tiles/CareerTile'
-import { CareerTimelineTile } from '@/components/tiles/CareerTimelineTile'
-import { AwardsTile } from '@/components/tiles/AwardsTile'
-import { OutputTile } from '@/components/tiles/OutputTile'
-import { OutputCard } from '@/components/tiles/OutputCard'
-import { BandRow } from '@/components/BandRow'
-import { ProjectTile } from '@/components/tiles/ProjectTile'
-import { ProjectsHeadTile } from '@/components/tiles/ProjectsHeadTile'
-import { ContactTile } from '@/components/tiles/ContactTile'
+import { loadCareer } from '@/lib/career'
+import { collectOutputs } from '@/lib/outputs'
+import { SiteShell } from '@/components/home/SiteShell'
+import { ClockScene } from '@/components/home/ClockScene'
+import { CareerStrip, ContactBand, FactCards, FeaturedProjects, OutputCards } from '@/components/home/Sections'
 
-/** Projects shown in the overview before the "+N more" tile. */
-const VISIBLE_PROJECTS = 7
+/** 以前のタブ表示（?view=…）へのリンクは、それぞれの一覧ページへ送る */
+const LEGACY_VIEWS: Record<string, string> = { career: '/career', projects: '/projects', writing: '/output' }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: Promise<{ view?: string }>
-}) {
-  const { view: rawView } = await searchParams
+/** トップに並べる「書いたもの」の数。ノートを先に、残りを記事・ブログで埋める */
+const OUTPUT_ON_HOME = 6
+
+export default async function Page({ searchParams }: { searchParams: Promise<{ view?: string }> }) {
+  const { view } = await searchParams
+  if (view && LEGACY_VIEWS[view]) redirect(LEGACY_VIEWS[view])
+
   const lang: Lang = await getLang()
-  const t = ui[lang]
-  // イントロはセッションで 1 回だけ。見たかどうかをサーバーで判断し、2 回目以降は描画しない
-  const showIntro = !(await cookies()).has(INTRO_COOKIE)
-  // スマホのタブ一覧に出す件数。データ本体をクライアントに送らないようサーバーで数える
-  const navCounts = {
-    career: careerData.length,
-    projects: projectsData.length,
-    writing: collectOutputs().length,
-  }
-
-  const items: BentoItemDef[] = [
-    { key: 'hero', views: ['all'], span: 2, rows: 2, node: <HeroTile lang={lang} /> },
-    { key: 'now', views: ['all'], plate: true, node: <NowTile lang={lang} /> },
-    { key: 'clock', views: ['all'], plate: true, node: <ClockTile label={t.tiles.tokyo} sub={t.tiles.tokyoSub} /> },
-    // 幅の狭い画面では 1 カラムだと詰まるので全幅にする
-    { key: 'education', views: ['all'], mobileFull: true, onPlate: true, node: <EducationTile lang={lang} /> },
-    { key: 'hobbies', views: ['all'], mobileFull: true, onPlate: true, node: <HobbiesTile lang={lang} /> },
-    { key: 'favorite-tech', views: ['all'], span: 4, node: <FavoriteTechTile lang={lang} /> },
-    // Overview は Output を 1 タイルにまとめ、Output ビューでは 1 件ずつカードにする。アウトプットを先に見せたいので Career の上に全幅で置く
-    {
-      key: 'writing',
-      views: ['all'],
-      span: 4,
-      node: (
-        <Suspense fallback={<TileSkeleton className="h-full" />}>
-          <OutputTile lang={lang} />
-        </Suspense>
-      ),
-    },
-    {
-      key: 'career',
-      views: ['all'],
-      span: 4,
-      node: (
-        <Suspense fallback={<TileSkeleton className="h-full" />}>
-          <CareerTile lang={lang} />
-        </Suspense>
-      ),
-    },
-    // キャリアタブでは縦のタイムラインで詳しく
-    {
-      key: 'career-timeline',
-      views: ['career'],
-      span: 4,
-      static: true,
-      node: (
-        <Suspense fallback={<TileSkeleton className="h-full" />}>
-          <CareerTimelineTile lang={lang} />
-        </Suspense>
-      ),
-    },
-    { key: 'projects-head', views: ['all', 'projects'], group: 'projects', node: <ProjectsHeadTile lang={lang} count={projectsData.length} /> },
-    ...projectsData.map((project, i) => ({
-      key: `project-${project.slug}`,
-      views: ['all' as const, 'projects' as const],
-      overflow: i >= VISIBLE_PROJECTS,
-      group: 'projects',
-      node: <ProjectTile project={project} lang={lang} />,
-    })),
-    { key: 'awards', views: ['all'], span: 2, node: <AwardsTile lang={lang} /> },
-    // Output ビューは区分ごとに「帯 → カード」の順
-    ...OUTPUT_GROUPS.flatMap((g) => {
-      const members = collectOutputs().filter((o) => groupOf(o.kind) === g.id)
-      if (members.length === 0) return []
-      return [
-        { key: `output-band-${g.id}`, views: ['writing' as const], span: 4 as const, static: true, node: <BandRow label={g.label[lang]} count={members.length} /> },
-        ...members.map((item) => ({
-          key: `output-${item.url}`,
-          views: ['writing' as const],
-          node: (
-            <Suspense fallback={<TileSkeleton className="h-full" />}>
-              <OutputCard item={item} lang={lang} />
-            </Suspense>
-          ),
-        })),
-      ]
-    }),
-    { key: 'contact', views: ['all'], node: <ContactTile lang={lang} /> },
-  ]
+  const t = home[lang]
+  const career = await loadCareer()
+  const outputs = collectOutputs()
 
   return (
-    <ViewProvider initial={parseView(rawView)}>
-      <ScrollToHash />
-      {showIntro && <IntroOverlay />}
-      {/* --intro: タイルの登場をイントロが抜けるタイミングまで遅らせる */}
-      <div className="baseplate relative min-h-screen font-sans text-ink" style={{ '--intro': showIntro ? '800ms' : '0ms' } as CSSProperties}>
-        <GroundBricks />
-        <Nav lang={lang} counts={navCounts} />
-        <main className="relative mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
-          <BentoGrid items={items} labels={{ more: t.tiles.moreProjects, less: t.tiles.lessProjects }} />
-          <AssembleScript />
-          <footer className="flex flex-col items-center gap-3 pt-10">
-            <a
-              href="?"
-              className="text-[11.5px] font-bold uppercase tracking-[.06em] text-mute no-underline transition-colors duration-150 hover:text-ink"
-            >
-              ↑ Back to Top
-            </a>
-            <p className="text-[11px] text-mute">{t.footer}</p>
-          </footer>
-        </main>
-      </div>
-    </ViewProvider>
+    <SiteShell lang={lang}>
+        <section className="grid items-center gap-2 pt-4 lg:grid-cols-[minmax(0,540px)_minmax(0,1fr)] lg:pt-6">
+          <div className="flex flex-col gap-6 sm:gap-7">
+            <p className="font-mono text-[12px] font-bold tracking-[.08em] text-mute sm:text-[13px]">{t.hero.eyebrow}</p>
+            <h1 className="text-[64px] font-extrabold leading-[0.92] tracking-[-0.045em] sm:text-[96px] lg:text-[104px]">
+              Kota
+              <br />
+              <span className="font-medium text-mute">Mizuno</span>
+            </h1>
+            <div className="flex max-w-[540px] flex-col gap-3">
+              <p className="text-[19px] font-extrabold leading-[1.5] tracking-[-0.01em] sm:text-[22px]">{t.hero.headline}</p>
+              <p className="text-[14.5px] leading-[1.9] text-ink/75 sm:text-[16px]">{t.hero.sub}</p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <a href="#projects" className="rounded-[12px] bg-ink px-6 py-[15px] text-[15px] font-bold text-paper no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.9)] transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[2px] hover:bg-teal hover:shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.9)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.9)]">
+                {t.hero.work}
+              </a>
+              <a href="https://github.com/kotta-27" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 rounded-[12px] bg-tile px-6 py-[15px] text-[15px] font-bold text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.14)] transition-[transform,box-shadow,color] duration-150 hover:-translate-y-[2px] hover:text-teal hover:shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.14)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.14)]">
+                <FaGithub className="text-[18px] transition-transform duration-300 group-hover:rotate-[-12deg]" />
+                GitHub
+              </a>
+            </div>
+          </div>
+          <div className="relative -mx-5 h-[300px] sm:mx-0 sm:h-[460px] lg:-mr-16 lg:h-[clamp(480px,74vh,640px)]">
+            <ClockScene label={t.hero.sceneLabel} hint={t.hero.sceneHint} />
+          </div>
+        </section>
+
+        <div className="-mt-12 sm:-mt-16">
+          <FactCards lang={lang} />
+        </div>
+
+        <FeaturedProjects lang={lang} />
+        <CareerStrip lang={lang} items={career} />
+        <OutputCards lang={lang} items={outputs.slice(0, OUTPUT_ON_HOME)} total={outputs.length} />
+        <ContactBand lang={lang} />
+    </SiteShell>
   )
 }

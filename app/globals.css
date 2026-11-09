@@ -415,3 +415,35 @@ html.dark .technic-axle-tip { background: color-mix(in oklab, rgb(var(--mute)) 5
 .note-cover__bricks { gap: calc(5 * var(--u)); }
 .note-cover__bricks > span:last-child { gap: calc(3 * var(--u)); }
 .note-cover__bricks .mini-brick { width: calc(18 * var(--u)); height: calc(9 * var(--u)); }
+
+/*
+ * 見出しの部品が落ちてきてはまる（components/home/DropBrick.tsx）。
+ * 落下 → 着地で少し潰れる → 小さく跳ね返って止まる。着地と同時に床の影が濃くなる。
+ */
+.brick-drop__shadow {
+  position: absolute;
+  left: 22%;
+  right: 22%;
+  bottom: 14%;
+  height: 12%;
+  border-radius: 50%;
+  background: rgb(var(--shadow-rgb) / 0.18);
+  filter: blur(4px);
+}
+.brick-drop--armed .brick-drop__part { opacity: 0; transform: translateY(-90px); }
+.brick-drop--armed .brick-drop__shadow { opacity: 0; transform: scale(0.4); }
+.brick-drop--in .brick-drop__part { animation: brick-drop 0.75s cubic-bezier(0.3, 0, 0.3, 1) both; transform-origin: 50% 85%; }
+.brick-drop--in .brick-drop__shadow { animation: brick-drop-shadow 0.75s ease-out both; }
+@keyframes brick-drop {
+  0% { opacity: 0; transform: translateY(-90px); }
+  15% { opacity: 1; }
+  55% { transform: translateY(0) scale(1, 1); }
+  65% { transform: translateY(2px) scale(1.06, 0.9); }
+  80% { transform: translateY(-5px) scale(0.98, 1.02); }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes brick-drop-shadow {
+  0% { opacity: 0; transform: scale(0.4); }
+  55% { opacity: 1; transform: scale(1.1); }
+  100% { opacity: 1; transform: none; }
+}

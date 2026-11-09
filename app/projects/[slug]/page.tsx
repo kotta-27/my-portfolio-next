@@ -1,48 +1,55 @@
+import Image from 'next/image'
 import { notFound } from 'next/navigation'
-import { PiArrowUpRight, PiCheckCircleFill, PiMedalFill, PiQuotes } from 'react-icons/pi'
-import { parseView, type Lang } from '@/types'
-import { projectsData } from '@/data/projects'
+import { PiArrowLeftBold, PiArrowRightBold, PiArrowUpRightBold, PiCheckCircleFill, PiMedalFill, PiQuotes } from 'react-icons/pi'
+import type { Lang } from '@/types'
+import { projectsData, type ProjectItem } from '@/data/projects'
 import { ui } from '@/data/ui'
+import { home } from '@/data/home'
 import { getLang } from '@/lib/lang'
-import { Reveal } from '@/components/Reveal'
-import { AssembleScript } from '@/components/AssembleScript'
-import { Tile } from '@/components/Tile'
-import { TileLabel } from '@/components/TileLabel'
-import { Tag } from '@/components/Tag'
-import { LangToggle } from '@/components/LangToggle'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { SiteShell } from '@/components/home/SiteShell'
 import { ProjectImageCarousel } from '@/components/ProjectImageCarousel'
-import { BackLink } from '@/components/BackLink'
-import { ProjectNeighborTile } from '@/components/tiles/ProjectNeighborTile'
 
 export function generateStaticParams() {
   return projectsData.map((p) => ({ slug: p.slug }))
 }
 
-export default async function ProjectPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ slug: string }>
-  searchParams: Promise<{ from?: string }>
-}) {
-  const { slug } = await params
-  const { from: rawFrom } = await searchParams
-  const lang: Lang = await getLang()
-  const from = parseView(rawFrom)
-  // 来たビューに戻す。Overview から来たならプロジェクト一覧の位置へ
-  const backHref = from === 'all' ? '/#projects' : `/?view=${from}`
+const eyebrow = 'font-mono text-[11.5px] font-bold uppercase tracking-[.08em] text-mute'
 
+/** 前後のプロジェクトへのリンク */
+function Neighbor({ project, label, dir }: { project: ProjectItem; label: string; dir: 'prev' | 'next' }) {
+  return (
+    <a
+      href={`/projects/${project.slug}`}
+      className={`group flex items-center gap-4 rounded-[18px] bg-tile p-4 text-ink no-underline ${dir === 'next' ? 'flex-row-reverse text-right' : ''}`}
+    >
+      <span className="relative block aspect-[16/10] w-[120px] shrink-0 overflow-hidden rounded-[10px] bg-soft sm:w-[160px]">
+        <Image src={project.image} alt="" fill sizes="160px" className="object-cover object-top" />
+      </span>
+      <span className="flex min-w-0 flex-col gap-1">
+        <span className={`inline-flex items-center gap-[6px] ${eyebrow} ${dir === 'next' ? 'justify-end' : ''}`}>
+          {dir === 'prev' && <PiArrowLeftBold className="text-[11px]" />}
+          {label}
+          {dir === 'next' && <PiArrowRightBold className="text-[11px]" />}
+        </span>
+        <span className="truncate text-[17px] font-extrabold transition-colors duration-150 group-hover:text-teal sm:text-[19px]">{project.name}</span>
+      </span>
+    </a>
+  )
+}
+
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const lang: Lang = await getLang()
   const index = projectsData.findIndex((p) => p.slug === slug)
   if (index === -1) notFound()
   const project = projectsData[index]
   const prev = projectsData[(index - 1 + projectsData.length) % projectsData.length]
   const next = projectsData[(index + 1) % projectsData.length]
   const t = ui[lang].projectMeta
-  const backLabel = from === 'projects' ? t.backToProjects : t.back
+  const h = home[lang]
   const meta = project.meta
 
-  const facts: { label: string; value: string }[] = [
+  const facts = [
     meta?.period && { label: t.period, value: meta.period[lang] },
     meta?.role && { label: t.role, value: meta.role[lang].join(', ') },
     meta?.members && { label: t.members, value: meta.members[lang] },
@@ -50,143 +57,124 @@ export default async function ProjectPage({
   ].filter((f): f is { label: string; value: string } => Boolean(f))
 
   return (
-    <div className="baseplate min-h-screen font-sans text-ink">
-      <div className="mx-auto max-w-[1100px] px-4 pb-16 pt-3 sm:px-6">
-        <div className="relative z-[200] mb-3 flex items-center justify-between">
-          <BackLink href={backHref} label={backLabel} />
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <LangToggle lang={lang} />
+    <SiteShell lang={lang}>
+      <article className="flex flex-col gap-10 pt-6 sm:pt-10">
+        <header className="flex flex-col gap-4">
+          <a href="/projects" className="group inline-flex w-fit items-center gap-[6px] text-[14px] font-bold text-mute no-underline hover:text-ink">
+            <PiArrowLeftBold className="text-[12px] transition-transform duration-200 group-hover:-translate-x-[3px]" />
+            {h.pages.projects.title}
+          </a>
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="flex min-w-0 flex-col gap-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="text-[44px] font-extrabold leading-none tracking-[-0.04em] sm:text-[64px]">{project.name}</h1>
+                {project.badge && (
+                  <span className="inline-flex items-center gap-[4px] rounded-[6px] bg-coral px-2 py-[4px] text-[12px] font-extrabold text-paper">
+                    <PiMedalFill className="text-[13px]" />
+                    {project.badge[lang]}
+                  </span>
+                )}
+              </div>
+              <p className="max-w-[640px] text-[15px] leading-[1.8] text-ink/75 sm:text-[17px]">{project[lang]}</p>
+            </div>
+            {project.links.length > 0 && (
+              <div className="flex flex-wrap gap-2 lg:shrink-0 lg:justify-end">
+                {project.links.map((link) => (
+                  <a
+                    key={link.url}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-[6px] rounded-[12px] bg-ink px-5 py-3 text-[14px] font-bold text-paper no-underline transition-colors duration-150 hover:bg-teal"
+                  >
+                    {link.label}
+                    <PiArrowUpRightBold className="text-[13px]" />
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
+        </header>
+
+        <div className="overflow-hidden rounded-[24px] bg-tile">
+          <ProjectImageCarousel images={project.images && project.images.length > 0 ? project.images : [project.image]} alt={project.name} />
         </div>
 
-        <Reveal span={4}>
-          <Tile pad={false}>
-            <ProjectImageCarousel
-              images={project.images && project.images.length > 0 ? project.images : [project.image]}
-              alt={project.name}
-            />
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:gap-16">
+          <div className="flex min-w-0 flex-col gap-10">
+            <p className="whitespace-pre-line text-[15px] leading-[2] text-ink/85 sm:text-[16px]">{project.detail[lang]}</p>
 
-            <div className="flex flex-col gap-10 p-6 sm:p-10">
-              {/* Header */}
-              <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <TileLabel>{ui[lang].sections.projects}</TileLabel>
-                    {project.badge && (
-                      <span className="flat-tile inline-flex items-center gap-[3px] bg-coral px-[8px] py-[3px] text-[10px] font-extrabold text-paper">
-                        <PiMedalFill className="text-[11px]" />
-                        {project.badge[lang]}
-                      </span>
-                    )}
-                  </div>
-                  <h1 className="mt-2 text-[32px] font-extrabold leading-[1] tracking-[-0.035em] sm:text-[44px]">
-                    {project.name}
-                  </h1>
-                  <p className="mt-3 max-w-[60ch] text-[13.5px] leading-[1.6] text-mute">{project[lang]}</p>
-                  <div className="mt-3 flex flex-wrap gap-[5px]">
-                    {project.tags.map((tag) => (
-                      <Tag key={tag}>{tag}</Tag>
-                    ))}
-                  </div>
-                </div>
-                {project.links.length > 0 && (
-                  <div className="flex flex-wrap gap-2 sm:shrink-0 sm:justify-end">
-                    {project.links.map((link) => (
-                      <a
-                        key={link.url}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="plate plate--dark inline-flex items-center gap-[5px] bg-ink px-4 py-[9px] text-[11.5px] font-bold text-paper no-underline hover:bg-teal"
-                      >
-                        {link.label}
-                        <PiArrowUpRight className="text-[13px]" />
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </header>
-
-              <p className="whitespace-pre-line text-[14px] leading-[1.9] text-ink/80 sm:text-[15px]">{project.detail[lang]}</p>
-
-              {facts.length > 0 && (
-                <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  {facts.map((fact) => (
-                    <div key={fact.label} className="rounded-[14px] bg-soft px-4 py-3">
-                      <dt className="text-[10.5px] font-bold uppercase tracking-[.08em] text-mute">{fact.label}</dt>
-                      <dd className="mt-1 text-[14px] font-extrabold leading-snug tracking-[-0.01em]">{fact.value}</dd>
-                    </div>
+            {meta?.contributions && (
+              <section className="flex flex-col gap-4">
+                <h2 className={eyebrow}>{t.contributions}</h2>
+                <ul className="flex flex-col gap-3">
+                  {meta.contributions[lang].map((item) => (
+                    <li key={item} className="flex items-start gap-[10px] text-[15px] font-semibold leading-[1.6]">
+                      <PiCheckCircleFill className="mt-[3px] shrink-0 text-[18px] text-teal" />
+                      {item}
+                    </li>
                   ))}
-                </dl>
-              )}
+                </ul>
+              </section>
+            )}
 
-              {(meta?.techStack || meta?.contributions) && (
-                <div className="grid grid-cols-1 gap-10 border-t border-soft pt-8 sm:grid-cols-2">
-                  {meta?.techStack && (
-                    <section>
-                      <TileLabel>{t.techStack}</TileLabel>
-                      <ul className="mt-2 flex flex-col divide-y divide-soft">
-                        {meta.techStack.map((cat) => (
-                          <li key={cat.category} className="grid grid-cols-[84px_1fr] items-start gap-3 py-[9px] first:pt-0 last:pb-0">
-                            <span className="pt-[3px] text-[11px] font-bold uppercase tracking-[.06em] text-mute">{cat.category}</span>
-                            <div className="flex flex-wrap gap-[5px]">
-                              {cat.items.map((item) => (
-                                <span key={item} className="flat-tile bg-soft px-[10px] py-[4px] text-[11.5px] font-bold">
-                                  {item}
-                                </span>
-                              ))}
-                            </div>
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-                  )}
-                  {meta?.contributions && (
-                    <section>
-                      <TileLabel>{t.contributions}</TileLabel>
-                      <ul className="mt-2 flex flex-col gap-[9px]">
-                        {meta.contributions[lang].map((item) => (
-                          <li key={item} className="flex items-start gap-[8px] text-[13px] font-semibold leading-[1.5]">
-                            <PiCheckCircleFill className="mt-[2px] shrink-0 text-[16px] text-teal" />
-                            {item}
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-                  )}
+            {meta?.reflection && (
+              <section className="flex flex-col gap-3 rounded-[18px] bg-slab p-6 text-slab-fg sm:p-8">
+                <h2 className="font-mono text-[11.5px] font-bold uppercase tracking-[.08em] text-slab-fg/60">{t.reflection}</h2>
+                <div className="flex items-start gap-4">
+                  <PiQuotes className="hidden shrink-0 text-[34px] text-teal sm:block" />
+                  <p className="whitespace-pre-line text-[15px] leading-[1.9] text-slab-fg/85">{meta.reflection[lang]}</p>
                 </div>
-              )}
+              </section>
+            )}
+          </div>
 
-              {meta?.reflection && (
-                <section className="rounded-[14px] bg-slab p-5 text-slab-fg sm:p-6">
-                  <TileLabel className="text-slab-fg/55">{t.reflection}</TileLabel>
-                  <div className="mt-2 flex items-start gap-4">
-                    <PiQuotes className="hidden shrink-0 text-[34px] text-teal sm:block" />
-                    <p className="whitespace-pre-line text-[14px] leading-[1.9] text-slab-fg/85 sm:text-[15px]">
-                      {meta.reflection[lang]}
-                    </p>
+          <aside className="flex flex-col gap-6 self-start rounded-[18px] bg-tile p-6 lg:sticky lg:top-24">
+            {facts.length > 0 && (
+              <dl className="grid grid-cols-2 gap-x-4 gap-y-4">
+                {facts.map((fact) => (
+                  <div key={fact.label} className="flex flex-col gap-1">
+                    <dt className={eyebrow}>{fact.label}</dt>
+                    <dd className="text-[15px] font-extrabold leading-snug">{fact.value}</dd>
                   </div>
-                </section>
+                ))}
+              </dl>
+            )}
+            <div className="flex flex-col gap-3">
+              <h2 className={eyebrow}>{t.techStack}</h2>
+              {meta?.techStack ? (
+                <ul className="flex flex-col gap-3">
+                  {meta.techStack.map((cat) => (
+                    <li key={cat.category} className="flex flex-col gap-[6px]">
+                      <span className="text-[12px] font-bold text-mute">{cat.category}</span>
+                      <span className="flex flex-wrap gap-[6px]">
+                        {cat.items.map((item) => (
+                          <span key={item} className="rounded-[6px] bg-soft px-[10px] py-[5px] text-[12.5px] font-bold">
+                            {item}
+                          </span>
+                        ))}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <span className="flex flex-wrap gap-[6px]">
+                  {project.tags.map((tag) => (
+                    <span key={tag} className="rounded-[6px] bg-soft px-[10px] py-[5px] text-[12.5px] font-bold">
+                      {tag}
+                    </span>
+                  ))}
+                </span>
               )}
             </div>
-          </Tile>
-        </Reveal>
-
-        <div className="mt-brick grid grid-cols-1 gap-y-brick sm:grid-cols-2">
-          <Reveal span={1} index={1}>
-            <ProjectNeighborTile project={prev} lang={lang} direction="prev" label={t.prevProject} from={from} />
-          </Reveal>
-          <Reveal span={1} index={2}>
-            <ProjectNeighborTile project={next} lang={lang} direction="next" label={t.nextProject} from={from} />
-          </Reveal>
+          </aside>
         </div>
-        <AssembleScript />
 
-        <div className="mt-8 flex justify-center">
-          <BackLink href={backHref} label={backLabel} />
-        </div>
-      </div>
-    </div>
+        <nav aria-label="Projects" className="grid gap-4 sm:grid-cols-2">
+          <Neighbor project={prev} label={t.prevProject} dir="prev" />
+          <Neighbor project={next} label={t.nextProject} dir="next" />
+        </nav>
+      </article>
+    </SiteShell>
   )
 }
