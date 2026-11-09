@@ -17,10 +17,21 @@ import { NoteCover } from '@/components/notes/NoteCover'
  * トップページ（リニューアル版）の各セクション。どれも「左に見出し、右に中身」の 2 列（lg 以上）で、狭い画面では縦に積む。
  */
 
-/** 見出しの列。eyebrow は小さな英字のラベル */
-export function SectionHead({ eyebrow, title, children }: { eyebrow: string; title: string; children?: ReactNode }) {
+/** 見出しに添える部品（Clutch のエンジンで描いた画像）。セクションごとに部品を変える */
+const SECTION_BRICKS = {
+  projects: '/bricks-contact-b.png',
+  career: '/bricks-section-plate.png',
+  output: '/bricks-contact-a.png',
+  list: '/bricks-section-tile.png',
+} as const
+
+export type SectionBrick = keyof typeof SECTION_BRICKS
+
+/** 見出しの列。eyebrow は小さな英字のラベル。brick を渡すと、その上に部品を 1 つ置く */
+export function SectionHead({ eyebrow, title, brick, children }: { eyebrow: string; title: string; brick?: SectionBrick; children?: ReactNode }) {
   return (
     <div className="flex flex-col gap-3">
+      {brick && <Image src={SECTION_BRICKS[brick]} alt="" width={72} height={72} className="-mb-1 -ml-2 h-[64px] w-[64px] sm:h-[72px] sm:w-[72px]" />}
       <span className="font-mono text-[12px] font-bold tracking-[.08em] text-mute">{eyebrow}</span>
       <h2 className="text-[32px] font-extrabold leading-tight tracking-[-0.03em] sm:text-[44px]">{title}</h2>
       {children}
@@ -119,7 +130,7 @@ export function FeaturedProjects({ lang }: { lang: Lang }) {
     <Split
       id="projects"
       head={
-        <SectionHead eyebrow={t.eyebrow} title={t.title}>
+        <SectionHead eyebrow={t.eyebrow} title={t.title} brick="projects">
           <p className="text-[15px] leading-[1.8] text-mute">{t.blurb}</p>
           <MoreLink href="/projects">{t.more(projectsData.length - rows.length)}</MoreLink>
         </SectionHead>
@@ -137,20 +148,21 @@ export function CareerStrip({ lang, items }: { lang: Lang; items: ResolvedCareer
     <Split
       id="career"
       head={
-        <SectionHead eyebrow={t.eyebrow} title={t.title}>
+        <SectionHead eyebrow={t.eyebrow} title={t.title} brick="career">
           <MoreLink href="/career">{t.more}</MoreLink>
         </SectionHead>
       }
     >
       <div className="relative rounded-[18px] bg-tile p-6 sm:p-8">
-        <span aria-hidden className="absolute left-[41px] right-8 top-[40px] hidden h-[3px] rounded-full bg-soft lg:block" />
+        <span aria-hidden className="absolute left-[41px] right-8 top-[38px] hidden h-[7px] rounded-[2px] bg-soft shadow-[0_2px_0_rgb(var(--ink)/0.08)] lg:block" />
         <ol className="relative flex flex-col-reverse gap-6 lg:grid lg:grid-cols-4">
           {items.map((item) => {
             const [latest] = item.positions
             const now = isOngoing(latest.period)
             return (
               <li key={item.company.en} className="grid grid-cols-[18px_minmax(0,1fr)] gap-x-3 lg:flex lg:flex-col lg:gap-[10px]">
-                <span aria-hidden className={`mt-[3px] block h-[18px] w-[18px] rounded-full lg:mt-0 ${now ? 'bg-teal shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.25)]' : 'bg-tile shadow-[inset_0_0_0_2px_rgb(var(--mute)/0.35)]'}`} />
+                {/* 真上から見たスタッド。今の会社だけ緑 */}
+                <span aria-hidden className={`stud-dot mt-[3px] block h-[18px] w-[18px] lg:mt-0 ${now ? 'stud-dot--on' : ''}`} />
                 <span className="flex flex-col gap-[6px]">
                   <span className={`flex items-center gap-2 font-mono text-[12px] tabular-nums ${now ? 'font-bold text-teal' : 'text-mute'}`}>
                     {companyPeriod(item)}
@@ -207,7 +219,7 @@ export function OutputCards({ lang, items, total }: { lang: Lang; items: OutputI
     <Split
       id="output"
       head={
-        <SectionHead eyebrow={t.eyebrow} title={t.title}>
+        <SectionHead eyebrow={t.eyebrow} title={t.title} brick="output">
           <MoreLink href="/output">{t.more(total)}</MoreLink>
         </SectionHead>
       }
