@@ -12,6 +12,7 @@ import { companyPeriod, isOngoing } from '@/lib/career'
 import { fetchOgImage } from '@/lib/fetchOgImage'
 import { Thumb } from '@/components/Thumb'
 import { NoteCover } from '@/components/notes/NoteCover'
+import { DropBrick } from '@/components/home/DropBrick'
 
 /*
  * トップページ（リニューアル版）の各セクション。どれも「左に見出し、右に中身」の 2 列（lg 以上）で、狭い画面では縦に積む。
@@ -31,7 +32,7 @@ export type SectionBrick = keyof typeof SECTION_BRICKS
 export function SectionHead({ eyebrow, title, brick, children }: { eyebrow: string; title: string; brick?: SectionBrick; children?: ReactNode }) {
   return (
     <div className="flex flex-col gap-3">
-      {brick && <Image src={SECTION_BRICKS[brick]} alt="" width={72} height={72} className="-mb-1 -ml-2 h-[64px] w-[64px] sm:h-[72px] sm:w-[72px]" />}
+      {brick && <DropBrick src={SECTION_BRICKS[brick]} />}
       <span className="font-mono text-[12px] font-bold tracking-[.08em] text-mute">{eyebrow}</span>
       <h2 className="text-[32px] font-extrabold leading-tight tracking-[-0.03em] sm:text-[44px]">{title}</h2>
       {children}
