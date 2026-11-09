@@ -132,7 +132,7 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
   }
   for (const p of AX) {
     put(rig, cylinderZ(3, 2.6), 'coral', p.x, p.y, 17.5)
-    put(rig, cylinderZ(2.3, 9), 'black', p.x, p.y, -17)
+    put(rig, cylinderZ(2.3, 9), 'black', p.x, p.y, -16)
   }
   const E = AX[5]
   const escape = put(rig, escapeWheelGeometry(24), 'mustard', E.x, E.y, plane(5))
@@ -141,8 +141,9 @@ export function mountClock(host: HTMLElement, opts: { theme: Theme; reducedMotio
   beam(11, 'dbg', V(-30, TOP + 6, -15), Math.PI / 2)
   beam(11, 'dbg', V(30, TOP + 6, -15), Math.PI / 2)
   beam(4, 'dbg', V(30, TOP + 86, -15), Math.PI / 2)
-  beamBetween(V(-30, TOP + 30, -15), V(30, TOP + 46, -15), 'lbg')
-  beamBetween(V(-30, TOP + 70, -15), V(30, TOP + 94, -15), 'lbg')
+  // 斜めの梁は柱の 1 枚うしろ（厚み 3.4 + すき間）に重ねて、柱とぶつからないようにする
+  beamBetween(V(-30, TOP + 30, -18.8), V(30, TOP + 46, -18.8), 'lbg')
+  beamBetween(V(-30, TOP + 70, -18.8), V(30, TOP + 94, -18.8), 'lbg')
   const Q = V(E.x, E.y + 17)
   beam(3, 'dbg', V(Q.x - 16, Q.y, 22), 0)
   put(rig, axleGeometry(44), 'black', Q.x, Q.y, 2)
