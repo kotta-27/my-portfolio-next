@@ -32,7 +32,7 @@ export const home: Record<Lang, HomeStrings> = {
     hero: {
       eyebrow: 'SOFTWARE ENGINEER · TOKYO',
       headline: '検索と、触ってわかる UI をつくるエンジニア。',
-      sub: 'OpenSearch の中身まで追いかけるのも、数式や 3D を動かして見せるのも好きです。',
+      sub: '数式や3Dを動かして見せるのが好き。',
       work: '作ったものを見る',
       sceneLabel: 'テクニック部品で組んだ骨組みの時計。振り子が脱進機を 1 歯ずつ進め、6 段の歯車で減速して、文字盤の針が今の時刻を指す',
       sceneHint: 'ドラッグで回す',
