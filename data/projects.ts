@@ -34,6 +34,35 @@ export type ProjectItem = {
 
 export const projectsData: ProjectItem[] = [
   {
+    name: 'yagura',
+    slug: 'yagura',
+    en: 'A workspace for coding agents: Claude, a terminal, a live preview and the diff side by side, with a sidebar that shows which agent needs you.',
+    ja: 'Claude・ターミナル・プレビュー・差分を並べて、どのエージェントが自分を待っているか一目でわかる、コーディングエージェント用の作業場。',
+    detail: {
+      en: 'A workspace for running several coding agents at once.\nSpaces on the left divide your work; each space holds tabs, and tabs split into panes that show a Claude agent, a terminal, a page preview or the diff.\nThe sidebar lists what every agent is doing right now and which ones are waiting for approval or finished unseen, along with the share of the 5-hour Claude Code limit left.\nSelect an area of the preview and the image goes to the agent with your instructions; comment on lines in the diff and send them back the same way.\nComes as an Electron desktop app and a Rust terminal version sharing one agent bridge. The server keeps running, so closing the window leaves the agents at work.',
+      ja: '複数のコーディングエージェントを同時に走らせるための作業場。\n左のスペースで仕事を分け、スペースごとにタブを持ち、タブは Claude のエージェント・ターミナル・ページのプレビュー・差分を表示するペインに分割できる。\nサイドバーには各エージェントが今何をしているか、承認待ちや見ていない間に終わったものはどれかが並び、Claude Code の 5 時間枠の残りも出る。\nプレビューの一部を範囲選択すると画像つきで指示を送れ、差分の行にコメントして同じようにエージェントへ返せる。\nElectron のデスクトップ版と Rust のターミナル版があり、同じエージェントの橋渡し部分を共有する。サーバーが動き続けるので、ウィンドウを閉じてもエージェントは作業を続ける。',
+    },
+    tags: ['Electron', 'Rust', 'Claude Agent SDK'],
+    links: [],
+    image: '/yagura_1.jpg',
+    images: ['/yagura_1.jpg', '/yagura_2.jpg'],
+    meta: {
+      contributions: {
+        en: ['Design and implementation', 'Agent bridge on the Claude Agent SDK, shared by the desktop and terminal versions', 'Live preview with area selection, and a diff pane for reviewing agent edits'],
+        ja: ['設計と実装', 'デスクトップ版とターミナル版で共有する、Claude Agent SDK のエージェント橋渡し部分', '範囲選択できるプレビューと、エージェントの編集を確認する差分ペイン'],
+      },
+      techStack: [
+        { category: 'Desktop', items: ['Electron', 'Vue', 'TypeScript', 'xterm.js', 'node-pty'] },
+        { category: 'TUI', items: ['Rust', 'ratatui', 'vt100'] },
+        { category: 'Agent', items: ['Claude Agent SDK', 'Node.js'] },
+        { category: 'Test', items: ['Playwright'] },
+      ],
+      period: { en: '2026-Nov – ongoing', ja: '2026年11月〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
     name: 'Mathscope',
     slug: 'mathscope',
     en: 'A math tool where formulas become graphs you can move — with 77 theorems and interactive figures.',

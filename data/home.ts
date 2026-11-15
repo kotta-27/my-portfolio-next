@@ -109,13 +109,34 @@ export type Featured = {
 
 export const featured: Featured[] = [
   {
-    slug: 'mathscope',
-    problem: { ja: '式とグラフの関係は、紙の上では動かして確かめられない。', en: 'On paper you cannot move a formula and watch its graph change.' },
-    approach: {
-      ja: 'x² や sin 2x のように書いても解析できる正規化の層をテスト付きで作り、展開は 1 手ずつ色で示す。',
-      en: 'A tested normalization layer accepts input written the way you would on paper, and expansions play one colored step at a time.',
+    slug: 'yagura',
+    problem: {
+      ja: 'エージェントを何体も走らせると、どれが承認待ちで、どれが終わったのかを見失う。',
+      en: 'Run several agents at once and you lose track of which one is waiting for you and which has finished.',
     },
-    result: { ja: '定理 77 個、動かせる図 41 個。', en: '77 theorems, 41 of them with interactive figures.' },
+    approach: {
+      ja: 'エージェント・ターミナル・プレビュー・差分をペインで並べ、サイドバーに全員の今の作業と承認待ちを出す。',
+      en: 'Agents, terminals, a live preview and the diff sit side by side in panes, and one sidebar shows what every agent is doing and who needs approval.',
+    },
+    result: {
+      ja: 'Electron のデスクトップ版と Rust のターミナル版。同じエージェントの橋渡し部分で動く。',
+      en: 'An Electron desktop app and a Rust terminal version, both running on the same agent bridge.',
+    },
+  },
+  {
+    slug: 'fude',
+    problem: {
+      ja: 'ノートを書きながら AI に聞くと、別のアプリへ文章をコピーして行き来することになる。',
+      en: 'Asking an AI about your notes means copying text into another app and switching back and forth.',
+    },
+    approach: {
+      ja: 'ノート上で選んだ文章を AI パネルに送ると、Gemini の回答が入力を止めずにストリーミングで届く。',
+      en: 'Select text in a note and send it to the AI panel; Gemini streams its answer back without blocking your typing.',
+    },
+    result: {
+      ja: 'Next.js を Electron に詰め、electron-builder で macOS アプリとして配布。',
+      en: 'Next.js packaged inside Electron and shipped as a macOS app with electron-builder.',
+    },
   },
   {
     slug: 'nanjenerator',
