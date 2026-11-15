@@ -37,6 +37,26 @@ html {
 }
 
 /*
+ * 日本語の改行: 文節の途中（「承認待 / ち」など）で折り返さず、行末に 1 文字だけ残さない。
+ * auto-phrase は対応ブラウザ（Chromium）だけで効き、ほかでは従来どおり。
+ */
+body {
+  line-break: strict;
+  word-break: auto-phrase;
+  text-wrap: pretty;
+}
+/* 見出しは行の長さをそろえ、約物（、。「」）の前後の空きを詰める。本文は読みやすさのため詰めない */
+h1, h2, h3 { text-wrap: balance; font-feature-settings: 'palt'; }
+
+/* キーボード操作のときだけ、どこにいるかをはっきり見せる */
+:focus-visible {
+  outline: 2px solid rgb(var(--teal));
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+::selection { background: rgb(var(--teal) / 0.24); }
+
+/*
  * ===== レゴブロック =====
  * .brick（外側）: 上辺のスタッドと、下に覗く側面（厚み）。凸がはみ出すので overflow は切らない
  * .brick-face（内側）: 面。プラスチックの艶（上辺のハイライト）と中身の切り抜き

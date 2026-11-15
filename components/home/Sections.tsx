@@ -13,6 +13,7 @@ import { fetchOgImage } from '@/lib/fetchOgImage'
 import { Thumb } from '@/components/Thumb'
 import { NoteCover } from '@/components/notes/NoteCover'
 import { DropBrick } from '@/components/home/DropBrick'
+import { TechStack } from '@/components/home/TechStack'
 
 /*
  * トップページ（リニューアル版）の各セクション。どれも「左に見出し、右に中身」の 2 列（lg 以上）で、狭い画面では縦に積む。
@@ -75,45 +76,54 @@ export function FactCards({ lang }: { lang: Lang }) {
   )
 }
 
-/** 代表作の 1 行: 写真・名前・問題 / 工夫 / 結果・技術 */
-function FeaturedRow({ project, lang, lines }: { project: ProjectItem; lang: Lang; lines: { label: string; text: string }[] }) {
+/** 代表作の 1 枚: 写真・番号・名前・問題 / 工夫 / 結果・技術。白いタイルにして、押せるものだと分かるよう下端に厚みを付ける */
+function FeaturedRow({ project, lang, lines, index }: { project: ProjectItem; lang: Lang; lines: { label: string; text: string }[]; index: number }) {
   return (
-    <li className="border-t border-ink/10 last:border-b">
+    <li>
       <a
         href={`/projects/${project.slug}`}
-        className="group grid gap-4 py-6 text-ink no-underline sm:grid-cols-[200px_minmax(0,1fr)] sm:gap-7 lg:grid-cols-[240px_minmax(0,1fr)_150px] lg:gap-8"
+        className="group grid gap-5 rounded-[20px] bg-tile p-4 text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.08)] transition-[transform,box-shadow] duration-200 hover:-translate-y-[3px] hover:shadow-[0_7px_0_rgb(var(--shadow-rgb)/0.1)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.08)] sm:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] sm:gap-7 sm:p-5"
       >
-        <span className="relative block aspect-[16/10] overflow-hidden rounded-[12px] bg-soft">
+        <span className="relative block aspect-[16/10] self-start overflow-hidden rounded-[12px] bg-soft shadow-[inset_0_0_0_1px_rgb(var(--ink)/0.06)]">
           <Image
             src={project.image}
             alt=""
             fill
-            sizes="(min-width: 1024px) 240px, (min-width: 640px) 200px, 100vw"
-            className="object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+            sizes="(min-width: 1024px) 340px, (min-width: 640px) 40vw, 100vw"
+            className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
           />
         </span>
-        <span className="flex min-w-0 flex-col gap-[10px]">
+        <span className="flex min-w-0 flex-col gap-3 sm:py-1 sm:pr-2">
+          <span className="flex items-center justify-between gap-3 font-mono text-[11.5px] font-bold tracking-[.08em] text-mute">
+            <span className="tabular-nums">{String(index + 1).padStart(2, '0')}</span>
+            <TechStack items={project.tags.slice(0, 2)} className="text-right font-medium tracking-normal" />
+          </span>
           <span className="flex flex-wrap items-center gap-[10px]">
-            <span className="text-[22px] font-extrabold tracking-[-0.02em] transition-colors duration-150 group-hover:text-teal sm:text-[24px]">{project.name}</span>
+            <span className="text-[24px] font-extrabold leading-tight tracking-[-0.02em] transition-colors duration-150 group-hover:text-teal sm:text-[28px]">{project.name}</span>
             {project.badge && (
               <span className="inline-flex items-center gap-[4px] rounded-[6px] bg-coral px-2 py-[3px] text-[11px] font-extrabold text-paper">
                 <PiMedalFill className="text-[12px]" />
                 {project.badge[lang]}
               </span>
             )}
+            <PiArrowRightBold className="ml-auto -translate-x-[6px] text-[16px] text-teal opacity-0 transition-[transform,opacity] duration-200 group-hover:translate-x-0 group-hover:opacity-100" />
           </span>
-          {lines.map((l) => (
-            <span key={l.label} className="grid grid-cols-[44px_minmax(0,1fr)] gap-2 text-[14px] leading-[1.75] text-ink/80">
-              <span className="font-mono text-[11px] font-bold leading-[2.2] text-teal">{l.label}</span>
-              <span>{l.text}</span>
-            </span>
-          ))}
+          <span className="flex flex-col gap-[6px] border-t border-ink/10 pt-3">
+            {lines.map((l) => (
+              <span key={l.label} className="grid grid-cols-[52px_minmax(0,1fr)] gap-2 text-[14px] leading-[1.75] text-ink/80">
+                <span className="font-mono text-[11px] font-bold leading-[2.25] text-teal">{l.label}</span>
+                <span>{l.text}</span>
+              </span>
+            ))}
+          </span>
         </span>
-        <span className="hidden pt-2 text-right font-mono text-[12px] text-mute lg:block">{project.tags.slice(0, 2).join(' · ')}</span>
       </a>
     </li>
   )
 }
+
+/** まだ書いていない仮の文言（［ ］や [ ] で囲んだもの）。公開ページには出さない */
+const isPlaceholder = (text: string) => /^\s*[［\[]/.test(text)
 
 export function FeaturedProjects({ lang }: { lang: Lang }) {
   const t = home[lang].projects
@@ -124,20 +134,24 @@ export function FeaturedProjects({ lang }: { lang: Lang }) {
       { label: t.problem, text: f.problem[lang] },
       { label: t.approach, text: f.approach[lang] },
       { label: t.result, text: f.result[lang] },
-    ]
-    return [<FeaturedRow key={f.slug} project={project} lang={lang} lines={lines} />]
+    ].filter((l) => !isPlaceholder(l.text))
+    return [{ slug: f.slug, project, lines }]
   })
   return (
     <Split
       id="projects"
       head={
         <SectionHead eyebrow={t.eyebrow} title={t.title} brick="projects">
-          <p className="text-[15px] leading-[1.8] text-mute">{t.blurb}</p>
+          <p className="text-[15px] leading-[1.8] text-mute">{t.blurb(rows.length)}</p>
           <MoreLink href="/projects">{t.more(projectsData.length - rows.length)}</MoreLink>
         </SectionHead>
       }
     >
-      <ul>{rows}</ul>
+      <ul className="flex flex-col gap-4 sm:gap-5">
+        {rows.map((r, i) => (
+          <FeaturedRow key={r.slug} project={r.project} lang={lang} lines={r.lines} index={i} />
+        ))}
+      </ul>
     </Split>
   )
 }
@@ -327,7 +341,7 @@ export function ProjectRow({ project, lang }: { project: ProjectItem; lang: Lang
     <li className="border-t border-ink/10 last:border-b">
       <a
         href={`/projects/${project.slug}`}
-        className="group grid items-center gap-4 py-5 text-ink no-underline grid-cols-[120px_minmax(0,1fr)] sm:grid-cols-[200px_minmax(0,1fr)] sm:gap-7 lg:grid-cols-[220px_minmax(0,1fr)_200px] lg:gap-8"
+        className="group -mx-3 grid items-center gap-4 rounded-[16px] px-3 py-5 text-ink no-underline transition-colors duration-200 hover:bg-tile/70 grid-cols-[120px_minmax(0,1fr)] sm:-mx-4 sm:grid-cols-[200px_minmax(0,1fr)] sm:gap-7 sm:px-4 lg:grid-cols-[220px_minmax(0,1fr)_200px] lg:gap-8"
       >
         <span className="relative block aspect-[16/10] overflow-hidden rounded-[10px] bg-soft">
           <Image
@@ -350,7 +364,7 @@ export function ProjectRow({ project, lang }: { project: ProjectItem; lang: Lang
           </span>
           <span className="text-[13.5px] leading-[1.7] text-ink/75 sm:text-[15px]">{project[lang]}</span>
         </span>
-        <span className="hidden text-right font-mono text-[12px] text-mute lg:block">{project.tags.join(' · ')}</span>
+        <TechStack items={project.tags} className="hidden text-right font-mono text-[12px] text-mute lg:block" />
       </a>
     </li>
   )

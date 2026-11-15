@@ -17,7 +17,7 @@ type HomeStrings = {
     sceneHint: string
   }
   facts: Fact[]
-  projects: { eyebrow: string; title: string; blurb: string; more: (n: number) => string; problem: string; approach: string; result: string }
+  projects: { eyebrow: string; title: string; blurb: (n: number) => string; more: (n: number) => string; problem: string; approach: string; result: string }
   career: { eyebrow: string; title: string; more: string; now: string }
   output: { eyebrow: string; title: string; more: (n: number) => string; read: string }
   contact: { eyebrow: string; title: string; body: string }
@@ -45,7 +45,7 @@ export const home: Record<Lang, HomeStrings> = {
     projects: {
       eyebrow: 'PROJECTS',
       title: '作ったもの',
-      blurb: '代表作 4 件。何の問題を、どう工夫して、どうなったか。',
+      blurb: (n) => `代表作 ${n} 件。何の問題を、どう工夫して、どうなったか。`,
       more: (n) => `ほか ${n} 件を見る`,
       problem: '問題',
       approach: '工夫',
@@ -80,7 +80,7 @@ export const home: Record<Lang, HomeStrings> = {
     projects: {
       eyebrow: 'PROJECTS',
       title: 'Selected work',
-      blurb: 'Four projects: the problem, the approach, and what came of it.',
+      blurb: (n) => `${n} projects: the problem, the approach, and what came of it.`,
       more: (n) => `See ${n} more`,
       problem: 'Problem',
       approach: 'Approach',
