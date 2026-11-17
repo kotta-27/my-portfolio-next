@@ -49,6 +49,29 @@ export function meshPhase(ta: number, tb: number, alpha: number): [number, numbe
   return [alpha - toothCenter(ta), alpha + Math.PI - toothCenter(tb) - TAU / tb / 2]
 }
 
+/**
+ * ラック（まっすぐな歯車）。y 方向に長さ len で、下端が原点。歯は -x を向き、ピッチ線が x = 0。
+ * 歯の間隔は π mm（モジュール 1）で、gearGeometry の歯車とかみ合う。
+ */
+export function rackGeometry(len: number) {
+  const pitch = Math.PI
+  const n = Math.floor(len / pitch)
+  const s = new THREE.Shape()
+  s.moveTo(1.2, 0)
+  for (let i = 0; i < n; i++) {
+    const y = i * pitch
+    s.lineTo(1.2, y)
+    s.lineTo(-0.95, y + pitch * 0.2)
+    s.lineTo(-0.95, y + pitch * 0.42)
+    s.lineTo(1.2, y + pitch * 0.62)
+  }
+  s.lineTo(1.2, len)
+  s.lineTo(5.2, len)
+  s.lineTo(5.2, 0)
+  s.closePath()
+  return extrude(s, 3.4)
+}
+
 /** 脱進機の車（のこぎり歯）。肉抜きの穴 4 つ */
 export function escapeWheelGeometry(t: number) {
   const p = TAU / t

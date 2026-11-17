@@ -7,10 +7,14 @@ import { loadCareer } from '@/lib/career'
 import { collectOutputs } from '@/lib/outputs'
 import { SiteShell } from '@/components/home/SiteShell'
 import { ClockScene } from '@/components/home/ClockScene'
+import { BrickName } from '@/components/home/BrickName'
 import { CareerStrip, ContactBand, FactCards, FeaturedProjects, OutputCards } from '@/components/home/Sections'
 
 /** 以前のタブ表示（?view=…）へのリンクは、それぞれの一覧ページへ送る */
 const LEGACY_VIEWS: Record<string, string> = { career: '/career', projects: '/projects', writing: '/output' }
+
+/** ヒーローの右の時計（6 段減速の時計）。名前の横の仕掛けと並ぶと 2 つになるので、いったん隠している。true で元の 2 列に戻る */
+const SHOW_CLOCK = false
 
 /** トップに並べる「書いたもの」の数。ノートを先に、残りを記事・ブログで埋める */
 const OUTPUT_ON_HOME = 6
@@ -26,35 +30,42 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
 
   return (
     <SiteShell lang={lang}>
-        <section className="grid items-center gap-2 pt-4 lg:grid-cols-[minmax(0,540px)_minmax(0,1fr)] lg:pt-6">
-          <div className="flex flex-col gap-6 sm:gap-7">
-            <p className="font-mono text-[12px] font-bold tracking-[.08em] text-mute sm:text-[13px]">{t.hero.eyebrow}</p>
-            <h1 className="text-[64px] font-extrabold leading-[0.92] tracking-[-0.045em] sm:text-[96px] lg:text-[104px]">
-              Kota
-              <br />
-              <span className="font-medium text-mute">Mizuno</span>
-            </h1>
-            <div className="flex max-w-[540px] flex-col gap-3">
-              <p className="text-[19px] font-extrabold leading-[1.5] tracking-[-0.01em] sm:text-[22px]">{t.hero.headline}</p>
-              <p className="text-[14.5px] leading-[1.9] text-ink/75 sm:text-[16px]">{t.hero.sub}</p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <a href="#projects" className="rounded-[12px] bg-ink px-6 py-[15px] text-[15px] font-bold text-paper no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.9)] transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[2px] hover:bg-teal hover:shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.9)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.9)]">
-                {t.hero.work}
-              </a>
-              <a href="https://github.com/kotta-27" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 rounded-[12px] bg-tile px-6 py-[15px] text-[15px] font-bold text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.14)] transition-[transform,box-shadow,color] duration-150 hover:-translate-y-[2px] hover:text-teal hover:shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.14)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.14)]">
-                <FaGithub className="text-[18px] transition-transform duration-300 group-hover:rotate-[-12deg]" />
-                GitHub
-              </a>
-            </div>
+        {/*
+          ヒーローを画面に固定したまま、余白（runway）の分だけ余分にスクロールしてもらう。
+          その間のスクロール量が名前の横の仕掛けのラックを動かし、最後にハンマーが落ちて名前が崩れる（components/home/BrickName.tsx）。
+          「動きを減らす」設定では余白を出さず、固定もしない。
+        */}
+        <div data-hero-pin>
+          <div data-hero-stage className="sticky top-[64px] flex flex-col gap-12 sm:top-[76px]">
+            <section className={`grid items-center gap-2 pt-4 ${SHOW_CLOCK ? 'lg:grid-cols-[minmax(0,540px)_minmax(0,1fr)] lg:pt-6' : 'sm:pt-8 lg:pt-12'}`}>
+              <div className="flex flex-col gap-6 sm:gap-7">
+                <p className="font-mono text-[12px] font-bold tracking-[.08em] text-mute sm:text-[13px]">{t.hero.eyebrow}</p>
+                <h1 className="text-[64px] font-extrabold leading-[0.92] tracking-[-0.045em] sm:text-[96px] lg:text-[104px]">
+                  <BrickName first="Kota" last="Mizuno" hint={t.hero.nameHint} wide={!SHOW_CLOCK} />
+                </h1>
+                <div className="flex max-w-[540px] flex-col gap-3">
+                  <p className="text-[19px] font-extrabold leading-[1.5] tracking-[-0.01em] sm:text-[22px]">{t.hero.headline}</p>
+                  <p className="text-[14.5px] leading-[1.9] text-ink/75 sm:text-[16px]">{t.hero.sub}</p>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  <a href="#projects" className="rounded-[12px] bg-ink px-6 py-[15px] text-[15px] font-bold text-paper no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.9)] transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[2px] hover:bg-teal hover:shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.9)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.9)]">
+                    {t.hero.work}
+                  </a>
+                  <a href="https://github.com/kotta-27" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 rounded-[12px] bg-tile px-6 py-[15px] text-[15px] font-bold text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.14)] transition-[transform,box-shadow,color] duration-150 hover:-translate-y-[2px] hover:text-teal hover:shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.14)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.14)]">
+                    <FaGithub className="text-[18px] transition-transform duration-300 group-hover:rotate-[-12deg]" />
+                    GitHub
+                  </a>
+                </div>
+              </div>
+              {SHOW_CLOCK && (
+                <div className="relative -mx-5 h-[300px] sm:mx-0 sm:h-[460px] lg:-mr-16 lg:h-[clamp(480px,74vh,640px)]">
+                  <ClockScene label={t.hero.sceneLabel} hint={t.hero.sceneHint} />
+                </div>
+              )}
+            </section>
+            <FactCards lang={lang} />
           </div>
-          <div className="relative -mx-5 h-[300px] sm:mx-0 sm:h-[460px] lg:-mr-16 lg:h-[clamp(480px,74vh,640px)]">
-            <ClockScene label={t.hero.sceneLabel} hint={t.hero.sceneHint} />
-          </div>
-        </section>
-
-        <div className="-mt-12 sm:-mt-16">
-          <FactCards lang={lang} />
+          <div data-hero-runway aria-hidden className="h-[70vh] motion-reduce:hidden lg:h-[100vh]" />
         </div>
 
         <FeaturedProjects lang={lang} />

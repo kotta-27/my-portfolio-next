@@ -56,6 +56,10 @@ h1, h2, h3 { text-wrap: balance; font-feature-settings: 'palt'; }
 }
 ::selection { background: rgb(var(--teal) / 0.24); }
 
+/* ブロックで組む見出しの英字（components/home/Sections.tsx の SectionHead）。3D が動いたら枠を出して文字を隠す。class の display に負けないようにする */
+[data-word-slot][hidden],
+[data-word-text][hidden] { display: none; }
+
 /*
  * ===== レゴブロック =====
  * .brick（外側）: 上辺のスタッドと、下に覗く側面（厚み）。凸がはみ出すので overflow は切らない

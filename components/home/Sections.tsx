@@ -29,12 +29,28 @@ const SECTION_BRICKS = {
 
 export type SectionBrick = keyof typeof SECTION_BRICKS
 
-/** 見出しの列。eyebrow は小さな英字のラベル。brick を渡すと、その上に部品を 1 つ置く */
+/** ブロックで組む見出しの英字の枠の幅。ブロック 1 個が 8.8px（lib/bricks/name.ts の WORD_STUD_PX）で、WORKS 25 個・CAREER 29 個・OUTPUT 27 個 */
+const BRICK_WORDS: Record<string, string> = { WORKS: 'w-[220px]', CAREER: 'w-[255px]', OUTPUT: 'w-[238px]' }
+
+/**
+ * 見出しの列。eyebrow は小さな英字のラベル。
+ * トップでは WORKS / CAREER / OUTPUT をブロックで組んで見せる（描くのは components/home/BrickName.tsx の canvas）。
+ * 3D が動くまでと、動かせない環境では、今までどおりの文字を出す。
+ */
 export function SectionHead({ eyebrow, title, brick, children }: { eyebrow: string; title: string; brick?: SectionBrick; children?: ReactNode }) {
+  const wordWidth = BRICK_WORDS[eyebrow]
+  const label = <span data-word-text className="font-mono text-[12px] font-bold tracking-[.08em] text-mute">{eyebrow}</span>
   return (
     <div className="flex flex-col gap-3">
       {brick && <DropBrick src={SECTION_BRICKS[brick]} />}
-      <span className="font-mono text-[12px] font-bold tracking-[.08em] text-mute">{eyebrow}</span>
+      {wordWidth ? (
+        <span data-brick-word={eyebrow} className="block">
+          <span data-word-slot hidden aria-hidden className={`mb-1 block h-[76px] max-w-full ${wordWidth}`} />
+          {label}
+        </span>
+      ) : (
+        label
+      )}
       <h2 className="text-[32px] font-extrabold leading-tight tracking-[-0.03em] sm:text-[44px]">{title}</h2>
       {children}
     </div>
@@ -61,10 +77,10 @@ export function Split({ id, head, children }: { id: string; head: ReactNode; chi
   )
 }
 
-/** 現職・学歴・興味の 3 枚 */
+/** 現職と興味の 2 枚（学歴は /career の見出しで触れるだけにしている） */
 export function FactCards({ lang }: { lang: Lang }) {
   return (
-    <ul className="grid gap-3 sm:grid-cols-3 sm:gap-5">
+    <ul className="grid gap-3 sm:grid-cols-2 sm:gap-5">
       {home[lang].facts.map((f) => (
         <li key={f.label} className="flex flex-col gap-2 rounded-[18px] bg-tile px-6 py-5 sm:px-7 sm:py-6">
           <span className="font-mono text-[11.5px] font-bold tracking-[.08em] text-mute">{f.label}</span>
@@ -141,7 +157,7 @@ export function FeaturedProjects({ lang }: { lang: Lang }) {
     <Split
       id="projects"
       head={
-        <SectionHead eyebrow={t.eyebrow} title={t.title} brick="projects">
+        <SectionHead eyebrow={t.eyebrow} title={t.title}>
           <p className="text-[15px] leading-[1.8] text-mute">{t.blurb(rows.length)}</p>
           <MoreLink href="/projects">{t.more(projectsData.length - rows.length)}</MoreLink>
         </SectionHead>
@@ -174,7 +190,7 @@ export function CareerStrip({ lang, items }: { lang: Lang; items: ResolvedCareer
     <Split
       id="career"
       head={
-        <SectionHead eyebrow={t.eyebrow} title={t.title} brick="career">
+        <SectionHead eyebrow={t.eyebrow} title={t.title}>
           <MoreLink href="/career">{t.more}</MoreLink>
         </SectionHead>
       }
@@ -271,7 +287,7 @@ export function OutputCards({ lang, items, total }: { lang: Lang; items: OutputI
     <Split
       id="output"
       head={
-        <SectionHead eyebrow={t.eyebrow} title={t.title} brick="output">
+        <SectionHead eyebrow={t.eyebrow} title={t.title}>
           <MoreLink href="/output">{t.more(total)}</MoreLink>
         </SectionHead>
       }

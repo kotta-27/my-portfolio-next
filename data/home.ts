@@ -15,6 +15,8 @@ type HomeStrings = {
     work: string
     sceneLabel: string
     sceneHint: string
+    /** 名前のブロックに添える、スクロールで仕掛けが動くことを伝えるひとこと */
+    nameHint: string
   }
   facts: Fact[]
   projects: { eyebrow: string; title: string; blurb: (n: number) => string; more: (n: number) => string; problem: string; approach: string; result: string }
@@ -28,7 +30,7 @@ type HomeStrings = {
 
 export const home: Record<Lang, HomeStrings> = {
   ja: {
-    nav: { projects: 'Projects', career: 'Career', output: 'Output', contact: 'Contact', menu: 'メニュー' },
+    nav: { projects: 'Works', career: 'Career', output: 'Output', contact: 'Contact', menu: 'メニュー' },
     hero: {
       eyebrow: 'SOFTWARE ENGINEER · TOKYO',
       headline: '検索と、触ってわかる UI をつくるエンジニア。',
@@ -36,14 +38,14 @@ export const home: Record<Lang, HomeStrings> = {
       work: '作ったものを見る',
       sceneLabel: 'テクニック部品で組んだ骨組みの時計。振り子が脱進機を 1 歯ずつ進め、6 段の歯車で減速して、文字盤の針が今の時刻を指す',
       sceneHint: 'ドラッグで回す',
+      nameHint: 'スクロールで仕掛けが動く',
     },
     facts: [
       { label: 'CURRENTLY', title: '株式会社スタディスト', sub: 'ソフトウェアエンジニア · 2026年4月〜' },
-      { label: 'EDUCATION', title: '芝浦工業大学大学院', sub: '修士（工学）· 量子アルゴリズム・格子暗号' },
       { label: 'INTERESTS', title: '検索技術 · UI/UX · 3D', sub: 'OpenSearch / Vector Search / Three.js' },
     ],
     projects: {
-      eyebrow: 'PROJECTS',
+      eyebrow: 'WORKS',
       title: '作ったもの',
       blurb: (n) => `代表作 ${n} 件。何の問題を、どう工夫して、どうなったか。`,
       more: (n) => `ほか ${n} 件を見る`,
@@ -59,11 +61,11 @@ export const home: Record<Lang, HomeStrings> = {
       back: 'トップへ',
       projects: { title: '作ったもの', blurb: '個人で作ったアプリ、ハッカソンの作品、研究のツール。' },
       output: { title: '書いたもの', blurb: '学習ノート、技術記事、インタビュー、登壇。' },
-      career: { title: '経歴', blurb: 'インターンから今の仕事まで。' },
+      career: { title: '経歴', blurb: 'インターンから今の仕事まで。大学院は芝浦工業大学で、量子アルゴリズムと格子暗号を研究（修士・工学）。' },
     },
   },
   en: {
-    nav: { projects: 'Projects', career: 'Career', output: 'Output', contact: 'Contact', menu: 'Menu' },
+    nav: { projects: 'Works', career: 'Career', output: 'Output', contact: 'Contact', menu: 'Menu' },
     hero: {
       eyebrow: 'SOFTWARE ENGINEER · TOKYO',
       headline: 'I build search, and UI you can understand by touching it.',
@@ -71,14 +73,14 @@ export const home: Record<Lang, HomeStrings> = {
       work: 'See my work',
       sceneLabel: 'A skeleton clock built from Technic parts: a pendulum steps the escape wheel one tooth at a time, six gear stages slow it down, and the hands show the current time',
       sceneHint: 'Drag to rotate',
+      nameHint: 'Scroll to run the machine',
     },
     facts: [
       { label: 'CURRENTLY', title: 'Studist Corporation', sub: 'Software Engineer · since Apr 2026' },
-      { label: 'EDUCATION', title: 'Shibaura Institute of Technology', sub: 'M.Eng. · quantum algorithms, lattice cryptography' },
       { label: 'INTERESTS', title: 'Search · UI/UX · 3D', sub: 'OpenSearch / Vector Search / Three.js' },
     ],
     projects: {
-      eyebrow: 'PROJECTS',
+      eyebrow: 'WORKS',
       title: 'Selected work',
       blurb: (n) => `${n} projects: the problem, the approach, and what came of it.`,
       more: (n) => `See ${n} more`,
@@ -94,7 +96,7 @@ export const home: Record<Lang, HomeStrings> = {
       back: 'Home',
       projects: { title: 'Work', blurb: 'Personal apps, hackathon builds and research tools.' },
       output: { title: 'Writing', blurb: 'Study notes, articles, interviews and talks.' },
-      career: { title: 'Career', blurb: 'From internships to my current role.' },
+      career: { title: 'Career', blurb: 'From internships to my current role. I did my M.Eng. at Shibaura Institute of Technology, on quantum algorithms and lattice cryptography.' },
     },
   },
 }
