@@ -9,6 +9,7 @@ import { town } from '@/data/town'
 import type { ResolvedCareerItem } from '@/data/career'
 import type { OutputItem } from '@/lib/outputs'
 import { companyPeriod } from '@/lib/career'
+import { OutputItemCard } from '@/components/home/Sections'
 import type { Section } from '@/lib/town/sections'
 
 /*
@@ -93,20 +94,14 @@ function Career({ lang, items }: { lang: Lang; items: ResolvedCareerItem[] }) {
   )
 }
 
+/** 書いたもの: 一覧ページやトップと同じサムネイル（ノートは表紙、ほかはリンク先の OGP 画像）を 2 列で */
 function Output({ lang, items, total }: { lang: Lang; items: OutputItem[]; total: number }) {
   return (
     <>
-      <ul className="flex flex-col">
+      <ul className="grid grid-cols-2 gap-2 sm:gap-3">
         {items.map((o) => (
-          <li key={o.url} className="border-b border-ink/10 py-[10px] first:pt-0">
-            <a
-              href={o.url}
-              {...(o.internal ? {} : { target: '_blank', rel: 'noopener noreferrer' })}
-              className="group flex flex-col gap-[2px] text-ink no-underline"
-            >
-              <span className="font-mono text-[11px] uppercase text-mute">{o.source}</span>
-              <b className="text-[14.5px] font-extrabold leading-[1.5] transition-colors duration-150 group-hover:text-teal">{o.label[lang]}</b>
-            </a>
+          <li key={o.url}>
+            <OutputItemCard item={o} lang={lang} />
           </li>
         ))}
       </ul>
@@ -155,7 +150,7 @@ export function townPanels(lang: Lang, career: ResolvedCareerItem[], outputs: Ou
     works: { eyebrow: b.works.title, title: t.projects.title, body: <Works lang={lang} /> },
     // career は古い順。パネルでは今の会社を先に出す
     career: { eyebrow: b.career.title, title: t.career.title, body: <Career lang={lang} items={career} /> },
-    output: { eyebrow: b.output.title, title: t.output.title, body: <Output lang={lang} items={outputs.slice(0, 7)} total={outputs.length} /> },
+    output: { eyebrow: b.output.title, title: t.output.title, body: <Output lang={lang} items={outputs.slice(0, 8)} total={outputs.length} /> },
     contact: { eyebrow: b.contact.title, title: t.contact.title, body: <Contact lang={lang} /> },
   }
 }
