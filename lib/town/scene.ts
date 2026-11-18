@@ -17,6 +17,7 @@ import { propStore } from '@/lib/town/store'
  */
 
 const P = 8
+const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 const PLATE = 3.2
 const BR = PLATE * 3
 
@@ -1479,12 +1480,15 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     // 東の端まで歩いたら、道の先（霧の向こう）が見えるように、さらに右へ寄せる
     const east = Math.max(0, fig.position.x - 150) * 0.9
     const want = new THREE.Vector3(narrow() || panelOpen ? fig.position.x : fig.position.x * 0.55 + east, 18, narrow() ? -10 : -24)
-    // 経歴のビル（4 階建て）のパネルを開いているときだけ引き、ビルの真ん中の高さを見る
-    const tall = panelOpen && focus?.group.userData.id === 'career'
-    const zoomGoal = tall ? (narrow() ? 1.65 : 1.3) : 1
+    // 経歴のビル（4 階建て）の前を通るとき・パネルを開いているときは引いて、ビルの真ん中の高さを見る。
+    // 前を通るときは、ビルに近いほど強く引く（少し離れると元に戻る）
+    const career = buildings.find((b) => b.id === 'career')
+    const otherPanel = panelOpen && focus?.group.userData.id !== 'career'
+    const tall = !career || otherPanel ? 0 : panelOpen ? 1 : clamp01(1 - (Math.abs(fig.position.x - career.x) - 30) / 60)
+    const zoomGoal = 1 + (narrow() ? 0.65 : 0.3) * tall
     zoom += (zoomGoal - zoom) * (input.reducedMotion ? 1 : Math.min(1, dt * 4))
     if (Math.abs(zoomGoal - zoom) > 0.002) moving = true
-    want.y += tall ? (narrow() ? 46 : 34) : 0
+    want.y += (narrow() ? 46 : 34) * tall
     view.target.lerp(want, input.reducedMotion ? 1 : Math.min(1, dt * 3))
     if (view.target.distanceTo(want) > 0.2) moving = true
     placeCamera()
