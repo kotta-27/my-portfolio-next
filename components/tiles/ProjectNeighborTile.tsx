@@ -1,0 +1,46 @@
+import Image from 'next/image'
+import Link from 'next/link'
+import { PiArrowLeft, PiArrowRight } from 'react-icons/pi'
+import type { Lang, View } from '@/types'
+import type { ProjectItem } from '@/data/projects'
+import { Tile } from '@/components/Tile'
+import { TileLabel } from '@/components/TileLabel'
+import { ArrowBadge } from '@/components/ArrowBadge'
+
+type Props = {
+  project: ProjectItem
+  lang: Lang
+  direction: 'prev' | 'next'
+  from: View
+  label: string
+}
+
+export function ProjectNeighborTile({ project, lang, direction, label, from }: Props) {
+  const Arrow = direction === 'prev' ? PiArrowLeft : PiArrowRight
+  return (
+    <Tile pad={false}>
+      <Link
+        href={`/projects/${project.slug}?from=${from}`}
+        className={`group flex h-full min-h-[120px] items-stretch no-underline ${direction === 'prev' ? 'flex-row' : 'flex-row-reverse'}`}
+      >
+        <div className="relative w-[38%] shrink-0 overflow-hidden bg-soft">
+          <Image
+            src={project.image}
+            alt={project.name}
+            fill
+            sizes="(min-width: 640px) 200px, 38vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+          />
+        </div>
+        <div className={`flex flex-1 flex-col justify-between gap-2 p-4 ${direction === 'prev' ? 'items-start' : 'items-end text-right'}`}>
+          <TileLabel>{label}</TileLabel>
+          <div>
+            <p className="text-[15px] font-extrabold leading-tight text-ink">{project.name}</p>
+            <p className="mt-[3px] line-clamp-2 text-[11.5px] leading-[1.5] text-mute">{project[lang]}</p>
+          </div>
+          <ArrowBadge icon={Arrow} size="md" />
+        </div>
+      </Link>
+    </Tile>
+  )
+}

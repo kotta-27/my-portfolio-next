@@ -1,0 +1,187 @@
+'use client'
+
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { PiArrowDownBold, PiXBold } from 'react-icons/pi'
+import type { Lang } from '@/types'
+import { town } from '@/data/town'
+import { SECTIONS, isSection, type Section } from '@/lib/town/sections'
+import type { TownBench } from '@/lib/town/scene'
+import type { PanelContent } from '@/components/town/Panels'
+import { LangToggle } from '@/components/LangToggle'
+import { ThemeToggle } from '@/components/ThemeToggle'
+
+type Props = {
+  lang: Lang
+  panels: Record<Section, PanelContent>
+  workImages: string[]
+  careerLogos: string[]
+}
+
+/** パネルの見出しの横の小さな四角。建物の色 */
+const DOT: Record<Section, string> = {
+  about: 'bg-ink',
+  works: 'bg-teal',
+  career: 'bg-mute',
+  output: 'bg-mustard',
+  contact: 'bg-coral',
+}
+
+/**
+ * トップの「レゴの街」。画面いっぱいに街を描き、建物（左上のボタンでも）を選ぶと人形が歩いていき、着くと中身のパネルが開く。
+ * URL の #at-works などで、その建物から始まる（下の一覧の #projects などのアンカーとぶつからないよう、at- を付ける）。
+ * three は大きいので、ここが描かれてから読み込む。読み込むまでと WebGL が使えないときは、街の代わりに案内を出し、下の一覧（app/page.tsx）へ誘う。
+ */
+export function TownView({ lang, panels, workImages, careerLogos }: Props) {
+  const host = useRef<HTMLDivElement>(null)
+  const bench = useRef<TownBench | null>(null)
+  const [state, setState] = useState<'loading' | 'ready' | 'none'>('loading')
+  const [open, setOpen] = useState<Section | null>(null)
+  const [target, setTarget] = useState<Section | null>(null)
+  const t = town[lang]
+
+  const go = useCallback((id: Section) => {
+    setTarget(id)
+    if (location.hash !== `#at-${id}`) history.replaceState(null, '', `#at-${id}`)
+    bench.current?.goTo(id)
+  }, [])
+  const close = useCallback(() => {
+    setOpen(null)
+    setTarget(null)
+    if (location.hash.startsWith('#at-')) history.replaceState(null, '', location.pathname + location.search)
+  }, [])
+
+  useEffect(() => {
+    const el = host.current
+    if (!el) return
+    let cancelled = false
+    const probe = document.createElement('canvas')
+    if (!(probe.getContext('webgl2') ?? probe.getContext('webgl'))) {
+      setState('none')
+      return
+    }
+    // 看板の文字を正しい書体で書くため、Web フォントを待ってから組む
+    Promise.all([import('@/lib/town/scene'), document.fonts.ready]).then(([{ mountTown }]) => {
+      if (cancelled) return
+      bench.current = mountTown(el, {
+        labels: t.buildings,
+        workImages,
+        careerLogos,
+        reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
+        onArrive: (id) => setOpen(id),
+        onLeave: () => setOpen(null),
+        onReady: () => setState('ready'),
+      })
+      const first = location.hash.replace(/^#at-/, '')
+      // URL で建物を指定されていなければ、街の西の端から歩いてきて ABOUT の家に入る
+      window.setTimeout(() => bench.current?.goTo(isSection(first) ? first : 'about'), 500)
+      if (isSection(first)) setTarget(first)
+      else setTarget('about')
+    })
+    const onHash = () => {
+      const id = location.hash.replace(/^#at-/, '')
+      if (isSection(id)) {
+        setTarget(id)
+        bench.current?.goTo(id)
+      }
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => {
+      cancelled = true
+      window.removeEventListener('hashchange', onHash)
+      bench.current?.dispose()
+      bench.current = null
+    }
+    // 街は 1 度だけ組む。言語が変わったときは key で作り直す（app/page.tsx）
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    bench.current?.setPanelOpen(open !== null)
+  }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open, close])
+
+  const panel = open ? panels[open] : null
+
+  return (
+    <section aria-label={t.label} className="relative h-[100svh] min-h-[560px] overflow-hidden bg-gradient-to-b from-tile/60 to-soft">
+      {/* 街の描画先。← → で歩けるよう、フォーカスを受けられるようにする */}
+      <div ref={host} tabIndex={0} aria-label={t.hint} className="absolute inset-0 outline-none" />
+
+      <nav aria-label="Main" className="absolute inset-x-0 top-0 z-10 flex flex-wrap items-center gap-2 p-3 sm:p-5">
+        <a href="/" className="hidden items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] sm:flex">
+          <span aria-hidden className="mini-brick mt-[3px] h-[10px] w-[17px] rounded-[3px]" />
+          Kota Mizuno
+        </a>
+        {SECTIONS.map((id) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => go(id)}
+            aria-current={target === id ? 'true' : undefined}
+            className={`rounded-[10px] px-[11px] py-[10px] font-mono text-[11.5px] font-extrabold tracking-[.06em] shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.14)] transition-colors duration-150 active:translate-y-[2px] active:shadow-[0_1px_0_rgb(var(--shadow-rgb)/0.14)] sm:px-[13px] sm:text-[12px] ${
+              target === id ? 'bg-ink text-paper' : 'bg-tile/90 text-ink hover:bg-tile'
+            }`}
+          >
+            {t.buildings[id].title}
+          </button>
+        ))}
+        <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
+          <LangToggle lang={lang} />
+        </div>
+      </nav>
+
+      {state === 'none' && (
+        <div className="absolute inset-0 grid place-items-center p-6 text-center">
+          <a href="#list" className="flex flex-col items-center gap-3 text-ink no-underline">
+            <span className="text-[44px] font-extrabold tracking-[-0.04em] sm:text-[72px]">Kota Mizuno</span>
+            <span className="inline-flex items-center gap-2 text-[15px] font-bold text-teal">
+              {t.listTitle}
+              <PiArrowDownBold />
+            </span>
+          </a>
+        </div>
+      )}
+
+      <div className={`pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center px-4 transition-opacity duration-500 ${state === 'ready' && !open ? 'opacity-100' : 'opacity-0'}`}>
+        <span className="hidden rounded-full bg-ink/85 px-4 py-[9px] text-[12.5px] font-bold text-paper sm:block">{t.hint}</span>
+      </div>
+      <a
+        href="#list"
+        className={`absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-full bg-tile/90 px-4 py-[9px] text-[12.5px] font-bold text-ink no-underline shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.12)] transition-opacity duration-300 ${open ? 'opacity-0' : 'opacity-100'}`}
+      >
+        {t.listTitle}
+        <PiArrowDownBold className="text-[12px]" />
+      </a>
+
+      <aside
+        aria-live="polite"
+        aria-hidden={!panel}
+        className={`absolute z-20 flex flex-col gap-[14px] overflow-auto rounded-[20px] bg-tile px-6 pb-[26px] pt-[22px] text-ink shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.1),0_20px_50px_rgb(var(--shadow-rgb)/0.12)] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.8,.2,1)] inset-x-[10px] bottom-[10px] h-[56%] sm:inset-x-auto sm:bottom-4 sm:right-4 sm:top-[84px] sm:h-auto sm:w-[min(400px,36%)] ${
+          panel ? 'translate-x-0 translate-y-0' : 'translate-y-[calc(100%+20px)] sm:translate-x-[calc(100%+30px)] sm:translate-y-0'
+        }`}
+      >
+        {panel && open && (
+          <>
+            <header className="flex items-center gap-[10px]">
+              <span aria-hidden className={`h-[14px] w-[14px] rounded-[3px] shadow-[0_2px_0_rgb(0_0_0/0.18)] ${DOT[open]}`} />
+              <span className="font-mono text-[12px] font-bold tracking-[.08em] text-mute">{panel.eyebrow}</span>
+              <button type="button" onClick={close} aria-label={t.close} className="ml-auto grid h-8 w-8 place-items-center rounded-[9px] bg-soft text-mute hover:text-ink">
+                <PiXBold className="text-[14px]" />
+              </button>
+            </header>
+            <h2 className="text-[30px] font-extrabold leading-[1.15] tracking-[-0.03em]">{panel.title}</h2>
+            {panel.body}
+          </>
+        )}
+      </aside>
+    </section>
+  )
+}
+

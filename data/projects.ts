@@ -1,0 +1,417 @@
+import type { Lang } from '@/types'
+
+export type ProjectLink = {
+  label: string
+  url: string
+}
+
+export type TechCategory = {
+  category: string
+  items: string[]
+}
+
+export type ProjectMeta = {
+  reflection?: Record<Lang, string>
+  contributions?: Record<Lang, string[]>
+  techStack?: TechCategory[]
+  period?: Record<Lang, string>
+  role?: Record<Lang, string[]>
+  members?: Record<Lang, string>
+  event?: string
+}
+
+export type ProjectItem = {
+  name: string
+  slug: string
+  image: string
+  images?: string[]
+  tags: string[]
+  links: ProjectLink[]
+  detail: Record<Lang, string>
+  meta?: ProjectMeta
+  badge?: Record<Lang, string>
+} & Record<Lang, string>
+
+export const projectsData: ProjectItem[] = [
+  {
+    name: 'yagura',
+    slug: 'yagura',
+    en: 'A workspace for coding agents: Claude, a terminal, a live preview and the diff side by side, with a sidebar that shows which agent needs you.',
+    ja: 'Claude・ターミナル・プレビュー・差分を並べて、どのエージェントが自分を待っているか一目でわかる、コーディングエージェント用の作業場。',
+    detail: {
+      en: 'A workspace for running several coding agents at once.\nSpaces on the left divide your work; each space holds tabs, and tabs split into panes that show a Claude agent, a terminal, a page preview or the diff.\nThe sidebar lists what every agent is doing right now and which ones are waiting for approval or finished unseen, along with the share of the 5-hour Claude Code limit left.\nSelect an area of the preview and the image goes to the agent with your instructions; comment on lines in the diff and send them back the same way.\nComes as an Electron desktop app and a Rust terminal version sharing one agent bridge. The server keeps running, so closing the window leaves the agents at work.',
+      ja: '複数のコーディングエージェントを同時に走らせるための作業場。\n左のスペースで仕事を分け、スペースごとにタブを持ち、タブは Claude のエージェント・ターミナル・ページのプレビュー・差分を表示するペインに分割できる。\nサイドバーには各エージェントが今何をしているか、承認待ちや見ていない間に終わったものはどれかが並び、Claude Code の 5 時間枠の残りも出る。\nプレビューの一部を範囲選択すると画像つきで指示を送れ、差分の行にコメントして同じようにエージェントへ返せる。\nElectron のデスクトップ版と Rust のターミナル版があり、同じエージェントの橋渡し部分を共有する。サーバーが動き続けるので、ウィンドウを閉じてもエージェントは作業を続ける。',
+    },
+    tags: ['Electron', 'Rust', 'Claude Agent SDK'],
+    links: [],
+    image: '/yagura_1.jpg',
+    images: ['/yagura_1.jpg', '/yagura_2.jpg'],
+    meta: {
+      contributions: {
+        en: ['Design and implementation', 'Agent bridge on the Claude Agent SDK, shared by the desktop and terminal versions', 'Live preview with area selection, and a diff pane for reviewing agent edits'],
+        ja: ['設計と実装', 'デスクトップ版とターミナル版で共有する、Claude Agent SDK のエージェント橋渡し部分', '範囲選択できるプレビューと、エージェントの編集を確認する差分ペイン'],
+      },
+      techStack: [
+        { category: 'Desktop', items: ['Electron', 'Vue', 'TypeScript', 'xterm.js', 'node-pty'] },
+        { category: 'TUI', items: ['Rust', 'ratatui', 'vt100'] },
+        { category: 'Agent', items: ['Claude Agent SDK', 'Node.js'] },
+        { category: 'Test', items: ['Playwright'] },
+      ],
+      period: { en: '2026-Nov – ongoing', ja: '2026年11月〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'Mathscope',
+    slug: 'mathscope',
+    en: 'A math tool where formulas become graphs you can move — with 77 theorems and interactive figures.',
+    ja: '式を入れるとグラフになり、文字を動かすと形が変わる数学ツール。定理77個を図つきで。',
+    detail: {
+      en: 'A browser tool for seeing and touching math.\nType a formula and it becomes a graph; every letter other than x turns into a slider, so you can watch the shape change.\nIt also breaks a formula into a tree, animates expansions like (a+b)² one step at a time, illustrates trig, derivatives and integrals on the unit circle, and collects 77 theorems across 12 fields with conditions, use cases and examples — 41 of them with figures you can move.\nInputs such as x², √x, sin 2x or full-width characters are normalized before parsing.',
+      ja: '「見て、触って、わかる」ための数学ツール。\n式を入れるとグラフになり、x 以外の文字が自動でスライダーになって形の変化を追える。\n式を木構造に分解する「構造」、(a+b)² などの展開を1手ずつ再生する「変形」、単位円・微分・積分を図で示す「図形」、12分野77個の定理を条件・使いどころ・例題つきでまとめた「定理」（うち41個は動かせる図つき）を備える。\nx²・√x・sin 2x・全角文字のような書き方も、解析前に正規化して受け付ける。',
+    },
+    tags: ['React', 'TypeScript', 'math.js'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/mathscope' },
+      { label: 'App', url: 'https://kotta-27.github.io/mathscope/' },
+    ],
+    image: '/mathscope_1.jpg',
+    images: ['/mathscope_1.jpg', '/mathscope_2.jpg', '/mathscope_3.jpg'],
+    meta: {
+      reflection: {
+        en: 'Letting people type formulas the way they write them on paper (x², sin 2x, ax+b) without breaking the parser took a dedicated normalization layer with its own tests. The step-by-step expansion engine was the other hard part: each rewrite has to be small enough to follow, and the changed part highlighted.',
+        ja: 'x²・sin 2x・ax+b のように紙に書く感覚で式を入れても解析できるよう、入力を正規化する層をテストつきで作るのが一番大変でした。もう一つは展開を1手ずつ見せるエンジンで、1手ごとの書き換えを追える細かさにし、変わった箇所を色で示すところに苦労しました。',
+      },
+      contributions: {
+        en: ['Design and implementation', 'Formula normalization and step-by-step expansion engine', '77 theorems and 41 interactive figures'],
+        ja: ['設計と実装', '式の正規化・1手ずつの展開エンジン', '定理77個と動かせる図41個'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['React', 'TypeScript', 'Vite'] },
+        { category: 'Math', items: ['math.js', 'KaTeX'] },
+        { category: 'Test', items: ['Vitest', 'Chrome DevTools Protocol (e2e)'] },
+        { category: 'Infra', items: ['GitHub Pages', 'GitHub Actions'] },
+      ],
+      period: { en: '2026-Oct – ongoing', ja: '2026年10月〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'pachi',
+    slug: 'pachi',
+    en: 'A study companion that is just a pair of eyes on a black screen. It blinks, daydreams and suggests a break.',
+    ja: '黒い画面に目だけ。まばたきして、ときどき考えて、休憩に誘ってくれる勉強・作業の相棒。',
+    detail: {
+      en: 'A study and work companion made of nothing but two eyes on a black screen.\nProp your phone sideways at the edge of your desk and press Start: it blinks, its gaze drifts, and now and then it does something on its own, like thinking, dozing off or nodding.\nAfter a set time (50 minutes by default) it asks if you want a break, then closes its eyes and counts down until you come back.\nStroke the screen and the eyes follow your finger; tap for a wink, long-press and they lean toward you.\nThe black screen stays dim at night, and it works in the browser with no login or install. Add it to your home screen for full screen.',
+      ja: '黒い画面に白い目が2つだけの、勉強・作業の相棒。\nスマホを横向きにして机の端に立てかけ、「はじめる」を押すと、まばたきして視線が泳ぎ、ときどき考え事やウトウトなどのしぐさをする。\n決めた時間（既定 50 分）がたつと「そろそろ休憩しない？」と誘い、休憩中は目を閉じてカウントダウンする。\n画面をなでると指を追い、タップでウインク、長押しで指のほうへ寄ってくる。\n黒ベタなので夜でも眩しくなく、ログインもインストールも不要。ホーム画面に追加すると全画面で使える。',
+    },
+    tags: ['Preact', 'TypeScript', 'Vite'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/pachi' },
+      { label: 'App', url: 'https://kotta-27.github.io/pachi/' },
+      { label: 'LP', url: 'https://kotta-27.github.io/pachi/lp/' },
+    ],
+    image: '/pachi_1.jpg',
+    images: ['/pachi_1.jpg', '/pachi_2.jpg', '/pachi_3.jpg'],
+    meta: {
+      contributions: {
+        en: ['Design and implementation', 'Eye engine for blinking, gaze and gestures', 'Landing page with a live demo'],
+        ja: ['設計と実装', 'まばたき・視線・しぐさを動かす目のエンジン', '実際に触れるデモ付きの紹介ページ'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['Preact', 'TypeScript', 'Vite'] },
+        { category: 'Infra', items: ['GitHub Pages', 'GitHub Actions'] },
+      ],
+      period: { en: '2026-Oct – ongoing', ja: '2026年10月〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'Tabipla',
+    slug: 'tabipla',
+    en: 'Group trip planning app with date polling, itinerary, and expense splitting.',
+    ja: '日程調整・旅程・割り勘までまとめられる、グループ旅行計画アプリ。',
+    detail: {
+      en: 'A web app for planning group trips end to end.\nMembers vote on candidate dates in a Doodle-style poll, build a shared day-by-day itinerary, keep trip notes, and split expenses — all inside one trip, joinable via invite link or code.\nBuilt with Next.js, NextAuth, and Drizzle ORM on Neon Postgres.',
+      ja: 'グループ旅行の計画をまとめて管理するWebアプリ。\n候補日をDoodle形式で投票する日程調整、日別の旅程プラン、メモ、費用の割り勘までを1つのトリップ内で完結。\n招待リンクやコードでメンバーを招待できる。\nNext.js + NextAuth + Drizzle ORM(Neon Postgres)で構築。',
+    },
+    tags: ['Next.js', 'PostgreSQL', 'NextAuth'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/tabipla-app' },
+    ],
+    image: '/tabipla_1.png',
+    images: ['/tabipla_1.png', '/tabipla_2.png'],
+    meta: {
+      reflection: {
+        en: 'Modeling a single trip as several connected sub-features — poll, itinerary, expenses, memos — while keeping membership and permissions consistent across all of them took careful schema design with Drizzle. Building the day-by-day itinerary editor with drag-and-drop reordering (dnd-kit) was also a good exercise in complex interactive UI.',
+        ja: '日程調整・旅程・費用・メモという複数の機能を1つのトリップとして繋ぎつつ、メンバーシップや権限を全体で一貫させるスキーマ設計にDrizzleで苦労しました。dnd-kitを使った日別旅程のドラッグ&ドロップ並び替えエディタの実装も、複雑なインタラクティブUIの良い練習になりました。',
+      },
+      contributions: {
+        en: ['Full-stack implementation', 'Schema & auth design', 'Itinerary drag-and-drop editor'],
+        ja: ['フルスタック実装', 'スキーマ・認証設計', '旅程ドラッグ&ドロップエディタの実装'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['Next.js', 'TypeScript', 'Tailwind CSS', 'dnd-kit'] },
+        { category: 'Backend', items: ['NextAuth', 'Drizzle ORM'] },
+        { category: 'DB', items: ['Neon (PostgreSQL)'] },
+      ],
+      period: { en: '2026 – ongoing', ja: '2026年〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'Fude',
+    slug: 'fude',
+    en: 'AI-powered note-taking desktop app with Notion-like blocks, built with Next.js and Electron.',
+    ja: 'Notion風ブロックとAIアシストを備えた、Next.js + Electron製のノートデスクトップアプリ。',
+    detail: {
+      en: 'A desktop note-taking app that packages a Next.js app inside Electron.\nNotes are composed of blocks — tables, links, properties — and any selected text can be sent to an AI panel powered by Gemini, which streams answers about the note content back inline.\nIncludes full-text search, an emoji picker, and app settings, all shipped as a native macOS app via electron-builder.',
+      ja: 'Next.jsアプリをElectronに内包したデスクトップ型ノートアプリ。\nテーブル・リンク・プロパティなどのブロックでノートを構成し、選択したテキストをAIパネルに送るとGemini APIが内容についてストリーミングで回答する。\n全文検索・絵文字ピッカー・設定画面を備え、electron-builderでmacOSネイティブアプリとして配布。',
+    },
+    tags: ['Next.js', 'Electron', 'Gemini API'],
+    links: [],
+    image: '/fude_mock_1.png',
+    meta: {
+      reflection: {
+        en: 'Packaging a Next.js standalone build inside Electron was the trickiest part — the standalone output omits `public/` and static assets by default, so a custom build script copies them back in before electron-builder runs. Streaming AI responses into a note UI without blocking typing also took a few iterations to get feeling responsive.',
+        ja: 'Next.jsのstandaloneビルドをElectronに詰め込む部分が一番苦労しました。standalone出力はデフォルトで`public/`や静的アセットを含まないため、electron-builder実行前にそれらをコピーし直す独自スクリプトを用意しました。ノートUIを止めずにAIの回答をストリーミング表示する部分も、快適に感じるまで何度か調整しました。',
+      },
+      contributions: {
+        en: ['Full-stack implementation', 'Electron packaging & build pipeline', 'AI panel & streaming UX'],
+        ja: ['フルスタック実装', 'Electronパッケージング・ビルドパイプライン構築', 'AIパネル・ストリーミングUXの実装'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['Next.js', 'TypeScript', 'Tailwind CSS'] },
+        { category: 'Desktop', items: ['Electron', 'electron-builder'] },
+        { category: 'AI', items: ['Google Gemini API'] },
+      ],
+      period: { en: '2026-Jul – ongoing', ja: '2026年7月〜継続中' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'Quantum Circuit Simulator',
+    slug: 'quantum-circuit-simulator',
+    en: 'Browser-based quantum circuit simulator built with Nuxt.js.',
+    ja: 'Nuxt.js で構築したブラウザ上で動く量子回路シミュレータ。',
+    detail: {
+      en: 'A browser-based quantum circuit simulator for visually placing and connecting quantum gates to explore quantum computation.\nBuilt with Nuxt.js, it simulates qubit state evolution in real time — from ideal probability distributions to noisy sampling — all without any local setup.',
+      ja: '量子ゲートを視覚的に配置・接続し、量子計算を体験できるブラウザ上の量子回路シミュレータ。\nNuxt.js で構築し、Qubitの状態変化をリアルタイムにシミュレーション。\n理想的な確率分布の表示から、ノイズを含めたサンプリングまでをローカル環境不要で量子回路設計を手軽に試せる。',
+    },
+    tags: ['Nuxt.js', 'Quantum Computing'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/nuxt-qc-app' },
+      { label: 'App', url: 'https://nuxt-qc-app.vercel.app/' },
+    ],
+    image: '/qc_nuxt_1.png',
+    meta: {
+      reflection: {
+        en: 'Getting drag-and-drop to feel natural was a real challenge. Designing the UI representation of control and target qubits for multi-qubit gates was also particularly tricky.',
+        ja: 'DnDを違和感なく実装するのに苦労しました。また、複数量子ゲートにおける制御・標的ビットのUI表現の設計は難しかったです。',
+      },
+      contributions: {
+        en: [
+          'Circuit UI design and implementation',
+          'Qubit state simulation logic',
+          'Gate operation rendering',
+        ],
+        ja: [
+          '回路UIのデザインと実装',
+          'Qubit状態シミュレーションロジックの実装',
+          'ゲート操作のレンダリング',
+        ],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['Nuxt.js', 'TypeScript', 'Tailwind CSS'] },
+        { category: 'Infra', items: ['Vercel'] },
+      ],
+      period: { en: '2025-Jan (5 days)', ja: '2025年1月（5日）' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+      event: undefined,
+    },
+  },
+  {
+    name: 'Orbital',
+    slug: 'orbital',
+    en: 'Task management app with habit, routine, and TODO tracking.',
+    ja: '習慣・ルーティン・TODOをまとめて管理するタスク管理アプリ。',
+    detail: {
+      en: 'A personal productivity app built to unify habits, routines, and TODOs in a single interface — built around the concept of "getting every day on track."\nBuilt with Vue.js and Ruby on Rails, backed by PostgreSQL.',
+      ja: '習慣・ルーティン・TODOを一元管理するパーソナル生産性アプリ。\nToDoから日課、習慣に繋げ、「毎日を、軌道に乗せる」をコンセプトに作成。\nVue.js + Ruby on Rails + PostgreSQL で構築。',
+    },
+    tags: ['Vue.js', 'Rails', 'PostgreSQL'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/orbit-todo-app' },
+    ],
+    image: '/orbit_1.png',
+    images: ['/orbit_1.png', '/orbit_2.png', '/orbit_3.png'],
+    meta: {
+      reflection: {
+        en: 'Designing a unified interface for three different task types — habits, routines, and TODOs — was the core challenge. Balancing flexibility with simplicity in the UX took several iterations. I also intentionally used a production-grade tech stack to practice real-world patterns, including simple CRUD implementation and Rails MVC design.',
+        ja: '習慣・ルーティン・TODOという3種類の異なるタスクを一つのUIで扱う設計が難しかったです。柔軟性とシンプルさのバランスを取るためにUIを何度も見直しました。業務で使うスタックでの開発を経験として行い、シンプルなCRUD実装や、RailsのMVC設計を学ぶことができました。',
+      },
+      contributions: {
+        en: ['Full-stack implementation', 'Database schema design', 'UI design'],
+        ja: ['フルスタック実装', 'データベーススキーマ設計', 'UIデザイン'],
+      },
+      techStack: [
+        { category: 'Frontend', items: ['Vue.js', 'TypeScript'] },
+        { category: 'Backend', items: ['Ruby on Rails', 'Pinia'] },
+        { category: 'DB', items: ['PostgreSQL'] },
+        { category: 'Infra', items: ['Heroku'] },
+      ],
+      period: {
+        en: '2025-May（2 Weeks）',
+        ja: '2025-May（2週間）',
+      },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'なんJenerator',
+    slug: 'nanjenerator',
+    badge: { en: 'Hackathon Best Prize', ja: 'ハッカソン最優秀賞' },
+    en: 'AI-powered 2ch-style thread generator using Amazon Bedrock.',
+    ja: 'Amazon Bedrockを使ったAI搭載の2ch風スレ生成ツール。',
+    detail: {
+      en: 'Enter any topic and get a fully generated 2ch-style thread complete with OP post and replies, all powered by Amazon Bedrock (Claude).\nBuilt at a hackathon, it became unexpectedly popular among friends.',
+      ja: 'テーマを入力すると、Amazon Bedrock（Claude）が2ch風のスレッドをOP・レス込みで丸ごと生成。\nハッカソンで制作し、身内に予想外に好評だったツール。',
+    },
+    tags: ['React', 'Python', 'AWS Bedrock'],
+    links: [],
+    image: '/nanj_1.png',
+    meta: {
+      reflection: {
+        en: 'The hardest part was tuning the prompt to consistently capture the tone and rhythm of 2ch-style posts. Seeing it go viral among friends was a great validation of the concept.',
+        ja: '2ch特有の文体やテンポをAIに再現させるプロンプト調整が一番難しかったです。身内でバズったときは、コンセプトが通じたと実感しました。',
+      },
+      contributions: {
+        en: ['Prompt engineering', 'Frontend implementation', 'AWS Bedrock integration'],
+        ja: ['プロンプトエンジニアリング', 'フロントエンド実装', 'AWS Bedrock連携'],
+      },
+      period: { en: '2024-XX (1 day)', ja: '2024-XX（1日）' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+      event: 'Hackathon',
+    },
+  },
+  {
+    name: 'Lab Purchase System',
+    slug: 'lab-purchase-system',
+    en: 'Purchase request management for research labs with approval workflows.',
+    ja: '承認フロー付き、研究室向け購入申請管理システム。',
+    detail: {
+      en: 'An internal tool for university research labs to manage equipment and consumable purchase requests.\nFeatures a multi-step approval workflow and Discord integration for instant notifications to lab members.',
+      ja: '大学研究室向けの物品購入申請管理システム。\n承認フローと Discord 通知連携を実装し、研究室内のやり取りを効率化。',
+    },
+    tags: ['React', 'Firebase', 'Discord API'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/lab-purchase-app' },
+    ],
+    image: '/purchase_1.png',
+    meta: {
+      reflection: {
+        en: 'Building a real tool for actual lab members meant requirements kept evolving. Integrating Discord notifications made the approval flow much more practical for day-to-day use. I also implemented Google authentication and a role-based permission system, allowing designated approvers to handle workflow approvals.',
+        ja: '実際に研究室メンバーが使うツールだったため、要件が開発中に変化し続けました。Discord通知の連携を追加したことで、承認フローが実用的になりました。Google認証によるログインを採用し、対象のロールに対して承認者権限を付与し、フローの承認などを行えるようにしました。',
+      },
+      contributions: {
+        en: ['Full-stack implementation', 'Approval workflow design', 'Discord notification integration'],
+        ja: ['フルスタック実装', '承認フロー設計', 'Discord通知連携'],
+      },
+      period: { en: '2024-XX (XX days)', ja: '2024-XX（XX日）' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'Quantum Pizza',
+    slug: 'quantum-pizza',
+    en: 'Educational quantum gate game — learn quantum information by making pizza.',
+    ja: 'ピザを作りながら量子情報を学ぶ、量子ゲートの教育ゲーム。',
+    detail: {
+      en: 'A browser-based educational game that teaches quantum gate operations through a pizza-making metaphor.\nPlayers apply quantum gates (X, H, CNOT…) to qubits to reach target states, making abstract concepts tangible and fun.',
+      ja: 'ピザ作りを通して量子ゲート操作を学ぶブラウザゲーム。\nX・H・CNOTなどのゲートをクビットに適用して目標状態を目指す。\n抽象的な概念を直感的に体験できる設計。',
+    },
+    tags: ['React', 'Quantum Computing'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/qpizza-game' },
+    ],
+    image: '/qpizza_1.png',
+    meta: {
+      reflection: {
+        en: 'Mapping quantum gate logic onto a pizza-making narrative required creative thinking about how to make abstract concepts feel tangible. It was a great exercise in educational UX design.',
+        ja: '量子ゲートの動作をピザ作りのストーリーに落とし込む発想が難しかったです。抽象的な概念を直感的に体験させる教育UXの設計を深く考える良い機会になりました。',
+      },
+      contributions: {
+        en: ['Game mechanics design', 'Quantum gate logic implementation', 'UI/UX design'],
+        ja: ['ゲームメカニクス設計', '量子ゲートロジックの実装', 'UI/UXデザイン'],
+      },
+      period: { en: '2024-XX (XX days)', ja: '2024-XX（XX日）' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'ImgToLatex',
+    slug: 'img-to-latex',
+    en: 'AI tool that converts math formula images to LaTeX code using Gemini.',
+    ja: 'Gemini APIで数式画像をLaTeXコードに変換するAIツール。',
+    detail: {
+      en: 'A web tool that takes a photo or screenshot of a handwritten or printed math formula and returns clean LaTeX code, powered by Google Gemini\'s vision API.\nAimed at students and researchers who need to digitize equations quickly.',
+      ja: '手書き・印刷された数式の画像をアップロードすると、Gemini Vision API が LaTeX コードに変換するWebツール。\n式のデジタル化を素早く行いたい学生・研究者向け。',
+    },
+    tags: ['React', 'Gemini API'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/img2tex-app' },
+    ],
+    image: '/tex_1.png',
+    meta: {
+      reflection: {
+        en: 'Getting Gemini to output clean, well-structured LaTeX consistently required careful prompt engineering. Handling edge cases like complex fraction and matrix notation was trickier than expected.',
+        ja: 'Geminiが安定してきれいなLaTeXを出力するようにプロンプトを調整するのが大変でした。分数や行列など複雑な数式のエッジケース対応が予想以上に難しかったです。',
+      },
+      contributions: {
+        en: ['UI design and implementation', 'Gemini API integration', 'LaTeX output formatting'],
+        ja: ['UIデザインと実装', 'Gemini API連携', 'LaTeX出力のフォーマット調整'],
+      },
+      period: { en: '2024-XX (XX days)', ja: '2024-XX（XX日）' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+  {
+    name: 'Quantum Super Techshiba-kun',
+    slug: 'quantum-super-techshiba-kun',
+    en: 'Side-scrolling game featuring quantum information technology as in-game elements.',
+    ja: '量子情報技術をゲーム要素に組み込んだ横スクロールゲーム。',
+    detail: {
+      en: 'A side-scrolling platformer where quantum mechanics aren\'t just a theme — they\'re core mechanics.\nSuperposition, entanglement, and measurement collapse are used as gameplay elements, built in React and deployed on Vercel.',
+      ja: '量子力学をテーマではなくゲームメカニクスそのものに組み込んだ横スクロールアクション。\n重ね合わせ・もつれ・測定崩壊がプレイ要素として機能する。\nReact + Vercel で構築。',
+    },
+    tags: ['React', 'Vercel'],
+    links: [
+      { label: 'GitHub', url: 'https://github.com/kotta-27/q-mario-app' },
+    ],
+    image: '/qmario_1.png',
+    meta: {
+      reflection: {
+        en: 'Designing game mechanics that genuinely reflect quantum phenomena — not just as a theme but as core gameplay — was the most intellectually stimulating part of this project.',
+        ja: '量子力学をテーマとしてだけでなく、ゲームメカニクスそのものとして機能させる設計が、このプロジェクトで最も知的に刺激的な部分でした。',
+      },
+      contributions: {
+        en: ['Game design and mechanics', 'Quantum logic implementation', 'Frontend implementation'],
+        ja: ['ゲーム設計とメカニクス', '量子ロジックの実装', 'フロントエンド実装'],
+      },
+      period: { en: '2024-XX (XX days)', ja: '2024-XX（XX日）' },
+      role: { en: ['All'], ja: ['すべて'] },
+      members: { en: '1 person', ja: '1人' },
+    },
+  },
+]
