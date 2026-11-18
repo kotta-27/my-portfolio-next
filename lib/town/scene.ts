@@ -58,7 +58,8 @@ export type TownInput = {
 }
 
 export type TownBench = {
-  goTo: (id: Section) => void
+  /** その建物の前まで歩く。open: false なら、着いてもパネルを開かず、建物を弾ませて入口を示すだけ（最初の 1 回） */
+  goTo: (id: Section, opts?: { open?: boolean }) => void
   /** パネルが開いているか（と、その幅 px）。開いているあいだは、人形がパネルに隠れないよう絵をずらす */
   setPanelOpen: (open: boolean, width?: number) => void
   dispose: () => void
@@ -605,25 +606,50 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   let goal: Building | null = null
   let walkT = 0
   let facing = 0
-  const goTo = (id: Section) => {
+  let openOnArrive = true
+  let beckon: { b: Building; next: number; left: number } | null = null // 入口を示すために、建物を何度か弾ませる
+  const arrive = (b: Building) => {
+    b.pop = 1
+    if (!openOnArrive) {
+      // パネルは開かず、少し間をおいてもう 2 回弾ませる
+      beckon = { b, next: clock + 1.1, left: 2 }
+      facing = 0
+      return
+    }
+    focus = b
+    input.onArrive(b.id)
+  }
+  const goTo = (id: Section, opts?: { open?: boolean }) => {
     const b = buildings.find((x) => x.id === id)
     if (!b) return
+    openOnArrive = opts?.open ?? true
+    beckon = null
     input.onLeave(false)
     goal = b
-    if (input.reducedMotion) {
-      fig.position.copy(b.door)
+    // すでにその建物の前にいるなら、歩かずにそのまま入る
+    if (fig.position.distanceTo(b.door) < 1) {
       path = []
       goal = null
       facing = Math.PI
-      focus = b
-      input.onArrive(b.id)
+      arrive(b)
+      loop()
+      return
+    }
+    if (input.reducedMotion) {
+      fig.position.copy(openOnArrive ? b.door : new THREE.Vector3(b.door.x, 0, 0))
+      path = []
+      goal = null
+      facing = Math.PI
+      arrive(b)
     } else {
       const from = fig.position
       const pts: THREE.Vector3[] = []
       // プロムナードの真ん中（z = 0）まで出て、横に歩き、建物の前へ
       if (Math.abs(from.z) > 2) pts.push(new THREE.Vector3(from.x, 0, 0))
       if (Math.abs(b.door.x - from.x) > 1) pts.push(new THREE.Vector3(b.door.x, 0, 0))
-      pts.push(b.door.clone())
+      // パネルを開かないときは、看板が人形に隠れないよう、建物の前の道の真ん中で止まる
+      if (openOnArrive) pts.push(b.door.clone())
+      else if (!pts.length) pts.push(new THREE.Vector3(b.door.x, 0, 0))
       path = pts
     }
     loop()
@@ -995,9 +1021,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
         fig.position.copy(to)
         path.shift()
         if (!path.length && goal) {
-          goal.pop = 1
-          focus = goal
-          input.onArrive(goal.id)
+          arrive(goal)
           goal = null
         }
       } else {
@@ -1026,6 +1050,13 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     fig.position.y = Math.abs(Math.sin(walkT)) * 1.2
     if (Math.abs(dy) > 0.002 || Math.abs(Math.sin(walkT)) > 0.01) moving = true
 
+    if (beckon && clock >= beckon.next && !input.reducedMotion) {
+      beckon.b.pop = 1
+      beckon.left--
+      beckon.next = clock + 1.1
+      if (beckon.left <= 0) beckon = null
+    }
+    if (beckon) moving = true
     // 建物: 着いたときの弾みと、カーソルを乗せたときの持ち上がり
     for (const b of buildings) {
       b.pop = Math.max(0, b.pop - dt * 2.2)

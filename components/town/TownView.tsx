@@ -103,10 +103,9 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         onReady: () => setState('ready'),
       })
       const first = location.hash.replace(/^#at-/, '')
-      // URL で建物を指定されていなければ、街の西の端から歩いてきて ABOUT の家に入る
-      window.setTimeout(() => bench.current?.goTo(isSection(first) ? first : 'about'), 500)
+      // URL で建物を指定されていればそこへ入る。なければ ABOUT の家の前まで歩いてきて、パネルは開かずに家を弾ませる
+      window.setTimeout(() => bench.current?.goTo(isSection(first) ? first : 'about', { open: isSection(first) }), 500)
       if (isSection(first)) setTarget(first)
-      else setTarget('about')
     })
     const onHash = () => {
       const id = location.hash.replace(/^#at-/, '')
