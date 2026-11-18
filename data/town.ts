@@ -26,6 +26,21 @@ type TownStrings = {
   more: Record<'works' | 'career' | 'output', (n: number) => string>
   careerNote: string
   now: string
+  /** ABOUT の家のパネル */
+  about: {
+    kana: string
+    role: string
+    /** これまで（2 文） */
+    story: string
+    likes: string
+    /** 好きな技術。パネルの 3 列に収まる短さで（長い説明は data/favoriteTech.ts） */
+    likeItems: { name: string; note: string }[]
+    awards: string
+    /** 受賞・展示。名前は短くしたもの（正式名は data/awards.ts）。best は一番の受賞（色を変える） */
+    awardItems: { date: string; title: string; badge: string; best?: boolean }[]
+    /** 余談 1 行 */
+    aside: string
+  }
 }
 
 export const town: Record<Lang, TownStrings> = {
@@ -47,6 +62,26 @@ export const town: Record<Lang, TownStrings> = {
     },
     careerNote: '建物は下の階から古い順。一番上の階が今の会社。',
     now: '現在',
+    about: {
+      kana: '水野 航太',
+      role: 'SOFTWARE ENGINEER · TOKYO',
+      story:
+        '大学院では量子アルゴリズムと格子暗号を研究しながら、量子の考え方をゲームや触れる UI で伝えるものを作ってきました。いまはスタディストで、検索の仕組みと、使う人が迷わない画面の両方をつくっています。',
+      likes: 'LIKES',
+      likeItems: [
+        { name: 'Vue.js', note: '素直なリアクティビティで、書きやすく読みやすい' },
+        { name: 'Three.js', note: 'ブラウザだけで 3D。この街もこれ' },
+        { name: '検索技術', note: '欲しい結果が上に来る仕組み' },
+      ],
+      awards: 'AWARDS & EXHIBITS',
+      awardItems: [
+        { date: '2024.06', title: 'Progate Hackathon powered by AWS', badge: '最優秀賞', best: true },
+        { date: '2024.05', title: '量子アニーリングアイディアソン', badge: '2位' },
+        { date: '2024.10', title: 'Quantum Innovation 2024 ポスター', badge: '若手ポスター賞' },
+        { date: '2025.08', title: '大阪・関西万博でゲーム展示', badge: '展示' },
+      ],
+      aside: 'レゴが好きで、このサイトもブロックで組みました。ベンチは長押しで動かせます。',
+    },
   },
   en: {
     buildings: {
@@ -66,5 +101,25 @@ export const town: Record<Lang, TownStrings> = {
     },
     careerNote: 'Oldest company on the ground floor, the current one at the top.',
     now: 'now',
+    about: {
+      kana: '',
+      role: 'SOFTWARE ENGINEER · TOKYO',
+      story:
+        'In grad school I researched quantum algorithms and lattice cryptography, and built games and hands-on UIs that explain quantum ideas. Now at Studist, I work on both how search works and screens people never get lost in.',
+      likes: 'LIKES',
+      likeItems: [
+        { name: 'Vue.js', note: 'Plain reactivity and single-file components' },
+        { name: 'Three.js', note: '3D in the browser. This town, too' },
+        { name: 'Search', note: 'Getting the right result to the top' },
+      ],
+      awards: 'AWARDS & EXHIBITS',
+      awardItems: [
+        { date: '2024.06', title: 'Progate Hackathon powered by AWS', badge: 'Best Prize', best: true },
+        { date: '2024.05', title: 'Quantum Annealing Ideathon', badge: '2nd Place' },
+        { date: '2024.10', title: 'Quantum Innovation 2024 poster', badge: 'Young Researcher Award' },
+        { date: '2025.08', title: 'Game exhibit at Expo 2025 Osaka', badge: 'Exhibit' },
+      ],
+      aside: 'I love LEGO, so this site is built from bricks too. Long-press a bench to move it.',
+    },
   },
 }

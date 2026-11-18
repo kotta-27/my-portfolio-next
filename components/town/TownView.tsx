@@ -216,7 +216,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
                 <PiXBold className="text-[14px]" />
               </button>
             </header>
-            <h2 className="text-[30px] font-extrabold leading-[1.15] tracking-[-0.03em]">{panel.title}</h2>
+            {panel.title ? <h2 className="text-[30px] font-extrabold leading-[1.15] tracking-[-0.03em]">{panel.title}</h2> : <h2 className="sr-only">{panel.eyebrow}</h2>}
             {panel.body}
           </>
         )}

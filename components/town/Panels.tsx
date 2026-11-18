@@ -26,23 +26,48 @@ function More({ href, children }: { href: string; children: ReactNode }) {
   )
 }
 
+/** ABOUT（名刺の形）: 写真と名前 → これまで → 好きな技術 → 受賞・展示 → 余談 */
 function About({ lang }: { lang: Lang }) {
-  const t = home[lang]
+  const a = town[lang].about
   return (
     <>
-      <p className="text-[17px] font-extrabold leading-[1.6]">{t.hero.headline}</p>
-      <p className="text-[14.5px] leading-[1.85] text-ink/80">{t.hero.sub}</p>
-      <dl className="flex flex-col gap-[10px]">
-        {t.facts.map((f) => (
-          <div key={f.label} className="rounded-[12px] bg-soft px-[14px] py-3">
-            <dt className="font-mono text-[10.5px] font-bold tracking-[.08em] text-mute">{f.label}</dt>
-            <dd className="flex flex-col">
-              <b className="text-[15px]">{f.title}</b>
-              <span className="text-[12.5px] text-mute">{f.sub}</span>
-            </dd>
-          </div>
+      <div className="grid grid-cols-[96px_minmax(0,1fr)] items-center gap-5 sm:grid-cols-[120px_minmax(0,1fr)]">
+        <span className="relative block aspect-square overflow-hidden rounded-full shadow-[0_0_0_4px_rgb(var(--tile)),0_0_0_5px_rgb(var(--ink)/0.08)]">
+          <Image src="/me-sq.jpg" alt="" fill sizes="120px" className="object-cover" />
+        </span>
+        <span className="flex min-w-0 flex-col">
+          <span className="text-[26px] font-extrabold leading-[1.1] tracking-[-0.03em] sm:text-[30px]">Kota Mizuno</span>
+          {a.kana && <span className="mt-1 text-[13px] text-mute">{a.kana}</span>}
+          <span className="mt-[10px] font-mono text-[11.5px] font-bold tracking-[.06em] text-teal">{a.role}</span>
+        </span>
+      </div>
+      <p className="text-[14.5px] leading-[1.9] text-ink/80">{a.story}</p>
+
+      <h3 className="font-mono text-[10.5px] font-bold tracking-[.08em] text-mute">{a.likes}</h3>
+      <ul className="grid gap-[10px] sm:grid-cols-3">
+        {a.likeItems.map((f) => (
+          <li key={f.name} className="flex flex-col gap-[6px] rounded-[14px] bg-soft p-[14px]">
+            <b className="text-[15px]">{f.name}</b>
+            <span className="text-[12px] leading-[1.6] text-mute">{f.note}</span>
+          </li>
         ))}
-      </dl>
+      </ul>
+
+      <h3 className="font-mono text-[10.5px] font-bold tracking-[.08em] text-mute">{a.awards}</h3>
+      <ul className="flex flex-col">
+        {a.awardItems.map((x) => (
+          <li key={x.title} className="grid grid-cols-[64px_minmax(0,1fr)_auto] items-center gap-[10px] border-t border-ink/10 py-[10px] text-[13.5px] font-bold">
+            <span className="font-mono text-[11px] font-medium tabular-nums text-mute">{x.date}</span>
+            <span className="min-w-0">{x.title}</span>
+            <span className={`rounded-[6px] px-2 py-[3px] text-[11px] font-extrabold ${x.best ? 'bg-coral text-paper' : 'bg-soft text-ink'}`}>{x.badge}</span>
+          </li>
+        ))}
+      </ul>
+
+      <p className="flex items-center gap-3 rounded-[14px] border-[1.5px] border-dashed border-ink/15 px-4 py-[14px] text-[13.5px] leading-[1.8] text-mute">
+        <span aria-hidden className="mini-brick h-[10px] w-[18px] shrink-0 rounded-[2px]" />
+        {a.aside}
+      </p>
     </>
   )
 }
@@ -139,6 +164,7 @@ function Contact({ lang }: { lang: Lang }) {
   )
 }
 
+/** title が空なら見出しを出さない（ABOUT は名刺の中に名前がある） */
 export type PanelContent = { eyebrow: string; title: string; body: ReactNode }
 
 /** 建物ごとのパネルの中身 */
@@ -146,7 +172,7 @@ export function townPanels(lang: Lang, career: ResolvedCareerItem[], outputs: Ou
   const t = home[lang]
   const b = town[lang].buildings
   return {
-    about: { eyebrow: b.about.title, title: 'Kota Mizuno', body: <About lang={lang} /> },
+    about: { eyebrow: b.about.title, title: '', body: <About lang={lang} /> },
     works: { eyebrow: b.works.title, title: t.projects.title, body: <Works lang={lang} /> },
     // career は古い順。パネルでは今の会社を先に出す
     career: { eyebrow: b.career.title, title: t.career.title, body: <Career lang={lang} items={career} /> },
