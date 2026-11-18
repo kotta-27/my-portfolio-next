@@ -48,7 +48,7 @@ export type TownInput = {
   /** 手前の歩道に立てる、外へのリンクの看板。icon は SVG のマークアップ（色は fg で塗る） */
   links: { href: string; label: string; icon: string; bg: string; fg: string }[]
   onLink: (href: string) => void
-  /** パネルを開いているあいだ、今いる建物と人形のほかを、背景の色へ褪せさせる（案 3） */
+  /** パネルを開いているあいだ、今いる建物と人形のほかを、背景の色へ褪せさせる（後ろの街がうるさくならないように） */
   focusDim?: boolean
   reducedMotion: boolean
   onArrive: (id: Section) => void

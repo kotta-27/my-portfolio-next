@@ -53,8 +53,6 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const [state, setState] = useState<'loading' | 'ready' | 'none'>('loading')
   const [open, setOpen] = useState<Section | null>(null)
   const [target, setTarget] = useState<Section | null>(null)
-  // パネルを開いたときの、後ろの街の抑え方（案を見比べるため ?veil=1|2|3 で切り替える。なしは今のまま）。URL はマウント後に読む
-  const [veil, setVeil] = useState(0)
   const t = town[lang]
 
   const go = useCallback((id: Section) => {
@@ -72,7 +70,6 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
     const el = host.current
     if (!el) return
     let cancelled = false
-    setVeil(Number(new URLSearchParams(location.search).get('veil') ?? 0))
     const probe = document.createElement('canvas')
     if (!(probe.getContext('webgl2') ?? probe.getContext('webgl'))) {
       setState('none')
@@ -90,7 +87,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         },
         workImages,
         careerLogos,
-        focusDim: new URLSearchParams(location.search).get('veil') === '3',
+        focusDim: true,
         reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
         onArrive: (id) => setOpen(id),
         onLeave: (toStreet) => {
@@ -156,16 +153,6 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
           )
         })}
       </div>
-
-      {/* 案 1: 全体に白い膜 ／ 案 2: パネル側ほど濃い白 */}
-      {(veil === 1 || veil === 2) && (
-        <div
-          aria-hidden
-          className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ${open ? 'opacity-100' : 'opacity-0'} ${
-            veil === 1 ? 'bg-ground/45' : 'bg-gradient-to-b from-transparent via-ground/40 to-ground/75 sm:bg-gradient-to-r sm:from-transparent sm:via-ground/30 sm:to-ground/80'
-          }`}
-        />
-      )}
 
       <nav aria-label="Main" className="absolute inset-x-0 top-0 z-10 flex flex-wrap items-center gap-2 p-3 sm:p-5">
         <a href="/" className="hidden items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] sm:flex">
