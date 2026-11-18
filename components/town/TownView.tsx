@@ -178,7 +178,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
       </div>
 
       <nav aria-label="Main" className="absolute inset-x-0 top-0 z-10 flex flex-wrap items-center gap-2 p-3 sm:p-5">
-        <a href="/" className="hidden items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] sm:flex">
+        <a href="/" className="hidden items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold dark:ring-1 dark:ring-inset dark:ring-ink/20 tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] sm:flex">
           <span aria-hidden className="mini-brick mt-[3px] h-[10px] w-[17px] rounded-[3px]" />
           Kota Mizuno
         </a>
@@ -189,7 +189,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
             onClick={() => go(id)}
             aria-current={target === id ? 'true' : undefined}
             className={`rounded-[10px] px-[11px] py-[10px] font-mono text-[11.5px] font-extrabold tracking-[.06em] shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.14)] transition-colors duration-150 active:translate-y-[2px] active:shadow-[0_1px_0_rgb(var(--shadow-rgb)/0.14)] sm:px-[13px] sm:text-[12px] ${
-              target === id ? 'bg-ink text-paper' : 'bg-tile/90 text-ink hover:bg-tile'
+              target === id ? 'bg-ink text-paper' : 'bg-tile/90 text-ink hover:bg-tile dark:ring-1 dark:ring-inset dark:ring-ink/20 dark:hover:ring-ink/40'
             }`}
           >
             {t.buildings[id].title}
