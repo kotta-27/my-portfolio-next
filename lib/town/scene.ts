@@ -39,7 +39,7 @@ const COL = {
 type Col = keyof typeof COL
 
 export type TownInput = {
-  /** 建物の看板。title は英字、sub は小さく添える言葉 */
+  /** 建物の看板。看板には title（英字）だけを書く。sub は WebGL が使えないときのリンクの文字に使う */
   labels: Record<Section, { title: string; sub: string }>
   /** 工房の窓に飾る作品の画像（3 枚） */
   workImages: string[]
@@ -292,7 +292,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     put(g, box(13, 28, 1.6, 0.4), mat('coral'), -8, 0, 0.6)
     put(g, new THREE.SphereGeometry(1, 10, 8), mat('mustard'), -4, 14, 1.8)
     windowPane(g, 14, 15, 14, 13)
-    const s = sign(L.about.title, L.about.sub, 30, 10, COL.navy, '#ffffff')
+    const s = sign(L.about.title, '', 30, 10, COL.navy, '#ffffff')
     s.position.set(0, top - 6, 2)
     g.add(s)
   })
@@ -311,7 +311,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       pic.position.set((i - 1) * 36, BR * 1.6, 0.6)
       g.add(pic)
     })
-    const s = sign(L.works.title, L.works.sub, 46, 14, COL.teal, '#ffffff')
+    const s = sign(L.works.title, '', 46, 14, COL.teal, '#ffffff')
     s.position.set(0, top + PLATE + 2, -6)
     s.rotation.x = -0.12
     g.add(s)
@@ -345,7 +345,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     stack(g, 2, 2, 1, 'dark', 12, -36, y + PLATE)
     put(g, new THREE.CylinderGeometry(0.6, 0.6, 26, 8), mat('black'), -14, y + PLATE + 13, -40)
     put(g, new THREE.SphereGeometry(1.6, 12, 10), mat('coral'), -14, y + PLATE + 26, -40)
-    const s = sign(L.career.title, L.career.sub, 40, 12, '#ffffff', COL.navy)
+    const s = sign(L.career.title, '', 40, 12, '#ffffff', COL.navy)
     s.position.set(0, y + PLATE + 8, -4)
     g.add(s)
   })
@@ -364,7 +364,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     const books: Col[] = ['coral', 'navy', 'teal', 'white', 'coral', 'dark']
     books.forEach((c, i) => put(g, blockGeo(2, 1, 1, i === books.length - 1), mat(c), -20 + (i % 2) * 2, PLATE * 2 + i * PLATE, -20))
     books.slice(0, 4).forEach((c, i) => put(g, blockGeo(2, 1, 1, i === 3), mat(c), 22, PLATE * 2 + i * PLATE, -22))
-    const s = sign(L.output.title, L.output.sub, 40, 11, '#ffffff', COL.navy)
+    const s = sign(L.output.title, '', 40, 11, '#ffffff', COL.navy)
     s.position.set(0, top - 9, 1.2)
     g.add(s)
   })
@@ -380,7 +380,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     windowPane(g, 12, 12, 10, 12)
     windowPane(g, 0, 32, 30, 8)
     // 看板は屋根の前の縁より手前に立てる（屋根のスタッドに隠れないように）
-    const s = sign(L.contact.title, L.contact.sub, 40, 11, '#ffffff', COL.coral)
+    const s = sign(L.contact.title, '', 40, 11, '#ffffff', COL.coral)
     s.position.set(0, top + PLATE + 7.5, 6)
     g.add(s)
     // ポストは通りの向かい側（南の歩道）に置く。プロムナードに置くと、人形が歩く道とぶつかる
