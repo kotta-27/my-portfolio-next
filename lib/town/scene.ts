@@ -5,11 +5,14 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js'
 import { createBrickMaterial } from '@/lib/bricks/geometry'
 import { gearGeometry } from '@/lib/bricks/technic'
 import type { Section } from '@/lib/town/sections'
+import { Sfx } from '@/lib/town/sfx'
+import { propStore } from '@/lib/town/store'
 
 /*
  * トップの「レゴの街」。プロムナード沿いに建物が 5 つ並び、それぞれがサイトのセクション。
  * 人形が歩いて建物の前に着くと onArrive が呼ばれ、画面の側（components/town/TownView.tsx）がその中身を開く。
  * 寸法は mm（1 スタッド 8mm、ブロック 1 段 9.6mm）。人形は高さ約 40mm で、オリジナルの形。
+ * 手前の歩道のベンチは、長押しで持ち上げて、スタッドに合わせて置き直せる（Clutch と同じ手触り。置ける範囲は道の手前の歩道だけ）。
  * three は大きいので、このファイルは TownView が動的に読み込む。
  */
 
@@ -197,7 +200,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   renderer.shadowMap.enabled = true
   renderer.shadowMap.type = THREE.PCFSoftShadowMap
   renderer.domElement.setAttribute('aria-hidden', 'true')
-  renderer.domElement.classList.add('absolute', 'inset-0', 'block', 'h-full', 'w-full', 'cursor-grab', 'touch-pan-y')
+  renderer.domElement.classList.add('absolute', 'inset-0', 'block', 'h-full', 'w-full', 'cursor-grab', 'touch-none')
   host.prepend(renderer.domElement)
   const scene = new THREE.Scene()
   const pmrem = new THREE.PMREMGenerator(renderer)
@@ -258,6 +261,8 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   // ───────── 建物 ─────────
   type Building = { id: Section; group: THREE.Group; door: THREE.Vector3; x: number; pop: number }
   const buildings: Building[] = []
+  // 動かした小物がぶつかってはいけないもの（建物・木・街灯・看板）
+  const solids: THREE.Object3D[] = []
   const FRONT = -32 // 建物の正面の z（プロムナードの北の縁）
   const L = input.labels
 
@@ -267,6 +272,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     group.userData.id = id
     make(group)
     town.add(group)
+    solids.push(group)
     buildings.push({ id, group, door: new THREE.Vector3(x, 0, FRONT + 14), x, pop: 0 })
   }
   const windowPane = (g: THREE.Group, x: number, y: number, w: number, h: number, z = 0.6) => {
@@ -387,18 +393,30 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     for (let k = 0; k < 3; k++) put(g, new THREE.CylinderGeometry((9 - k * 2.6) * s, (11 - k * 2.6) * s, 8 * s, 18), mat('leaf'), 0, (16 + k * 7) * s, 0)
     g.position.set(x, 0, z)
     town.add(g)
+    solids.push(g)
   }
   const trees: [number, number, number][] = [[-210, 60, 1.1], [-150, 80, 0.9], [-110, 96, 1], [86, 98, 1.2], [150, 64, 0.95], [210, 86, 1.05], [-110, -100, 1.2], [70, -100, 1], [150, -96, 0.9], [-225, -90, 1]]
   for (const [x, z, s] of trees) tree(x, z, s)
   for (let x = -200; x <= 200; x += 80) {
-    put(town, new THREE.CylinderGeometry(0.9, 1.2, 44, 8), mat('black'), x, 22, 30)
+    solids.push(put(town, new THREE.CylinderGeometry(0.9, 1.2, 44, 8), mat('black'), x, 22, 30))
     put(town, new THREE.CylinderGeometry(3, 2, 4, 12), mat('white'), x, 46, 30)
   }
-  for (const x of [-120, 110]) {
-    put(town, blockGeo(4, 1, 1), mat('dark'), x, 4, 50)
-    stack(town, 1, 1, 1, 'dark', x - 12, 50, 0, false)
-    stack(town, 1, 1, 1, 'dark', x + 12, 50, 0, false)
+  // ベンチ（動かせる）。4 × 1 スタッド。group の原点が足元の中心
+  type Prop = { id: string; group: THREE.Group; w: number; d: number; h: number; place: { x: number; z: number; rot: number } }
+  const props: Prop[] = []
+  const bench = (id: string, x: number, z: number) => {
+    const group = new THREE.Group()
+    put(group, blockGeo(4, 1, 1), mat('dark'), 0, 4, 0)
+    stack(group, 1, 1, 1, 'dark', -12, 0, 0, false)
+    stack(group, 1, 1, 1, 'dark', 12, 0, 0, false)
+    group.userData.prop = id
+    town.add(group)
+    const prop: Prop = { id, group, w: 4, d: 1, h: 4 + PLATE + 1.7, place: { x, z, rot: 0 } }
+    props.push(prop)
+    return prop
   }
+  bench('bench-west', -120, 52)
+  bench('bench-east', 112, 52)
 
   // ───────── 手前の歩道の看板（X・GitHub などへのリンク） ─────────
   // 2 × 4 の台に、4 × 4 の板を少し後ろへ倒して立てる。板の前の面にアイコンと名前を描く
@@ -453,6 +471,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     board.add(face)
     group.userData.href = link.href
     town.add(group)
+    solids.push(group)
     signposts.push({ group, href: link.href, lift: 0 })
   })
 
@@ -565,25 +584,205 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   // ───────── 操作: 建物をクリックで向かう、ドラッグで回す。街にフォーカスがあるときは ← → で歩き、↑ / Enter で入り、↓ で道に戻る ─────────
   const ray = new THREE.Raycaster()
   const ndc = new THREE.Vector2()
-  type Target = Building | Signpost
+  type Target = Building | Signpost | Prop
   let hover: Target | null = null
-  const pick = (e: PointerEvent): Target | null => {
+  const aim = (e: PointerEvent) => {
     const r = renderer.domElement.getBoundingClientRect()
     ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1)
     ray.setFromCamera(ndc, camera)
-    const hit = ray.intersectObjects([...buildings.map((b) => b.group), ...signposts.map((s) => s.group)], true)[0]
+  }
+  const pick = (e: PointerEvent): Target | null => {
+    aim(e)
+    const hit = ray.intersectObjects([...buildings.map((b) => b.group), ...signposts.map((s) => s.group), ...props.map((p) => p.group)], true)[0]
     if (!hit) return null
     let o: THREE.Object3D | null = hit.object
-    while (o && !o.userData.id && !o.userData.href) o = o.parent
-    return buildings.find((b) => b.group === o) ?? signposts.find((s) => s.group === o) ?? null
+    while (o && !o.userData.id && !o.userData.href && !o.userData.prop) o = o.parent
+    return buildings.find((b) => b.group === o) ?? signposts.find((s) => s.group === o) ?? props.find((p) => p.group === o) ?? null
+  }
+
+  // ───────── 小物を動かす: 長押しで持ち上げ、スタッドに合わせた置き場所を白い枠で見せ、離すとカチッとはまる ─────────
+  const sfx = new Sfx()
+  const LIFT = 14 // 持ち上げたときの高さ
+  const HOLD_MS = 380 // 長押しとみなす時間
+  // 置ける範囲: 道（プロムナード）の手前の歩道。プロムナードの南の縁から、ベースプレートの手前の縁まで
+  const AREA = { x0: (-PW / 2) * P, x1: (PW / 2) * P, z0: 24, z1: (PD / 2) * P }
+  const ground = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
+  const ghost = new THREE.Group()
+  const ghostLine = new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.95, depthTest: false })
+  const ghostFill = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.18, depthWrite: false })
+  ghost.renderOrder = 10
+  ghost.visible = false
+  town.add(ghost)
+  let ghostKey = ''
+  const footprintOf = (p: Prop, rot: number) => (rot % 2 === 0 ? { fw: p.w, fd: p.d } : { fw: p.d, fd: p.w })
+  /** 足元の中心を、スタッドの格子に合わせる。スタッドは 8mm おきの 4mm 目なので、足元の左端（手前の端）は 8 の倍数 */
+  const snap = (v: number, n: number) => Math.round((v - (n * P) / 2) / P) * P + (n * P) / 2
+  type Rect = { x0: number; x1: number; z0: number; z1: number }
+  let obstacles: Rect[] = []
+  const rectOf = (p: Prop, place: { x: number; z: number; rot: number }): Rect => {
+    const { fw, fd } = footprintOf(p, place.rot)
+    return { x0: place.x - (fw * P) / 2, x1: place.x + (fw * P) / 2, z0: place.z - (fd * P) / 2, z1: place.z + (fd * P) / 2 }
+  }
+  const overlaps = (a: Rect, b: Rect) => a.x0 < b.x1 && b.x0 < a.x1 && a.z0 < b.z1 && b.z0 < a.z1
+  const canPlace = (p: Prop, place: { x: number; z: number; rot: number }) => {
+    const r = rectOf(p, place)
+    if (r.x0 < AREA.x0 || r.x1 > AREA.x1 || r.z0 < AREA.z0 || r.z1 > AREA.z1) return false
+    return !obstacles.some((o) => overlaps(r, o))
+  }
+  const collectObstacles = (except: Prop) => {
+    obstacles = [
+      ...solids.map((o) => new THREE.Box3().setFromObject(o)).map((b) => ({ x0: b.min.x + 0.5, x1: b.max.x - 0.5, z0: b.min.z + 0.5, z1: b.max.z - 0.5 })),
+      ...props.filter((p) => p !== except).map((p) => rectOf(p, p.place)),
+    ]
+  }
+  const showGhost = (p: Prop, place: { x: number; z: number; rot: number }, ok: boolean) => {
+    const { fw, fd } = footprintOf(p, place.rot)
+    const key = `${fw}x${fd}`
+    if (key !== ghostKey) {
+      ghost.clear()
+      const geo = new THREE.BoxGeometry(fw * P - 0.2, p.h, fd * P - 0.2)
+      geo.translate(0, p.h / 2, 0)
+      const line = new THREE.LineSegments(new THREE.EdgesGeometry(geo), ghostLine)
+      const fill = new THREE.Mesh(geo, ghostFill)
+      line.renderOrder = fill.renderOrder = 10
+      ghost.add(fill, line)
+      ghostKey = key
+    }
+    ghost.position.set(place.x, 0, place.z)
+    const c = ok ? '#ffffff' : '#ff4a3d'
+    ghostLine.color.set(c)
+    ghostFill.color.set(c)
+    ghost.visible = true
+  }
+  // 長押しの待ち（押しているあいだ、ベンチがわずかに震える）・持っている小物・置く動き
+  let pressing: { prop: Prop; timer: number; t: number } | null = null
+  let held: { prop: Prop; target: { x: number; z: number; rot: number }; ok: boolean; from: { x: number; z: number; rot: number } } | null = null
+  type Seat = { prop: Prop; from: THREE.Vector3; to: { x: number; z: number; rot: number }; t: number; move: number }
+  let seating: Seat | null = null
+  let jiggle = 0 // はまったときに街全体が小さく沈む
+  const pan = (x: number) => Math.max(-1, Math.min(1, x / 240))
+
+  const pickUp = (prop: Prop) => {
+    pressing = null
+    collectObstacles(prop)
+    held = { prop, target: { ...prop.place }, ok: true, from: { ...prop.place } }
+    sfx.pop(pan(prop.place.x))
+    navigator.vibrate?.(10)
+    hover = null
+    el.style.cursor = 'grabbing'
+    showGhost(prop, prop.place, true)
+    loop()
+  }
+  const moveHeld = (e: PointerEvent) => {
+    if (!held) return
+    aim(e)
+    const at = ray.ray.intersectPlane(ground, new THREE.Vector3())
+    if (!at) return
+    const { fw, fd } = footprintOf(held.prop, held.target.rot)
+    const place = { x: snap(at.x, fw), z: snap(at.z, fd), rot: held.target.rot }
+    if (place.x !== held.target.x || place.z !== held.target.z) {
+      held.target = place
+      held.ok = canPlace(held.prop, place)
+    }
+    showGhost(held.prop, held.target, held.ok)
+    loop()
+  }
+  const turnHeld = () => {
+    if (!held) return
+    const rot = (held.target.rot + 1) % 2
+    const { fw, fd } = footprintOf(held.prop, rot)
+    held.target = { x: snap(held.target.x, fw), z: snap(held.target.z, fd), rot }
+    held.ok = canPlace(held.prop, held.target)
+    showGhost(held.prop, held.target, held.ok)
+    sfx.turn(pan(held.target.x))
+    loop()
+  }
+  const drop = () => {
+    if (!held) return
+    const { prop } = held
+    // 置けない場所なら、ゴツンと鳴らして元の場所へ戻す
+    const to = held.ok ? held.target : held.from
+    if (!held.ok) sfx.bonk(pan(held.target.x))
+    seating = { prop, from: prop.group.position.clone(), to, t: 0, move: held.ok ? 0.06 : 0.24 }
+    held = null
+    ghost.visible = false
+    el.style.cursor = ''
+    loop()
+  }
+  const stepProps = (dt: number) => {
+    let moving = false
+    if (pressing) {
+      pressing.t += dt
+      const g = pressing.prop.group
+      g.rotation.z = Math.sin(pressing.t * 70) * 0.012 * Math.min(1, pressing.t * 6)
+      moving = true
+    }
+    if (held) {
+      const g = held.prop.group
+      const goal = new THREE.Vector3(held.target.x, LIFT + Math.sin(clock * 3) * 0.6, held.target.z)
+      g.position.lerp(goal, Math.min(1, dt * 18))
+      let dr = (held.target.rot * Math.PI) / 2 - g.rotation.y
+      dr = Math.atan2(Math.sin(dr), Math.cos(dr))
+      g.rotation.y += dr * Math.min(1, dt * 16)
+      g.rotation.z = 0
+      g.rotation.x = 0.06
+      moving = true
+    }
+    if (seating) {
+      const s = seating
+      s.t += dt
+      const g = s.prop.group
+      const u = Math.min(1, s.t / s.move)
+      const ex = 1 - Math.pow(1 - u, 3)
+      g.position.x = s.from.x + (s.to.x - s.from.x) * ex
+      g.position.z = s.from.z + (s.to.z - s.from.z) * ex
+      g.rotation.y = (s.to.rot * Math.PI) / 2
+      g.rotation.x = 0.06 * (1 - u)
+      const down = Math.min(1, Math.max(0, (s.t - s.move) / 0.12))
+      g.position.y = (s.move > 0.1 ? LIFT : s.from.y) * (1 - down * down)
+      if (down >= 1) {
+        g.position.set(s.to.x, 0, s.to.z)
+        g.rotation.set(0, (s.to.rot * Math.PI) / 2, 0)
+        s.prop.place = { ...s.to }
+        propStore.set(s.prop.id, s.prop.place)
+        sfx.click(4, pan(s.to.x))
+        navigator.vibrate?.(8)
+        jiggle = 1
+        seating = null
+      }
+      moving = true
+    }
+    if (jiggle > 0) {
+      jiggle = Math.max(0, jiggle - dt / 0.22)
+      town.position.y = -0.5 * Math.sin((1 - jiggle) * Math.PI) * jiggle
+      moving = true
+    }
+    return moving
   }
   let drag: { x: number; y: number; moved: number } | null = null
   const el = renderer.domElement
   const onDown = (e: PointerEvent) => {
+    sfx.unlock()
     drag = { x: e.clientX, y: e.clientY, moved: 0 }
     el.setPointerCapture(e.pointerId)
+    // 小物の上で押したら、長押しを待つ（動かす前に指を動かしたら、いつもどおり街を回す）
+    const t = pick(e)
+    if (t && 'place' in t && !seating && !input.reducedMotion) {
+      pressing = { prop: t, timer: window.setTimeout(() => pickUp(t), HOLD_MS), t: 0 }
+      loop()
+    }
+  }
+  const cancelPress = () => {
+    if (!pressing) return
+    window.clearTimeout(pressing.timer)
+    pressing.prop.group.rotation.z = 0
+    pressing = null
   }
   const onMove = (e: PointerEvent) => {
+    if (held) {
+      moveHeld(e)
+      return
+    }
     if (drag) {
       const dx = e.clientX - drag.x
       const dy = e.clientY - drag.y
@@ -591,6 +790,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       drag.x = e.clientX
       drag.y = e.clientY
       if (drag.moved > 6) {
+        cancelPress()
         view.yaw = Math.min(1.25, Math.max(-1.25, view.yaw - dx * 0.006))
         view.pitch = Math.min(1.2, Math.max(0.3, view.pitch + dy * 0.004))
         el.classList.replace('cursor-grab', 'cursor-grabbing')
@@ -601,17 +801,22 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     const b = pick(e)
     if (b !== hover) {
       hover = b
-      el.style.cursor = b ? 'pointer' : ''
+      el.style.cursor = b ? ('place' in b ? 'grab' : 'pointer') : ''
       loop()
     }
   }
   const onUp = (e: PointerEvent) => {
     const click = drag && drag.moved <= 6
     drag = null
+    cancelPress()
+    if (held) {
+      drop()
+      return
+    }
     el.classList.replace('cursor-grabbing', 'cursor-grab')
     if (!click) return
     const b = pick(e)
-    if (!b) return
+    if (!b || 'place' in b) return
     if ('href' in b) input.onLink(b.href)
     else goTo(b.id)
   }
@@ -623,14 +828,35 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   el.addEventListener('pointermove', onMove)
   el.addEventListener('pointerup', onUp)
   el.addEventListener('pointerleave', onLeaveCanvas)
+  el.addEventListener('pointercancel', onUp)
+  // 持っているあいだ、右クリックで 90° 回す
+  const onContext = (e: MouseEvent) => {
+    if (!held) return
+    e.preventDefault()
+    turnHeld()
+  }
+  el.addEventListener('contextmenu', onContext)
   disposers.push(() => {
     el.removeEventListener('pointerdown', onDown)
     el.removeEventListener('pointermove', onMove)
     el.removeEventListener('pointerup', onUp)
     el.removeEventListener('pointerleave', onLeaveCanvas)
+    el.removeEventListener('pointercancel', onUp)
+    el.removeEventListener('contextmenu', onContext)
+    cancelPress()
   })
   const keys = new Set<string>()
   const onKeyDown = (e: KeyboardEvent) => {
+    // 小物を持っているあいだ: R で回す、Esc で元の場所へ戻す
+    if (held) {
+      if (e.key === 'r' || e.key === 'R') turnHeld()
+      if (e.key === 'Escape') {
+        held.ok = false
+        drop()
+      }
+      e.preventDefault()
+      return
+    }
     if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
       keys.add(e.key)
       path = []
@@ -738,6 +964,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       b.group.position.y += (y - b.group.position.y) * Math.min(1, dt * 14)
       if (Math.abs(y - b.group.position.y) > 0.01 || b.pop > 0) moving = true
     }
+    if (stepProps(dt)) moving = true
     // 看板: カーソルを乗せると少し持ち上がる
     for (const sp of signposts) {
       const goal = sp === hover ? 3 : 0
@@ -761,6 +988,18 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     if (moving || (visible && !input.reducedMotion) || needsRender) raf = requestAnimationFrame(frame)
     else last = 0
   }
+  // 前に動かした小物は、その場所から（ページの中だけで覚えている）
+  for (const p of props) {
+    const saved = propStore.get(p.id)
+    if (!saved) continue
+    collectObstacles(p)
+    if (!canPlace(p, saved)) continue
+    p.place = { ...saved }
+    p.group.position.set(saved.x, 0, saved.z)
+    p.group.rotation.y = (saved.rot * Math.PI) / 2
+  }
+  for (const p of props) p.group.position.set(p.place.x, 0, p.place.z)
+
   const ro = new ResizeObserver(resize)
   ro.observe(host)
   const io = new IntersectionObserver(([e]) => {
