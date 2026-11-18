@@ -1,10 +1,6 @@
 import { A, C, Callout, Cite, CodeBlock, Figure, Li, NoteSection, P, References, Strong, type Reference } from '@/components/notes/Prose'
-import { BruteVsHnsw } from '@/components/notes/hnsw/BruteVsHnsw'
-import { GreedyWalk } from '@/components/notes/hnsw/GreedyWalk'
-import { LayerSearch } from '@/components/notes/hnsw/LayerSearch'
-import { LevelDice } from '@/components/notes/hnsw/LevelDice'
-import { InsertNode } from '@/components/notes/hnsw/InsertNode'
-import { EfTradeoff } from '@/components/notes/hnsw/EfTradeoff'
+// 動く図は画面に近づいてから読み込む（components/notes/figures.tsx）
+import { BruteVsHnsw, GreedyWalk, LayerSearch, LevelDice, InsertNode, EfTradeoff } from '@/components/notes/figures'
 
 export const toc = [
   { id: 'why', title: { ja: 'なぜ調べたか', en: 'Why I looked into it' } },

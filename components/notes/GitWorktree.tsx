@@ -1,10 +1,8 @@
 import { PiArrowsSplitBold, PiBugBeetleBold, PiEyeBold, PiRobotBold } from 'react-icons/pi'
+// 動く図は画面に近づいてから読み込む（components/notes/figures.tsx）
+import { RepoModel, SwitchVsWorktree, SharedVsOwn, SameBranch } from '@/components/notes/figures'
 import type { IconType } from 'react-icons'
 import { C, Callout, Figure, Li, NoteSection, P, Strong, Terminal } from '@/components/notes/Prose'
-import { RepoModel } from '@/components/notes/worktree/RepoModel'
-import { SwitchVsWorktree } from '@/components/notes/worktree/SwitchVsWorktree'
-import { SharedVsOwn } from '@/components/notes/worktree/SharedVsOwn'
-import { SameBranch } from '@/components/notes/worktree/SameBranch'
 
 export const toc = [
   { id: 'why', title: { ja: 'なぜ調べたか', en: 'Why I looked into it' } },
