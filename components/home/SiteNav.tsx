@@ -28,9 +28,9 @@ export function SiteNav({ lang }: { lang: Lang }) {
     <>
       <header className="sticky top-0 z-50 bg-ground/85 backdrop-blur-md">
         <nav aria-label="Main" className="flex items-center gap-2 p-3 sm:p-5">
-          <a href="/" className="flex items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] dark:ring-1 dark:ring-inset dark:ring-ink/20">
+          <a href="/" className="flex items-center gap-[10px] rounded-[12px] bg-tile/90 px-[13px] py-[13px] text-[16px] font-extrabold sm:px-[14px] sm:py-[10px] tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] dark:ring-1 dark:ring-inset dark:ring-ink/20">
             <span aria-hidden className="mini-brick mt-[3px] h-[10px] w-[17px] rounded-[3px]" />
-            Kota Mizuno
+            <span className="sr-only sm:not-sr-only">Kota Mizuno</span>
           </a>
           {SECTIONS.map((id) => (
             <a
