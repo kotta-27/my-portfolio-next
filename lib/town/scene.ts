@@ -865,9 +865,26 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     el.classList.replace('cursor-grabbing', 'cursor-grab')
     if (!click) return
     const b = pick(e)
+    // パネルを開いているとき、ほかの建物と看板以外（地面・今いる建物・ベンチ）を押したら、パネルを閉じて道に戻る
+    if (panelOpen && (!b || 'place' in b || (!('href' in b) && b === focus))) {
+      toStreet()
+      return
+    }
     if (!b || 'place' in b) return
     if ('href' in b) input.onLink(b.href)
     else goTo(b.id)
+  }
+  /** 建物の前から、プロムナードの真ん中へ戻る（パネルは閉じる） */
+  function toStreet() {
+    goal = null
+    input.onLeave(true)
+    path = Math.abs(fig.position.z) > 0.5 ? [new THREE.Vector3(fig.position.x, 0, 0)] : []
+    if (input.reducedMotion && path.length) {
+      fig.position.z = 0
+      path = []
+    }
+    facing = 0
+    loop()
   }
   const onLeaveCanvas = () => {
     hover = null
@@ -921,17 +938,8 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       e.preventDefault()
       loop()
     } else if (e.key === 'ArrowDown') {
-      // 建物の前から、プロムナードの真ん中へ戻る（パネルは閉じる）
       e.preventDefault()
-      goal = null
-      input.onLeave(true)
-      path = Math.abs(fig.position.z) > 0.5 ? [new THREE.Vector3(fig.position.x, 0, 0)] : []
-      if (input.reducedMotion && path.length) {
-        fig.position.z = 0
-        path = []
-      }
-      facing = 0
-      loop()
+      toStreet()
     } else if (e.key === 'Enter' || e.key === 'ArrowUp') {
       const near = buildings.reduce((a, b) => (Math.abs(b.x - fig.position.x) < Math.abs(a.x - fig.position.x) ? b : a))
       if (Math.abs(near.x - fig.position.x) < 50) {
