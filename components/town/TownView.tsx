@@ -61,7 +61,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const [target, setTarget] = useState<Section | null>(null)
   // スマホ: 人形に一番近い建物（下の地図で今いる場所を示す）と、下から出るパネルの高さ（少しだけ / 全部）
   const [near, setNear] = useState<Section>('about')
-  const [sheetFull, setSheetFull] = useState(false)
+  const [sheetFull, setSheetFull] = useState(true)
   const sheetDrag = useRef<{ y: number } | null>(null)
   const stick = useRef<HTMLDivElement>(null)
   const t = town[lang]
@@ -159,9 +159,9 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
     bench.current?.setPanelOpen(open !== null, aside.current?.offsetWidth, sheetFull ? 0.86 : 0.4)
   }, [open, sheetFull])
 
-  // 別の建物に着いたら、パネルはまた少しだけの高さから
+  // 建物に着いたら、パネルは上まで開いた状態から（つまみを下へ引くと縮む）
   useEffect(() => {
-    setSheetFull(false)
+    setSheetFull(true)
   }, [open])
 
   useEffect(() => {
