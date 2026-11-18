@@ -294,8 +294,9 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     put(g, box(w, h, 1.6, 0.2), glass, x, y, z + 0.2)
   }
 
+  // 建物の x は、屋根（台より 1〜2 ポッチ広い）どうしが重ならないように決めてある
   // ABOUT: 小さな家
-  building('about', -170, (g) => {
+  building('about', -178, (g) => {
     const w = 7
     const d = 6
     const top = stack(g, w, d, 4, 'white', 0, (-d * P) / 2)
@@ -364,7 +365,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   })
 
   // OUTPUT: 図書館。白い柱の列と、マスタードの壁。柱の奥に本の山
-  building('output', 112, (g) => {
+  building('output', 116, (g) => {
     const w = 13
     const d = 7
     put(g, blockGeo(w + 1, d + 1, 1, false), mat('navy'), 0, 0, (-d * P) / 2)
@@ -383,7 +384,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   })
 
   // CONTACT: 郵便局と、通りのポスト
-  building('contact', 186, (g) => {
+  building('contact', 202, (g) => {
     const w = 6
     const d = 5
     // 人形（約 42mm）より背を高くして、着いたときに人形の頭が看板に重ならないようにする
@@ -708,7 +709,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     put(head, new THREE.SphereGeometry(5.3, 28, 10, 0, Math.PI * 2, 0, Math.PI / 2), mat('coral'), 0, 10.8, 0).scale.y = 0.45
     put(head, box(9, 0.9, 5, 0.3), mat('coral'), 0, 9.3, 5.2)
   }
-  fig.position.set(input.reducedMotion ? -170 : -250, 0, input.reducedMotion ? 0 : 0)
+  fig.position.set(input.reducedMotion ? -178 : -250, 0, input.reducedMotion ? 0 : 0)
   town.add(fig)
 
   // ───────── パネルを開いているあいだ、今いる建物と人形のほかを褪せさせる ─────────
