@@ -28,7 +28,8 @@ const LINK_ICONS: Record<TownLink['id'], IconType> = { x: FaXTwitter, github: Fa
 const DOT: Record<Section, string> = {
   about: 'bg-ink',
   works: 'bg-teal',
-  career: 'bg-mute',
+  // 経歴のビルの各階の帯の色（下から古い会社）を並べて、ほかの建物の単色と見分けられるようにする
+  career: 'bg-[linear-gradient(90deg,rgb(var(--mustard))_0_25%,rgb(var(--coral))_25%_50%,rgb(var(--mute))_50%_75%,rgb(var(--teal))_75%)]',
   output: 'bg-mustard',
   contact: 'bg-coral',
 }
@@ -260,7 +261,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
                   near === id ? 'bg-ink text-paper' : 'text-mute'
                 }`}
               >
-                <span aria-hidden className={`h-[7px] w-[12px] rounded-[2px] ${DOT[id]} ${near === id ? '' : 'opacity-60'}`} />
+                <span aria-hidden className={`h-[7px] w-[12px] rounded-[2px] ${DOT[id]} ${near === id ? 'ring-[1.5px] ring-paper/80' : 'opacity-60'}`} />
                 {t.buildings[id].title}
               </button>
             </li>
