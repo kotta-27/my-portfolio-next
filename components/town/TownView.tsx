@@ -1,9 +1,12 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { PiArrowRightBold, PiXBold } from 'react-icons/pi'
+import { FaGithub, FaXTwitter } from 'react-icons/fa6'
+import { SiZenn } from 'react-icons/si'
+import { PiArrowRightBold, PiEnvelopeSimpleBold, PiXBold } from 'react-icons/pi'
+import type { IconType } from 'react-icons'
 import type { Lang } from '@/types'
-import { town } from '@/data/town'
+import { town, townLinks, type TownLink } from '@/data/town'
 import { SECTIONS, isSection, type Section } from '@/lib/town/sections'
 import type { TownBench } from '@/lib/town/scene'
 import type { PanelContent } from '@/components/town/Panels'
@@ -16,6 +19,9 @@ type Props = {
   workImages: string[]
   careerLogos: string[]
 }
+
+/** 手前の歩道の看板のアイコン。3D の板に描くため、隠した DOM に描いて SVG を読み取る */
+const LINK_ICONS: Record<TownLink['id'], IconType> = { x: FaXTwitter, github: FaGithub, zenn: SiZenn, mail: PiEnvelopeSimpleBold }
 
 /** パネルの見出しの横の小さな四角。建物の色 */
 const DOT: Record<Section, string> = {
@@ -42,6 +48,7 @@ const FALLBACK: { id: Section; href: string }[] = [
 export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const host = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLElement>(null)
+  const icons = useRef<HTMLDivElement>(null)
   const bench = useRef<TownBench | null>(null)
   const [state, setState] = useState<'loading' | 'ready' | 'none'>('loading')
   const [open, setOpen] = useState<Section | null>(null)
@@ -73,6 +80,11 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
       if (cancelled) return
       bench.current = mountTown(el, {
         labels: t.buildings,
+        links: townLinks.map((l) => ({ ...l, icon: icons.current?.querySelector(`[data-icon="${l.id}"]`)?.innerHTML ?? '' })),
+        onLink: (href) => {
+          if (href.startsWith('mailto:')) location.href = href
+          else window.open(href, '_blank', 'noopener,noreferrer')
+        },
         workImages,
         careerLogos,
         reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
@@ -128,6 +140,18 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
     <section aria-label={t.label} className="relative h-[100svh] min-h-[560px] overflow-hidden bg-gradient-to-b from-tile/60 to-soft">
       {/* 街の描画先。← → で歩けるよう、フォーカスを受けられるようにする */}
       <div ref={host} tabIndex={0} aria-label={t.hint} className="absolute inset-0 outline-none" />
+
+      {/* 看板のアイコンの元（見えない）。three の板に描くときに SVG を読み取る */}
+      <div ref={icons} aria-hidden className="hidden">
+        {townLinks.map((l) => {
+          const Icon = LINK_ICONS[l.id]
+          return (
+            <span key={l.id} data-icon={l.id}>
+              <Icon />
+            </span>
+          )
+        })}
+      </div>
 
       <nav aria-label="Main" className="absolute inset-x-0 top-0 z-10 flex flex-wrap items-center gap-2 p-3 sm:p-5">
         <a href="/" className="hidden items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] sm:flex">

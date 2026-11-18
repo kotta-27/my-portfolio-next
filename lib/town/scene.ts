@@ -42,6 +42,9 @@ export type TownInput = {
   workImages: string[]
   /** 4 階建ての各階のロゴ。下の階（古い会社）から順に */
   careerLogos: string[]
+  /** 手前の歩道に立てる、外へのリンクの看板。icon は SVG のマークアップ（色は fg で塗る） */
+  links: { href: string; label: string; icon: string; bg: string; fg: string }[]
+  onLink: (href: string) => void
   reducedMotion: boolean
   onArrive: (id: Section) => void
   /** 人形が歩き出した（パネルを閉じる合図）。toStreet は、どの建物にも向かわず通りに出たとき（← → ↓ キー） */
@@ -385,17 +388,71 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     g.position.set(x, 0, z)
     town.add(g)
   }
-  const trees: [number, number, number][] = [[-210, 60, 1.1], [-150, 80, 0.9], [-30, 70, 1], [40, 90, 1.2], [150, 64, 0.95], [210, 86, 1.05], [-110, -100, 1.2], [70, -100, 1], [150, -96, 0.9], [-225, -90, 1]]
+  const trees: [number, number, number][] = [[-210, 60, 1.1], [-150, 80, 0.9], [-110, 96, 1], [86, 98, 1.2], [150, 64, 0.95], [210, 86, 1.05], [-110, -100, 1.2], [70, -100, 1], [150, -96, 0.9], [-225, -90, 1]]
   for (const [x, z, s] of trees) tree(x, z, s)
   for (let x = -200; x <= 200; x += 80) {
     put(town, new THREE.CylinderGeometry(0.9, 1.2, 44, 8), mat('black'), x, 22, 30)
     put(town, new THREE.CylinderGeometry(3, 2, 4, 12), mat('white'), x, 46, 30)
   }
-  for (const x of [-120, 70]) {
+  for (const x of [-120, 110]) {
     put(town, blockGeo(4, 1, 1), mat('dark'), x, 4, 50)
     stack(town, 1, 1, 1, 'dark', x - 12, 50, 0, false)
     stack(town, 1, 1, 1, 'dark', x + 12, 50, 0, false)
   }
+
+  // ───────── 手前の歩道の看板（X・GitHub などへのリンク） ─────────
+  // 2 × 4 の台に、4 × 4 の板を少し後ろへ倒して立てる。板の前の面にアイコンと名前を描く
+  type Signpost = { group: THREE.Group; href: string; lift: number }
+  const signposts: Signpost[] = []
+  const drawSign = (link: TownInput['links'][number]) => {
+    const c = document.createElement('canvas')
+    c.width = c.height = 256
+    const ctx = c.getContext('2d')
+    const tex = new THREE.CanvasTexture(c)
+    tex.colorSpace = THREE.SRGBColorSpace
+    tex.anisotropy = 8
+    if (!ctx) return tex
+    const paint = (img?: HTMLImageElement) => {
+      ctx.fillStyle = link.bg
+      ctx.fillRect(0, 0, 256, 256)
+      if (img) ctx.drawImage(img, 68, 34, 120, 120)
+      ctx.fillStyle = link.fg
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.font = `800 30px ${fontFamily}`
+      ctx.fillText(link.label, 128, 200, 228)
+      tex.needsUpdate = true
+      needsRender = true
+    }
+    paint()
+    const img = new Image()
+    // 読み込みは組み立てのあと（描画のループができてから）に終わるので、ここで描き直しを頼める
+    img.onload = () => {
+      paint(img)
+      loop()
+    }
+    // 画像として読むには xmlns が要る（DOM から取った SVG には付いていないことがある）
+    let svg = link.icon.replace(/currentColor/g, link.fg).replace(/\s(width|height)="[^"]*"/g, '')
+    svg = svg.replace('<svg', `<svg width="120" height="120"${svg.includes('xmlns=') ? '' : ' xmlns="http://www.w3.org/2000/svg"'}`)
+    img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`
+    return tex
+  }
+  input.links.forEach((link, i) => {
+    const group = new THREE.Group()
+    group.position.set(-70 + i * 36, 0, 46)
+    put(group, blockGeo(4, 2, 1), mat('dark'), 0, 0, 0)
+    const board = new THREE.Group()
+    board.position.set(0, PLATE, 0)
+    board.rotation.x = -0.18
+    group.add(board)
+    put(board, box(4 * P - 0.4, 4 * P - 0.4, 3.2, 0.6), mat('white'), 0, 0, 0)
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(4 * P - 3, 4 * P - 3), new THREE.MeshBasicMaterial({ map: drawSign(link), toneMapped: false }))
+    face.position.set(0, (4 * P - 0.4) / 2, 1.65)
+    board.add(face)
+    group.userData.href = link.href
+    town.add(group)
+    signposts.push({ group, href: link.href, lift: 0 })
+  })
 
   // ───────── 人形 ─────────
   const fig = new THREE.Group()
@@ -506,16 +563,17 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   // ───────── 操作: 建物をクリックで向かう、ドラッグで回す。街にフォーカスがあるときは ← → で歩き、↑ / Enter で入り、↓ で道に戻る ─────────
   const ray = new THREE.Raycaster()
   const ndc = new THREE.Vector2()
-  let hover: Building | null = null
-  const pick = (e: PointerEvent) => {
+  type Target = Building | Signpost
+  let hover: Target | null = null
+  const pick = (e: PointerEvent): Target | null => {
     const r = renderer.domElement.getBoundingClientRect()
     ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1)
     ray.setFromCamera(ndc, camera)
-    const hit = ray.intersectObjects(buildings.map((b) => b.group), true)[0]
+    const hit = ray.intersectObjects([...buildings.map((b) => b.group), ...signposts.map((s) => s.group)], true)[0]
     if (!hit) return null
     let o: THREE.Object3D | null = hit.object
-    while (o && !o.userData.id) o = o.parent
-    return buildings.find((b) => b.group === o) ?? null
+    while (o && !o.userData.id && !o.userData.href) o = o.parent
+    return buildings.find((b) => b.group === o) ?? signposts.find((s) => s.group === o) ?? null
   }
   let drag: { x: number; y: number; moved: number } | null = null
   const el = renderer.domElement
@@ -551,7 +609,9 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     el.classList.replace('cursor-grabbing', 'cursor-grab')
     if (!click) return
     const b = pick(e)
-    if (b) goTo(b.id)
+    if (!b) return
+    if ('href' in b) input.onLink(b.href)
+    else goTo(b.id)
   }
   const onLeaveCanvas = () => {
     hover = null
@@ -675,6 +735,13 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       const y = (b === hover ? 1.6 : 0) + Math.sin((1 - b.pop) * Math.PI) * b.pop * 4
       b.group.position.y += (y - b.group.position.y) * Math.min(1, dt * 14)
       if (Math.abs(y - b.group.position.y) > 0.01 || b.pop > 0) moving = true
+    }
+    // 看板: カーソルを乗せると少し持ち上がる
+    for (const sp of signposts) {
+      const goal = sp === hover ? 3 : 0
+      sp.lift += (goal - sp.lift) * Math.min(1, dt * 14)
+      sp.group.position.y = sp.lift
+      if (Math.abs(goal - sp.lift) > 0.01) moving = true
     }
     if (!input.reducedMotion) for (const g of gears) g.rotation.z = ((clock * 6) / (g.userData.t as number)) * (g.userData.t === 8 ? -1 : 1)
 
