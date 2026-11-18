@@ -51,8 +51,8 @@ export type TownInput = {
 
 export type TownBench = {
   goTo: (id: Section) => void
-  /** パネルが開いているか。開いているあいだは、人形がパネルに隠れないよう絵をずらす */
-  setPanelOpen: (open: boolean) => void
+  /** パネルが開いているか（と、その幅 px）。開いているあいだは、人形がパネルに隠れないよう絵をずらす */
+  setPanelOpen: (open: boolean, width?: number) => void
   dispose: () => void
 }
 
@@ -443,6 +443,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   let vw = 1
   let vh = 1
   let panelOpen = false
+  let panelWidth = 420
   const resize = () => {
     vw = host.clientWidth
     vh = host.clientHeight
@@ -462,7 +463,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     const right = new THREE.Vector3(Math.cos(view.yaw), 0, -Math.sin(view.yaw))
     const t = view.target.clone()
     // パネルが開いているあいだは、人形がパネルに隠れないよう絵をずらす（広い画面は右に、スマホは下に出る）
-    if (panelOpen && !narrow()) t.addScaledVector(right, (Math.min(420, vw * 0.36) / vw) * size * aspect * 0.5)
+    if (panelOpen && !narrow()) t.addScaledVector(right, (Math.min(panelWidth + 16, vw * 0.6) / vw) * size * aspect * 0.5)
     if (panelOpen && narrow()) t.y -= (size * 0.26) / Math.cos(view.pitch)
     camera.position.copy(t).addScaledVector(dir, 1000)
     camera.lookAt(t)
@@ -692,8 +693,9 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
 
   return {
     goTo,
-    setPanelOpen(open) {
+    setPanelOpen(open, width) {
       panelOpen = open
+      if (width) panelWidth = width
       loop()
     },
     dispose() {

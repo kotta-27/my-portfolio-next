@@ -17,6 +17,15 @@ type Props = {
   careerLogos: string[]
 }
 
+/** 広い画面でのパネルの幅。作ったものは画像を大きく見せたいので 1.5 倍 */
+const WIDTH: Record<Section, string> = {
+  about: 'sm:w-[min(400px,36%)]',
+  works: 'sm:w-[min(600px,54%)]',
+  career: 'sm:w-[min(400px,36%)]',
+  output: 'sm:w-[min(400px,36%)]',
+  contact: 'sm:w-[min(400px,36%)]',
+}
+
 /** パネルの見出しの横の小さな四角。建物の色 */
 const DOT: Record<Section, string> = {
   about: 'bg-ink',
@@ -41,6 +50,7 @@ const FALLBACK: { id: Section; href: string }[] = [
  */
 export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const host = useRef<HTMLDivElement>(null)
+  const aside = useRef<HTMLElement>(null)
   const bench = useRef<TownBench | null>(null)
   const [state, setState] = useState<'loading' | 'ready' | 'none'>('loading')
   const [open, setOpen] = useState<Section | null>(null)
@@ -104,7 +114,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   }, [])
 
   useEffect(() => {
-    bench.current?.setPanelOpen(open !== null)
+    bench.current?.setPanelOpen(open !== null, aside.current?.offsetWidth)
   }, [open])
 
   useEffect(() => {
@@ -168,9 +178,10 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
       </div>
 
       <aside
+        ref={aside}
         aria-live="polite"
         aria-hidden={!panel}
-        className={`absolute z-20 flex flex-col gap-[14px] overflow-auto rounded-[20px] bg-tile px-6 pb-[26px] pt-[22px] text-ink shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.1),0_20px_50px_rgb(var(--shadow-rgb)/0.12)] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.8,.2,1)] inset-x-[10px] bottom-[10px] h-[56%] sm:inset-x-auto sm:bottom-4 sm:right-4 sm:top-[84px] sm:h-auto sm:w-[min(400px,36%)] ${
+        className={`absolute z-20 flex flex-col gap-[14px] overflow-auto rounded-[20px] bg-tile px-6 pb-[26px] pt-[22px] text-ink shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.1),0_20px_50px_rgb(var(--shadow-rgb)/0.12)] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.8,.2,1)] inset-x-[10px] bottom-[10px] h-[56%] sm:inset-x-auto sm:bottom-4 sm:right-4 sm:top-[84px] sm:h-auto ${WIDTH[open ?? 'about']} ${
           panel ? 'translate-x-0 translate-y-0' : 'translate-y-[calc(100%+20px)] sm:translate-x-[calc(100%+30px)] sm:translate-y-0'
         }`}
       >
