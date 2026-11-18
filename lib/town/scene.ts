@@ -362,15 +362,19 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   building('contact', 186, (g) => {
     const w = 6
     const d = 5
-    const top = stack(g, w, d, 3, 'coral', 0, (-d * P) / 2)
+    // 人形（約 42mm）より背を高くして、着いたときに人形の頭が看板に重ならないようにする
+    const top = stack(g, w, d, 5, 'coral', 0, (-d * P) / 2)
     put(g, blockGeo(w + 1, d + 1, 1), mat('white'), 0, top, (-d * P) / 2)
-    put(g, box(12, 22, 1.6, 0.4), mat('white'), -8, 0, 0.6)
-    windowPane(g, 12, 10, 10, 10)
-    const s = sign(L.contact.title, L.contact.sub, 34, 9, '#ffffff', COL.coral)
-    s.position.set(0, top + PLATE + 1, -2)
+    put(g, box(12, 24, 1.6, 0.4), mat('white'), -8, 0, 0.6)
+    windowPane(g, 12, 12, 10, 12)
+    windowPane(g, 0, 32, 30, 8)
+    // 看板は屋根の前の縁より手前に立てる（屋根のスタッドに隠れないように）
+    const s = sign(L.contact.title, L.contact.sub, 40, 11, '#ffffff', COL.coral)
+    s.position.set(0, top + PLATE + 7.5, 6)
     g.add(s)
-    const post = stack(g, 2, 2, 3, 'coral', -26, 30, 0)
-    put(g, box(10, 1.2, 1, 0.3), mat('navy'), -26, post - 7, 30 + P + 0.2)
+    // ポストは通りの向かい側（南の歩道）に置く。プロムナードに置くと、人形が歩く道とぶつかる
+    const post = stack(g, 2, 2, 3, 'coral', -16, 66, 0)
+    put(g, box(10, 1.2, 1, 0.3), mat('navy'), -16, post - 7, 66 + P + 0.2)
   })
 
   // 公園（木・ベンチ・街灯）。背の低いものだけにして、建物を隠さない
@@ -662,8 +666,8 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     }
     if (!input.reducedMotion) for (const g of gears) g.rotation.z = ((clock * 6) / (g.userData.t as number)) * (g.userData.t === 8 ? -1 : 1)
 
-    // カメラは人形を追いかける（広い画面では、街の真ん中との間）
-    const want = new THREE.Vector3(narrow() ? fig.position.x : fig.position.x * 0.55, 18, narrow() ? -10 : -24)
+    // カメラは人形を追いかける（広い画面では、街の真ん中との間。パネルが開いたら人形と建物を真ん中に）
+    const want = new THREE.Vector3(narrow() || panelOpen ? fig.position.x : fig.position.x * 0.55, 18, narrow() ? -10 : -24)
     view.target.lerp(want, input.reducedMotion ? 1 : Math.min(1, dt * 3))
     if (view.target.distanceTo(want) > 0.2) moving = true
     placeCamera()
