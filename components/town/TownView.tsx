@@ -8,6 +8,7 @@ import type { IconType } from 'react-icons'
 import type { Lang } from '@/types'
 import { town, townLinks, type TownLink } from '@/data/town'
 import { SECTIONS, isSection, type Section } from '@/lib/town/sections'
+import { DOT } from '@/components/town/dots'
 import type { TownBench } from '@/lib/town/scene'
 import type { PanelContent } from '@/components/town/Panels'
 import { LangToggle, saveLang } from '@/components/LangToggle'
@@ -24,15 +25,6 @@ type Props = {
 /** 手前の歩道の看板のアイコン。3D の板に描くため、隠した DOM に描いて SVG を読み取る */
 const LINK_ICONS: Record<TownLink['id'], IconType> = { x: FaXTwitter, github: FaGithub, zenn: SiZenn, mail: PiEnvelopeSimpleBold }
 
-/** パネルの見出しの横の小さな四角。建物の色 */
-const DOT: Record<Section, string> = {
-  about: 'bg-ink',
-  works: 'bg-teal',
-  // 経歴のビルの各階の帯の色（下から古い会社）を並べて、ほかの建物の単色と見分けられるようにする
-  career: 'bg-[linear-gradient(90deg,rgb(var(--mustard))_0_25%,rgb(var(--coral))_25%_50%,rgb(var(--mute))_50%_75%,rgb(var(--teal))_75%)]',
-  output: 'bg-mustard',
-  contact: 'bg-coral',
-}
 
 /** WebGL が使えないとき、街の代わりに出すリンク */
 const FALLBACK: { id: Section; href: string }[] = [

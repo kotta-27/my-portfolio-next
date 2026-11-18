@@ -9,7 +9,7 @@ export function SiteShell({ lang, children }: { lang: Lang; children: ReactNode 
     <div className="min-h-screen font-sans text-ink">
       <SiteNav lang={lang} />
       <main className="mx-auto flex max-w-[1312px] flex-col gap-24 px-5 pb-16 sm:gap-28 sm:px-8 lg:px-16">{children}</main>
-      <footer className="mx-auto flex max-w-[1312px] flex-col gap-5 px-5 pb-10 sm:px-8 lg:px-16">
+      <footer className="mx-auto flex max-w-[1312px] flex-col gap-5 px-5 pb-28 sm:px-8 sm:pb-10 lg:px-16">
         <span aria-hidden className="h-px bg-ink/10" />
         <div className="flex flex-col items-start justify-between gap-4 text-[13px] text-mute sm:flex-row sm:items-center">
           <a href="/" className="flex items-center gap-[10px] font-extrabold tracking-[-0.02em] text-ink no-underline">

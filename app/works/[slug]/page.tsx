@@ -20,7 +20,7 @@ function Neighbor({ project, label, dir }: { project: ProjectItem; label: string
   return (
     <a
       href={`/works/${project.slug}`}
-      className={`group flex items-center gap-4 rounded-[18px] bg-tile p-4 text-ink no-underline ${dir === 'next' ? 'flex-row-reverse text-right' : ''}`}
+      className={`group flex min-w-0 items-center gap-4 rounded-[18px] bg-tile p-4 text-ink no-underline ${dir === 'next' ? 'flex-row-reverse text-right' : ''}`}
     >
       <span className="relative block aspect-[16/10] w-[120px] shrink-0 overflow-hidden rounded-[10px] bg-soft sm:w-[160px]">
         <Image src={project.image} alt="" fill sizes="160px" className="object-cover object-top" />
