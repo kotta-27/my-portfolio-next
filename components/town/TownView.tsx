@@ -77,7 +77,14 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         careerLogos,
         reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
         onArrive: (id) => setOpen(id),
-        onLeave: () => setOpen(null),
+        onLeave: (toStreet) => {
+          setOpen(null)
+          // 通りに出たら、どの建物も選んでいない状態に戻す
+          if (toStreet) {
+            setTarget(null)
+            if (location.hash.startsWith('#at-')) history.replaceState(null, '', location.pathname + location.search)
+          }
+        },
         onReady: () => setState('ready'),
       })
       const first = location.hash.replace(/^#at-/, '')

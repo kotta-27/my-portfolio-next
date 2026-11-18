@@ -44,8 +44,8 @@ export type TownInput = {
   careerLogos: string[]
   reducedMotion: boolean
   onArrive: (id: Section) => void
-  /** 人形が歩き出した（パネルを閉じる合図） */
-  onLeave: () => void
+  /** 人形が歩き出した（パネルを閉じる合図）。toStreet は、どの建物にも向かわず通りに出たとき（← → ↓ キー） */
+  onLeave: (toStreet: boolean) => void
   onReady: () => void
 }
 
@@ -483,7 +483,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   const goTo = (id: Section) => {
     const b = buildings.find((x) => x.id === id)
     if (!b) return
-    input.onLeave()
+    input.onLeave(false)
     goal = b
     if (input.reducedMotion) {
       fig.position.copy(b.door)
@@ -573,14 +573,14 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       keys.add(e.key)
       path = []
       goal = null
-      input.onLeave()
+      input.onLeave(true)
       e.preventDefault()
       loop()
     } else if (e.key === 'ArrowDown') {
       // 建物の前から、プロムナードの真ん中へ戻る（パネルは閉じる）
       e.preventDefault()
       goal = null
-      input.onLeave()
+      input.onLeave(true)
       path = Math.abs(fig.position.z) > 0.5 ? [new THREE.Vector3(fig.position.x, 0, 0)] : []
       if (input.reducedMotion && path.length) {
         fig.position.z = 0
