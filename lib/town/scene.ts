@@ -837,6 +837,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   let panelOpen = false
   let panelWidth = 420
   let sheet = 0.56
+  let zoom = 1
   const resize = () => {
     vw = host.clientWidth
     vh = host.clientHeight
@@ -846,7 +847,8 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   }
   const narrow = () => vw < 700
   const placeCamera = () => {
-    const size = narrow() ? 230 : 230
+    // 経歴のビルのパネルを開いているあいだは、4 階まで入るように少し引く
+    const size = 230 * zoom
     const aspect = vw / vh
     camera.left = (-size * aspect) / 2
     camera.right = (size * aspect) / 2
@@ -1477,6 +1479,12 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     // 東の端まで歩いたら、道の先（霧の向こう）が見えるように、さらに右へ寄せる
     const east = Math.max(0, fig.position.x - 150) * 0.9
     const want = new THREE.Vector3(narrow() || panelOpen ? fig.position.x : fig.position.x * 0.55 + east, 18, narrow() ? -10 : -24)
+    // 経歴のビル（4 階建て）のパネルを開いているときだけ引き、ビルの真ん中の高さを見る
+    const tall = panelOpen && focus?.group.userData.id === 'career'
+    const zoomGoal = tall ? (narrow() ? 1.65 : 1.3) : 1
+    zoom += (zoomGoal - zoom) * (input.reducedMotion ? 1 : Math.min(1, dt * 4))
+    if (Math.abs(zoomGoal - zoom) > 0.002) moving = true
+    want.y += tall ? (narrow() ? 46 : 34) : 0
     view.target.lerp(want, input.reducedMotion ? 1 : Math.min(1, dt * 3))
     if (view.target.distanceTo(want) > 0.2) moving = true
     placeCamera()
