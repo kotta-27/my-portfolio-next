@@ -492,6 +492,35 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     signposts.push({ group, href: link.href, lift: 0 })
   })
 
+  /** 台のブロックの前の面に、刷り込みのような小さな文字を貼る（操作盤の銘板） */
+  const plateLabel = (parent: THREE.Object3D, text: string, w: number, z: number) => {
+    const c = document.createElement('canvas')
+    c.width = 512
+    c.height = 96
+    const ctx = c.getContext('2d')
+    if (ctx) {
+      ctx.fillStyle = 'rgba(255,255,255,0.88)'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      ctx.font = `700 54px "JetBrains Mono", ui-monospace, monospace`
+      // 字間を空けて、銘板らしく
+      const letters = text.split('')
+      const gap = 10
+      const widths = letters.map((l) => ctx.measureText(l).width)
+      let x = (512 - (widths.reduce((a, b) => a + b, 0) + gap * (letters.length - 1))) / 2
+      letters.forEach((l, i) => {
+        ctx.fillText(l, x + widths[i] / 2, 50)
+        x += widths[i] + gap
+      })
+    }
+    const t = new THREE.CanvasTexture(c)
+    t.colorSpace = THREE.SRGBColorSpace
+    t.anisotropy = 8
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, (w * 96) / 512), new THREE.MeshBasicMaterial({ map: t, transparent: true, toneMapped: false }))
+    m.position.set(0, BR / 2, z + 0.06)
+    parent.add(m)
+  }
+
   // ───────── 手前の左のレバー（ライト / ダークの切り替え） ─────────
   // 2 本の柱に軸が 2 本。レバー付きの 24 歯の歯車が、8 歯の歯車を 3 倍の角度で回し、白と紺の円板が半回転して今のモードを見せる
   const lever = (() => {
@@ -500,6 +529,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     group.position.set(-168, 0, 120)
     group.userData.lever = true
     stack(group, 4, 2, 1, 'dark', 0, 0, 0, true)
+    plateLabel(group, 'LIGHTS', 26, P)
     // 仕掛けは 0.6 倍の大きさにする（台はスタッドに合わせたいので縮めない）
     const SCALE = 0.6
     const rig = new THREE.Group()
@@ -535,6 +565,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     group.position.set(-128, 0, 120) // 4 × 2 の台。スタッドに合わせて中心は 8 の倍数
     group.userData.flip = true
     stack(group, 4, 2, 1, 'dark', 0, 0, 0, true)
+    plateLabel(group, 'LANGUAGE', 28, P)
     const SCALE = 0.6
     const rig = new THREE.Group()
     rig.scale.setScalar(SCALE)
