@@ -56,7 +56,7 @@ export const home: Record<Lang, HomeStrings> = {
     career: { eyebrow: 'CAREER', title: '経歴', more: '詳しく見る', now: 'NOW' },
     output: { eyebrow: 'OUTPUT', title: '書いたもの', more: (n) => `すべて見る（${n}）`, read: '読む' },
     contact: { eyebrow: 'CONTACT', title: "Let's build something.", body: 'お仕事の相談も、技術の話も、気軽にどうぞ。' },
-    footer: '© 2026 水野航太',
+    footer: '© 2026 Kota Mizuno',
     pages: {
       back: 'トップへ',
       projects: { title: '作ったもの', blurb: '個人で作ったアプリ、ハッカソンの作品、研究のツール。' },
