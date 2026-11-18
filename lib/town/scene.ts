@@ -50,6 +50,11 @@ export type TownInput = {
   onLink: (href: string) => void
   /** 手前の左のレバーを倒した（ライト / ダークを入れ替える） */
   onToggleTheme: () => void
+  /** 今の言語（札の最初の向き）。札を回し終えたら onToggleLang を呼ぶ */
+  lang: 'ja' | 'en'
+  onToggleLang: () => void
+  /** 札の上に添える、押せることを伝える小さな札（HTML）。街が毎フレーム位置を合わせる */
+  langHint?: HTMLElement | null
   /** 今がダークか（レバーの最初の向き） */
   dark: boolean
   /** パネルを開いているあいだ、今いる建物と人形のほかを、背景の色へ褪せさせる（後ろの街がうるさくならないように） */
@@ -521,6 +526,59 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   })()
   solids.push(lever.group)
 
+  // ───────── レバーの右隣の札（言語の切り替え） ─────────
+  // 2 本の柱に渡した軸に、表が EN・裏が JA の札。押すと半回転し、回り終えたら言語を切り替える
+  const flip = (() => {
+    const group = new THREE.Group()
+    group.position.set(-128, 0, 120) // 4 × 2 の台。スタッドに合わせて中心は 8 の倍数
+    group.userData.flip = true
+    stack(group, 4, 2, 1, 'dark', 0, 0, 0, true)
+    const SCALE = 0.6
+    const rig = new THREE.Group()
+    rig.scale.setScalar(SCALE)
+    rig.position.set(0, BR, 0)
+    group.add(rig)
+    for (const x of [-20, 20]) {
+      const post = put(rig, liftarmGeometry(4), mat('gray'), x, 2, 0)
+      post.rotation.z = Math.PI / 2
+      post.rotation.y = Math.PI / 2
+    }
+    put(rig, axleGeometry(44), mat('black'), 0, 26, 0).rotation.y = Math.PI / 2
+    const card = new THREE.Group()
+    card.position.set(0, 26, 0)
+    rig.add(card)
+    put(card, box(30, 22, 6, 1), mat('white'), 0, -11, 0)
+    const face = (text: string, bg: string) => {
+      const c = document.createElement('canvas')
+      c.width = 256
+      c.height = 180
+      const ctx = c.getContext('2d')
+      if (ctx) {
+        ctx.fillStyle = bg
+        ctx.fillRect(0, 0, 256, 180)
+        ctx.fillStyle = '#ffffff'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.font = `800 96px ${fontFamily}`
+        ctx.fillText(text, 128, 98)
+      }
+      const t = new THREE.CanvasTexture(c)
+      t.colorSpace = THREE.SRGBColorSpace
+      t.anisotropy = 8
+      return new THREE.Mesh(new THREE.PlaneGeometry(27, 19), new THREE.MeshBasicMaterial({ map: t, toneMapped: false }))
+    }
+    const front = face('EN', COL.navy)
+    front.position.z = 3.05
+    const back = face('JA', COL.coral)
+    back.position.z = -3.05
+    back.rotation.x = Math.PI
+    card.add(front, back)
+    town.add(group)
+    const a = input.lang === 'ja' ? Math.PI : 0
+    return { group, card, angle: a, goal: a, sent: true }
+  })()
+  solids.push(flip.group)
+
   // ───────── 人形 ─────────
   const fig = new THREE.Group()
   const legL = new THREE.Group()
@@ -701,7 +759,8 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   const ray = new THREE.Raycaster()
   const ndc = new THREE.Vector2()
   type Lever = typeof lever
-  type Target = Building | Signpost | Prop | Lever
+  type Flip = typeof flip
+  type Target = Building | Signpost | Prop | Lever | Flip
   let hover: Target | null = null
   const aim = (e: PointerEvent) => {
     const r = renderer.domElement.getBoundingClientRect()
@@ -710,11 +769,12 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   }
   const pick = (e: PointerEvent): Target | null => {
     aim(e)
-    const hit = ray.intersectObjects([...buildings.map((b) => b.group), ...signposts.map((s) => s.group), ...props.map((p) => p.group), lever.group], true)[0]
+    const hit = ray.intersectObjects([...buildings.map((b) => b.group), ...signposts.map((s) => s.group), ...props.map((p) => p.group), lever.group, flip.group], true)[0]
     if (!hit) return null
     let o: THREE.Object3D | null = hit.object
-    while (o && !o.userData.id && !o.userData.href && !o.userData.prop && !o.userData.lever) o = o.parent
+    while (o && !o.userData.id && !o.userData.href && !o.userData.prop && !o.userData.lever && !o.userData.flip) o = o.parent
     if (o === lever.group) return lever
+    if (o === flip.group) return flip
     return buildings.find((b) => b.group === o) ?? signposts.find((s) => s.group === o) ?? props.find((p) => p.group === o) ?? null
   }
 
@@ -936,6 +996,15 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     if (!click) return
     const b = pick(e)
     // レバー: ライト / ダークを入れ替える（パネルは開いたまま）
+    // 札: 半回転させ、回り終えたら言語を切り替える（パネルは開いたまま）
+    if (b === flip) {
+      if (!flip.sent) return
+      flip.goal = flip.goal === 0 ? Math.PI : 0
+      flip.sent = false
+      sfx.turn(pan(flip.group.position.x))
+      loop()
+      return
+    }
     if (b === lever) {
       flipLever()
       input.onToggleTheme()
@@ -946,7 +1015,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       toStreet()
       return
     }
-    if (!b || 'place' in b || b === lever) return
+    if (!b || 'place' in b || b === lever || b === flip) return
     if ('href' in b) input.onLink(b.href)
     else if ('id' in b) goTo(b.id)
   }
@@ -1128,6 +1197,19 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       moving = true
     }
     // 看板: カーソルを乗せると少し持ち上がる
+    // 札: 回り終えたら言語を切り替える（画面を作り直すので、その前に回し切る）
+    {
+      const d = flip.goal - flip.angle
+      flip.angle += d * Math.min(1, dt * (input.reducedMotion ? 60 : 8))
+      if (Math.abs(d) < 0.003) flip.angle = flip.goal
+      flip.card.rotation.x = flip.angle
+      if (flip.angle !== flip.goal) moving = true
+      else if (!flip.sent) {
+        flip.sent = true
+        sfx.click(2, pan(flip.group.position.x))
+        input.onToggleLang()
+      }
+    }
     // レバー: 倒れる向きへ回る（台は動かさない）。小さい歯車は逆向きに 3 倍回る
     {
       const d = lever.goal - lever.angle
@@ -1150,6 +1232,12 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     view.target.lerp(want, input.reducedMotion ? 1 : Math.min(1, dt * 3))
     if (view.target.distanceTo(want) > 0.2) moving = true
     placeCamera()
+    // 札の上の案内を、札の真上に合わせる。パネルを開いているあいだは隠す
+    if (input.langHint) {
+      const p = new THREE.Vector3(flip.group.position.x, BR + 32, flip.group.position.z).project(camera)
+      input.langHint.style.transform = `translate(-50%, -100%) translate(${((p.x + 1) / 2) * vw}px, ${((1 - p.y) / 2) * vh}px)`
+      input.langHint.dataset.show = panelOpen ? 'false' : 'true'
+    }
     renderer.render(scene, camera)
     needsRender = false
     if (!readySent) {

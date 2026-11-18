@@ -7,6 +7,12 @@ import type { Lang } from '@/types'
 
 const LANGS: Lang[] = ['en', 'ja']
 
+/** 言語を cookie に保存する（kotap.dev 上では www と blog で共有）。画面の更新は呼んだ側で行う。街の札からも呼ぶ */
+export function saveLang(target: Lang) {
+  const domain = location.hostname.endsWith('kotap.dev') ? '; domain=.kotap.dev' : ''
+  document.cookie = `lang=${target}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax${domain}`
+}
+
 /** EN / JA segmented switch; the teal pill slides to the active language. */
 export function LangToggle({ lang }: { lang: Lang }) {
   const router = useRouter()
@@ -15,8 +21,7 @@ export function LangToggle({ lang }: { lang: Lang }) {
   // 言語は URL に載せず cookie に保存する。kotap.dev 上では www と blog で共有する
   function switchTo(target: Lang) {
     if (target === lang) return
-    const domain = location.hostname.endsWith('kotap.dev') ? '; domain=.kotap.dev' : ''
-    document.cookie = `lang=${target}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax${domain}`
+    saveLang(target)
     startTransition(() => router.refresh())
   }
 

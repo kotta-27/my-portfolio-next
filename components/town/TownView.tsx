@@ -10,7 +10,8 @@ import { town, townLinks, type TownLink } from '@/data/town'
 import { SECTIONS, isSection, type Section } from '@/lib/town/sections'
 import type { TownBench } from '@/lib/town/scene'
 import type { PanelContent } from '@/components/town/Panels'
-import { LangToggle } from '@/components/LangToggle'
+import { LangToggle, saveLang } from '@/components/LangToggle'
+import { useRouter } from 'next/navigation'
 import { ThemeToggle, toggleTheme } from '@/components/ThemeToggle'
 
 type Props = {
@@ -49,6 +50,8 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const host = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLElement>(null)
   const icons = useRef<HTMLDivElement>(null)
+  const langHint = useRef<HTMLSpanElement>(null)
+  const router = useRouter()
   const bench = useRef<TownBench | null>(null)
   const [state, setState] = useState<'loading' | 'ready' | 'none'>('loading')
   const [open, setOpen] = useState<Section | null>(null)
@@ -85,6 +88,12 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         links: townLinks.map((l) => ({ ...l, icon: icons.current?.querySelector(`[data-icon="${l.id}"]`)?.innerHTML ?? '' })),
         dark: document.documentElement.classList.contains('dark'),
         onToggleTheme: toggleTheme,
+        lang,
+        langHint: langHint.current,
+        onToggleLang: () => {
+          saveLang(lang === 'ja' ? 'en' : 'ja')
+          router.refresh()
+        },
         onLink: (href) => {
           if (href.startsWith('mailto:')) location.href = href
           else window.open(href, '_blank', 'noopener,noreferrer')
@@ -160,6 +169,16 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
           )
         })}
       </div>
+
+      {/* 言語の札の上の、控えめな案内。読めない人に向けて、今と反対の言語で書く。位置は街が合わせる（lib/town/scene.ts） */}
+      <span
+        ref={langHint}
+        aria-hidden
+        data-show="false"
+        className="pointer-events-none absolute left-0 top-0 z-[5] whitespace-nowrap rounded-full bg-tile/85 px-[10px] py-[5px] text-[11px] font-bold text-mute shadow-[0_1px_2px_rgb(var(--shadow-rgb)/0.12)] transition-opacity duration-500 data-[show=false]:opacity-0"
+      >
+        {t.langHint}
+      </span>
 
       <nav aria-label="Main" className="absolute inset-x-0 top-0 z-10 flex flex-wrap items-center gap-2 p-3 sm:p-5">
         <a href="/" className="hidden items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] sm:flex">
