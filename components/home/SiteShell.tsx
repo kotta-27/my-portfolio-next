@@ -21,7 +21,7 @@ export function SiteShell({ lang, children }: { lang: Lang; children: ReactNode 
               { href: '/projects', label: home[lang].nav.projects },
               { href: '/career', label: home[lang].nav.career },
               { href: '/output', label: home[lang].nav.output },
-              { href: '/#contact', label: home[lang].nav.contact },
+              { href: '/#at-contact', label: home[lang].nav.contact },
             ].map((l) => (
               <a key={l.href} href={l.href} className="text-mute no-underline transition-colors duration-150 hover:text-ink">
                 {l.label}
