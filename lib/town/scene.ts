@@ -439,7 +439,9 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   }
   input.links.forEach((link, i) => {
     const group = new THREE.Group()
-    group.position.set(-70 + i * 36, 0, 46)
+    // ベースプレートのスタッドに合わせて置く。スタッドの中心は 8mm おきの 4mm 目なので、
+    // 4 × 2 の台の中心は x・z とも 8 の倍数にする。間は 5 スタッド（40mm）
+    group.position.set(-80 + i * 40, 0, 80)
     put(group, blockGeo(4, 2, 1), mat('dark'), 0, 0, 0)
     const board = new THREE.Group()
     board.position.set(0, PLATE, 0)
