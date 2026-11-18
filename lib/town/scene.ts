@@ -53,8 +53,6 @@ export type TownInput = {
   /** 今の言語（札の最初の向き）。札を回し終えたら onToggleLang を呼ぶ */
   lang: 'ja' | 'en'
   onToggleLang: () => void
-  /** 札の上に添える、押せることを伝える小さな札（HTML）。街が毎フレーム位置を合わせる */
-  langHint?: HTMLElement | null
   /** 今がダークか（レバーの最初の向き） */
   dark: boolean
   /** パネルを開いているあいだ、今いる建物と人形のほかを、背景の色へ褪せさせる（後ろの街がうるさくならないように） */
@@ -1265,12 +1263,6 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     view.target.lerp(want, input.reducedMotion ? 1 : Math.min(1, dt * 3))
     if (view.target.distanceTo(want) > 0.2) moving = true
     placeCamera()
-    // 札の上の案内を、札の真上に合わせる。パネルを開いているあいだは隠す
-    if (input.langHint) {
-      const p = new THREE.Vector3(flip.group.position.x, BR + 32, flip.group.position.z).project(camera)
-      input.langHint.style.transform = `translate(-50%, -100%) translate(${((p.x + 1) / 2) * vw}px, ${((1 - p.y) / 2) * vh}px)`
-      input.langHint.dataset.show = panelOpen ? 'false' : 'true'
-    }
     renderer.render(scene, camera)
     needsRender = false
     if (!readySent) {
