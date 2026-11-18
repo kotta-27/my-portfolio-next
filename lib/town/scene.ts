@@ -73,6 +73,8 @@ export type TownBench = {
   setPanelOpen: (open: boolean, width?: number) => void
   /** ほかの場所でライト / ダークが切り替わったとき、レバーを合わせる */
   setDark: (dark: boolean) => void
+  /** 言語が切り替わったとき、札をその言語の面へ回す（札から切り替えたときは、すでにその向き） */
+  setLang: (lang: 'ja' | 'en') => void
   dispose: () => void
 }
 
@@ -1276,6 +1278,13 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
 
   return {
     goTo,
+    setLang(lang) {
+      const goal = lang === 'ja' ? Math.PI : 0
+      if (goal === flip.goal) return
+      flip.goal = goal
+      flip.sent = true // 上のボタンから来たので、回り終えても切り替えを頼まない
+      loop()
+    },
     setDark(dark) {
       const goal = dark ? 0.5 : -0.5
       if (goal === lever.goal) return

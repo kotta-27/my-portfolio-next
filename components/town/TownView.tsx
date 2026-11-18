@@ -52,6 +52,9 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const icons = useRef<HTMLDivElement>(null)
   const langHint = useRef<HTMLSpanElement>(null)
   const router = useRouter()
+  // 言語を切り替えても街は作り直さない（人形の位置や開いているパネルを保つ）。札から切り替えるときに今の言語を読むための控え
+  const langRef = useRef(lang)
+  langRef.current = lang
   const bench = useRef<TownBench | null>(null)
   const [state, setState] = useState<'loading' | 'ready' | 'none'>('loading')
   const [open, setOpen] = useState<Section | null>(null)
@@ -91,7 +94,8 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         lang,
         langHint: langHint.current,
         onToggleLang: () => {
-          saveLang(lang === 'ja' ? 'en' : 'ja')
+          // 中身（パネルの文言など）だけをサーバーから取り直す。ページは読み込み直さない
+          saveLang(langRef.current === 'ja' ? 'en' : 'ja')
           router.refresh()
         },
         onLink: (href) => {
@@ -136,9 +140,14 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
       bench.current?.dispose()
       bench.current = null
     }
-    // 街は 1 度だけ組む。言語が変わったときは key で作り直す（app/page.tsx）
+    // 街は 1 度だけ組む。言語が変わっても作り直さず、札の向きだけ合わせる（下の effect）
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // 上のボタンで言語を切り替えたときも、街の札を回す
+  useEffect(() => {
+    bench.current?.setLang(lang)
+  }, [lang])
 
   useEffect(() => {
     bench.current?.setPanelOpen(open !== null, aside.current?.offsetWidth)

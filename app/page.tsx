@@ -26,7 +26,7 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ v
   return (
     <main className="font-sans text-ink">
       <h1 className="sr-only">Kota Mizuno</h1>
-      <TownView key={lang} lang={lang} panels={townPanels(lang, career, outputs)} workImages={workImages} careerLogos={careerLogos} />
+      <TownView lang={lang} panels={townPanels(lang, career, outputs)} workImages={workImages} careerLogos={careerLogos} />
     </main>
   )
 }
