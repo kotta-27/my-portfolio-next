@@ -517,7 +517,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     half('white', 0)
     half('navy', Math.PI)
     town.add(group)
-    return { group, big, small, angle: input.dark ? 0.5 : -0.5, goal: input.dark ? 0.5 : -0.5, pop: 0 }
+    return { group, big, small, angle: input.dark ? 0.5 : -0.5, goal: input.dark ? 0.5 : -0.5 }
   })()
   solids.push(lever.group)
 
@@ -953,7 +953,6 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   /** レバーを反対側へ倒す。カチッと鳴らす */
   function flipLever() {
     lever.goal = -lever.goal
-    lever.pop = 1
     sfx.click(3, pan(lever.group.position.x))
     loop()
   }
@@ -1129,16 +1128,14 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       moving = true
     }
     // 看板: カーソルを乗せると少し持ち上がる
-    // レバー: 倒れる向きへ少し行き過ぎてから止まる。小さい歯車は逆向きに 3 倍回る
+    // レバー: 倒れる向きへ回る（台は動かさない）。小さい歯車は逆向きに 3 倍回る
     {
       const d = lever.goal - lever.angle
       lever.angle += d * Math.min(1, dt * (input.reducedMotion ? 60 : 9))
       if (Math.abs(d) < 0.0005) lever.angle = lever.goal
       lever.big.rotation.z = -lever.angle
       lever.small.rotation.z = 3 * lever.angle + Math.PI / 2
-      lever.pop = Math.max(0, lever.pop - dt * 4)
-      lever.group.position.y = (lever === hover ? 1.4 : 0) + Math.sin(lever.pop * Math.PI) * 1.2
-      if (Math.abs(d) >= 0.0005 || lever.pop > 0) moving = true
+      if (Math.abs(d) >= 0.0005) moving = true
     }
     for (const sp of signposts) {
       const goal = sp === hover ? 3 : 0
