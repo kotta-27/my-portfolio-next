@@ -415,6 +415,15 @@ html.dark .ground-brick { opacity: 0.8; }
 html.dark .technic-axle,
 html.dark .technic-axle-tip { background: color-mix(in oklab, rgb(var(--mute)) 50%, rgb(var(--tile))); }
 
+/* ページを移るときの読み込みの線（components/NavProgress.tsx）。すぐ 30% まで伸び、そのあと 90% までゆっくり近づく */
+@keyframes nav-progress {
+  0% { transform: scaleX(0); }
+  10% { transform: scaleX(0.3); }
+  100% { transform: scaleX(0.9); }
+}
+.nav-progress { transform-origin: left; animation: nav-progress 8s cubic-bezier(0.1, 0.7, 0.2, 1) forwards; }
+@media (prefers-reduced-motion: reduce) { .nav-progress { animation: none; transform: scaleX(0.6); } }
+
 /* デジタル時計の「:」は 1 秒ごとに点滅する */
 @keyframes clock-blink {
   50% { opacity: 0.15; }
