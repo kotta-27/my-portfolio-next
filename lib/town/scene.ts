@@ -63,6 +63,8 @@ export type TownInput = {
   onLeave: (toStreet: boolean) => void
   /** 人形に一番近い建物が変わった（スマホの下の地図で、今いる場所を示す） */
   onNear?: (id: Section) => void
+  /** タッチの端末で、押した場所に出すスティック（HTML）。中の要素がつまみ。街が位置と傾きを合わせる */
+  stick?: HTMLElement | null
   onReady: () => void
 }
 
@@ -1100,9 +1102,26 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     return moving
   }
   let drag: { x: number; y: number; moved: number } | null = null
-  // タッチの端末（スマホ・タブレット）: 視点は動かさず、横に指を滑らせて通りを歩く。指を離すと一番近い建物の前で止まる
+  // タッチの端末（スマホ・タブレット）: 視点は動かさない。押した場所にスティック（ぷにコン）が出て、左右に倒した分だけ歩く。
+  // 離すと一番近い建物の前の道で止まる。倒さずに離す（タップ）と、建物や看板を押したことになる。何も無い所なら目の前の建物に入る
   const touchWalk = matchMedia('(pointer: coarse)').matches
-  let swipe: { startX: number; figX: number; target: number } | null = null
+  const STICK = 36 // つまみが動ける半径（px）
+  let swipe: { x0: number; vel: number } | null = null
+  const stickEl = input.stick ?? null
+  const knobEl = stickEl?.firstElementChild as HTMLElement | null
+  const showStick = (cx: number, cy: number, dx: number) => {
+    if (!stickEl) return
+    const r = host.getBoundingClientRect()
+    stickEl.style.left = `${cx - r.left}px`
+    stickEl.style.top = `${cy - r.top}px`
+    stickEl.dataset.on = 'true'
+    if (knobEl) knobEl.style.transform = `translateX(${dx}px)`
+  }
+  const hideStick = () => {
+    if (!stickEl) return
+    stickEl.dataset.on = 'false'
+    if (knobEl) knobEl.style.transform = ''
+  }
   let snapTo: Building | null = null
   const nearest = (x: number) => buildings.reduce((a, b) => (Math.abs(b.x - x) < Math.abs(a.x - x) ? b : a))
   const el = renderer.domElement
@@ -1110,6 +1129,11 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     sfx.unlock()
     drag = { x: e.clientX, y: e.clientY, moved: 0 }
     el.setPointerCapture(e.pointerId)
+    if (touchWalk) {
+      swipe = { x0: e.clientX, vel: 0 }
+      if (stickEl) stickEl.dataset.y = String(e.clientY)
+      showStick(e.clientX, e.clientY, 0)
+    }
     // 小物の上で押したら、長押しを待つ（動かす前に指を動かしたら、いつもどおり街を回す）
     const t = pick(e)
     if (t && 'place' in t && !seating && !input.reducedMotion) {
@@ -1134,20 +1158,20 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       drag.moved += Math.abs(dx) + Math.abs(dy)
       drag.x = e.clientX
       drag.y = e.clientY
-      if (drag.moved > 6 && touchWalk) {
-        cancelPress()
-        if (!swipe) {
+      if (touchWalk && swipe) {
+        // スティックを倒した量（左右だけ）で歩く速さが決まる。大きく倒すと速い
+        const off = Math.max(-STICK, Math.min(STICK, e.clientX - swipe.x0))
+        swipe.vel = Math.abs(off) < 6 ? 0 : (off / STICK) * SPEED * 1.4
+        if (swipe.vel !== 0 && (path.length || goal || snapTo || panelOpen)) {
           // 歩き出す: パネルを閉じ、建物の前からは道へ
           goal = null
           path = []
           snapTo = null
           beckon = null
           input.onLeave(true)
-          swipe = { startX: e.clientX - dx, figX: fig.position.x, target: fig.position.x }
         }
-        // 指を左へ滑らせると街が左へ流れる = 人形は右へ進む
-        const perPx = (camera.right - camera.left) / vw
-        swipe.target = Math.min(232, Math.max(-230, swipe.figX - (e.clientX - swipe.startX) * perPx * 1.4))
+        if (Math.abs(e.clientX - swipe.x0) > 6) cancelPress()
+        showStick(swipe.x0, Number(stickEl?.dataset.y ?? e.clientY), off)
         loop()
         return
       }
@@ -1171,13 +1195,18 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     const click = drag && drag.moved <= 6
     drag = null
     if (swipe) {
-      // 一番近い建物の前の道で止まる（入らない）
-      const b = nearest(swipe.target)
+      const walked = Math.abs(fig.position.z) < 0.5 // 道の上にいる（建物の前に入っていない）
       swipe = null
-      snapTo = b
-      path = [new THREE.Vector3(b.x, 0, 0)]
-      loop()
-      return
+      hideStick()
+      if (!click && walked && !path.length && !goal) {
+        // 一番近い建物の前の道で止まる（入らない）
+        const b = nearest(fig.position.x)
+        snapTo = b
+        path = [new THREE.Vector3(b.x, 0, 0)]
+        loop()
+        return
+      }
+      if (!click) return
     }
     cancelPress()
     if (held) {
@@ -1207,6 +1236,12 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       toStreet()
       return
     }
+    // タッチ: 何も無い所をタップしたら、目の前の建物に入る
+    if (touchWalk && !b && !panelOpen) {
+      const n = nearest(fig.position.x)
+      if (Math.abs(n.x - fig.position.x) < 40) goTo(n.id)
+      return
+    }
     if (!b || 'place' in b || b === lever || b === flip) return
     if ('href' in b) input.onLink(b.href)
     else if ('id' in b) goTo(b.id)
@@ -1230,6 +1265,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     loop()
   }
   const onLeaveCanvas = () => {
+    if (swipe) return
     hover = null
     loop()
   }
@@ -1326,15 +1362,11 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
 
     let vx = 0
     let vz = 0
-    if (swipe) {
-      // 指に付いて歩く（速すぎないように）
+    if (swipe && swipe.vel !== 0) {
+      // スティックを倒しているあいだ歩く
       fig.position.z += (0 - fig.position.z) * Math.min(1, dt * 8)
-      const d = swipe.target - fig.position.x
-      const stepLen = Math.min(Math.abs(d), SPEED * 2.2 * dt)
-      if (stepLen > 0.05) {
-        fig.position.x += Math.sign(d) * stepLen
-        vx = Math.sign(d)
-      }
+      fig.position.x = Math.min(232, Math.max(-230, fig.position.x + swipe.vel * dt))
+      vx = Math.sign(swipe.vel)
     } else if (keys.size) {
       fig.position.z += (0 - fig.position.z) * Math.min(1, dt * 8)
       vx = (keys.has('ArrowRight') ? 1 : 0) - (keys.has('ArrowLeft') ? 1 : 0)
@@ -1372,7 +1404,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       if (panelOpen) facing = Math.PI
     }
     if (input.onNear) {
-      const n = nearest(swipe ? swipe.target : fig.position.x).id
+      const n = nearest(fig.position.x).id
       if (n !== lastNear) {
         lastNear = n
         input.onNear(n)

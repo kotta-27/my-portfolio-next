@@ -62,6 +62,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const [near, setNear] = useState<Section>('about')
   const [sheetFull, setSheetFull] = useState(false)
   const sheetDrag = useRef<{ y: number } | null>(null)
+  const stick = useRef<HTMLDivElement>(null)
   const t = town[lang]
 
   const go = useCallback((id: Section) => {
@@ -110,6 +111,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
         onArrive: (id) => setOpen(id),
         onNear: (id) => setNear(id),
+        stick: stick.current,
         onLeave: (toStreet) => {
           setOpen(null)
           // 通りに出たら、どの建物も選んでいない状態に戻す
@@ -229,6 +231,18 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         </div>
       )}
 
+
+      {/* タッチの端末: 押した場所に出るスティック（ぷにコン）。位置とつまみの傾きは街が合わせる（lib/town/scene.ts） */}
+      <div
+        ref={stick}
+        aria-hidden
+        data-on="false"
+        className="pointer-events-none absolute z-[6] -ml-12 -mt-12 h-24 w-24 rounded-full bg-tile/45 shadow-[inset_0_0_0_2px_rgb(var(--ink)/0.22),0_2px_10px_rgb(var(--shadow-rgb)/0.15)] backdrop-blur-[2px] transition-opacity duration-150 data-[on=false]:opacity-0"
+      >
+        <span className="absolute left-1/2 top-1/2 -ml-[22px] -mt-[22px] grid h-11 w-11 place-items-center rounded-full bg-tile shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.2)]">
+          <span className="h-5 w-5 rounded-full bg-teal" />
+        </span>
+      </div>
 
       {/* スマホ: 下の街の地図。今いる場所を濃くし、押すとその建物へ歩く。横に指を滑らせても歩ける */}
       <nav
