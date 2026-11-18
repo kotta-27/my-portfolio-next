@@ -48,6 +48,8 @@ export type TownInput = {
   /** 手前の歩道に立てる、外へのリンクの看板。icon は SVG のマークアップ（色は fg で塗る） */
   links: { href: string; label: string; icon: string; bg: string; fg: string }[]
   onLink: (href: string) => void
+  /** パネルを開いているあいだ、今いる建物と人形のほかを、背景の色へ褪せさせる（案 3） */
+  focusDim?: boolean
   reducedMotion: boolean
   onArrive: (id: Section) => void
   /** 人形が歩き出した（パネルを閉じる合図）。toStreet は、どの建物にも向かわず通りに出たとき（← → ↓ キー） */
@@ -519,6 +521,50 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   fig.position.set(input.reducedMotion ? -170 : -250, 0, input.reducedMotion ? 0 : 0)
   town.add(fig)
 
+  // ───────── パネルを開いているあいだ、今いる建物と人形のほかを褪せさせる ─────────
+  // 部品の材質は建物どうしで共有しているので、褪せさせるものだけ材質の写しに差し替え、その色を背景の色へ寄せる
+  let focus: { group: THREE.Group } | null = null
+  let dim = 0
+  let dimGoal = 0
+  const faded = new Map<THREE.Material, THREE.Material>()
+  const bg = new THREE.Color()
+  const fadedOf = (m: THREE.Material) => {
+    let f = faded.get(m)
+    if (!f) {
+      f = m.clone()
+      f.userData.orig = m
+      faded.set(m, f)
+    }
+    return f
+  }
+  const inside = (o: THREE.Object3D, root: THREE.Object3D) => {
+    for (let p: THREE.Object3D | null = o; p; p = p.parent) if (p === root) return true
+    return false
+  }
+  const applyDim = () => {
+    const keep = (o: THREE.Object3D) => inside(o, fig) || (focus !== null && inside(o, focus.group))
+    town.traverse((o) => {
+      const mesh = o as THREE.Mesh
+      if (!mesh.isMesh || inside(o, ghost)) return
+      const swap = (m: THREE.Material) => {
+        const orig = (m.userData.orig as THREE.Material | undefined) ?? m
+        return dim > 0.001 && !keep(o) ? fadedOf(orig) : orig
+      }
+      mesh.material = Array.isArray(mesh.material) ? mesh.material.map(swap) : swap(mesh.material)
+    })
+    const k = 0.62 * dim
+    for (const [orig, f] of faded) {
+      const o = orig as THREE.MeshStandardMaterial
+      const c = f as THREE.MeshStandardMaterial
+      if (o.map) {
+        // 画像は色を掛けても明るくできないので、透かして背景に溶かす
+        c.transparent = true
+        c.opacity = 1 - k
+      } else if (o.color) c.color.copy(o.color).lerp(bg, k)
+    }
+    shadowMat.opacity = 0.14 * (1 - k)
+  }
+
   // ───────── カメラ ─────────
   const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 1, 3000)
   const view = { yaw: 0.42, pitch: 0.6, target: new THREE.Vector3(-90, 18, -24) }
@@ -568,6 +614,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       path = []
       goal = null
       facing = Math.PI
+      focus = b
       input.onArrive(b.id)
     } else {
       const from = fig.position
@@ -608,6 +655,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   const AREA = { x0: (-PW / 2) * P, x1: (PW / 2) * P, z0: 24, z1: (PD / 2) * P }
   const ground = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
   const ghost = new THREE.Group()
+  ghost.name = 'ghost'
   const ghostLine = new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.95, depthTest: false })
   const ghostFill = new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.18, depthWrite: false })
   ghost.renderOrder = 10
@@ -928,6 +976,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
         path.shift()
         if (!path.length && goal) {
           goal.pop = 1
+          focus = goal
           input.onArrive(goal.id)
           goal = null
         }
@@ -965,6 +1014,12 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       if (Math.abs(y - b.group.position.y) > 0.01 || b.pop > 0) moving = true
     }
     if (stepProps(dt)) moving = true
+    if (Math.abs(dimGoal - dim) > 0.001) {
+      dim += (dimGoal - dim) * Math.min(1, dt * (input.reducedMotion ? 60 : 6))
+      if (Math.abs(dimGoal - dim) <= 0.001) dim = dimGoal
+      applyDim()
+      moving = true
+    }
     // 看板: カーソルを乗せると少し持ち上がる
     for (const sp of signposts) {
       const goal = sp === hover ? 3 : 0
@@ -1019,6 +1074,11 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     goTo,
     setPanelOpen(open, width) {
       panelOpen = open
+      if (input.focusDim) {
+        const g = getComputedStyle(document.documentElement).getPropertyValue('--ground').trim().split(/\s+/).map(Number)
+        if (g.length === 3) bg.setRGB(g[0] / 255, g[1] / 255, g[2] / 255, THREE.SRGBColorSpace)
+        dimGoal = open ? 1 : 0
+      }
       if (width) panelWidth = width
       loop()
     },
