@@ -489,12 +489,15 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   // 2 本の柱に軸が 2 本。レバー付きの 24 歯の歯車が、8 歯の歯車を 3 倍の角度で回し、白と紺の円板が半回転して今のモードを見せる
   const lever = (() => {
     const group = new THREE.Group()
-    // 6 × 2 の台をベースプレートのスタッドに合わせて置く（幅も奥行きも偶数なので、中心は 8 の倍数）
+    // 4 × 2 の台をベースプレートのスタッドに合わせて置く（幅も奥行きも偶数なので、中心は 8 の倍数）
     group.position.set(-168, 0, 120)
     group.userData.lever = true
-    stack(group, 6, 2, 1, 'dark', 0, 0, 0, true)
+    stack(group, 4, 2, 1, 'dark', 0, 0, 0, true)
+    // 仕掛けは 0.6 倍の大きさにする（台はスタッドに合わせたいので縮めない）
+    const SCALE = 0.6
     const rig = new THREE.Group()
-    rig.position.set(-8, BR + 22, 0)
+    rig.scale.setScalar(SCALE)
+    rig.position.set(-8 * SCALE, BR + 22 * SCALE, 0)
     group.add(rig)
     for (const px of [0, 16]) {
       put(rig, liftarmGeometry(4), mat('gray'), px, -22 - 2, -6).rotation.z = Math.PI / 2
