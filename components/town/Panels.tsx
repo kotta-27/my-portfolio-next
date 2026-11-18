@@ -41,7 +41,18 @@ function About({ lang }: { lang: Lang }) {
           <span className="mt-[10px] font-mono text-[11.5px] font-bold tracking-[.06em] text-teal">{a.role}</span>
         </span>
       </div>
-      <p className="text-[14.5px] leading-[1.9] text-ink/80">{a.story}</p>
+      <p className="text-[14.5px] leading-[1.9] text-ink/80">
+        {a.story.split(a.link.text).map((part, i) => (
+          <span key={i}>
+            {i > 0 && (
+              <a href={a.link.href} target="_blank" rel="noopener noreferrer" className="font-bold text-teal underline decoration-teal/40 underline-offset-[3px] hover:decoration-teal">
+                {a.link.text}
+              </a>
+            )}
+            {part}
+          </span>
+        ))}
+      </p>
 
       <h3 className="font-mono text-[10.5px] font-bold tracking-[.08em] text-mute">{a.likes}</h3>
       <ul className="grid gap-[10px] sm:grid-cols-3">

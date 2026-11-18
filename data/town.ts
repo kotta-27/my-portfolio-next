@@ -30,8 +30,9 @@ type TownStrings = {
   about: {
     kana: string
     role: string
-    /** これまで（2 文） */
+    /** これまで（2 文）。link.text の部分を link.href へのリンクにする */
     story: string
+    link: { text: string; href: string }
     likes: string
     /** 好きな技術。パネルの 3 列に収まる短さで（長い説明は data/favoriteTech.ts） */
     likeItems: { name: string; note: string }[]
@@ -67,6 +68,7 @@ export const town: Record<Lang, TownStrings> = {
       role: 'SOFTWARE ENGINEER · TOKYO',
       story:
         '大学院では量子アルゴリズムと格子暗号を研究しながら、量子の考え方をゲームや触れる UI で伝えるものを作ってきました。いまはスタディストで、検索の仕組みと、使う人が迷わない画面の両方をつくっています。',
+      link: { text: 'スタディスト', href: 'https://studist.jp/' },
       likes: 'LIKES',
       likeItems: [
         { name: 'Vue.js', note: '素直なリアクティビティで、書きやすく読みやすい' },
@@ -106,6 +108,7 @@ export const town: Record<Lang, TownStrings> = {
       role: 'SOFTWARE ENGINEER · TOKYO',
       story:
         'In grad school I researched quantum algorithms and lattice cryptography, and built games and hands-on UIs that explain quantum ideas. Now at Studist, I work on both how search works and screens people never get lost in.',
+      link: { text: 'Studist', href: 'https://studist.jp/' },
       likes: 'LIKES',
       likeItems: [
         { name: 'Vue.js', note: 'Plain reactivity and single-file components' },
