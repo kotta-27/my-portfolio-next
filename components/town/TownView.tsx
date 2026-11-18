@@ -61,6 +61,8 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
     bench.current?.goTo(id)
   }, [])
   const close = useCallback(() => {
+    // ✕ はパネルと一緒に消えるので、フォーカスを街へ戻す
+    host.current?.focus({ preventScroll: true })
     setOpen(null)
     setTarget(null)
     if (location.hash.startsWith('#at-')) history.replaceState(null, '', location.pathname + location.search)

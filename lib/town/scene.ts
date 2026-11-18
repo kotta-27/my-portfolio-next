@@ -628,7 +628,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     loop()
   }
 
-  // ───────── 操作: 建物をクリックで向かう、ドラッグで回す。街にフォーカスがあるときは ← → で歩き、↑ / Enter で入り、↓ で道に戻る ─────────
+  // ───────── 操作: 建物をクリックで向かう、ドラッグで回す。← → で歩き、↑ / Enter で入り、↓ で道に戻る ─────────
   const ray = new THREE.Raycaster()
   const ndc = new THREE.Vector2()
   type Target = Building | Signpost | Prop
@@ -895,6 +895,13 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   })
   const keys = new Set<string>()
   const onKeyDown = (e: KeyboardEvent) => {
+    // キーはページ全体で受ける（パネルの ✕ や上のボタンを押した直後も歩けるように）。
+    // ただしパネルの中（スクロールに矢印を使う）と、文字を打つ場所では受けない
+    if (e.metaKey || e.ctrlKey || e.altKey) return
+    const at = e.target instanceof Element ? e.target : null
+    if (at?.closest('aside, input, textarea, select, [contenteditable="true"]')) return
+    // ボタンやリンクの上の Enter は、そのボタンを押すほうを優先する
+    if (e.key === 'Enter' && at?.closest('button, a')) return
     // 小物を持っているあいだ: R で回す、Esc で元の場所へ戻す
     if (held) {
       if (e.key === 'r' || e.key === 'R') turnHeld()
@@ -933,11 +940,11 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     }
   }
   const onKeyUp = (e: KeyboardEvent) => keys.delete(e.key)
-  host.addEventListener('keydown', onKeyDown)
-  host.addEventListener('keyup', onKeyUp)
+  window.addEventListener('keydown', onKeyDown)
+  window.addEventListener('keyup', onKeyUp)
   disposers.push(() => {
-    host.removeEventListener('keydown', onKeyDown)
-    host.removeEventListener('keyup', onKeyUp)
+    window.removeEventListener('keydown', onKeyDown)
+    window.removeEventListener('keyup', onKeyUp)
   })
 
   // ───────── 描画: 画面に見えているあいだだけ（工房の歯車がいつも回っている） ─────────
