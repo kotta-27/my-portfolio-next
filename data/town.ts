@@ -80,7 +80,7 @@ export const town: Record<Lang, TownStrings> = {
         { date: '2024.10', title: 'Quantum Innovation 2024 ポスター', badge: '若手ポスター賞' },
         { date: '2025.08', title: '大阪・関西万博でゲーム展示', badge: '展示' },
       ],
-      aside: 'レゴが好きで、このサイトもブロックで組みました。ベンチは長押しで動かせます。',
+      aside: 'レゴとドラクエと謎解きが好き。',
     },
   },
   en: {
@@ -119,7 +119,7 @@ export const town: Record<Lang, TownStrings> = {
         { date: '2024.10', title: 'Quantum Innovation 2024 poster', badge: 'Young Researcher Award' },
         { date: '2025.08', title: 'Game exhibit at Expo 2025 Osaka', badge: 'Exhibit' },
       ],
-      aside: 'I love LEGO, so this site is built from bricks too. Long-press a bench to move it.',
+      aside: 'I love LEGO, Dragon Quest and puzzle games.',
     },
   },
 }
