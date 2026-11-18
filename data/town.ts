@@ -27,7 +27,7 @@ export const town: Record<Lang, TownStrings> = {
       output: { title: 'OUTPUT', sub: '書いたもの' },
       contact: { title: 'CONTACT', sub: '連絡先' },
     },
-    hint: '建物をクリック ／ ← → で歩く ／ ドラッグで回す',
+    hint: '建物をクリック ／ ← → で歩く・↑ で入る・↓ で道に戻る ／ ドラッグで回す',
     label: 'レゴで組んだ街。建物がそれぞれ、自己紹介・作ったもの・経歴・書いたもの・連絡先になっている',
     close: '閉じる',
     more: {
@@ -46,7 +46,7 @@ export const town: Record<Lang, TownStrings> = {
       output: { title: 'OUTPUT', sub: 'Writing' },
       contact: { title: 'CONTACT', sub: 'Contact' },
     },
-    hint: 'Click a building / ← → to walk / drag to rotate',
+    hint: 'Click a building / ← → walk, ↑ enter, ↓ back to the street / drag to rotate',
     label: 'A town built from bricks. Each building is a section: about, works, career, writing and contact',
     close: 'Close',
     more: {

@@ -503,7 +503,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     loop()
   }
 
-  // ───────── 操作: 建物をクリックで向かう、ドラッグで回す、← → で歩く（街にフォーカスがあるときだけ） ─────────
+  // ───────── 操作: 建物をクリックで向かう、ドラッグで回す。街にフォーカスがあるときは ← → で歩き、↑ / Enter で入り、↓ で道に戻る ─────────
   const ray = new THREE.Raycaster()
   const ndc = new THREE.Vector2()
   let hover: Building | null = null
@@ -575,6 +575,18 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       goal = null
       input.onLeave()
       e.preventDefault()
+      loop()
+    } else if (e.key === 'ArrowDown') {
+      // 建物の前から、プロムナードの真ん中へ戻る（パネルは閉じる）
+      e.preventDefault()
+      goal = null
+      input.onLeave()
+      path = Math.abs(fig.position.z) > 0.5 ? [new THREE.Vector3(fig.position.x, 0, 0)] : []
+      if (input.reducedMotion && path.length) {
+        fig.position.z = 0
+        path = []
+      }
+      facing = 0
       loop()
     } else if (e.key === 'Enter' || e.key === 'ArrowUp') {
       const near = buildings.reduce((a, b) => (Math.abs(b.x - fig.position.x) < Math.abs(a.x - fig.position.x) ? b : a))
