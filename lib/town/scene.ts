@@ -485,7 +485,10 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     town.add(g)
     solids.push(g)
   }
-  const trees: [number, number, number][] = [[-210, 60, 1.1], [-150, 80, 0.9], [-110, 96, 1], [86, 98, 1.2], [150, 64, 0.95], [210, 86, 1.05], [-110, -100, 1.2], [70, -100, 1], [150, -96, 0.9], [-225, -90, 1]]
+  // スマホ（狭い画面）では、レバーと札を道の手前（4 ポッチ空けて）に寄せる（カメラが人形に寄るので、奥だと画面の下に隠れる）。
+  // そのぶん西のベンチは右へずらし、台の手前に来る 2 本の木は置かない（銘板が隠れるので）
+  const compact = host.clientWidth < 700
+  const trees: [number, number, number][] = [[-210, 60, 1.1], ...(compact ? [] : ([[-150, 80, 0.9], [-110, 96, 1]] as [number, number, number][])), [86, 98, 1.2], [150, 64, 0.95], [210, 86, 1.05], [-110, -100, 1.2], [70, -100, 1], [150, -96, 0.9], [-225, -90, 1]]
   for (const [x, z, s] of trees) tree(x, z, s)
   for (let x = -200; x <= 200; x += 80) {
     solids.push(put(town, new THREE.CylinderGeometry(0.9, 1.2, 44, 8), mat('black'), x, 22, 30))
@@ -505,10 +508,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     props.push(prop)
     return prop
   }
-  // スマホ（狭い画面）では、レバーと札を道のすぐ手前に寄せる（カメラが人形に寄るので、奥だと画面の下に隠れる）。
-  // そのぶん西のベンチは右へずらす
-  const compact = host.clientWidth < 700
-  bench('bench-west', compact ? -96 : -120, 52)
+  bench('bench-west', compact ? -48 : -120, 52)
   bench('bench-east', 112, 52)
 
   // ───────── 道の先（東の端の向こう）: 霧に薄れていく道と、まだ建っていない建物の輪郭、TO BE CONTINUED の道標 ─────────
@@ -659,7 +659,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   const lever = (() => {
     const group = new THREE.Group()
     // 4 × 2 の台をベースプレートのスタッドに合わせて置く（幅も奥行きも偶数なので、中心は 8 の倍数）
-    if (compact) group.position.set(-176, 0, 40)
+    if (compact) group.position.set(-176, 0, 64) // 道の縁（z = 24）から 4 ポッチ空けた奥行き 2 の台
     else group.position.set(-168, 0, 120)
     group.userData.lever = true
     stack(group, 4, 2, 1, 'dark', 0, 0, 0, true)
@@ -696,7 +696,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   // 2 本の柱に渡した軸に、表が EN・裏が JA の札。押すと半回転し、回り終えたら言語を切り替える
   const flip = (() => {
     const group = new THREE.Group()
-    group.position.set(compact ? -144 : -128, 0, compact ? 40 : 120) // 4 × 2 の台。スタッドに合わせて中心は 8 の倍数
+    group.position.set(compact ? -136 : -128, 0, compact ? 64 : 120) // スマホではレバーの台との間を 1 ポッチ // 4 × 2 の台。スタッドに合わせて中心は 8 の倍数
     group.userData.flip = true
     stack(group, 4, 2, 1, 'dark', 0, 0, 0, true)
     plateLabel(group, 'LANGUAGE', 28, P)
