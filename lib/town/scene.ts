@@ -629,7 +629,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     loop()
   }
 
-  // ───────── 操作: 建物をクリックで向かう、ドラッグで回す。← → で歩き、↑ / Enter で入り、↓ で道に戻る ─────────
+  // ───────── 操作: 建物をクリックで向かう、ドラッグで回す。← → / A D で歩き、↑ / W / Enter で入り、↓ / S で道に戻る ─────────
   const ray = new THREE.Raycaster()
   const ndc = new THREE.Vector2()
   type Target = Building | Signpost | Prop
@@ -912,6 +912,9 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     cancelPress()
   })
   const keys = new Set<string>()
+  /** W A S D を矢印キーにそろえる（キーの位置で見るので、配列や IME に左右されない） */
+  const WASD: Record<string, string> = { KeyW: 'ArrowUp', KeyA: 'ArrowLeft', KeyS: 'ArrowDown', KeyD: 'ArrowRight' }
+  const keyOf = (e: KeyboardEvent) => (e.isComposing ? '' : (WASD[e.code] ?? e.key))
   const onKeyDown = (e: KeyboardEvent) => {
     // キーはページ全体で受ける（パネルの ✕ や上のボタンを押した直後も歩けるように）。
     // ただしパネルの中（スクロールに矢印を使う）と、文字を打つ場所では受けない
@@ -930,17 +933,18 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       e.preventDefault()
       return
     }
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-      keys.add(e.key)
+    const key = keyOf(e)
+    if (key === 'ArrowLeft' || key === 'ArrowRight') {
+      keys.add(key)
       path = []
       goal = null
       input.onLeave(true)
       e.preventDefault()
       loop()
-    } else if (e.key === 'ArrowDown') {
+    } else if (key === 'ArrowDown') {
       e.preventDefault()
       toStreet()
-    } else if (e.key === 'Enter' || e.key === 'ArrowUp') {
+    } else if (key === 'Enter' || key === 'ArrowUp') {
       const near = buildings.reduce((a, b) => (Math.abs(b.x - fig.position.x) < Math.abs(a.x - fig.position.x) ? b : a))
       if (Math.abs(near.x - fig.position.x) < 50) {
         e.preventDefault()
@@ -948,7 +952,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       }
     }
   }
-  const onKeyUp = (e: KeyboardEvent) => keys.delete(e.key)
+  const onKeyUp = (e: KeyboardEvent) => keys.delete(keyOf(e))
   window.addEventListener('keydown', onKeyDown)
   window.addEventListener('keyup', onKeyUp)
   disposers.push(() => {
