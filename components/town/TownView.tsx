@@ -11,7 +11,7 @@ import { SECTIONS, isSection, type Section } from '@/lib/town/sections'
 import type { TownBench } from '@/lib/town/scene'
 import type { PanelContent } from '@/components/town/Panels'
 import { LangToggle } from '@/components/LangToggle'
-import { ThemeToggle } from '@/components/ThemeToggle'
+import { ThemeToggle, toggleTheme } from '@/components/ThemeToggle'
 
 type Props = {
   lang: Lang
@@ -83,6 +83,8 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
       bench.current = mountTown(el, {
         labels: t.buildings,
         links: townLinks.map((l) => ({ ...l, icon: icons.current?.querySelector(`[data-icon="${l.id}"]`)?.innerHTML ?? '' })),
+        dark: document.documentElement.classList.contains('dark'),
+        onToggleTheme: toggleTheme,
         onLink: (href) => {
           if (href.startsWith('mailto:')) location.href = href
           else window.open(href, '_blank', 'noopener,noreferrer')
@@ -115,9 +117,13 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
       }
     }
     window.addEventListener('hashchange', onHash)
+    // 上のボタンでライト / ダークを切り替えたら、街のレバーも倒す
+    const themeWatch = new MutationObserver(() => bench.current?.setDark(document.documentElement.classList.contains('dark')))
+    themeWatch.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
     return () => {
       cancelled = true
       window.removeEventListener('hashchange', onHash)
+      themeWatch.disconnect()
       bench.current?.dispose()
       bench.current = null
     }

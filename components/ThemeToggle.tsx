@@ -18,6 +18,13 @@ function saveTheme(value: 'dark' | 'light') {
   document.cookie = `${STORAGE_KEY}=${value}; path=/; max-age=${ONE_YEAR}; samesite=lax${domain}`
 }
 
+/** ライト / ダークを入れ替えて保存する（街のレバーからも呼ぶ。lib/town/scene.ts） */
+export function toggleTheme() {
+  const next = !document.documentElement.classList.contains('dark')
+  document.documentElement.classList.toggle('dark', next)
+  saveTheme(next ? 'dark' : 'light')
+}
+
 /** ライト / ダークの切替。選ぶまでは OS の設定に従い、選んだら保存する */
 export function ThemeToggle() {
   // 初期クラスは layout の head スクリプトが描画前に付けている。ここではそれを読むだけ
@@ -37,14 +44,18 @@ export function ThemeToggle() {
       setDark(e.matches)
     }
     media.addEventListener('change', onChange)
-    return () => media.removeEventListener('change', onChange)
+    // 街のレバーなど、ほかの場所で切り替えられたときも、アイコンを合わせる
+    const mo = new MutationObserver(() => setDark(document.documentElement.classList.contains('dark')))
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => {
+      media.removeEventListener('change', onChange)
+      mo.disconnect()
+    }
   }, [])
 
   function toggle() {
-    const next = !document.documentElement.classList.contains('dark')
-    document.documentElement.classList.toggle('dark', next)
-    saveTheme(next ? 'dark' : 'light')
-    setDark(next)
+    toggleTheme()
+    setDark(document.documentElement.classList.contains('dark'))
   }
 
   return (

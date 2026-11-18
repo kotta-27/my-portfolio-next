@@ -3,7 +3,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js'
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js'
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js'
 import { createBrickMaterial } from '@/lib/bricks/geometry'
-import { gearGeometry } from '@/lib/bricks/technic'
+import { axleGeometry, cylinderZ, gearGeometry, liftarmGeometry, toothCenter } from '@/lib/bricks/technic'
 import type { Section } from '@/lib/town/sections'
 import { Sfx } from '@/lib/town/sfx'
 import { propStore } from '@/lib/town/store'
@@ -48,6 +48,10 @@ export type TownInput = {
   /** 手前の歩道に立てる、外へのリンクの看板。icon は SVG のマークアップ（色は fg で塗る） */
   links: { href: string; label: string; icon: string; bg: string; fg: string }[]
   onLink: (href: string) => void
+  /** 手前の左のレバーを倒した（ライト / ダークを入れ替える） */
+  onToggleTheme: () => void
+  /** 今がダークか（レバーの最初の向き） */
+  dark: boolean
   /** パネルを開いているあいだ、今いる建物と人形のほかを、背景の色へ褪せさせる（後ろの街がうるさくならないように） */
   focusDim?: boolean
   reducedMotion: boolean
@@ -62,6 +66,8 @@ export type TownBench = {
   goTo: (id: Section, opts?: { open?: boolean }) => void
   /** パネルが開いているか（と、その幅 px）。開いているあいだは、人形がパネルに隠れないよう絵をずらす */
   setPanelOpen: (open: boolean, width?: number) => void
+  /** ほかの場所でライト / ダークが切り替わったとき、レバーを合わせる */
+  setDark: (dark: boolean) => void
   dispose: () => void
 }
 
@@ -479,6 +485,39 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     signposts.push({ group, href: link.href, lift: 0 })
   })
 
+  // ───────── 手前の左のレバー（ライト / ダークの切り替え） ─────────
+  // 2 本の柱に軸が 2 本。レバー付きの 24 歯の歯車が、8 歯の歯車を 3 倍の角度で回し、白と紺の円板が半回転して今のモードを見せる
+  const lever = (() => {
+    const group = new THREE.Group()
+    // 6 × 2 の台をベースプレートのスタッドに合わせて置く（幅も奥行きも偶数なので、中心は 8 の倍数）
+    group.position.set(-168, 0, 120)
+    group.userData.lever = true
+    stack(group, 6, 2, 1, 'dark', 0, 0, 0, true)
+    const rig = new THREE.Group()
+    rig.position.set(-8, BR + 22, 0)
+    group.add(rig)
+    for (const px of [0, 16]) {
+      put(rig, liftarmGeometry(4), mat('gray'), px, -22 - 2, -6).rotation.z = Math.PI / 2
+      put(rig, axleGeometry(20), mat('black'), px, 0, 1)
+    }
+    const big = new THREE.Group()
+    rig.add(big)
+    put(big, gearGeometry(24), mat('gray'), 0, 0, 5).rotation.z = -toothCenter(24)
+    const arm = put(big, liftarmGeometry(5), mat('black'), 0, 0, 9)
+    arm.rotation.z = Math.PI / 2
+    put(big, cylinderZ(4.4, 7), mat('coral'), 0, 32, 9)
+    const small = new THREE.Group()
+    small.position.x = 16
+    rig.add(small)
+    put(small, gearGeometry(8), mat('black'), 0, 0, 5).rotation.z = Math.PI - toothCenter(8) - Math.PI / 8
+    const half = (c: Col, from: number) => put(small, new THREE.CylinderGeometry(8.5, 8.5, 2.4, 28, 1, false, from, Math.PI).rotateX(Math.PI / 2), mat(c), 0, 0, 10.5)
+    half('white', 0)
+    half('navy', Math.PI)
+    town.add(group)
+    return { group, big, small, angle: input.dark ? 0.5 : -0.5, goal: input.dark ? 0.5 : -0.5, pop: 0 }
+  })()
+  solids.push(lever.group)
+
   // ───────── 人形 ─────────
   const fig = new THREE.Group()
   const legL = new THREE.Group()
@@ -658,7 +697,8 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   // ───────── 操作: 建物をクリックで向かう、ドラッグで回す。← → / A D で歩き、↑ / W / Enter で入り、↓ / S で道に戻る ─────────
   const ray = new THREE.Raycaster()
   const ndc = new THREE.Vector2()
-  type Target = Building | Signpost | Prop
+  type Lever = typeof lever
+  type Target = Building | Signpost | Prop | Lever
   let hover: Target | null = null
   const aim = (e: PointerEvent) => {
     const r = renderer.domElement.getBoundingClientRect()
@@ -667,10 +707,11 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   }
   const pick = (e: PointerEvent): Target | null => {
     aim(e)
-    const hit = ray.intersectObjects([...buildings.map((b) => b.group), ...signposts.map((s) => s.group), ...props.map((p) => p.group)], true)[0]
+    const hit = ray.intersectObjects([...buildings.map((b) => b.group), ...signposts.map((s) => s.group), ...props.map((p) => p.group), lever.group], true)[0]
     if (!hit) return null
     let o: THREE.Object3D | null = hit.object
-    while (o && !o.userData.id && !o.userData.href && !o.userData.prop) o = o.parent
+    while (o && !o.userData.id && !o.userData.href && !o.userData.prop && !o.userData.lever) o = o.parent
+    if (o === lever.group) return lever
     return buildings.find((b) => b.group === o) ?? signposts.find((s) => s.group === o) ?? props.find((p) => p.group === o) ?? null
   }
 
@@ -891,14 +932,27 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     el.classList.replace('cursor-grabbing', 'cursor-grab')
     if (!click) return
     const b = pick(e)
+    // レバー: ライト / ダークを入れ替える（パネルは開いたまま）
+    if (b === lever) {
+      flipLever()
+      input.onToggleTheme()
+      return
+    }
     // パネルを開いているとき、ほかの建物と看板以外（地面・今いる建物・ベンチ）を押したら、パネルを閉じて道に戻る
     if (panelOpen && (!b || 'place' in b || (!('href' in b) && b === focus))) {
       toStreet()
       return
     }
-    if (!b || 'place' in b) return
+    if (!b || 'place' in b || b === lever) return
     if ('href' in b) input.onLink(b.href)
-    else goTo(b.id)
+    else if ('id' in b) goTo(b.id)
+  }
+  /** レバーを反対側へ倒す。カチッと鳴らす */
+  function flipLever() {
+    lever.goal = -lever.goal
+    lever.pop = 1
+    sfx.click(3, pan(lever.group.position.x))
+    loop()
   }
   /** 建物の前から、プロムナードの真ん中へ戻る（パネルは閉じる） */
   function toStreet() {
@@ -1072,6 +1126,17 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       moving = true
     }
     // 看板: カーソルを乗せると少し持ち上がる
+    // レバー: 倒れる向きへ少し行き過ぎてから止まる。小さい歯車は逆向きに 3 倍回る
+    {
+      const d = lever.goal - lever.angle
+      lever.angle += d * Math.min(1, dt * (input.reducedMotion ? 60 : 9))
+      if (Math.abs(d) < 0.0005) lever.angle = lever.goal
+      lever.big.rotation.z = -lever.angle
+      lever.small.rotation.z = 3 * lever.angle + Math.PI / 2
+      lever.pop = Math.max(0, lever.pop - dt * 4)
+      lever.group.position.y = (lever === hover ? 1.4 : 0) + Math.sin(lever.pop * Math.PI) * 1.2
+      if (Math.abs(d) >= 0.0005 || lever.pop > 0) moving = true
+    }
     for (const sp of signposts) {
       const goal = sp === hover ? 3 : 0
       sp.lift += (goal - sp.lift) * Math.min(1, dt * 14)
@@ -1123,6 +1188,12 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
 
   return {
     goTo,
+    setDark(dark) {
+      const goal = dark ? 0.5 : -0.5
+      if (goal === lever.goal) return
+      lever.goal = goal
+      loop()
+    },
     setPanelOpen(open, width) {
       panelOpen = open
       if (input.focusDim) {
