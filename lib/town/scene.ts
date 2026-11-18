@@ -505,7 +505,10 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     props.push(prop)
     return prop
   }
-  bench('bench-west', -120, 52)
+  // スマホ（狭い画面）では、レバーと札を道のすぐ手前に寄せる（カメラが人形に寄るので、奥だと画面の下に隠れる）。
+  // そのぶん西のベンチは右へずらす
+  const compact = host.clientWidth < 700
+  bench('bench-west', compact ? -96 : -120, 52)
   bench('bench-east', 112, 52)
 
   // ───────── 道の先（東の端の向こう）: 霧に薄れていく道と、まだ建っていない建物の輪郭、TO BE CONTINUED の道標 ─────────
@@ -656,7 +659,8 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   const lever = (() => {
     const group = new THREE.Group()
     // 4 × 2 の台をベースプレートのスタッドに合わせて置く（幅も奥行きも偶数なので、中心は 8 の倍数）
-    group.position.set(-168, 0, 120)
+    if (compact) group.position.set(-176, 0, 40)
+    else group.position.set(-168, 0, 120)
     group.userData.lever = true
     stack(group, 4, 2, 1, 'dark', 0, 0, 0, true)
     plateLabel(group, 'LIGHTS', 26, P)
@@ -692,7 +696,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   // 2 本の柱に渡した軸に、表が EN・裏が JA の札。押すと半回転し、回り終えたら言語を切り替える
   const flip = (() => {
     const group = new THREE.Group()
-    group.position.set(-128, 0, 120) // 4 × 2 の台。スタッドに合わせて中心は 8 の倍数
+    group.position.set(compact ? -144 : -128, 0, compact ? 40 : 120) // 4 × 2 の台。スタッドに合わせて中心は 8 の倍数
     group.userData.flip = true
     stack(group, 4, 2, 1, 'dark', 0, 0, 0, true)
     plateLabel(group, 'LANGUAGE', 28, P)
