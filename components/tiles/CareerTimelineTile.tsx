@@ -119,8 +119,9 @@ export async function CareerTimelineTile({ lang, bare = false }: { lang: Lang; b
   )
 }
 
-/** 1 ポジション分の説明・やったこと・関連記事 */
-function PositionBody({ pos, lang }: { pos: ResolvedCareerPosition; lang: Lang }) {
+/** 1 ポジション分の説明・やったこと・関連記事（街の経歴のパネルでも使う） */
+/** narrow: 関連記事を 1 列にする（街のパネルのように幅が狭いところ用） */
+export function PositionBody({ pos, lang, narrow = false }: { pos: ResolvedCareerPosition; lang: Lang; narrow?: boolean }) {
   const t = ui[lang]
   const highlights = pos.highlights?.[lang] ?? []
   return (
@@ -144,7 +145,7 @@ function PositionBody({ pos, lang }: { pos: ResolvedCareerPosition; lang: Lang }
       {pos.links.length > 0 && (
         <section className="mt-4">
           <TileLabel>{t.tiles.careerLinks}</TileLabel>
-          <div className="mt-2 grid grid-cols-1 gap-2 lg:grid-cols-2">
+          <div className={`mt-2 grid grid-cols-1 gap-2 ${narrow ? '' : 'lg:grid-cols-2'}`}>
             {pos.links.map((link) => (
               <a
                 key={link.url}

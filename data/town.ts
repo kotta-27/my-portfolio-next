@@ -24,7 +24,6 @@ type TownStrings = {
   close: string
   /** パネルから一覧ページへ */
   more: Record<'works' | 'career' | 'output', (n: number) => string>
-  careerNote: string
   now: string
   /** ABOUT の家のパネル */
   about: {
@@ -61,7 +60,6 @@ export const town: Record<Lang, TownStrings> = {
       career: () => '経歴を詳しく見る',
       output: (n) => `すべて見る（${n}）`,
     },
-    careerNote: '建物は下の階から古い順。一番上の階が今の会社。',
     now: '現在',
     about: {
       kana: '水野 航太',
@@ -101,7 +99,6 @@ export const town: Record<Lang, TownStrings> = {
       career: () => 'See full career',
       output: (n) => `See all (${n})`,
     },
-    careerNote: 'Oldest company on the ground floor, the current one at the top.',
     now: 'now',
     about: {
       kana: '',

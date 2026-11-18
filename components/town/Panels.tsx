@@ -8,7 +8,9 @@ import { projectsData } from '@/data/projects'
 import { town } from '@/data/town'
 import type { ResolvedCareerItem } from '@/data/career'
 import type { OutputItem } from '@/lib/outputs'
-import { companyPeriod } from '@/lib/career'
+import { companyPeriod, durationLabel, isOngoing } from '@/lib/career'
+import { ui } from '@/data/ui'
+import { PositionBody } from '@/components/tiles/CareerTimelineTile'
 import { OutputItemCard } from '@/components/home/Sections'
 import type { Section } from '@/lib/town/sections'
 
@@ -107,25 +109,69 @@ function Works({ lang }: { lang: Lang }) {
   )
 }
 
+/** 経歴: 今の会社から順に、各社の期間・ポジション・説明・やったこと・関連記事まで（/career と同じ中身） */
 function Career({ lang, items }: { lang: Lang; items: ResolvedCareerItem[] }) {
+  const t = ui[lang].tiles
   return (
     <>
-      <p className="text-[13px] text-mute">{town[lang].careerNote}</p>
-      <ul className="flex flex-col gap-[10px]">
-        {[...items].reverse().map((c) => (
-          <li key={c.company.en} className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-3 rounded-[12px] bg-soft px-3 py-[10px]">
-            <span className="relative block h-[44px] w-[44px] overflow-hidden rounded-[10px] bg-white">
-              <Image src={c.logo} alt="" fill sizes="44px" className="object-contain p-[6px]" />
-            </span>
-            <span className="flex min-w-0 flex-col">
-              <b className="text-[15px] font-extrabold">{c.company[lang]}</b>
-              <span className="text-[12.5px] text-mute">{c.positions[0].role[lang]}</span>
-              <span className="font-mono text-[11px] tabular-nums text-mute">{companyPeriod(c)}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
-      <More href="/career">{town[lang].more.career(items.length)}</More>
+      <ol className="flex flex-col">
+        {[...items].reverse().map((c) => {
+          const current = isOngoing(c.positions[0].period)
+          const period = companyPeriod(c)
+          const multiple = c.positions.length > 1
+          return (
+            <li key={c.company.en} className="border-t border-ink/10 py-6 first:border-t-0 first:pt-2 last:pb-0">
+              <div className="grid grid-cols-[44px_minmax(0,1fr)] items-center gap-3">
+                <span className="relative block h-[44px] w-[44px] overflow-hidden rounded-[10px] bg-white shadow-[inset_0_0_0_1px_rgb(var(--ink)/0.08)]">
+                  <Image src={c.logo} alt="" fill sizes="44px" className="object-contain p-[6px]" />
+                </span>
+                <span className="flex min-w-0 flex-col gap-[2px]">
+                  <span className="flex flex-wrap items-center gap-2">
+                    <b className="text-[17px] font-extrabold leading-tight">{c.company[lang]}</b>
+                    {current && <span className="rounded-[5px] bg-teal px-[7px] py-[2px] text-[9.5px] font-bold uppercase tracking-[.06em] text-paper">now</span>}
+                  </span>
+                  <span className="font-mono text-[11.5px] tabular-nums text-mute">
+                    <span className={current ? 'font-bold text-teal' : ''}>{period}</span>
+                    {durationLabel(period, lang) && <span> · {durationLabel(period, lang)}</span>}
+                  </span>
+                </span>
+              </div>
+              {multiple ? (
+                // インターン → 正社員のように、同じ会社のポジションを新しい順に
+                <div className="mt-4 flex flex-col gap-6">
+                  {c.positions.map((pos) => {
+                    const ongoing = isOngoing(pos.period)
+                    return (
+                      <div key={pos.period} className={`border-l-2 pl-4 ${ongoing ? 'border-teal' : 'border-soft'}`}>
+                        <p className="text-[14.5px] font-extrabold">
+                          {pos.role[lang]}
+                          <span className="ml-2 rounded-[5px] bg-soft px-[6px] py-[2px] align-[2px] text-[10px] font-bold text-mute">{pos.isIntern ? t.intern : t.fullTime}</span>
+                        </p>
+                        <p className="mt-[3px] font-mono text-[11.5px] tabular-nums text-mute">
+                          <span className={ongoing ? 'font-bold text-teal' : ''}>{pos.period}</span> · {durationLabel(pos.period, lang)}
+                        </p>
+                        <PositionBody pos={pos} lang={lang} narrow />
+                      </div>
+                    )
+                  })}
+                </div>
+              ) : (
+                <>
+                  <p className="mt-3 text-[14px] font-extrabold">{c.positions[0].role[lang]}</p>
+                  <PositionBody pos={c.positions[0]} lang={lang} narrow />
+                </>
+              )}
+              <div className="mt-4 flex flex-wrap gap-[5px]">
+                {c.tags.map((tag) => (
+                  <span key={tag} className="rounded-[6px] bg-soft px-[9px] py-[4px] text-[11.5px] font-bold">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </li>
+          )
+        })}
+      </ol>
     </>
   )
 }
