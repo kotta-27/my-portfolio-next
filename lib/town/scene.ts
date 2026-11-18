@@ -311,12 +311,13 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       pic.position.set((i - 1) * 36, BR * 1.6, 0.6)
       g.add(pic)
     })
+    // 看板は屋根のスタッド（高さ 1.7）より上に浮かせ、後ろの 2 本の柱で支える
     const s = sign(L.works.title, '', 46, 14, COL.teal, '#ffffff')
-    s.position.set(0, top + PLATE + 2, -6)
-    s.rotation.x = -0.12
+    s.position.set(0, top + PLATE + 1.7 + 7 + 1.5, -6)
+    s.rotation.x = -0.08
     g.add(s)
-    put(g, box(4, 12, 4, 0.5), mat('dark'), -18, top + PLATE, -8)
-    put(g, box(4, 12, 4, 0.5), mat('dark'), 18, top + PLATE, -8)
+    put(g, box(4, 19, 4, 0.5), mat('dark'), -18, top + PLATE, -8.6)
+    put(g, box(4, 19, 4, 0.5), mat('dark'), 18, top + PLATE, -8.6)
     for (const [gy, t, c] of [[BR * 3.2, 24, 'mustard'], [BR * 1.55, 8, 'coral']] as const) {
       const gear = put(g, gearGeometry(t), mat(c), (w * P) / 2 + 2, gy, -24)
       gear.rotation.order = 'YXZ'
