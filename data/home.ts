@@ -24,7 +24,7 @@ type HomeStrings = {
   output: { eyebrow: string; title: string; more: (n: number) => string; read: string }
   contact: { eyebrow: string; title: string; body: string }
   footer: string
-  /** 一覧ページ（/projects・/output・/career） */
+  /** 一覧ページ（/works・/output・/career） */
   pages: { back: string; projects: { title: string; blurb: string }; output: { title: string; blurb: string }; career: { title: string; blurb: string } }
 }
 

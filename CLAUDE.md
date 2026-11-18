@@ -11,7 +11,7 @@
 ## Design (Lego town)
 - トップは画面いっぱいの「レゴの街」。`components/town/TownView.tsx`（画面・パネル）と `lib/town/scene.ts`（three の街・人形）。建物 = セクション（`lib/town/sections.ts`）
 - 建物に着くと開くパネルの中身は `components/town/Panels.tsx`。看板や操作の文言は `data/town.ts`
-- トップは街だけ。詳しい中身は各一覧ページ（/projects・/career・/output）。WebGL が使えないときは、街の代わりにそのリンクを出す
+- トップは街だけ。詳しい中身は各一覧ページ（/works・/career・/output）。WebGL が使えないときは、街の代わりにそのリンクを出す
 - ブロックの形と材質は `lib/bricks/geometry.ts`、歯車などは `lib/bricks/technic.ts`
 - 色は `tailwind.config.ts` のトークンのみ: `ground` `tile` `ink` `teal` `coral` `mustard` `mute` `soft`。生の HEX を className に書かない
 - 書体: `font-sans`（Plus Jakarta Sans / Noto Sans JP）、数値は `font-mono`（JetBrains Mono）+ `tabular-nums`

@@ -35,7 +35,7 @@ const DOT: Record<Section, string> = {
 
 /** WebGL が使えないとき、街の代わりに出すリンク */
 const FALLBACK: { id: Section; href: string }[] = [
-  { id: 'works', href: '/projects' },
+  { id: 'works', href: '/works' },
   { id: 'career', href: '/career' },
   { id: 'output', href: '/output' },
   { id: 'contact', href: 'mailto:mizukou27@gmail.com' },
@@ -44,7 +44,7 @@ const FALLBACK: { id: Section; href: string }[] = [
 /**
  * トップの「レゴの街」。画面いっぱいに街を描き、建物（左上のボタンでも）を選ぶと人形が歩いていき、着くと中身のパネルが開く。
  * URL の #at-works などで、その建物から始まる（下の一覧の #projects などのアンカーとぶつからないよう、at- を付ける）。
- * three は大きいので、ここが描かれてから読み込む。WebGL が使えないときは、街の代わりに各ページ（/projects など）へのリンクを並べる。
+ * three は大きいので、ここが描かれてから読み込む。WebGL が使えないときは、街の代わりに各ページ（/works など）へのリンクを並べる。
  */
 export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const host = useRef<HTMLDivElement>(null)

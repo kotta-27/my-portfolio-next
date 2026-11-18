@@ -18,7 +18,7 @@ export function SiteShell({ lang, children }: { lang: Lang; children: ReactNode 
           </a>
           <nav aria-label="Footer" className="flex flex-wrap gap-x-6 gap-y-2 font-bold">
             {[
-              { href: '/projects', label: home[lang].nav.projects },
+              { href: '/works', label: home[lang].nav.projects },
               { href: '/career', label: home[lang].nav.career },
               { href: '/output', label: home[lang].nav.output },
               { href: '/#at-contact', label: home[lang].nav.contact },

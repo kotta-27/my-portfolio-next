@@ -9,7 +9,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 
 /** 今いるページが、街のどの建物にあたるか */
 function sectionOf(path: string): Section | null {
-  if (path.startsWith('/projects')) return 'works'
+  if (path.startsWith('/works')) return 'works'
   if (path.startsWith('/career')) return 'career'
   if (path.startsWith('/output') || path.startsWith('/notes')) return 'output'
   return null

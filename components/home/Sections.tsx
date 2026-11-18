@@ -81,7 +81,7 @@ function FeaturedRow({ project, lang, lines, index }: { project: ProjectItem; la
   return (
     <li>
       <a
-        href={`/projects/${project.slug}`}
+        href={`/works/${project.slug}`}
         className="group grid gap-5 rounded-[20px] bg-tile p-4 text-ink no-underline shadow-[0_4px_0_rgb(var(--shadow-rgb)/0.08)] transition-[transform,box-shadow] duration-200 hover:-translate-y-[3px] hover:shadow-[0_7px_0_rgb(var(--shadow-rgb)/0.1)] active:translate-y-[2px] active:shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.08)] sm:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] sm:gap-7 sm:p-5"
       >
         <span className="relative block aspect-[16/10] self-start overflow-hidden rounded-[12px] bg-soft shadow-[inset_0_0_0_1px_rgb(var(--ink)/0.06)]">
@@ -143,7 +143,7 @@ export function FeaturedProjects({ lang }: { lang: Lang }) {
       head={
         <SectionHead eyebrow={t.eyebrow} title={t.title}>
           <p className="text-[15px] leading-[1.8] text-mute">{t.blurb(rows.length)}</p>
-          <MoreLink href="/projects">{t.more(projectsData.length - rows.length)}</MoreLink>
+          <MoreLink href="/works">{t.more(projectsData.length - rows.length)}</MoreLink>
         </SectionHead>
       }
     >
@@ -340,7 +340,7 @@ export function ProjectRow({ project, lang }: { project: ProjectItem; lang: Lang
   return (
     <li className="border-t border-ink/10 last:border-b">
       <a
-        href={`/projects/${project.slug}`}
+        href={`/works/${project.slug}`}
         className="group -mx-3 grid items-center gap-4 rounded-[16px] px-3 py-5 text-ink no-underline transition-colors duration-200 hover:bg-tile/70 grid-cols-[120px_minmax(0,1fr)] sm:-mx-4 sm:grid-cols-[200px_minmax(0,1fr)] sm:gap-7 sm:px-4 lg:grid-cols-[220px_minmax(0,1fr)_200px] lg:gap-8"
       >
         <span className="relative block aspect-[16/10] overflow-hidden rounded-[10px] bg-soft">

@@ -9,7 +9,7 @@ import { TownView } from '@/components/town/TownView'
 import { townPanels } from '@/components/town/Panels'
 
 /** 以前のタブ表示（?view=…）へのリンクは、それぞれの一覧ページへ送る */
-const LEGACY_VIEWS: Record<string, string> = { career: '/career', projects: '/projects', writing: '/output' }
+const LEGACY_VIEWS: Record<string, string> = { career: '/career', projects: '/works', writing: '/output' }
 
 /** トップ。画面いっぱいの「レゴの街」だけ（components/town/TownView.tsx）。詳しい中身は各一覧ページへ */
 export default async function Page({ searchParams }: { searchParams: Promise<{ view?: string }> }) {

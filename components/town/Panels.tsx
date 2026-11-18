@@ -16,7 +16,7 @@ import type { Section } from '@/lib/town/sections'
 
 /*
  * 街の建物に着いたとき右（スマホでは下）に開く、各セクションの中身。サーバーで組んで TownView に渡す。
- * 長い中身は今の一覧ページ（/projects・/career・/output）に任せ、ここは要点だけ。
+ * 長い中身は今の一覧ページ（/works・/career・/output）に任せ、ここは要点だけ。
  */
 
 function More({ href, children }: { href: string; children: ReactNode }) {
@@ -92,7 +92,7 @@ function Works({ lang }: { lang: Lang }) {
       <ul className="flex flex-col">
         {items.map((p) => (
           <li key={p.slug} className="border-t border-ink/10 py-4 first:border-t-0 first:pt-0 last:pb-0">
-            <a href={`/projects/${p.slug}`} className="group grid grid-cols-[96px_minmax(0,1fr)] items-center gap-3 text-ink no-underline sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-4">
+            <a href={`/works/${p.slug}`} className="group grid grid-cols-[96px_minmax(0,1fr)] items-center gap-3 text-ink no-underline sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-4">
               <span className="relative block aspect-[16/10] overflow-hidden rounded-[8px] bg-soft">
                 <Image src={p.image} alt="" fill sizes="(min-width: 640px) 150px, 96px" className="object-cover object-top" />
               </span>
@@ -104,7 +104,7 @@ function Works({ lang }: { lang: Lang }) {
           </li>
         ))}
       </ul>
-      <More href="/projects">{town[lang].more.works(projectsData.length)}</More>
+      <More href="/works">{town[lang].more.works(projectsData.length)}</More>
     </>
   )
 }
