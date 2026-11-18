@@ -128,6 +128,68 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     parent.add(mesh)
     return mesh
   }
+  /**
+   * 屋根の斜めのブロック（スロープ）。長さ len スタッド（x 方向）、奥行き run スタッド（z 方向）、高さはブロック 1 段。
+   * 後ろの 1 スタッド分が平らでスタッドが 1 列、そこから前（+z）へ向かって下がる。足元の中心が原点。
+   * run が 2 なら 45°、3 なら 33° くらい。
+   */
+  const slopeGeo = (len: number, run: number) => {
+    const key = `slope|${len}|${run}`
+    const hit = geoCache.get(key)
+    if (hit) return hit
+    const half = (run * P) / 2 - 0.1
+    const lip = 1.6
+    const shape = new THREE.Shape()
+    shape.moveTo(-half, 0)
+    shape.lineTo(half, 0)
+    shape.lineTo(half, lip)
+    shape.lineTo(-half + P - 0.1, BR)
+    shape.lineTo(-half, BR)
+    shape.closePath()
+    const L = len * P - 0.2
+    const body = new THREE.ExtrudeGeometry(shape, { depth: L, bevelEnabled: false })
+    body.rotateY(-Math.PI / 2)
+    body.translate(L / 2, 0, 0)
+    const parts: THREE.BufferGeometry[] = [normalise(body)]
+    for (let i = 0; i < len; i++) {
+      const st = new THREE.LatheGeometry(studProfile, 14)
+      st.translate((i + 0.5 - len / 2) * P, BR, -half + P / 2)
+      parts.push(normalise(st))
+    }
+    const g = mergeGeometries(parts, false)
+    if (!g) throw new Error('slope geometry')
+    geoCache.set(key, g)
+    return g
+  }
+  /**
+   * 切妻の屋根。棟（てっぺん）が x 方向に通り、前（+z）と後ろ（-z）へ下がる。足元の中心が原点、幅 w・奥行き d スタッド。
+   * 段ごとにスロープを run - 1 スタッドずつ内へ寄せて積み、間は普通のブロックで埋める。てっぺんは平らなスタッドの列になる
+   */
+  const gableRoof = (parent: THREE.Object3D, w: number, d: number, run: number, c: Col, y0: number, z0: number) => {
+    const step = run - 1
+    // 45° の面は、この向きのカメラでは光源の照り返しをまともに受けて白っぽく飛ぶので、屋根だけ艶を抑えた材質にする
+    const key = `roof|${c}`
+    let m = mats.get(key)
+    if (!m) {
+      m = createBrickMaterial(COL[c])
+      m.clearcoat = 0
+      m.roughness = 0.9
+      m.sheen = 0
+      m.envMapIntensity = 0.35
+      mats.set(key, m)
+    }
+    for (let k = 0; ; k++) {
+      const front = k * step // 前のスロープが占める最初の列（前の端から数えて）
+      if (2 * (front + run) > d) break
+      const zOf = (row: number, n: number) => z0 + d * P / 2 - (row + n / 2) * P // 前の端から row 列目から n 列の中心
+      const y = y0 + k * BR
+      put(parent, slopeGeo(w, run), m, 0, y, zOf(front, run))
+      const back = put(parent, slopeGeo(w, run), m, 0, y, zOf(d - front - run, run))
+      back.rotation.y = Math.PI
+      const fill = d - 2 * (front + run)
+      if (fill > 0) put(parent, blockGeo(w, fill, 3, false), m, 0, y, zOf(front + run, fill))
+    }
+  }
   /** ブロックを n 段積む（一番上だけスタッド付き）。x, z は足元の中心。積んだ上面の高さを返す */
   const stack = (parent: THREE.Object3D, w: number, d: number, n: number, c: Col | THREE.Material, x: number, z: number, y0 = 0, studsOnTop = true) => {
     const m = typeof c === 'string' ? mat(c) : c
@@ -300,8 +362,9 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     const w = 7
     const d = 6
     const top = stack(g, w, d, 4, 'white', 0, (-d * P) / 2)
-    for (let k = 0; k < 3; k++) put(g, blockGeo(w + 1, d - 2 * k, 3, k === 2), mat('navy'), 0, top + k * BR, (-d * P) / 2)
-    stack(g, 1, 1, 2, 'dark', 16, -16, top + BR)
+    // 切妻の屋根（45° のスロープ）。前後に 1 スタッドずつ張り出す
+    gableRoof(g, w + 1, d + 2, 2, 'navy', top, (-d * P) / 2)
+    stack(g, 1, 1, 2, 'dark', 16, -36, top + BR * 1.4)
     put(g, box(13, 28, 1.6, 0.4), mat('coral'), -8, 0, 0.6)
     put(g, new THREE.SphereGeometry(1, 10, 8), mat('mustard'), -4, 14, 1.8)
     windowPane(g, 14, 15, 14, 13)
@@ -374,7 +437,12 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     for (let i = 0; i < 5; i++) stack(g, 1, 1, 4, 'white', (i * 3 - 6) * P, -P * 0.5, PLATE * 2, false)
     const top = PLATE * 2 + BR * 4
     put(g, blockGeo(w + 1, d, 1, false), mat('white'), 0, top, (-d * P) / 2 + 2)
-    for (let k = 0; k < 3; k++) put(g, blockGeo(w - 1 - k * 4, 2, 3, k === 2), mat('teal'), 0, top + PLATE + k * BR, -P * 1.2)
+    // 切妻の屋根（33° のスロープ）。棟は前後（z）に通し、正面に三角の破風が見える
+    const roof = new THREE.Group()
+    roof.position.set(0, 0, (-d * P) / 2 + 2)
+    roof.rotation.y = Math.PI / 2
+    g.add(roof)
+    gableRoof(roof, d, w + 1, 3, 'teal', top + PLATE, 0)
     const books: Col[] = ['coral', 'navy', 'teal', 'white', 'coral', 'dark']
     books.forEach((c, i) => put(g, blockGeo(2, 1, 1, i === books.length - 1), mat(c), -20 + (i % 2) * 2, PLATE * 2 + i * PLATE, -20))
     books.slice(0, 4).forEach((c, i) => put(g, blockGeo(2, 1, 1, i === 3), mat(c), 22, PLATE * 2 + i * PLATE, -22))
