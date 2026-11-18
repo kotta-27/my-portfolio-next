@@ -76,9 +76,9 @@ function Works({ lang }: { lang: Lang }) {
   const items = featured.flatMap((f) => projectsData.filter((p) => p.slug === f.slug))
   return (
     <>
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col">
         {items.map((p) => (
-          <li key={p.slug}>
+          <li key={p.slug} className="border-t border-ink/10 py-4 first:border-t-0 first:pt-0 last:pb-0">
             <a href={`/projects/${p.slug}`} className="group grid grid-cols-[96px_minmax(0,1fr)] items-center gap-3 text-ink no-underline sm:grid-cols-[150px_minmax(0,1fr)] sm:gap-4">
               <span className="relative block aspect-[16/10] overflow-hidden rounded-[8px] bg-soft">
                 <Image src={p.image} alt="" fill sizes="(min-width: 640px) 150px, 96px" className="object-cover object-top" />
