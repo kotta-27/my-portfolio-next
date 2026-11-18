@@ -433,6 +433,63 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   bench('bench-west', -120, 52)
   bench('bench-east', 112, 52)
 
+  // ───────── 道の先（東の端の向こう）: 霧に薄れていく道と、まだ建っていない建物の輪郭、TO BE CONTINUED の道標 ─────────
+  {
+    const edge = (PW / 2) * P
+    const ghost = (o: number) => new THREE.MeshBasicMaterial({ color: '#AEB7C1', transparent: true, opacity: o, depthWrite: false })
+    // 道はプレートの外へ、だんだん薄くなりながら続く
+    for (let i = 0; i < 6; i++)
+      for (let j = -1; j <= 1; j++) {
+        const m = new THREE.Mesh(new THREE.BoxGeometry(2 * P - 0.3, 1.2, 2 * P - 0.3), ghost(Math.max(0, 0.45 - i * 0.075)))
+        m.position.set(edge + P + i * 2 * P, -PLATE + 0.6, j * 2 * P)
+        town.add(m)
+      }
+    // 建物の輪郭（線と、ごく薄い面）。遠いほど薄い
+    const outline = (w: number, h: number, d: number, x: number, z: number, o: number) => {
+      const geo = new THREE.BoxGeometry(w, h, d)
+      geo.translate(0, h / 2 - PLATE, 0)
+      const line = new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: '#7C8894', transparent: true, opacity: o }))
+      line.position.set(x, 0, z)
+      const fill = new THREE.Mesh(geo, ghost(o * 0.22))
+      fill.position.set(x, 0, z)
+      town.add(line, fill)
+    }
+    outline(56, 64, 48, edge + 44, FRONT - 24, 0.55)
+    outline(40, 104, 40, edge + 104, FRONT - 28, 0.32)
+    outline(48, 44, 44, edge + 160, FRONT - 22, 0.16)
+    // 道標: 道の東の端、手前の歩道に
+    const post = new THREE.Group()
+    post.position.set(edge - 16, 0, 64) // 人形の通り道（z = 0）と郵便局の前をふさがない、手前の角
+    put(post, blockGeo(2, 2, 1), mat('dark'), 0, 0, 0)
+    put(post, box(3, 40, 3, 0.5), mat('dark'), 0, PLATE, 0)
+    const c = document.createElement('canvas')
+    c.width = 640
+    c.height = 170
+    const ctx = c.getContext('2d')
+    if (ctx) {
+      ctx.fillStyle = '#F4F4F2'
+      ctx.fillRect(0, 0, 640, 170)
+      ctx.fillStyle = COL.navy
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+      let px = 76
+      ctx.font = `800 ${px}px ${fontFamily}`
+      while (ctx.measureText('TO BE CONTINUED  →').width > 560) ctx.font = `800 ${(px -= 2)}px ${fontFamily}`
+      ctx.fillText('TO BE CONTINUED  →', 320, 92)
+    }
+    const tex = new THREE.CanvasTexture(c)
+    tex.colorSpace = THREE.SRGBColorSpace
+    tex.anisotropy = 8
+    const face = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.5 })
+    const side = mat('white')
+    const board = new THREE.Mesh(new THREE.BoxGeometry(48, 12.75, 2), [side, side, side, side, face, side])
+    board.position.set(10, PLATE + 32, 2.6)
+    board.castShadow = true
+    post.add(board)
+    town.add(post)
+    solids.push(post)
+  }
+
   // ───────── 手前の歩道の看板（X・GitHub などへのリンク） ─────────
   // 2 × 4 の台に、4 × 4 の板を少し後ろへ倒して立てる。板の前の面にアイコンと名前を描く
   type Signpost = { group: THREE.Group; href: string; lift: number }
@@ -1167,7 +1224,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     if (keys.size) {
       fig.position.z += (0 - fig.position.z) * Math.min(1, dt * 8)
       vx = (keys.has('ArrowRight') ? 1 : 0) - (keys.has('ArrowLeft') ? 1 : 0)
-      fig.position.x = Math.min(220, Math.max(-230, fig.position.x + vx * SPEED * dt))
+      fig.position.x = Math.min(232, Math.max(-230, fig.position.x + vx * SPEED * dt))
     } else if (path.length) {
       const to = path[0]
       const d = to.clone().sub(fig.position)
@@ -1259,7 +1316,9 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     if (!input.reducedMotion) for (const g of gears) g.rotation.z = ((clock * 6) / (g.userData.t as number)) * (g.userData.t === 8 ? -1 : 1)
 
     // カメラは人形を追いかける（広い画面では、街の真ん中との間。パネルが開いたら人形と建物を真ん中に）
-    const want = new THREE.Vector3(narrow() || panelOpen ? fig.position.x : fig.position.x * 0.55, 18, narrow() ? -10 : -24)
+    // 東の端まで歩いたら、道の先（霧の向こう）が見えるように、さらに右へ寄せる
+    const east = Math.max(0, fig.position.x - 150) * 0.9
+    const want = new THREE.Vector3(narrow() || panelOpen ? fig.position.x : fig.position.x * 0.55 + east, 18, narrow() ? -10 : -24)
     view.target.lerp(want, input.reducedMotion ? 1 : Math.min(1, dt * 3))
     if (view.target.distanceTo(want) > 0.2) moving = true
     placeCamera()
