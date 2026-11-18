@@ -11,8 +11,6 @@ type TownStrings = {
   hint: string
   /** 街の読み上げ */
   label: string
-  /** 3D が動かないとき・街の下に、同じ中身を縦に並べた一覧の見出し */
-  listTitle: string
   close: string
   /** パネルから一覧ページへ */
   more: Record<'works' | 'career' | 'output', (n: number) => string>
@@ -31,7 +29,6 @@ export const town: Record<Lang, TownStrings> = {
     },
     hint: '建物をクリック ／ ← → で歩く ／ ドラッグで回す',
     label: 'レゴで組んだ街。建物がそれぞれ、自己紹介・作ったもの・経歴・書いたもの・連絡先になっている',
-    listTitle: '街を歩かずに見る',
     close: '閉じる',
     more: {
       works: (n) => `すべての作品を見る（${n}）`,
@@ -51,7 +48,6 @@ export const town: Record<Lang, TownStrings> = {
     },
     hint: 'Click a building / ← → to walk / drag to rotate',
     label: 'A town built from bricks. Each building is a section: about, works, career, writing and contact',
-    listTitle: 'Skip the walk',
     close: 'Close',
     more: {
       works: (n) => `See all projects (${n})`,

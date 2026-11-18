@@ -1,7 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { PiArrowDownBold, PiXBold } from 'react-icons/pi'
+import { PiArrowRightBold, PiXBold } from 'react-icons/pi'
 import type { Lang } from '@/types'
 import { town } from '@/data/town'
 import { SECTIONS, isSection, type Section } from '@/lib/town/sections'
@@ -26,10 +26,18 @@ const DOT: Record<Section, string> = {
   contact: 'bg-coral',
 }
 
+/** WebGL が使えないとき、街の代わりに出すリンク */
+const FALLBACK: { id: Section; href: string }[] = [
+  { id: 'works', href: '/projects' },
+  { id: 'career', href: '/career' },
+  { id: 'output', href: '/output' },
+  { id: 'contact', href: 'mailto:mizukou27@gmail.com' },
+]
+
 /**
  * トップの「レゴの街」。画面いっぱいに街を描き、建物（左上のボタンでも）を選ぶと人形が歩いていき、着くと中身のパネルが開く。
  * URL の #at-works などで、その建物から始まる（下の一覧の #projects などのアンカーとぶつからないよう、at- を付ける）。
- * three は大きいので、ここが描かれてから読み込む。読み込むまでと WebGL が使えないときは、街の代わりに案内を出し、下の一覧（app/page.tsx）へ誘う。
+ * three は大きいので、ここが描かれてから読み込む。WebGL が使えないときは、街の代わりに各ページ（/projects など）へのリンクを並べる。
  */
 export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const host = useRef<HTMLDivElement>(null)
@@ -139,26 +147,25 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
 
       {state === 'none' && (
         <div className="absolute inset-0 grid place-items-center p-6 text-center">
-          <a href="#list" className="flex flex-col items-center gap-3 text-ink no-underline">
+          <div className="flex flex-col items-center gap-5">
             <span className="text-[44px] font-extrabold tracking-[-0.04em] sm:text-[72px]">Kota Mizuno</span>
-            <span className="inline-flex items-center gap-2 text-[15px] font-bold text-teal">
-              {t.listTitle}
-              <PiArrowDownBold />
-            </span>
-          </a>
+            <ul className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+              {FALLBACK.map((l) => (
+                <li key={l.href}>
+                  <a href={l.href} className="inline-flex items-center gap-[6px] text-[15px] font-bold text-teal no-underline">
+                    {t.buildings[l.id].sub}
+                    <PiArrowRightBold className="text-[12px]" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       )}
 
       <div className={`pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center px-4 transition-opacity duration-500 ${state === 'ready' && !open ? 'opacity-100' : 'opacity-0'}`}>
         <span className="hidden rounded-full bg-ink/85 px-4 py-[9px] text-[12.5px] font-bold text-paper sm:block">{t.hint}</span>
       </div>
-      <a
-        href="#list"
-        className={`absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-full bg-tile/90 px-4 py-[9px] text-[12.5px] font-bold text-ink no-underline shadow-[0_2px_0_rgb(var(--shadow-rgb)/0.12)] transition-opacity duration-300 ${open ? 'opacity-0' : 'opacity-100'}`}
-      >
-        {t.listTitle}
-        <PiArrowDownBold className="text-[12px]" />
-      </a>
 
       <aside
         aria-live="polite"
