@@ -22,6 +22,10 @@ type TownStrings = {
   /** 街の読み上げ */
   label: string
   close: string
+  /** スマホの下の地図・パネルのつまみ（読み上げ用） */
+  mapLabel: string
+  sheetMore: string
+  sheetLess: string
   /** パネルから一覧ページへ */
   more: Record<'works' | 'career' | 'output', (n: number) => string>
   now: string
@@ -55,6 +59,9 @@ export const town: Record<Lang, TownStrings> = {
     hint: '建物や看板をクリック ／ ← → か A D で歩く・↑ W で入る・↓ S で道に戻る ／ ベンチは長押しで動かせる',
     label: 'レゴで組んだ街。建物がそれぞれ、自己紹介・作ったもの・経歴・書いたもの・連絡先になっている',
     close: '閉じる',
+    mapLabel: '街の地図',
+    sheetMore: 'パネルを広げる',
+    sheetLess: 'パネルを縮める',
     more: {
       works: (n) => `すべての作品を見る（${n}）`,
       career: () => '経歴を詳しく見る',
@@ -94,6 +101,9 @@ export const town: Record<Lang, TownStrings> = {
     hint: 'Click a building or sign / ← → or A D walk, ↑ W enter, ↓ S back to the street / long-press a bench to move it',
     label: 'A town built from bricks. Each building is a section: about, works, career, writing and contact',
     close: 'Close',
+    mapLabel: 'Town map',
+    sheetMore: 'Expand panel',
+    sheetLess: 'Shrink panel',
     more: {
       works: (n) => `See all projects (${n})`,
       career: () => 'See full career',

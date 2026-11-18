@@ -58,6 +58,10 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   const [state, setState] = useState<'loading' | 'ready' | 'none'>('loading')
   const [open, setOpen] = useState<Section | null>(null)
   const [target, setTarget] = useState<Section | null>(null)
+  // スマホ: 人形に一番近い建物（下の地図で今いる場所を示す）と、下から出るパネルの高さ（少しだけ / 全部）
+  const [near, setNear] = useState<Section>('about')
+  const [sheetFull, setSheetFull] = useState(false)
+  const sheetDrag = useRef<{ y: number } | null>(null)
   const t = town[lang]
 
   const go = useCallback((id: Section) => {
@@ -105,6 +109,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         focusDim: true,
         reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
         onArrive: (id) => setOpen(id),
+        onNear: (id) => setNear(id),
         onLeave: (toStreet) => {
           setOpen(null)
           // 通りに出たら、どの建物も選んでいない状態に戻す
@@ -148,7 +153,12 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
   }, [lang])
 
   useEffect(() => {
-    bench.current?.setPanelOpen(open !== null, aside.current?.offsetWidth)
+    bench.current?.setPanelOpen(open !== null, aside.current?.offsetWidth, sheetFull ? 0.86 : 0.4)
+  }, [open, sheetFull])
+
+  // 別の建物に着いたら、パネルはまた少しだけの高さから
+  useEffect(() => {
+    setSheetFull(false)
   }, [open])
 
   useEffect(() => {
@@ -178,7 +188,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
       </div>
 
       <nav aria-label="Main" className="absolute inset-x-0 top-0 z-10 flex flex-wrap items-center gap-2 p-3 sm:p-5">
-        <a href="/" className="hidden items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold dark:ring-1 dark:ring-inset dark:ring-ink/20 tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] sm:flex">
+        <a href="/" className="flex items-center gap-[10px] rounded-[12px] bg-tile/90 px-[14px] py-[10px] text-[16px] font-extrabold dark:ring-1 dark:ring-inset dark:ring-ink/20 tracking-[-0.02em] text-ink no-underline shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)]">
           <span aria-hidden className="mini-brick mt-[3px] h-[10px] w-[17px] rounded-[3px]" />
           Kota Mizuno
         </a>
@@ -188,7 +198,7 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
             type="button"
             onClick={() => go(id)}
             aria-current={target === id ? 'true' : undefined}
-            className={`rounded-[10px] px-[11px] py-[10px] font-mono text-[11.5px] font-extrabold tracking-[.06em] shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.14)] transition-colors duration-150 active:translate-y-[2px] active:shadow-[0_1px_0_rgb(var(--shadow-rgb)/0.14)] sm:px-[13px] sm:text-[12px] ${
+            className={`hidden rounded-[10px] px-[11px] py-[10px] font-mono sm:inline-block text-[11.5px] font-extrabold tracking-[.06em] shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.14)] transition-colors duration-150 active:translate-y-[2px] active:shadow-[0_1px_0_rgb(var(--shadow-rgb)/0.14)] sm:px-[13px] sm:text-[12px] ${
               target === id ? 'bg-ink text-paper' : 'bg-tile/90 text-ink hover:bg-tile dark:ring-1 dark:ring-inset dark:ring-ink/20 dark:hover:ring-ink/40'
             }`}
           >
@@ -220,16 +230,61 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
       )}
 
 
+      {/* スマホ: 下の街の地図。今いる場所を濃くし、押すとその建物へ歩く。横に指を滑らせても歩ける */}
+      <nav
+        aria-label={t.mapLabel}
+        className={`absolute inset-x-0 bottom-3 z-10 flex justify-center px-3 transition-opacity duration-300 sm:hidden ${open ? 'pointer-events-none opacity-0' : 'opacity-100'}`}
+      >
+        <ol className="flex items-end gap-[2px] rounded-[14px] bg-tile/90 p-[5px] shadow-[0_3px_0_rgb(var(--shadow-rgb)/0.12)] backdrop-blur-sm dark:ring-1 dark:ring-inset dark:ring-ink/20">
+          {SECTIONS.map((id) => (
+            <li key={id}>
+              <button
+                type="button"
+                onClick={() => go(id)}
+                aria-current={near === id ? 'location' : undefined}
+                className={`flex flex-col items-center gap-[5px] rounded-[10px] px-[9px] pb-[6px] pt-[7px] font-mono text-[9.5px] font-extrabold tracking-[.04em] transition-colors duration-200 ${
+                  near === id ? 'bg-ink text-paper' : 'text-mute'
+                }`}
+              >
+                <span aria-hidden className={`h-[7px] w-[12px] rounded-[2px] ${DOT[id]} ${near === id ? '' : 'opacity-60'}`} />
+                {t.buildings[id].title}
+              </button>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
       <aside
         ref={aside}
         aria-live="polite"
         aria-hidden={!panel}
-        className={`absolute z-20 flex flex-col gap-[14px] overflow-auto rounded-[20px] bg-tile px-6 pb-[26px] pt-[22px] text-ink shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.1),0_20px_50px_rgb(var(--shadow-rgb)/0.12)] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.8,.2,1)] inset-x-[10px] bottom-[10px] h-[56%] sm:inset-x-auto sm:bottom-4 sm:right-4 sm:top-[84px] sm:h-auto sm:w-[min(600px,54%)] ${
+        className={`absolute z-20 flex flex-col gap-[14px] overflow-auto rounded-[20px] bg-tile px-6 pb-[26px] pt-[22px] text-ink shadow-[0_6px_0_rgb(var(--shadow-rgb)/0.1),0_20px_50px_rgb(var(--shadow-rgb)/0.12)] transition-transform duration-[450ms] ease-[cubic-bezier(.2,.8,.2,1)] inset-x-[10px] bottom-[10px] ${sheetFull ? 'h-[86%]' : 'h-[40%]'} transition-[transform,height] sm:inset-x-auto sm:bottom-4 sm:right-4 sm:top-[84px] sm:h-auto sm:w-[min(600px,54%)] ${
           panel ? 'translate-x-0 translate-y-0' : 'translate-y-[calc(100%+20px)] sm:translate-x-[calc(100%+30px)] sm:translate-y-0'
         }`}
       >
         {panel && open && (
           <>
+            {/* スマホ: つまみ。上へ引くと全部、下へ引くと少しだけ（少しだけのときは閉じる）。タップで切り替え */}
+            <button
+              type="button"
+              aria-label={sheetFull ? t.sheetLess : t.sheetMore}
+              onPointerDown={(e) => {
+                sheetDrag.current = { y: e.clientY }
+                e.currentTarget.setPointerCapture(e.pointerId)
+              }}
+              onPointerUp={(e) => {
+                const dy = sheetDrag.current ? e.clientY - sheetDrag.current.y : 0
+                sheetDrag.current = null
+                if (dy < -24) setSheetFull(true)
+                else if (dy > 24) {
+                  if (sheetFull) setSheetFull(false)
+                  else close()
+                } else setSheetFull((v) => !v)
+              }}
+              className="-mx-6 -mt-[14px] mb-[-6px] flex touch-none justify-center py-2 sm:hidden"
+            >
+              <span aria-hidden className="h-[5px] w-[44px] rounded-full bg-ink/20" />
+            </button>
             <header className="flex items-center gap-[10px]">
               <span aria-hidden className={`h-[14px] w-[14px] rounded-[3px] shadow-[0_2px_0_rgb(0_0_0/0.18)] ${DOT[open]}`} />
               <span className="font-mono text-[12px] font-bold tracking-[.08em] text-mute">{panel.eyebrow}</span>

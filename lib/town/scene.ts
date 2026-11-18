@@ -61,6 +61,8 @@ export type TownInput = {
   onArrive: (id: Section) => void
   /** 人形が歩き出した（パネルを閉じる合図）。toStreet は、どの建物にも向かわず通りに出たとき（← → ↓ キー） */
   onLeave: (toStreet: boolean) => void
+  /** 人形に一番近い建物が変わった（スマホの下の地図で、今いる場所を示す） */
+  onNear?: (id: Section) => void
   onReady: () => void
 }
 
@@ -68,7 +70,8 @@ export type TownBench = {
   /** その建物の前まで歩く。open: false なら、着いてもパネルを開かず、建物を弾ませて入口を示すだけ（最初の 1 回） */
   goTo: (id: Section, opts?: { open?: boolean }) => void
   /** パネルが開いているか（と、その幅 px）。開いているあいだは、人形がパネルに隠れないよう絵をずらす */
-  setPanelOpen: (open: boolean, width?: number) => void
+  /** sheet: スマホで下から出るパネルが、画面の高さのどれだけを覆っているか（0〜1） */
+  setPanelOpen: (open: boolean, width?: number, sheet?: number) => void
   /** ほかの場所でライト / ダークが切り替わったとき、レバーを合わせる */
   setDark: (dark: boolean) => void
   /** 言語が切り替わったとき、札をその言語の面へ回す（札から切り替えたときは、すでにその向き） */
@@ -831,6 +834,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   let vh = 1
   let panelOpen = false
   let panelWidth = 420
+  let sheet = 0.56
   const resize = () => {
     vw = host.clientWidth
     vh = host.clientHeight
@@ -851,7 +855,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     const t = view.target.clone()
     // パネルが開いているあいだは、人形がパネルに隠れないよう絵をずらす（広い画面は右に、スマホは下に出る）
     if (panelOpen && !narrow()) t.addScaledVector(right, (Math.min(panelWidth + 16, vw * 0.6) / vw) * size * aspect * 0.5)
-    if (panelOpen && narrow()) t.y -= (size * 0.26) / Math.cos(view.pitch)
+    if (panelOpen && narrow()) t.y -= (size * sheet * 0.46) / Math.cos(view.pitch)
     camera.position.copy(t).addScaledVector(dir, 1000)
     camera.lookAt(t)
     camera.updateProjectionMatrix()
@@ -1096,6 +1100,11 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
     return moving
   }
   let drag: { x: number; y: number; moved: number } | null = null
+  // タッチの端末（スマホ・タブレット）: 視点は動かさず、横に指を滑らせて通りを歩く。指を離すと一番近い建物の前で止まる
+  const touchWalk = matchMedia('(pointer: coarse)').matches
+  let swipe: { startX: number; figX: number; target: number } | null = null
+  let snapTo: Building | null = null
+  const nearest = (x: number) => buildings.reduce((a, b) => (Math.abs(b.x - x) < Math.abs(a.x - x) ? b : a))
   const el = renderer.domElement
   const onDown = (e: PointerEvent) => {
     sfx.unlock()
@@ -1125,6 +1134,23 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       drag.moved += Math.abs(dx) + Math.abs(dy)
       drag.x = e.clientX
       drag.y = e.clientY
+      if (drag.moved > 6 && touchWalk) {
+        cancelPress()
+        if (!swipe) {
+          // 歩き出す: パネルを閉じ、建物の前からは道へ
+          goal = null
+          path = []
+          snapTo = null
+          beckon = null
+          input.onLeave(true)
+          swipe = { startX: e.clientX - dx, figX: fig.position.x, target: fig.position.x }
+        }
+        // 指を左へ滑らせると街が左へ流れる = 人形は右へ進む
+        const perPx = (camera.right - camera.left) / vw
+        swipe.target = Math.min(232, Math.max(-230, swipe.figX - (e.clientX - swipe.startX) * perPx * 1.4))
+        loop()
+        return
+      }
       if (drag.moved > 6) {
         cancelPress()
         view.yaw = Math.min(1.25, Math.max(-1.25, view.yaw - dx * 0.006))
@@ -1144,6 +1170,15 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   const onUp = (e: PointerEvent) => {
     const click = drag && drag.moved <= 6
     drag = null
+    if (swipe) {
+      // 一番近い建物の前の道で止まる（入らない）
+      const b = nearest(swipe.target)
+      swipe = null
+      snapTo = b
+      path = [new THREE.Vector3(b.x, 0, 0)]
+      loop()
+      return
+    }
     cancelPress()
     if (held) {
       drop()
@@ -1271,6 +1306,7 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
   // ───────── 描画: 画面に見えているあいだだけ（工房の歯車がいつも回っている） ─────────
   let raf = 0
   let last = 0
+  let lastNear: Section | null = null
   let clock = 0
   let visible = true
   let readySent = false
@@ -1290,7 +1326,16 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
 
     let vx = 0
     let vz = 0
-    if (keys.size) {
+    if (swipe) {
+      // 指に付いて歩く（速すぎないように）
+      fig.position.z += (0 - fig.position.z) * Math.min(1, dt * 8)
+      const d = swipe.target - fig.position.x
+      const stepLen = Math.min(Math.abs(d), SPEED * 2.2 * dt)
+      if (stepLen > 0.05) {
+        fig.position.x += Math.sign(d) * stepLen
+        vx = Math.sign(d)
+      }
+    } else if (keys.size) {
       fig.position.z += (0 - fig.position.z) * Math.min(1, dt * 8)
       vx = (keys.has('ArrowRight') ? 1 : 0) - (keys.has('ArrowLeft') ? 1 : 0)
       fig.position.x = Math.min(232, Math.max(-230, fig.position.x + vx * SPEED * dt))
@@ -1305,6 +1350,11 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
         if (!path.length && goal) {
           arrive(goal)
           goal = null
+        } else if (!path.length && snapTo) {
+          // スワイプで歩いて止まった: 建物を 1 回弾ませ、こちらを向く
+          snapTo.pop = 1
+          snapTo = null
+          facing = 0
         }
       } else {
         fig.position.addScaledVector(d, stepLen / len)
@@ -1320,6 +1370,13 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       walkT += (Math.round(walkT / Math.PI) * Math.PI - walkT) * Math.min(1, dt * 12)
       // 着いたら建物のほうを向く
       if (panelOpen) facing = Math.PI
+    }
+    if (input.onNear) {
+      const n = nearest(swipe ? swipe.target : fig.position.x).id
+      if (n !== lastNear) {
+        lastNear = n
+        input.onNear(n)
+      }
     }
     let dy = facing - fig.rotation.y
     dy = Math.atan2(Math.sin(dy), Math.cos(dy))
@@ -1442,8 +1499,9 @@ export function mountTown(host: HTMLElement, input: TownInput): TownBench {
       lever.goal = goal
       loop()
     },
-    setPanelOpen(open, width) {
+    setPanelOpen(open, width, sheetFrac) {
       panelOpen = open
+      if (sheetFrac) sheet = sheetFrac
       if (input.focusDim) {
         const g = getComputedStyle(document.documentElement).getPropertyValue('--ground').trim().split(/\s+/).map(Number)
         if (g.length === 3) bg.setRGB(g[0] / 255, g[1] / 255, g[2] / 255, THREE.SRGBColorSpace)
