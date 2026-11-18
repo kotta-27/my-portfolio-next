@@ -198,9 +198,6 @@ export function TownView({ lang, panels, workImages, careerLogos }: Props) {
         </div>
       )}
 
-      <div className={`pointer-events-none absolute inset-x-0 bottom-4 z-10 flex justify-center px-4 transition-opacity duration-500 ${state === 'ready' && !open ? 'opacity-100' : 'opacity-0'}`}>
-        <span className="hidden rounded-full bg-ink/85 px-4 py-[9px] text-[12.5px] font-bold text-paper sm:block">{t.hint}</span>
-      </div>
 
       <aside
         ref={aside}
