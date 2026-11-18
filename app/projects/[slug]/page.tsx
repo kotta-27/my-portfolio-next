@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                   </span>
                 )}
               </div>
-              <p className="max-w-[640px] text-[15px] leading-[1.8] text-ink/75 sm:text-[17px]">{project[lang]}</p>
+              <p className="max-w-[880px] text-[15px] leading-[1.8] text-ink/75 sm:text-[17px]">{project[lang]}</p>
             </div>
             {project.links.length > 0 && (
               <div className="flex flex-wrap gap-2 lg:shrink-0 lg:justify-end">
